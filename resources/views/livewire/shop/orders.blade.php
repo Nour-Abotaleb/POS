@@ -5,7 +5,7 @@
     <ul role="list" class=" space-y-2 dark:divide-gray-700 mt-4">
         @forelse ($orders as $order)
         <li class="p-3 border rounded-md">
-            <a href="{{ route('order_success', $order->uuid) }}"  class="font-medium text-skin-base truncate dark:text-white">
+            <a href="{{ route('order_success', $order->uuid) }}"  class="font-medium truncate dark:text-white" style="color: #011646;">
                 <div class="flex w-full  space-y-4">
 
                     <div class="flex w-full items-center justify-between" >

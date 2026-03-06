@@ -80,7 +80,7 @@
           <div class="hidden lg:flex items-center gap-2 ltr:mr-2 rtl:ml-2">
             <button
                 type="button"
-                onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"
+                onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; var inPage = document.getElementById('pos-products-search'); if (inPage) { inPage.value = ''; inPage.dispatchEvent(new Event('input', { bubbles: true })); } window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"
                 style="background-color: #011646; border-color: #011646;"
                 class="text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center gap-1"
                 title="@lang('app.reset')"
@@ -90,7 +90,7 @@
                 <path d="M13.4417 4.43333L11.0333 1.66667" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M13.4417 4.43333L10.6334 6.48333" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-                @lang('app.reset')
+                <!-- @lang('app.reset') -->
               </button>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400">
@@ -104,7 +104,7 @@
                 type="text"
                 class="w-64 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2 border-gray-200 rounded-lg text-sm"
                 placeholder="@lang('placeholders.searchMenuItems')"
-                oninput="window.dispatchEvent(new CustomEvent('pos:set-search', { detail: { value: this.value } })); if (window.Livewire && window.Livewire.dispatch) window.Livewire.dispatch('pos-set-search', { value: this.value });"
+                oninput="var v = this.value; window.dispatchEvent(new CustomEvent('pos:set-search', { detail: { value: v } })); if (window.Livewire && window.Livewire.dispatch) window.Livewire.dispatch('pos-set-search', { value: v }); var inPage = document.getElementById('pos-products-search'); if (inPage && inPage.value !== v) { inPage.value = v; inPage.dispatchEvent(new Event('input', { bubbles: true })); }"
               />
             </div>
           </div>

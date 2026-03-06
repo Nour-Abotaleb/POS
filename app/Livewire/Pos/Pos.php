@@ -311,17 +311,17 @@ class Pos extends Component
             $this->formattedOrderNumber = $orderNumberData['formatted_order_number'];
         }
 
-        // Auto-set default order type if popup is disabled and no order is loaded
-        if (!$this->orderID && !$this->tableOrderID) {
-            $disablePopup = $this->restaurant->disable_order_type_popup ?? false;
-            if ($disablePopup && $this->restaurant->default_order_type_id) {
-                $defaultOrderType = OrderType::find($this->restaurant->default_order_type_id);
-                if ($defaultOrderType && $defaultOrderType->is_active) {
-                    $this->orderTypeId = $defaultOrderType->id;
-                    $this->orderType = $defaultOrderType->type;
-                    $this->orderTypeSlug = $defaultOrderType->slug;
-                    $this->updatedOrderTypeId($this->orderTypeId);
-                }
+        // Default to Dine In when no order is loaded (Order Panel and KOT)
+        if (!$this->orderID && !$this->tableOrderID && !$this->orderTypeId) {
+            $defaultOrderType = OrderType::where('branch_id', branch()->id)
+                ->where('is_active', true)
+                ->where('slug', 'dine_in')
+                ->first();
+            if ($defaultOrderType) {
+                $this->orderTypeId = $defaultOrderType->id;
+                $this->orderType = $defaultOrderType->type;
+                $this->orderTypeSlug = $defaultOrderType->slug;
+                $this->updatedOrderTypeId($this->orderTypeId);
             }
         }
     }
@@ -2750,9 +2750,12 @@ class Pos extends Component
 
     /** Sync search term from header search input (browser event pos-set-search). */
     #[On('pos-set-search')]
-    public function setSearchFromHeader($payload = [])
+    public function setSearchFromHeader($value = null)
     {
-        $value = is_array($payload) ? ($payload['value'] ?? '') : (string) $payload;
+        if (is_array($value)) {
+            $value = $value['value'] ?? '';
+        }
+        $value = $value === null ? '' : (string) $value;
         $this->search = $value === '' ? null : $value;
     }
 
@@ -3207,6 +3210,8 @@ class Pos extends Component
             return OrderType::where('branch_id', branch()->id)
                 ->where('is_active', true)
                 ->when(!$showCustomOrderTypes, fn($q) => $q->where('is_default', true))
+                ->orderByRaw("CASE WHEN slug = 'dine_in' THEN 0 WHEN slug = 'delivery' THEN 1 ELSE 2 END")
+                ->orderBy('order_type_name')
                 ->get();
         });
     }
@@ -3248,6 +3253,18 @@ class Pos extends Component
             $this->orderTypeSlug = $orderTypeFirst->slug;
             $this->orderType = $orderTypeFirst->type;
             $this->orderTypeId = $orderTypeFirst->id;
+        } elseif (!$this->orderID && !$this->tableOrderID && !$this->orderTypeId && $orderTypes->isNotEmpty()) {
+            // Multiple order types: default to Dine In for Order Panel and KOT
+            $dineIn = $orderTypes->firstWhere('slug', 'dine_in');
+            if ($dineIn) {
+                $this->orderTypeId = $dineIn->id;
+                $this->orderType = $dineIn->type;
+                $this->orderTypeSlug = $dineIn->slug;
+            } else {
+                $this->orderTypeId = $orderTypeFirst->id;
+                $this->orderType = $orderTypeFirst->type;
+                $this->orderTypeSlug = $orderTypeFirst->slug;
+            }
         }
 
         // Check MultiPOS status and determine if POS should be blocked

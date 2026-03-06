@@ -43,7 +43,7 @@
                 <div>
                     <!-- Progress Bar -->
                     <div class="left-0 hidden w-full h-0.5 bg-gray-200 rounded sm:block top-5 mt-5 dark:bg-gray-600">
-                        <div class="h-0.5 progress-bar-fill rounded bg-skin-base/80 dark:bg-skin-base/90"
+                        <div class="h-0.5 progress-bar-fill rounded bg-[#011646]/80 dark:bg-[#011646]/90"
                             style="width: {{ min(100, ($currentStepIndex / (count($steps) - 1)) * 100) }}%"></div>
                     </div>
 
@@ -61,8 +61,8 @@
                                 <!-- Status Step Icon -->
                                 <div @class([
                                     'flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full shadow-sm transition-all duration-300',
-                                    'bg-skin-base text-white shadow-lg shadow-skin-base/25' => $index == $currentStepIndex,
-                                    'bg-skin-base text-white' => $index < $currentStepIndex,
+                                    'bg-[#011646] text-white shadow-lg shadow-[#011646]/25' => $index == $currentStepIndex,
+                                    'bg-[#011646] text-white' => $index < $currentStepIndex,
                                     'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400' => $index > $currentStepIndex,
                                     'ring-2 ring-white dark:ring-gray-800' => true
                                 ]) data-status-step="{{ $status }}">
@@ -125,7 +125,7 @@
                                 @if(!$loop->last)
                                     <div class="top-8 left-4 h-full w-0.5 bg-gray-200 dark:bg-gray-600 hidden">
                                         @if($index < $currentStepIndex)
-                                            <div class="h-full transition-all duration-700 ease-out bg-skin-base/60 dark:bg-skin-base/80"></div>
+                                            <div class="h-full transition-all duration-700 ease-out bg-[#011646]/60 dark:bg-[#011646]/80"></div>
                                         @endif
                                     </div>
                                 @endif
@@ -139,8 +139,8 @@
                                 ])>
                                     <p @class([
                                         'text-xs font-semibold transition-all duration-300',
-                                        'text-skin-base dark:text-skin-base/90' => $index == $currentStepIndex,
-                                        'text-skin-base dark:text-skin-base/90' => $index <= $currentStepIndex,
+                                        'text-[#011646] dark:text-[#011646]/90' => $index == $currentStepIndex,
+                                        'text-[#011646] dark:text-[#011646]/90' => $index <= $currentStepIndex,
                                         'text-gray-500 dark:text-gray-400' => $index > $currentStepIndex,
                                     ])>
                                         {{ App\Enums\OrderStatus::from($status)->translatedLabel() }}
@@ -197,7 +197,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M3 9v8a2 2 0 0 0 2 2h4m-6-10h18M9 19h10a2 2 0 0 0 2-2V9" />
                             </svg>
                             @lang('modules.settings.tableNumber')
-                            <span class="px-1.5 py-0.5 bg-skin-base text-gray-100 rounded-full text-xs font-medium">
+                            <span class="px-1.5 py-0.5 bg-[#011646] text-gray-100 rounded-full text-xs font-medium">
                                 {{ $order->table->table_code ?? '--' }}
                             </span>
                         </div>
@@ -218,7 +218,7 @@
 
         <!-- Delivery Address -->
         @if($order->order_type === 'delivery' && $order->delivery_address)
-            <div class="p-2 mt-3 rounded-lg bg-skin-base/5 dark:bg-gray-700/30" wire:key="delivery-address">
+            <div class="p-2 mt-3 rounded-lg bg-[#011646]/5 dark:bg-gray-700/30" wire:key="delivery-address">
                 <div class="flex items-center gap-2">
                     <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zm-2.657-5.657a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -231,12 +231,12 @@
         @endif
 
         <!-- Delivery ETA or Preparation Time -->
-        <div class="p-2 mt-3 rounded-lg bg-skin-base/15">
-            <div class="flex items-center gap-2 text-skin-base">
+        <div class="p-2 mt-3 rounded-lg bg-[#011646]/15">
+            <div class="flex items-center gap-2 text-[#011646]">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="text-xs font-medium text-skin-base">
+                <span class="text-xs font-medium text-[#011646]">
                     @php
                         $timeValue = null;
                         $timeLabel = null;
@@ -360,9 +360,9 @@
                                 @if($item->modifierOptions->isNotEmpty())
                                     <div class="flex flex-wrap gap-1.5 mt-2">
                                         @foreach ($item->modifierOptions as $modifier)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-skin-base/10 text-skin-base">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#011646]/10 text-[#011646]">
                                                 {{ $modifier->name ?? $modifier->pivot->modifier_option_name }}
-                                                <span class="ml-1 text-skin-base">
+                                                <span class="ml-1 text-[#011646]">
                                                     (+{{ currency_format($modifier->pivot->modifier_option_price ?? $modifier->price, $restaurant->currency_id) }})
                                                 </span>
                                             </span>
@@ -499,8 +499,8 @@
                             <div class="flex items-center justify-between gap-3 mt-2">
                                 <!-- Left Section: Icon and Text -->
                                 <div class="flex items-center gap-2">
-                                    <div class="p-1.5 rounded-lg bg-skin-base/10">
-                                        <svg class="w-3.5 h-3.5 text-skin-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="p-1.5 rounded-lg bg-[#011646]/10">
+                                        <svg class="w-3.5 h-3.5 text-[#011646]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
@@ -908,7 +908,7 @@
         <x-dialog-modal wire:model.live="showTipModal" maxWidth="md">
             <x-slot name="title">
                 <div class="flex items-center gap-2">
-                    <svg class="w-6 h-6 text-skin-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 text-[#011646]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <span>@lang('modules.order.addTip')</span>
@@ -922,7 +922,7 @@
                         <span class="text-gray-600 dark:text-gray-400">@lang('modules.order.currentTotal')</span>
                         <span class="font-medium">{{ currency_format($order->total - $order->tip_amount, $restaurant->currency_id) }}</span>
                     </div>
-                    <div class="flex justify-between text-skin-base">
+                    <div class="flex justify-between text-[#011646]">
                         <span>@lang('modules.order.tipAmount')</span>
                         <span class="font-medium">+ {{ currency_format($tipAmount ?? 0, $restaurant->currency_id) }}</span>
                     </div>
@@ -948,8 +948,8 @@
                                 wire:click="$set('tipAmount', {{ $calculatedTip }})"
                                 class="relative px-4 py-3 text-sm font-medium rounded-xl border-2
                                     {{ $tipAmount == $calculatedTip
-                                        ? 'border-skin-base bg-skin-base/10 text-skin-base shadow-sm'
-                                        : 'border-gray-200 dark:border-gray-600 hover:border-skin-base hover:bg-skin-base/5'
+                                        ? 'border-[#011646] bg-[#011646]/10 text-[#011646] shadow-sm'
+                                        : 'border-gray-200 dark:border-gray-600 hover:border-[#011646] hover:bg-[#011646]/5'
                                     }}"
                             >
                                 <div class="font-bold">{{ $percentage }}%</div>

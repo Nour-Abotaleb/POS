@@ -23,7 +23,8 @@
                         </form>
 
                         <button wire:click="$set('filterStatus', 'pending')"
-                        class="px-3 py-2 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        class="px-3 py-2 text-sm font-medium text-center text-gray-600 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+ style="border-color: #011646;">
                             @lang('modules.restaurant.needApproval')
                             <span class="inline-flex items-center justify-center px-2 py-0.5 ms-2 text-xs font-semibold text-white bg-[#011646] rounded-md">
                                 {{ $count }}

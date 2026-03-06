@@ -3,256 +3,72 @@
         class="lg:w-6/12 flex flex-col h-screen max-h-[90vh] min-h-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800"
     >
         <div class="flex-1 min-h-0 overflow-y-auto flex flex-col">
-        <!-- Order Type -->
-        <div
-            class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pb-3 flex flex-wrap items-center gap-2"
-        >
-            <span class="text-xs text-gray-500 dark:text-gray-400 mr-2">
-                Order Type:
-            </span>
-
-            <button
-                v-for="type in orderTypes"
-                :key="type.id"
-                @click="selectOrderType(type)"
-                class="px-3 py-2 text-xs rounded-full border transition-all"
-                :class="{
-                    'bg-skin-base text-white border-skin-base': selectedOrderType === type.slug,
-                    'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600':
-                        selectedOrderType !== type.slug
-                }"
+            <!-- Order Type -->
+            <div
+                class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pb-3 flex flex-wrap items-center gap-2"
             >
-                {{ type.order_type_name }}
-            </button>
-        </div>
+                <span class="text-xs text-gray-500 dark:text-gray-400 mr-2">
+                    Order Type:
+                </span>
 
-        <!-- Order Header -->
-        <div>
-            <div class="flex justify-between my-2 items-center">
-                <div
-                    class="font-medium py-2 inline-flex items-center gap-1 dark:text-neutral-200 relative group"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-receipt w-6 h-6"
-                        viewBox="0 0 16 16"
-                    >
-                        <path
-                            d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"
-                        ></path>
-                        <path
-                            d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"
-                        ></path>
-                    </svg>
-                    <span
-                        :class="{
-                            'text-yellow-600 dark:text-yellow-400': !isOnline,
-                        }"
-                    >
-                        {{ formattedOrderNumber }}
-                    </span>
-                    <!-- Offline Warning Tooltip -->
-                    <div
-                        v-if="!isOnline"
-                        class="absolute left-0 top-full mt-1 w-64 p-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none"
-                    >
-                        <div class="flex items-start gap-2">
-                            <svg
-                                class="w-4 h-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                                />
-                            </svg>
-                            <p
-                                class="text-xs text-yellow-800 dark:text-yellow-300"
-                            >
-                                <strong>Offline Mode:</strong> This order number
-                                is temporary and will change when the
-                                application becomes online. The server will
-                                assign the final order number after
-                                synchronization.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Table Display (only for dine_in) -->
-                <div
-                    v-if="
-                        orderType === 'Dine In' ||
-                        orderType === 'dine_in' ||
-                        orderType?.toLowerCase() === 'dine in'
+                <button
+                    v-for="type in orderTypes"
+                    :key="type.id"
+                    @click="selectOrderType(type)"
+                    class="px-3 py-2 text-xs rounded-full border transition-all"
+                    :class="{
+                        'text-white border-[#011646]':
+                            selectedOrderType === type.slug,
+                        'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600':
+                            selectedOrderType !== type.slug,
+                    }"
+                    :style="
+                        selectedOrderType === type.slug
+                            ? { backgroundColor: '#011646' }
+                            : {}
                     "
-                    class="inline-flex items-center gap-2 dark:text-gray-300"
                 >
-                    <template v-if="currentTable">
-                        <svg
-                            fill="currentColor"
-                            class="w-5 h-5 transition duration-75 group-hover:text-gray-900 dark:text-gray-200 dark:group-hover:text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 44.999 44.999"
-                            xml:space="preserve"
-                        >
-                            <g stroke-width="0" />
-                            <g stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="m42.558 23.378 2.406-10.92a1.512 1.512 0 0 0-2.954-.652l-2.145 9.733h-9.647a1.512 1.512 0 0 0 0 3.026h.573l-3.258 7.713a1.51 1.51 0 0 0 1.393 2.102c.59 0 1.15-.348 1.394-.925l2.974-7.038 4.717.001 2.971 7.037a1.512 1.512 0 1 0 2.787-1.177l-3.257-7.713h.573a1.51 1.51 0 0 0 1.473-1.187m-28.35 1.186h.573a1.512 1.512 0 0 0 0-3.026H5.134L2.99 11.806a1.511 1.511 0 1 0-2.954.652l2.406 10.92a1.51 1.51 0 0 0 1.477 1.187h.573L1.234 32.28a1.51 1.51 0 0 0 .805 1.98 1.515 1.515 0 0 0 1.982-.805l2.971-7.037 4.717-.001 2.972 7.038a1.514 1.514 0 0 0 1.982.805 1.51 1.51 0 0 0 .805-1.98z"
-                            />
-                            <path
-                                d="M24.862 31.353h-.852V18.308h8.13a1.513 1.513 0 1 0 0-3.025H12.856a1.514 1.514 0 0 0 0 3.025h8.13v13.045h-.852a1.514 1.514 0 0 0 0 3.027h4.728a1.513 1.513 0 1 0 0-3.027"
-                            />
-                        </svg>
-                        {{ currentTable }}
-
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-                            @click="showTableAssignmentModal = true"
-                            title="Change Table"
-                        >
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_table_assign)">
-                                    <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_table_assign">
-                                        <rect width="20" height="17" fill="white"/>
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </button>
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-                            @click="$emit('merge-tables')"
-                            title="Merge Tables"
-                        >
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M14.875 12.2329H2.125" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </template>
-                    <template v-else>
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-                            @click="showTableAssignmentModal = true"
-                            title="Set Table"
-                        >
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_table_set)">
-                                    <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_table_set">
-                                        <rect width="20" height="17" fill="white"/>
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </button>
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-                            @click="$emit('merge-tables')"
-                            title="Merge Tables"
-                        >
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M14.875 12.2329H2.125" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </template>
-                </div>
+                    {{ type.order_type_name }}
+                </button>
             </div>
 
-            <!-- Pax and Waiter -->
-            <div class="flex justify-between items-center gap-2">
-                <div
-                    class="py-2 inline-flex items-center gap-1 text-sm dark:text-gray-300"
-                >
-                    Pax
-                    <input
-                        type="number"
-                        v-model="localPax"
-                        @input="$emit('update:pax', localPax)"
-                        class="w-14 px-2 py-1 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-transparent"
-                        step="1"
-                        min="1"
-                    />
-                </div>
-                <div class="gap-2 inline-flex items-center">
-                    <button
-                        type="button"
-                        class="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative"
-                        @click="$emit('add-note')"
-                        title="Add Note"
+            <!-- Order Header -->
+            <div>
+                <div class="flex justify-between my-2 items-center">
+                    <div
+                        class="font-medium py-2 inline-flex items-center gap-1 dark:text-neutral-200 relative group"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-pencil-square"
+                            class="bi bi-receipt w-6 h-6"
                             viewBox="0 0 16 16"
                         >
                             <path
-                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"
                             ></path>
                             <path
-                                fill-rule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"
                             ></path>
                         </svg>
-                    </button>
-                    <div class="inline-flex items-center gap-2">
-                        <svg
-                            class="w-5 h-5 text-gray-700 dark:text-gray-200 hidden lg:block"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                        <span
+                            :class="{
+                                'text-yellow-600 dark:text-yellow-400':
+                                    !isOnline,
+                            }"
                         >
-                            <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                            ></path>
-                        </svg>
-                        <span class="text-sm text-gray-600 dark:text-gray-300"
-                            >Waiter:</span
+                            {{ formattedOrderNumber }}
+                        </span>
+                        <!-- Offline Warning Tooltip -->
+                        <div
+                            v-if="!isOnline"
+                            class="absolute left-0 top-full mt-1 w-64 p-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none"
                         >
-                        <div class="relative">
-                            <select
-                                v-model="localWaiterId"
-                                @change="
-                                    $emit('update:waiterId', localWaiterId)
-                                "
-                                class="w-36 pl-2 pr-6 py-1 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-transparent appearance-none cursor-pointer"
-                            >
-                                <option value="">Select Waiter</option>
-                                <option
-                                    v-for="waiter in waiters"
-                                    :key="waiter.id"
-                                    :value="waiter.id"
-                                >
-                                    {{ waiter.name }}
-                                </option>
-                            </select>
-                            <div
-                                class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none"
-                            >
+                            <div class="flex items-start gap-2">
                                 <svg
-                                    class="w-4 h-4 text-gray-400 dark:text-gray-500"
+                                    class="w-4 h-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -261,627 +77,853 @@
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M19 9l-7 7-7-7"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                                     />
                                 </svg>
+                                <p
+                                    class="text-xs text-yellow-800 dark:text-yellow-300"
+                                >
+                                    <strong>Offline Mode:</strong> This order
+                                    number is temporary and will change when the
+                                    application becomes online. The server will
+                                    assign the final order number after
+                                    synchronization.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Table Display (only for dine_in) -->
+                    <div
+                        v-if="
+                            orderType === 'Dine In' ||
+                            orderType === 'dine_in' ||
+                            orderType?.toLowerCase() === 'dine in'
+                        "
+                        class="inline-flex items-center gap-2 dark:text-gray-300"
+                    >
+                        <template v-if="currentTable">
+                            <svg
+                                fill="currentColor"
+                                class="w-5 h-5 transition duration-75 group-hover:text-gray-900 dark:text-gray-200 dark:group-hover:text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 44.999 44.999"
+                                xml:space="preserve"
+                            >
+                                <g stroke-width="0" />
+                                <g
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="m42.558 23.378 2.406-10.92a1.512 1.512 0 0 0-2.954-.652l-2.145 9.733h-9.647a1.512 1.512 0 0 0 0 3.026h.573l-3.258 7.713a1.51 1.51 0 0 0 1.393 2.102c.59 0 1.15-.348 1.394-.925l2.974-7.038 4.717.001 2.971 7.037a1.512 1.512 0 1 0 2.787-1.177l-3.257-7.713h.573a1.51 1.51 0 0 0 1.473-1.187m-28.35 1.186h.573a1.512 1.512 0 0 0 0-3.026H5.134L2.99 11.806a1.511 1.511 0 1 0-2.954.652l2.406 10.92a1.51 1.51 0 0 0 1.477 1.187h.573L1.234 32.28a1.51 1.51 0 0 0 .805 1.98 1.515 1.515 0 0 0 1.982-.805l2.971-7.037 4.717-.001 2.972 7.038a1.514 1.514 0 0 0 1.982.805 1.51 1.51 0 0 0 .805-1.98z"
+                                />
+                                <path
+                                    d="M24.862 31.353h-.852V18.308h8.13a1.513 1.513 0 1 0 0-3.025H12.856a1.514 1.514 0 0 0 0 3.025h8.13v13.045h-.852a1.514 1.514 0 0 0 0 3.027h4.728a1.513 1.513 0 1 0 0-3.027"
+                                />
+                            </svg>
+                            {{ currentTable }}
+
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                @click="showTableAssignmentModal = true"
+                                title="Change Table"
+                            >
+                                <svg
+                                    width="20"
+                                    height="17"
+                                    viewBox="0 0 20 17"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-[#011646]"
+                                >
+                                    <g clip-path="url(#clip0_table_assign)">
+                                        <path
+                                            d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z"
+                                            fill="currentColor"
+                                        />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_table_assign">
+                                            <rect
+                                                width="20"
+                                                height="17"
+                                                fill="white"
+                                            />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                @click="$emit('merge-tables')"
+                                title="Merge Tables"
+                            >
+                                <svg
+                                    width="17"
+                                    height="17"
+                                    viewBox="0 0 17 17"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-[#011646]"
+                                >
+                                    <path
+                                        d="M12.24 7.40209L14.875 4.76707L12.24 2.13209"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M2.125 4.76707H14.875"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M14.875 12.2329H2.125"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </button>
+                        </template>
+                        <template v-else>
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                @click="showTableAssignmentModal = true"
+                                title="Set Table"
+                            >
+                                <svg
+                                    width="20"
+                                    height="17"
+                                    viewBox="0 0 20 17"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-[#011646]"
+                                >
+                                    <g clip-path="url(#clip0_table_set)">
+                                        <path
+                                            d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z"
+                                            fill="currentColor"
+                                        />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_table_set">
+                                            <rect
+                                                width="20"
+                                                height="17"
+                                                fill="white"
+                                            />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                @click="$emit('merge-tables')"
+                                title="Merge Tables"
+                            >
+                                <svg
+                                    width="17"
+                                    height="17"
+                                    viewBox="0 0 17 17"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-[#011646]"
+                                >
+                                    <path
+                                        d="M12.24 7.40209L14.875 4.76707L12.24 2.13209"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M2.125 4.76707H14.875"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                    <path
+                                        d="M14.875 12.2329H2.125"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Pax and Waiter -->
+                <div class="flex justify-between items-center gap-2">
+                    <div
+                        class="py-2 inline-flex items-center gap-1 text-sm dark:text-gray-300"
+                    >
+                        Pax
+                        <input
+                            type="number"
+                            v-model="localPax"
+                            @input="$emit('update:pax', localPax)"
+                            class="w-14 px-2 py-1 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-transparent"
+                            step="1"
+                            min="1"
+                        />
+                    </div>
+                    <div class="gap-2 inline-flex items-center">
+                        <button
+                            type="button"
+                            class="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative text-[#011646]"
+                            @click="$emit('add-note')"
+                            title="Add Note"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-pencil-square text-[#011646]"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                ></path>
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <div class="inline-flex items-center gap-2">
+                            <svg
+                                class="w-5 h-5 hidden lg:block text-[#011646]"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                ></path>
+                            </svg>
+                            <span class="text-sm text-[#011646]">Waiter:</span>
+                            <div class="relative">
+                                <select
+                                    v-model="localWaiterId"
+                                    @change="
+                                        $emit('update:waiterId', localWaiterId)
+                                    "
+                                    class="w-36 pl-2 pr-6 py-1 border rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:border-[#011646] appearance-none cursor-pointer border-[#011646] focus:ring-[#011646] dark:border-[#011646]"
+                                >
+                                    <option value="">Select Waiter</option>
+                                    <option
+                                        v-for="waiter in waiters"
+                                        :key="waiter.id"
+                                        :value="waiter.id"
+                                    >
+                                        {{ waiter.name }}
+                                    </option>
+                                </select>
+                                <div
+                                    class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none"
+                                >
+                                    <svg
+                                        class="w-4 h-4 text-[#011646]"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 9l-7 7-7-7"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div
-            v-if="props?.order"
-            class="flex justify-between p-2 text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-700"
-        >
-            <div>KOT #{{ props.order }}</div>
-        </div>
-
-        <!-- Cart Items Table -->
-        <div class="flex flex-col rounded overflow-visible">
-            <table
-                class="flex-1 min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600"
+            <div
+                v-if="props?.order"
+                class="flex justify-between p-2 text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-700"
             >
-                <thead class="bg-gray-100 dark:bg-gray-700">
-                    <tr>
-                        <th
-                            scope="col"
-                            class="p-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400 rtl:text-right ltr:text-left"
-                        >
-                            Item Name
-                        </th>
-                        <th
-                            scope="col"
-                            class="p-2 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400"
-                        >
-                            Qty
-                        </th>
-                        <th
-                            scope="col"
-                            class="p-2 text-xs font-medium text-right text-gray-500 uppercase dark:text-gray-400 hidden lg:table-cell"
-                        >
-                            Price
-                        </th>
-                        <th
-                            scope="col"
-                            class="p-2 text-xs font-medium text-right text-gray-500 uppercase dark:text-gray-400"
-                        >
-                            Amount
-                        </th>
-                        <th
-                            scope="col"
-                            class="p-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400 text-right"
-                        >
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody
-                    class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+                <div>KOT #{{ props.order }}</div>
+            </div>
+
+            <!-- Cart Items Table -->
+            <div class="flex flex-col rounded overflow-visible">
+                <table
+                    class="flex-1 min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600"
                 >
-                    <tr
-                        v-if="cartItems.length === 0"
-                        class="hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                        <td class="p-8 text-center" colspan="5">
-                            <div
-                                class="flex flex-col items-center justify-center space-y-3"
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th
+                                scope="col"
+                                class="p-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400 rtl:text-right ltr:text-left"
                             >
-                                <svg
-                                    class="w-12 h-12 text-gray-500 dark:text-gray-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                    ></path>
-                                </svg>
-                                <div
-                                    class="text-gray-500 dark:text-gray-400 text-base"
-                                >
-                                    No record found
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr
-                        v-for="item in cartItems"
-                        :key="item.id"
-                        class="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                Item Name
+                            </th>
+                            <th
+                                scope="col"
+                                class="p-2 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400"
+                            >
+                                Qty
+                            </th>
+                            <th
+                                scope="col"
+                                class="p-2 text-xs font-medium text-right text-gray-500 uppercase dark:text-gray-400 hidden lg:table-cell"
+                            >
+                                Price
+                            </th>
+                            <th
+                                scope="col"
+                                class="p-2 text-xs font-medium text-right text-gray-500 uppercase dark:text-gray-400"
+                            >
+                                Amount
+                            </th>
+                            <th
+                                scope="col"
+                                class="p-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400 text-right"
+                            >
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody
+                        class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
                     >
-                        <!-- Item Name, Note, and Add Note UI -->
-                        <td
-                            class="flex flex-col p-2 mr-12 lg:min-w-20 relative"
+                        <tr
+                            v-if="cartItems.length === 0"
+                            class="hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
-                            <div
-                                class="text-xs text-gray-900 dark:text-white inline-flex items-center lg:table-cell"
-                            >
-                                {{ item.name }}
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-white inline-flex items-center"
-                            >
-                                <!-- Optionally show price/unit or item meta data here -->
-                            </div>
-                            <!-- Special Instructions (Note) UI for each cart item -->
-                            <div
-                                class="inline-flex items-center relative group"
-                                v-cloak
-                            >
-                                <template
-                                    v-if="
-                                        item.note &&
-                                        !item._showNoteInput &&
-                                        !item._showNotePreview
-                                    "
-                                >
-                                    <div
-                                        class="flex items-center gap-2 cursor-pointer text-skin-base text-xs hover:text-skin-base/80 transition-all duration-200"
-                                        @click="
-                                            () => {
-                                                item._showNotePreview = true;
-                                            }
-                                        "
-                                        title="Special Instructions"
-                                    >
-                                        <svg
-                                            class="w-3.5 h-3.5"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            fill="none"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M7 8h10M7 12h4m1 8-4-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3z"
-                                            ></path>
-                                        </svg>
-                                        <span
-                                            class="truncate max-w-[70px] md:max-w-64 lg:max-w-[70px]"
-                                            >{{ item.note }}</span
-                                        >
-                                    </div>
-                                </template>
-
-                                <template
-                                    v-else-if="
-                                        !item.note &&
-                                        !item._showNoteInput &&
-                                        !item._showNotePreview
-                                    "
-                                >
-                                    <button
-                                        @click="
-                                            () => {
-                                                item._showNoteInput = true;
-                                                item._activeNote =
-                                                    item.note || '';
-                                            }
-                                        "
-                                        class="inline-flex items-center gap-1 text-xs pt-1 text-gray-500 hover:text-skin-base transition-colors duration-200"
-                                        title="Add Note"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            class="w-3.5 h-3.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M12 4v16m8-8H4"
-                                            ></path>
-                                        </svg>
-                                        Add Note
-                                    </button>
-                                </template>
-
-                                <!-- Note Preview Modal -->
+                            <td class="p-8 text-center" colspan="5">
                                 <div
-                                    v-if="item._showNotePreview"
-                                    class="absolute top-0 left-0 z-10"
-                                    @click.away="item._showNotePreview = false"
+                                    class="flex flex-col items-center justify-center space-y-3"
                                 >
+                                    <svg
+                                        class="w-12 h-12 text-gray-500 dark:text-gray-300"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                                        ></path>
+                                    </svg>
                                     <div
-                                        class="bg-white dark:bg-gray-700 rounded-md shadow-md border border-gray-300 dark:border-gray-600 p-3 w-64 md:w-96"
+                                        class="text-gray-500 dark:text-gray-400 text-base"
+                                    >
+                                        No record found
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr
+                            v-for="item in cartItems"
+                            :key="item.id"
+                            class="hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                            <!-- Item Name, Note, and Add Note UI -->
+                            <td
+                                class="flex flex-col p-2 mr-12 lg:min-w-20 relative"
+                            >
+                                <div
+                                    class="text-xs text-gray-900 dark:text-white inline-flex items-center lg:table-cell"
+                                >
+                                    {{ item.name }}
+                                </div>
+                                <div
+                                    class="text-xs text-gray-600 dark:text-white inline-flex items-center"
+                                >
+                                    <!-- Optionally show price/unit or item meta data here -->
+                                </div>
+                                <!-- Special Instructions (Note) UI for each cart item -->
+                                <div
+                                    class="inline-flex items-center relative group"
+                                    v-cloak
+                                >
+                                    <template
+                                        v-if="
+                                            item.note &&
+                                            !item._showNoteInput &&
+                                            !item._showNotePreview
+                                        "
                                     >
                                         <div
-                                            class="text-sm dark:text-white mb-2 break-all"
+                                            class="flex items-center gap-2 cursor-pointer text-xs transition-all duration-200 text-[#011646] hover:opacity-80"
+                                            @click="
+                                                () => {
+                                                    item._showNotePreview = true;
+                                                }
+                                            "
+                                            title="Special Instructions"
                                         >
-                                            {{ item.note }}
-                                        </div>
-                                        <div
-                                            class="flex justify-end gap-2 dark:text-white"
-                                        >
-                                            <button
-                                                @click="
-                                                    () => {
-                                                        item._showNotePreview = false;
-                                                        item._showNoteInput = true;
-                                                        item._activeNote =
-                                                            item.note || '';
-                                                    }
-                                                "
-                                                class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 rounded transition-colors duration-200"
+                                            <svg
+                                                class="w-3.5 h-3.5"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                fill="none"
                                             >
-                                                <span
-                                                    class="flex items-center gap-x-1"
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M7 8h10M7 12h4m1 8-4-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3z"
+                                                ></path>
+                                            </svg>
+                                            <span
+                                                class="truncate max-w-[70px] md:max-w-64 lg:max-w-[70px]"
+                                                >{{ item.note }}</span
+                                            >
+                                        </div>
+                                    </template>
+
+                                    <template
+                                        v-else-if="
+                                            !item.note &&
+                                            !item._showNoteInput &&
+                                            !item._showNotePreview
+                                        "
+                                    >
+                                        <button
+                                            @click="
+                                                () => {
+                                                    item._showNoteInput = true;
+                                                    item._activeNote =
+                                                        item.note || '';
+                                                }
+                                            "
+                                            class="inline-flex items-center gap-1 text-xs pt-1 text-gray-500 hover:text-[#011646] transition-colors duration-200"
+                                            title="Add Note"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                class="w-3.5 h-3.5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M12 4v16m8-8H4"
+                                                ></path>
+                                            </svg>
+                                            Add Note
+                                        </button>
+                                    </template>
+
+                                    <!-- Note Preview Modal -->
+                                    <div
+                                        v-if="item._showNotePreview"
+                                        class="absolute top-0 left-0 z-10"
+                                        @click.away="
+                                            item._showNotePreview = false
+                                        "
+                                    >
+                                        <div
+                                            class="bg-white dark:bg-gray-700 rounded-md shadow-md border border-gray-300 dark:border-gray-600 p-3 w-64 md:w-96"
+                                        >
+                                            <div
+                                                class="text-sm dark:text-white mb-2 break-all"
+                                            >
+                                                {{ item.note }}
+                                            </div>
+                                            <div
+                                                class="flex justify-end gap-2 dark:text-white"
+                                            >
+                                                <button
+                                                    @click="
+                                                        () => {
+                                                            item._showNotePreview = false;
+                                                            item._showNoteInput = true;
+                                                            item._activeNote =
+                                                                item.note || '';
+                                                        }
+                                                    "
+                                                    class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 rounded transition-colors duration-200"
                                                 >
-                                                    <svg
-                                                        class="w-3 h-3"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                        fill="none"
+                                                    <span
+                                                        class="flex items-center gap-x-1"
                                                     >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                                        ></path>
-                                                    </svg>
-                                                    Update
-                                                </span>
-                                            </button>
-                                            <button
-                                                @click="
+                                                        <svg
+                                                            class="w-3 h-3"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                            fill="none"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                                            ></path>
+                                                        </svg>
+                                                        Update
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    @click="
+                                                        () => {
+                                                            $emit('add-note', {
+                                                                id: item.id,
+                                                                note: '',
+                                                            });
+                                                            item._showNotePreview = false;
+                                                        }
+                                                    "
+                                                    class="text-xs px-2 py-1 bg-red-50 hover:bg-red-100 dark:bg-red-700 dark:hover:bg-red-600 text-red-500 dark:text-red-300 rounded transition-colors duration-200"
+                                                    title="Delete"
+                                                >
+                                                    <span
+                                                        class="flex items-center gap-x-1"
+                                                    >
+                                                        <svg
+                                                            class="w-3 h-3"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                            fill="none"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M6 18L18 6M6 6l12 12"
+                                                            ></path>
+                                                        </svg>
+                                                        Delete
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    @click="
+                                                        item._showNotePreview = false
+                                                    "
+                                                    class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 rounded transition-colors duration-200"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Note Input Modal -->
+                                    <div
+                                        v-if="item._showNoteInput"
+                                        class="fixed inset-0 z-40"
+                                        @click="item._showNoteInput = false"
+                                    ></div>
+                                    <div
+                                        v-if="item._showNoteInput"
+                                        class="absolute top-0 left-full ml-2 z-50 min-w-[280px]"
+                                        @click.stop
+                                    >
+                                        <div
+                                            class="flex items-center bg-white dark:bg-gray-700 rounded-md shadow-2xl border-2 border-gray-300 dark:border-gray-600 overflow-hidden"
+                                            @click.stop
+                                        >
+                                            <input
+                                                type="text"
+                                                v-model="item._activeNote"
+                                                class="w-64 md:w-80 p-2 border-none text-base focus:outline-none focus:ring-2 focus:ring-[#011646] dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
+                                                placeholder="Special Instructions? (e.g., no onions, extra spicy)"
+                                                @keydown.enter="
                                                     () => {
                                                         $emit('add-note', {
                                                             id: item.id,
-                                                            note: '',
+                                                            note: item._activeNote,
                                                         });
-                                                        item._showNotePreview = false;
+                                                        item._showNoteInput = false;
                                                     }
                                                 "
-                                                class="text-xs px-2 py-1 bg-red-50 hover:bg-red-100 dark:bg-red-700 dark:hover:bg-red-600 text-red-500 dark:text-red-300 rounded transition-colors duration-200"
-                                                title="Delete"
+                                                @keydown.escape="
+                                                    item._showNoteInput = false
+                                                "
+                                                autofocus
+                                                :ref="
+                                                    (el) => {
+                                                        if (
+                                                            el &&
+                                                            item._showNoteInput
+                                                        )
+                                                            el.focus();
+                                                    }
+                                                "
+                                            />
+                                            <div
+                                                class="flex items-center gap-1 pr-2"
                                             >
-                                                <span
-                                                    class="flex items-center gap-x-1"
+                                                <button
+                                                    @click.stop="
+                                                        () => {
+                                                            if (
+                                                                item._activeNote &&
+                                                                item._activeNote.trim()
+                                                            ) {
+                                                                $emit(
+                                                                    'add-note',
+                                                                    {
+                                                                        id: item.id,
+                                                                        note: item._activeNote.trim(),
+                                                                    },
+                                                                );
+                                                            }
+                                                            item._showNoteInput = false;
+                                                        }
+                                                    "
+                                                    class="p-1.5 text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#011646] focus:ring-offset-2 hover:opacity-90"
+                                                    style="
+                                                        background-color: #011646;
+                                                    "
+                                                    title="Save"
+                                                    type="button"
                                                 >
                                                     <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
                                                         class="w-3 h-3"
+                                                        fill="none"
                                                         viewBox="0 0 24 24"
                                                         stroke="currentColor"
-                                                        fill="none"
                                                     >
                                                         <path
                                                             stroke-linecap="round"
                                                             stroke-linejoin="round"
                                                             stroke-width="2"
-                                                            d="M6 18L18 6M6 6l12 12"
+                                                            d="m5 13 4 4L19 7"
                                                         ></path>
                                                     </svg>
-                                                    Delete
-                                                </span>
-                                            </button>
-                                            <button
-                                                @click="
-                                                    item._showNotePreview = false
-                                                "
-                                                class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 rounded transition-colors duration-200"
-                                            >
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Note Input Modal -->
-                                <div
-                                    v-if="item._showNoteInput"
-                                    class="fixed inset-0 z-40"
-                                    @click="item._showNoteInput = false"
-                                ></div>
-                                <div
-                                    v-if="item._showNoteInput"
-                                    class="absolute top-0 left-full ml-2 z-50 min-w-[280px]"
-                                    @click.stop
-                                >
-                                    <div
-                                        class="flex items-center bg-white dark:bg-gray-700 rounded-md shadow-2xl border-2 border-gray-300 dark:border-gray-600 overflow-hidden"
-                                        @click.stop
-                                    >
-                                        <input
-                                            type="text"
-                                            v-model="item._activeNote"
-                                            class="w-64 md:w-80 p-2 border-none text-base focus:outline-none focus:ring-2 focus:ring-skin-base dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
-                                            placeholder="Special Instructions? (e.g., no onions, extra spicy)"
-                                            @keydown.enter="
-                                                () => {
-                                                    $emit('add-note', {
-                                                        id: item.id,
-                                                        note: item._activeNote,
-                                                    });
-                                                    item._showNoteInput = false;
-                                                }
-                                            "
-                                            @keydown.escape="
-                                                item._showNoteInput = false
-                                            "
-                                            autofocus
-                                            :ref="
-                                                (el) => {
-                                                    if (
-                                                        el &&
-                                                        item._showNoteInput
-                                                    )
-                                                        el.focus();
-                                                }
-                                            "
-                                        />
-                                        <div
-                                            class="flex items-center gap-1 pr-2"
-                                        >
-                                            <button
-                                                @click.stop="
-                                                    () => {
-                                                        if (
-                                                            item._activeNote &&
-                                                            item._activeNote.trim()
-                                                        ) {
-                                                            $emit('add-note', {
-                                                                id: item.id,
-                                                                note: item._activeNote.trim(),
-                                                            });
+                                                </button>
+                                                <button
+                                                    @click.stop="
+                                                        () => {
+                                                            item._showNoteInput = false;
+                                                            item._activeNote =
+                                                                item.note || '';
                                                         }
-                                                        item._showNoteInput = false;
-                                                    }
-                                                "
-                                                class="p-1.5 text-white rounded-md bg-skin-base hover:bg-skin-base/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-skin-base focus:ring-offset-2"
-                                                title="Save"
-                                                type="button"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    class="w-3 h-3"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
+                                                    "
+                                                    class="p-1.5 text-gray-500 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                                    title="Cancel"
+                                                    type="button"
                                                 >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="m5 13 4 4L19 7"
-                                                    ></path>
-                                                </svg>
-                                            </button>
-                                            <button
-                                                @click.stop="
-                                                    () => {
-                                                        item._showNoteInput = false;
-                                                        item._activeNote =
-                                                            item.note || '';
-                                                    }
-                                                "
-                                                class="p-1.5 text-gray-500 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                                                title="Cancel"
-                                                type="button"
-                                            >
-                                                <svg
-                                                    class="w-3 h-3"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M6 18 18 6M6 6l12 12"
-                                                    ></path>
-                                                </svg>
-                                            </button>
+                                                    <svg
+                                                        class="w-3 h-3"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M6 18 18 6M6 6l12 12"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
 
-                        <!-- Quantity Control -->
-                        <td
-                            class="p-2 text-base text-gray-900 whitespace-nowrap text-center"
-                        >
-                            <div
-                                class="relative flex items-center max-w-[8rem] mx-auto"
+                            <!-- Quantity Control -->
+                            <td
+                                class="p-2 text-base text-gray-900 whitespace-nowrap text-center"
                             >
-                                <button
-                                    type="button"
-                                    @click="$emit('decrease-quantity', item.id)"
-                                    class="bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-md p-3 h-8 relative"
+                                <div
+                                    class="relative flex items-center max-w-[8rem] mx-auto"
                                 >
-                                    <svg
-                                        class="w-2 h-2 text-gray-900 dark:text-white"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 18 2"
+                                    <button
+                                        type="button"
+                                        @click="
+                                            $emit('decrease-quantity', item.id)
+                                        "
+                                        class="bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-md p-3 h-8 relative"
                                     >
-                                        <path
-                                            stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M1 1h16"
-                                        ></path>
-                                    </svg>
-                                </button>
-                                <input
-                                    type="text"
-                                    v-model.lazy="item.quantity"
-                                    @change="
-                                        $emit('add-note', {
-                                            id: item.id,
-                                            note: item.note,
-                                            quantity: item.quantity,
-                                        })
-                                    "
-                                    class="min-w-10 border-b border-t bg-white border-x-0 border-gray-300 h-8 text-center text-gray-900 text-sm block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                    min="1"
-                                    oninput="
-                                        this.value = this.value.replace(
-                                            /[^0-9]/g,
-                                            '',
-                                        )
-                                    "
-                                />
-                                <button
-                                    type="button"
-                                    @click="$emit('increase-quantity', item.id)"
-                                    class="bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-md p-3 h-8 relative"
-                                >
-                                    <svg
-                                        class="w-2 h-2 text-gray-900 dark:text-white"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 18 18"
-                                    >
-                                        <path
-                                            stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M9 1v16M1 9h16"
-                                        ></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-
-                        <td
-                            class="p-2 text-xs font-medium text-gray-700 whitespace-nowrap dark:text-white text-right hidden lg:table-cell"
-                        >
-                            {{ currencySymbol }} {{ formatPrice(item.price) }}
-                        </td>
-                        <td
-                            class="p-2 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white text-right"
-                        >
-                            {{ currencySymbol }}
-                            {{ formatPrice(item.price * item.quantity) }}
-                        </td>
-                        <td class="p-2 whitespace-nowrap text-right">
-                            <button
-                                class="rounded text-gray-800 dark:text-gray-400 border dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-900/20 p-2 relative"
-                                @click="$emit('remove-item', item.id)"
-                            >
-                                <svg
-                                    class="w-4 h-4 text-gray-700 dark:text-gray-200"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1"
-                                        clip-rule="evenodd"
-                                    ></path>
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Order Summary -->
-        <div class="lg:min-w-20">
-            <div
-                class="h-auto p-4 mt-3 select-none text-center bg-gray-50 rounded space-y-4 dark:bg-gray-700"
-                v-if="cartItems.length > 0"
-            >
-                <div class="text-left">
-                    <button
-                        class="text-left inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-                        @click="showDiscountModal = true"
-                    >
-                        <svg
-                            class="h-5 w-5 text-current me-1"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 16 16"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.5"
-                        >
-                            <path d="m7.25 14.25-5.5-5.5 7-7h5.5v5.5z" />
-                            <circle cx="11" cy="5" r=".5" fill="#000" />
-                        </svg>
-                        Add Discount
-                    </button>
-                </div>
-
-                <div
-                    class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
-                >
-                    <div>Total Items</div>
-                    <div>
-                        {{ totalItems }}
-                    </div>
-                </div>
-                <div
-                    class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
-                >
-                    <div>Sub Total</div>
-                    <div>{{ currencySymbol }}{{ formatPrice(subTotal) }}</div>
-                </div>
-
-                <div v-if="discountAmount && discountAmount > 0">
-                    <div
-                        class="flex justify-between text-green-500 text-sm dark:text-green-400"
-                    >
-                        <div class="inline-flex items-center gap-x-1">
-                            Discount
-                            <span v-if="discountType === 'percent'">
-                                ({{ discountValue }}%)
-                            </span>
-                            <span
-                                class="text-red-500 hover:scale-110 active:scale-100 cursor-pointer"
-                                @click="$emit('remove-discount')"
-                            >
-                                <svg
-                                    class="w-4 h-4"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                        clip-rule="evenodd"
+                                        <svg
+                                            class="w-2 h-2 text-gray-900 dark:text-white"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 18 2"
+                                        >
+                                            <path
+                                                stroke="currentColor"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M1 1h16"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    <input
+                                        type="text"
+                                        v-model.lazy="item.quantity"
+                                        @change="
+                                            $emit('add-note', {
+                                                id: item.id,
+                                                note: item.note,
+                                                quantity: item.quantity,
+                                            })
+                                        "
+                                        class="min-w-10 border-b border-t bg-white border-x-0 border-gray-300 h-8 text-center text-gray-900 text-sm block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                        min="1"
+                                        oninput="
+                                            this.value = this.value.replace(
+                                                /[^0-9]/g,
+                                                '',
+                                            )
+                                        "
                                     />
-                                </svg>
-                            </span>
-                        </div>
-                        <div>
-                            -{{ currencySymbol
-                            }}{{ formatPrice(discountAmount) }}
-                        </div>
-                    </div>
-                </div>
+                                    <button
+                                        type="button"
+                                        @click="
+                                            $emit('increase-quantity', item.id)
+                                        "
+                                        class="bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-md p-3 h-8 relative"
+                                    >
+                                        <svg
+                                            class="w-2 h-2 text-gray-900 dark:text-white"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 18 18"
+                                        >
+                                            <path
+                                                stroke="currentColor"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 1v16M1 9h16"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
 
-                <div v-if="orderType === 'delivery'">
-                    <div
-                        class="flex justify-between items-center text-gray-500 text-sm dark:text-neutral-400"
-                    >
-                        <div>
-                            Delivery Fee
-                            <span
-                                v-if="deliveryFee === 0"
-                                class="text-xs text-gray-400"
+                            <td
+                                class="p-2 text-xs font-medium text-gray-700 whitespace-nowrap dark:text-white text-right hidden lg:table-cell"
                             >
-                                (Free Delivery)
-                            </span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="relative">
-                                <input
-                                    type="number"
-                                    step="1"
-                                    min="0"
-                                    class="w-16 text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm"
-                                    :value="deliveryFee"
-                                    @input="
-                                        $emit(
-                                            'update:deliveryFee',
-                                            parseFloat($event.target.value) ||
-                                                0,
-                                        )
-                                    "
-                                />
-                            </div>
+                                {{ currencySymbol }}
+                                {{ formatPrice(item.price) }}
+                            </td>
+                            <td
+                                class="p-2 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white text-right"
+                            >
+                                {{ currencySymbol }}
+                                {{ formatPrice(item.price * item.quantity) }}
+                            </td>
+                            <td class="p-2 whitespace-nowrap text-right">
+                                <button
+                                    class="rounded text-gray-800 dark:text-gray-400 border dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-900/20 p-2 relative"
+                                    @click="$emit('remove-item', item.id)"
+                                >
+                                    <svg
+                                        class="w-4 h-4 text-gray-700 dark:text-gray-200"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1"
+                                            clip-rule="evenodd"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:min-w-20">
+                <div
+                    class="h-auto p-4 mt-3 select-none text-center bg-gray-50 rounded space-y-4 dark:bg-gray-700"
+                    v-if="cartItems.length > 0"
+                >
+                    <div class="text-left">
+                        <button
+                            class="text-left inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
+                            @click="showDiscountModal = true"
+                        >
+                            <svg
+                                class="h-5 w-5 text-current me-1"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 16 16"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="1.5"
+                            >
+                                <path d="m7.25 14.25-5.5-5.5 7-7h5.5v5.5z" />
+                                <circle cx="11" cy="5" r=".5" fill="#000" />
+                            </svg>
+                            Add Discount
+                        </button>
+                    </div>
+
+                    <div
+                        class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                    >
+                        <div>Total Items</div>
+                        <div>
+                            {{ totalItems }}
                         </div>
                     </div>
-                </div>
+                    <div
+                        class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                    >
+                        <div>Sub Total</div>
+                        <div>
+                            {{ currencySymbol }}{{ formatPrice(subTotal) }}
+                        </div>
+                    </div>
 
-                <div v-if="extraCharges && extraCharges.length > 0">
-                    <div v-for="charge in extraCharges" :key="charge.id">
+                    <div v-if="discountAmount && discountAmount > 0">
                         <div
-                            class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                            class="flex justify-between text-green-500 text-sm dark:text-green-400"
                         >
                             <div class="inline-flex items-center gap-x-1">
-                                {{ charge.name || charge.charge_name }}
-                                <span v-if="charge.charge_type === 'percent'">
-                                    ({{ charge.value || charge.charge_value }}%)
+                                Discount
+                                <span v-if="discountType === 'percent'">
+                                    ({{ discountValue }}%)
                                 </span>
                                 <span
                                     class="text-red-500 hover:scale-110 active:scale-100 cursor-pointer"
-                                    @click="
-                                        $emit('remove-extra-charge', charge.id)
-                                    "
+                                    @click="$emit('remove-discount')"
                                 >
                                     <svg
                                         class="w-4 h-4"
@@ -897,61 +939,140 @@
                                     </svg>
                                 </span>
                             </div>
-
                             <div>
-                                ${{
-                                    charge.charge_type === "percent"
-                                        ? ((subTotal - discountAmount) *
-                                              charge.charge_value) /
-                                          100
-                                        : subTotal -
-                                          discountAmount +
-                                          charge.charge_value
-                                }}
+                                -{{ currencySymbol
+                                }}{{ formatPrice(discountAmount) }}
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div v-if="taxes.length > 0">
-                    <div v-for="tax in taxes" :key="tax.id">
+                    <div v-if="orderType === 'delivery'">
                         <div
-                            class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                            class="flex justify-between items-center text-gray-500 text-sm dark:text-neutral-400"
                         >
                             <div>
-                                {{ tax.tax_name }} ({{
-                                    tax.rate || tax.tax_percent
-                                }}%)
+                                Delivery Fee
+                                <span
+                                    v-if="deliveryFee === 0"
+                                    class="text-xs text-gray-400"
+                                >
+                                    (Free Delivery)
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="relative">
+                                    <input
+                                        type="number"
+                                        step="1"
+                                        min="0"
+                                        class="w-16 text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm"
+                                        :value="deliveryFee"
+                                        @input="
+                                            $emit(
+                                                'update:deliveryFee',
+                                                parseFloat(
+                                                    $event.target.value,
+                                                ) || 0,
+                                            )
+                                        "
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="extraCharges && extraCharges.length > 0">
+                        <div v-for="charge in extraCharges" :key="charge.id">
+                            <div
+                                class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                            >
+                                <div class="inline-flex items-center gap-x-1">
+                                    {{ charge.name || charge.charge_name }}
+                                    <span
+                                        v-if="charge.charge_type === 'percent'"
+                                    >
+                                        ({{
+                                            charge.value || charge.charge_value
+                                        }}%)
+                                    </span>
+                                    <span
+                                        class="text-red-500 hover:scale-110 active:scale-100 cursor-pointer"
+                                        @click="
+                                            $emit(
+                                                'remove-extra-charge',
+                                                charge.id,
+                                            )
+                                        "
+                                    >
+                                        <svg
+                                            class="w-4 h-4"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    ${{
+                                        charge.charge_type === "percent"
+                                            ? ((subTotal - discountAmount) *
+                                                  charge.charge_value) /
+                                              100
+                                            : subTotal -
+                                              discountAmount +
+                                              charge.charge_value
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="taxes.length > 0">
+                        <div v-for="tax in taxes" :key="tax.id">
+                            <div
+                                class="flex justify-between text-gray-500 text-sm dark:text-neutral-400"
+                            >
+                                <div>
+                                    {{ tax.tax_name }} ({{
+                                        tax.rate || tax.tax_percent
+                                    }}%)
+                                </div>
+                                <div>
+                                    {{ currencySymbol }}
+                                    {{ formatPrice(tax.amount) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            v-if="totalTaxAmount > 0"
+                            class="flex justify-between text-gray-500 text-sm dark:text-neutral-400 mt-3"
+                        >
+                            <div>
+                                Total Tax
+                                <span
+                                    v-if="isInclusive"
+                                    class="text-xs text-gray-400"
+                                >
+                                    (Tax Inclusive)
+                                </span>
+                                <span v-else class="text-xs text-gray-400">
+                                    (Tax Exclusive)
+                                </span>
                             </div>
                             <div>
                                 {{ currencySymbol }}
-                                {{ formatPrice(tax.amount) }}
+                                {{ formatPrice(totalTaxAmount) }}
                             </div>
                         </div>
                     </div>
-                    <div
-                        v-if="totalTaxAmount > 0"
-                        class="flex justify-between text-gray-500 text-sm dark:text-neutral-400 mt-3"
-                    >
-                        <div>
-                            Total Tax
-                            <span
-                                v-if="isInclusive"
-                                class="text-xs text-gray-400"
-                            >
-                                (Tax Inclusive)
-                            </span>
-                            <span v-else class="text-xs text-gray-400">
-                                (Tax Exclusive)
-                            </span>
-                        </div>
-                        <div>
-                            {{ currencySymbol }}
-                            {{ formatPrice(totalTaxAmount) }}
-                        </div>
-                    </div>
                 </div>
-            </div>
             </div>
         </div>
 
@@ -972,9 +1093,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div
-                class="h-auto pb-4 pt-3 select-none text-center w-full"
-            >
+            <div class="h-auto pb-4 pt-3 select-none text-center w-full">
                 <div class="flex gap-3">
                     <button
                         class="rounded bg-gray-700 text-white w-full p-2 relative"
@@ -1308,10 +1427,19 @@ const props = defineProps({
     },
 });
 
-const selectedOrderType = ref(null)
+// Sync selected order type from parent (default Dine In)
+function orderTypeToSlug(val) {
+    if (!val) return null;
+    const v = String(val).toLowerCase();
+    if (v === "dine in" || v === "dine_in") return "dine_in";
+    if (v === "delivery") return "delivery";
+    if (v === "pickup") return "pickup";
+    return v.replace(/\s+/g, "_");
+}
+const selectedOrderType = ref(orderTypeToSlug(props.orderType));
 
 function selectOrderType(type) {
-    selectedOrderType.value = type.slug
+    selectedOrderType.value = type.slug;
 }
 
 const emit = defineEmits([
@@ -1353,6 +1481,14 @@ watch(
     () => props.waiterId,
     (newVal) => {
         localWaiterId.value = newVal;
+    },
+);
+
+watch(
+    () => props.orderType,
+    (newVal) => {
+        const slug = orderTypeToSlug(newVal);
+        if (slug) selectedOrderType.value = slug;
     },
 );
 

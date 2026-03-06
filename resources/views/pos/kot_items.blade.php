@@ -75,11 +75,11 @@
                                 <path d="M36.82,107.86L35.65,78.4l13.25-0.53c5.66,0.78,11.39,3.61,17.15,6.92l10.29-0.41c4.67,0.1,7.3,4.72,2.89,8 c-3.5,2.79-8.27,2.83-13.17,2.58c-3.37-0.03-3.34,4.5,0.17,4.37c1.22,0.05,2.54-0.29,3.69-0.34c6.09-0.25,11.06-1.61,13.94-6.55 l1.4-3.66l15.01-8.2c7.56-2.83,12.65,4.3,7.23,10.1c-10.77,8.51-21.2,16.27-32.62,22.09c-8.24,5.47-16.7,5.64-25.34,1.01 L36.82,107.86z M29.74,62.97h91.9c0.68,0,1.24,0.57,1.24,1.24v5.41c0,0.67-0.56,1.24-1.24,1.24h-91.9 c-0.68,0-1.24-0.56-1.24-1.24v-5.41C28.5,63.53,29.06,62.97,29.74,62.97z M79.26,11.23 c25.16,2.01,46.35,23.16,43.22,48.06l-93.57,0C25.82,34.23,47.09,13.05,72.43,11.2V7.14l-4,0c-0.7,0-1.28-0.58-1.28-1.28V1.28 c0-0.7,0.57-1.28,1.28-1.28h14.72c0.7,0,1.28,0.58,1.28,1.28v4.58c0,0.7-0.58,1.28-1.28,1.28h-3.89L79.26,11.23z M0,77.39l31.55-1.66l1.4,35.25L1.4,112.63L0,77.39z"/>
                             </svg> -->
                             @if (auth()->user()->roles->pluck('display_name')->contains('Waiter'))
-                                <span class="text-xs w-36 px-2 py-1 border border-gray-300 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600 dark:border-gray-700 truncate" title="{{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}">
+                                <span class="text-xs w-36 px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600 truncate" style="border-color: #011646;" title="{{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}">
                                     {{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}
                                 </span>
                             @else
-                                <x-select class="text-xs w-36" wire:model.defer='selectWaiter'>
+                                <x-select class="text-xs w-36 border-[#011646] focus:border-[#011646] focus:ring-[#011646]" wire:model.defer='selectWaiter'>
                                     <option value="">@lang('modules.order.selectWaiter')</option>
                                     @foreach ($users as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -91,7 +91,7 @@
                         {{-- 2. Pax --}}
                         <div class="inline-flex items-center text-xs dark:text-gray-300">
                             <div class="inline-flex items-center gap-1.5 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 focus-within:ring-1 focus-within:ring-gray-500 dark:focus-within:ring-gray-400 focus-within:border-gray-500 dark:focus-within:border-gray-400 [&_input]:h-5 [&_input]:min-h-0">
-                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 text-gray-600 dark:text-gray-400">
+                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0" style="color: #011646;">
                                     <path d="M6.48831 7.69958C6.41748 7.6925 6.33248 7.6925 6.25456 7.69958C4.56873 7.64291 3.22998 6.26166 3.22998 4.56166C3.22998 2.82625 4.63248 1.41666 6.37498 1.41666C8.1104 1.41666 9.51998 2.82625 9.51998 4.56166C9.5129 6.26166 8.17415 7.64291 6.48831 7.69958Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M11.6237 2.83334C12.9979 2.83334 14.1029 3.94542 14.1029 5.3125C14.1029 6.65125 13.0404 7.74209 11.7158 7.79167C11.6591 7.78459 11.5954 7.78459 11.5316 7.79167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M2.94664 10.3133C1.23247 11.4608 1.23247 13.3308 2.94664 14.4713C4.89455 15.7746 8.08914 15.7746 10.0371 14.4713C11.7512 13.3238 11.7512 11.4538 10.0371 10.3133C8.09622 9.01709 4.90164 9.01709 2.94664 10.3133Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -104,11 +104,11 @@
                         {{-- 3. Add Note --}}
                         <x-secondary-button class="relative text-xs p-2" wire:click="$toggle('showKotNote')" :title="__('modules.order.addNote')" data-tooltip-target="tooltip-note">
                             @if ($this->orderNote)
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1 text-skin-base" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1" style="color: #011646;" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8" />
                                 </svg>
                             @endif
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
                                 <path d="M9.39254 2.55L3.57712 8.70542C3.35754 8.93917 3.14504 9.39958 3.10254 9.71833L2.84045 12.0133C2.74837 12.8421 3.34337 13.4087 4.16504 13.2671L6.44587 12.8775C6.76462 12.8208 7.21087 12.5871 7.43045 12.3462L13.2459 6.19083C14.2517 5.12833 14.705 3.91708 13.1396 2.43667C11.5813 0.970415 10.3984 1.4875 9.39254 2.55Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M8.42212 3.57709C8.7267 5.53209 10.3134 7.02667 12.2825 7.225" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 15.5833H14.875" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -121,7 +121,7 @@
 
                         {{-- 4. Merge Table --}}
                         <x-secondary-button wire:click="openMergeTableModal" class="p-2" :title="__('modules.order.mergeTables')">
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
                                 <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -131,7 +131,7 @@
 
                         {{-- 5. Assign Table --}}
                         <x-secondary-button wire:click="openTableChangeConfirmation" class="p-2" :title="__('modules.order.setTable')">
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
                                 <g clip-path="url(#clip0_kot_row_table)">
                                     <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>
                                 </g>

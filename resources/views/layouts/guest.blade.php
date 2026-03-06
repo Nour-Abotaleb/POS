@@ -34,7 +34,7 @@
         :root {
             /* --color-base: 219, 41, 41; */
             --color-base: {{ $restaurant->theme_rgb }};
-            --livewire-progress-bar-color: {{ $restaurant->theme_hex }};
+            --livewire-progress-bar-color: #011646;
         }
     </style>
 

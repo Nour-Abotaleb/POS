@@ -82,17 +82,17 @@
                         <ul class="flex flex-col font-medium ">
                             <li>
                                 <a href="{{ url('/') }}"
-                                    class="block py-2 pr-4 pl-3 text-gray-700 rounded dark:text-white">@lang('menu.home')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('menu.home')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#icon-features"
-                                    class="block py-2 pr-4 pl-3 text-gray-700 rounded dark:text-white">@lang('landing.features')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('landing.features')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#simple-pricing"
-                                    class="block py-2 pr-4 pl-3 text-gray-700 rounded dark:text-white">@lang('landing.pricing')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('landing.pricing')</a>
                             </li>
 
                             @php
@@ -125,7 +125,7 @@
 
                             <li>
                                 <a href="{{ route('restaurant_signup') }}" wire:navigate
-                                    class="block py-2 pr-4 pl-3 text-gray-700 rounded dark:text-white">@lang('landing.getStarted')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white font-semibold" style="color: #011646;">@lang('landing.getStarted')</a>
                             </li>
                         </ul>
                     </div>
@@ -168,7 +168,8 @@
 
                         @if (!user())
                             <a href="{{ route('restaurant_signup') }}"
-                                class="text-white justify-center bg-skin-base hover:bg-skin-base/[.8] sm:w-auto dark:bg-skin-base dark:hover:bg-skin-base/[0.7] font-semibold rounded-lg text-sm px-5 py-2.5 text-center ltr:ml-2 rtl:mr-2"
+                                class="text-white justify-center hover:opacity-90 sm:w-auto font-semibold rounded-lg text-sm px-5 py-2.5 text-center ltr:ml-2 rtl:mr-2 transition-colors"
+                                style="background-color: #011646;"
                                 wire:click="$dispatch('showSignup')">@lang('landing.getStarted')</a>
                         @endif
                         <button data-collapse-toggle="mobile-menu-2" type="button"
@@ -190,37 +191,52 @@
                         </button>
                     </div>
                     <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
-                        id="mobile-menu-2">
+                        id="mobile-menu-2"
+                        x-data="{
+                            activeSection: 'home',
+                            init() {
+                                const update = () => {
+                                    const h = (window.location.hash || '').replace(/^#/, '');
+                                    this.activeSection = h === 'icon-features' ? 'features' : h === 'simple-pricing' ? 'pricing' : h === 'user-faqs' ? 'faq' : 'home';
+                                };
+                                update();
+                                window.addEventListener('hashchange', update);
+                                document.addEventListener('livewire:navigated', update);
+                            }
+                        }">
                         <ul
                             class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 rtl:space-x-reverse">
                             <li>
-                                <a href="{{ url('/') }}" wire:navigate @class([
-                                    'block py-2 pr-4 pl-3 rounded bg-red-700 lg:bg-transparent lg:p-0',
-                                    'dark:text-white text-gray-700' => !request()->routeIs(['home']),
-                                    'dark:text-skin-base text-skin-base' => request()->routeIs(['home']),
-                                ])
-                                    aria-current="page">@lang('menu.home')</a>
+                                <a href="{{ url('/') }}"
+                                    wire:navigate
+                                    class="block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 transition-all duration-300 text-gray-700 dark:text-white lg:hover:opacity-90"
+                                    :class="{ 'lg:!text-[#011646]': activeSection === 'home' }"
+                                    :style="activeSection === 'home' ? 'color: #011646;' : ''"
+                                    :aria-current="activeSection === 'home' ? 'page' : null">@lang('menu.home')</a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/') }}#icon-features" @class([
-                                    'transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white',
-                                ])
-                                    aria-current="page">@lang('landing.features')</a>
+                                <a href="{{ url('/') }}#icon-features"
+                                    class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
+                                    :class="{ 'lg:!text-[#011646]': activeSection === 'features' }"
+                                    :style="activeSection === 'features' ? 'color: #011646;' : ''"
+                                    :aria-current="activeSection === 'features' ? 'page' : null">@lang('landing.features')</a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/') }}#simple-pricing" @class([
-                                    'transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white',
-                                ])
-                                    aria-current="page">@lang('landing.pricing')</a>
+                                <a href="{{ url('/') }}#simple-pricing"
+                                    class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
+                                    :class="{ 'lg:!text-[#011646]': activeSection === 'pricing' }"
+                                    :style="activeSection === 'pricing' ? 'color: #011646;' : ''"
+                                    :aria-current="activeSection === 'pricing' ? 'page' : null">@lang('landing.pricing')</a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/') }}#user-faqs" @class([
-                                    'transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white',
-                                ])
-                                    aria-current="page">@lang('landing.faq')</a>
+                                <a href="{{ url('/') }}#user-faqs"
+                                    class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
+                                    :class="{ 'lg:!text-[#011646]': activeSection === 'faq' }"
+                                    :style="activeSection === 'faq' ? 'color: #011646;' : ''"
+                                    :aria-current="activeSection === 'faq' ? 'page' : null">@lang('landing.faq')</a>
                             </li>
 
                             @foreach ($customMenu as $menu)

@@ -14,7 +14,8 @@
             <div
                 class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
                 <a href="{{ route('restaurant_signup') }}"
-                    class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-skin-base hover:bg-skin-base/[0.7] focus:ring-4 focus:ring-skin-base dark:focus:ring-skin-base">
+                    class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg hover:opacity-90 focus:ring-4 focus:ring-[#011646] dark:focus:ring-[#011646] transition-colors"
+                    style="background-color: #011646;">
                     @if ($trialPackage)
                         @lang('landing.startTrial', ['days' => $trialPackage->trial_days])
                     @else
@@ -37,7 +38,7 @@
 
                 <!-- SVG Element -->
                 <div class="hidden md:block absolute top-0 end-0 -translate-y-12 translate-x-20">
-                    <svg class="w-16 h-auto text-skin-base" width="121" height="135" viewBox="0 0 121 135"
+                    <svg class="w-16 h-auto" style="color: #011646;" width="121" height="135" viewBox="0 0 121 135"
                         fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 16.4754C11.7688 27.4499 21.2452 57.3224 5 89.0164" stroke="currentColor"
                             stroke-width="10" stroke-linecap="round" />
@@ -139,8 +140,15 @@
     @if(!$frontFeatures->isEmpty())
     <!-- Icon Blocks -->
     <div id="icon-features" class="mb-5"> </div>
-    <div class="max-w-[85rem] mt-6 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-
+    <div class="max-w-[85rem] mt-6 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto landing-feature-icons">
+        <style>
+            #icon-features svg,
+            .landing-feature-icons svg { color: #011646 !important; fill: #011646 !important; }
+            #icon-features svg path,
+            .landing-feature-icons svg path,
+            #icon-features svg use,
+            .landing-feature-icons svg use { fill: #011646 !important; }
+        </style>
         <!-- Title -->
         <div class="mx-auto  mb-8 lg:mb-14 text-center">
             <h2 class="text-3xl lg:text-4xl text-gray-800 font-bold dark:text-neutral-200">
@@ -161,8 +169,8 @@
                                 {!! $feature->image !!}
                             @else
                                 <!-- Default SVG if icon not set -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-qr-code-scan text-skin-base dark:text-skin-base size-6" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#011646"
+                                    class="bi bi-qr-code-scan size-6" style="color: #011646; fill: #011646;" viewBox="0 0 16 16">
                                     <path
                                         d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z" />
                                     <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z" />
@@ -379,7 +387,7 @@
                                     @lang('landing.emailTitle')
                                 </p>
                                 <p>
-                                    <a class="relative inline-block font-medium text-black before:absolute before:bottom-0.5 before:start-0 before:-z-[1] before:w-full before:h-1 before:bg-skin-base hover:before:bg-black focus:outline-none focus:before:bg-black dark:text-white dark:hover:before:bg-white dark:focus:before:bg-white"
+                                    <a class="relative inline-block font-medium text-black before:absolute before:bottom-0.5 before:start-0 before:-z-[1] before:w-full before:h-1 before:bg-[#011646] hover:before:bg-black focus:outline-none focus:before:bg-black dark:text-white dark:hover:before:bg-white dark:focus:before:bg-white"
                                         href="mailto:{{ $frontContact->email ?? __('landing.contactEmail')}}">
                                          {{ $frontContact->email ?? __('landing.contactEmail')}}
 

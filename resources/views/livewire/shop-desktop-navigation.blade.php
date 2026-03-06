@@ -24,7 +24,7 @@
                                 wire:navigate @class([
                                     'block py-2 pr-4 pl-3 rounded bg-primary-700 lg:bg-transparent lg:p-0',
                                     'dark:text-white text-gray-700' => !request()->routeIs(['home']),
-                                    'dark:text-skin-base text-skin-base' => request()->routeIs(['home']),
+                                    'dark:text-[#011646] text-[#011646]' => request()->routeIs(['home']),
                                 ]) aria-current="page">@lang('menu.home')</a>
                         </li>
 
@@ -34,7 +34,7 @@
                                     wire:navigate @class([
                                         'block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0',
                                         'text-gray-700 dark:text-white' => !request()->routeIs(['book_a_table']),
-                                        'dark:text-skin-base text-skin-base' => request()->routeIs([
+                                        'dark:text-[#011646] text-[#011646]' => request()->routeIs([
                                             'book_a_table',
                                         ]),
                                     ]) aria-current="page">@lang('menu.bookTable')</a>
@@ -46,7 +46,7 @@
                                 wire:navigate @class([
                                     'block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0',
                                     'text-gray-700 dark:text-white' => !request()->routeIs(['about']),
-                                    'dark:text-skin-base text-skin-base' => request()->routeIs(['about']),
+                                    'dark:text-[#011646] text-[#011646]' => request()->routeIs(['about']),
                                 ]) aria-current="page">@lang('menu.about', [$restaurant->hash])</a>
                         </li>
                         <li>
@@ -54,7 +54,7 @@
                                 wire:navigate @class([
                                     'block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0',
                                     'text-gray-700 dark:text-white' => !request()->routeIs(['contact']),
-                                    'dark:text-skin-base text-skin-base' => request()->routeIs(['contact']),
+                                    'dark:text-[#011646] text-[#011646]' => request()->routeIs(['contact']),
                                 ]) aria-current="page">@lang('menu.contact', [$restaurant->hash])</a>
                         </li>
                     </ul>
@@ -101,7 +101,7 @@
                     </svg>
                     @if (isset($orderItemCount) && $orderItemCount > 0)
                         <div
-                            class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-skin-base border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                            class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900" style="background-color: #011646;">
                             {{ $orderItemCount }}</div>
                     @endif
                 </a>
@@ -112,7 +112,7 @@
 
                 @if (!is_null(customer()))
                     <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
-                        class="z-50 flex items-center justify-between w-full py-2 px-3 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-skin-base md:p-0 md:w-auto dark:text-white md:dark:hover:text-skin-base dark:focus:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        class="z-50 flex items-center justify-between w-full py-2 px-3 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#011646] md:p-0 md:w-auto dark:text-white md:dark:hover:text-[#011646] dark:focus:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
                         @lang('menu.myAccount')
                         <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 10 6">

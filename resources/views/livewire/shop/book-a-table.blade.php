@@ -15,7 +15,7 @@
         </div>
     @else
     <section class="bg-white dark:bg-gray-900 hidden lg:block px-4">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12 bg-skin-base/[.1] dark:bg-gray-800 rounded-lg">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12 bg-[#011646]/10 dark:bg-gray-800 rounded-lg">
             <h1 class="text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-3xl dark:text-white">@lang('messages.frontReservationHeading')</h1>
         </div>
     </section>
@@ -176,7 +176,7 @@
                             <input type="radio" id="timeSlot{{ $loop->index }}" wire:model.live="availableTimeSlots" value="{{ $timeSlot }}" class="hidden peer" {{ $isDisabled ? 'disabled' : '' }} />
                             <label for="timeSlot{{ $loop->index }}"
                                 @class([
-                                    'inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg dark:border-gray-700 dark:peer-checked:text-skin-base peer-checked:border-skin-base peer-checked:text-skin-base dark:text-gray-400 dark:bg-gray-800 transition-all duration-200',
+                                    'inline-flex items-center justify-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-lg dark:border-gray-700 dark:peer-checked:text-[#011646] peer-checked:border-[#011646] peer-checked:text-[#011646] dark:text-gray-400 dark:bg-gray-800 transition-all duration-200',
                                     'opacity-50 cursor-not-allowed' => $isDisabled,
                                     'cursor-pointer hover:text-gray-600 hover:bg-gray-50 dark:hover:text-gray-300 dark:hover:bg-gray-700' => !$isDisabled
                                 ])
@@ -218,14 +218,14 @@
 
             <div class="mt-6">
                 @if (is_null(customer()))
-                    <x-button type="button" wire:click="$dispatch('showSignup')" class="w-full md:w-auto inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-skin-base hover:bg-skin-base/90 focus:ring-4 focus:ring-skin-base-light dark:focus:ring-skin-base-dark transition-all duration-200">
+                    <x-button type="button" wire:click="$dispatch('showSignup')" class="w-full md:w-auto inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg hover:opacity-90 focus:ring-4 focus:ring-[#011646]/30 transition-all duration-200" style="background-color: #011646;">
                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                         </svg>
                         @lang('messages.loginForReservation')
                     </x-button>
                 @else
-                    <x-button type='button' wire:click='submitReservation' wire:loading.attr="disabled" class="w-full md:w-auto inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-skin-base hover:bg-skin-base/90 focus:ring-4 focus:ring-skin-base-light dark:focus:ring-skin-base-dark transition-all duration-200">
+                    <x-button type='button' wire:click='submitReservation' wire:loading.attr="disabled" class="w-full md:w-auto inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg hover:opacity-90 focus:ring-4 focus:ring-[#011646]/30 transition-all duration-200" style="background-color: #011646;">
                         <svg wire:loading wire:target="submitReservation" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

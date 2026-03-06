@@ -18,12 +18,12 @@
                     <button
                         type="button"
                         wire:click="selectOrderTypeFromModal({{ $orderType->id }})"
-                        class="flex flex-col items-center justify-center p-6 transition-all duration-200 border-2 border-gray-200 rounded-lg hover:border-skin-base hover:shadow-lg dark:border-gray-600 dark:hover:border-skin-base group"
+                        class="flex flex-col items-center justify-center p-6 transition-all duration-200 border-2 border-gray-200 rounded-lg hover:border-[#011646] hover:shadow-lg dark:border-gray-600 dark:hover:border-[#011646] group"
                         wire:key="modal-order-type-{{ $orderType->id }}"
                     >
                         <!-- Icon -->
-                        <div class="flex items-center justify-center w-16 h-16 mb-4 transition-colors rounded-full bg-gray-50 group-hover:bg-skin-base dark:bg-gray-700">
-                            <svg class="w-8 h-8 text-gray-600 transition-colors group-hover:text-white dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-center w-16 h-16 mb-4 transition-colors rounded-full bg-gray-50 group-hover:bg-[#011646]/10 dark:bg-gray-700 dark:group-hover:bg-[#011646]/10">
+                            <svg class="w-8 h-8 text-gray-600 transition-colors group-hover:text-[#011646] dark:text-gray-300 dark:group-hover:text-[#011646]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 @if($orderType->type === 'dine_in')
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                                 @elseif($orderType->type === 'delivery')
@@ -108,7 +108,7 @@
     @if(!$isHeaderDisabled)
         <section class="px-4 bg-white dark:bg-gray-900">
             @if($headerType === 'text')
-                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-skin-base/[.1] dark:bg-gray-800 rounded-lg">
+                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-[#011646]/10 dark:bg-gray-800 rounded-lg">
                     <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
                         {{ $headerText }}
                     </h1>
@@ -176,7 +176,7 @@
                 @else
                     <!-- Default header if no custom settings -->
                     <div
-                    class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-skin-base/[.1] dark:bg-gray-800 rounded-lg">
+                    class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-[#011646]/10 dark:bg-gray-800 rounded-lg">
                     <h1
                         class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
                             @lang('messages.frontHeroHeading')</h1>
@@ -196,7 +196,7 @@
                 <!-- All Menu Card -->
                 <a @class([
                     'group flex items-center border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600',
-                    'bg-skin-base dark:bg-skin-base' => is_null($menuId),
+                    'bg-[#011646] dark:bg-[#011646]' => is_null($menuId),
                     'bg-white' => !is_null($menuId),
                 ]) wire:key='menu-{{ 'all-' . microtime() }}'
                     wire:click='filterMenuItems(null)' href="javascript:;">
@@ -212,7 +212,7 @@
                             <div class="grow">
                                 <h3 wire:loading.class.delay='opacity-50' @class([
                                     'font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200 text-xs lg:text-base',
-                                    'text-gray-800 group-hover:text-skin-base' => !is_null($menuId),
+                                    'text-gray-800 group-hover:text-[#011646]' => !is_null($menuId),
                                     'text-white group-hover:text-white' => is_null($menuId),
                                 ])>
                                     @lang('app.showAll')
@@ -227,7 +227,7 @@
                     <div x-show="showAll || {{ $index }} < 7" x-transition>
                         <a @class([
                             'group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600',
-                            'bg-skin-base dark:bg-skin-base' => $menuId == $item->id,
+                            'bg-[#011646] dark:bg-[#011646]' => $menuId == $item->id,
                             'bg-white' => $menuId != $item->id,
                         ]) wire:key='menu-{{ $item->id . microtime() }}'
                             wire:click='filterMenuItems({{ $item->id }})' href="javascript:;">
@@ -243,7 +243,7 @@
 
                                     <div class="grow">
                                         <h3 wire:loading.class.delay='opacity-50' @class([
-                                            'font-semibold group-hover:text-skin-base dark:group-hover:text-gray-100 dark:text-neutral-200 text-xs lg:text-base',
+                                            'font-semibold group-hover:text-[#011646] dark:group-hover:text-gray-100 dark:text-neutral-200 text-xs lg:text-base',
                                             'text-gray-800 dark:text-gray-200' => $menuId != $item->id,
                                             'text-white group-hover:text-white' => $menuId == $item->id,
                                         ])>
@@ -273,7 +273,7 @@
             @if (count($this->menuList) > 8)
                 <div class="flex justify-center mt-4" x-cloak wire:key="show-more-button">
                     <button @click="showAll = !showAll"
-                        class="flex items-center gap-1 text-sm text-skin-base hover:underline">
+                        class="flex items-center gap-1 text-sm hover:underline" style="color: #011646;">
                         <span
                             x-text="showAll ? '{{ __('modules.menu.showLess') }}' : '{{ __('modules.menu.showMore') }}'"></span>
                         <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': showAll }"
@@ -309,13 +309,13 @@
                     class="absolute left-0 right-0 z-50 mt-2 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-700">
                     <div class="overflow-y-auto max-h-80">
                         <button wire:click="filterMenu(null); $nextTick(() => { open = false })"
-                            class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors {{ is_null($filterCategories) ? 'bg-gray-50 dark:bg-gray-600 text-skin-base' : 'text-gray-700 dark:text-gray-200' }}">
+                            class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors {{ is_null($filterCategories) ? 'bg-gray-50 dark:bg-gray-600' : 'text-gray-700 dark:text-gray-200' }}" style="{{ is_null($filterCategories) ? 'color: #011646;' : '' }}">
                             @lang('app.showAll')
                         </button>
 
                         @foreach ($this->categoryList as $item)
                             <button wire:click="filterMenu({{ $item->id }}); $nextTick(() => { open = false })"
-                                class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center justify-between {{ $filterCategories == $item->id ? 'bg-gray-50 dark:bg-gray-600 text-skin-base' : 'text-gray-700 dark:text-gray-200' }}">
+                                class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center justify-between {{ $filterCategories == $item->id ? 'bg-gray-50 dark:bg-gray-600' : 'text-gray-700 dark:text-gray-200' }}" style="{{ $filterCategories == $item->id ? 'color: #011646;' : '' }}">
                                 <span>{{ $item->getTranslation('category_name', session('locale', app()->getLocale())) }}</span>
                                 <span
                                     class="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded-full dark:bg-gray-600 dark:text-gray-300">
@@ -333,7 +333,7 @@
                     aria-label="Categories">
                     <button wire:click="filterMenu(null)" @class([
                         'px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap',
-                        'bg-skin-base text-white shadow-sm' => is_null($filterCategories),
+                        'bg-[#011646] text-white shadow-sm' => is_null($filterCategories),
                         'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' => !is_null(
                             $filterCategories),
                     ])>
@@ -345,7 +345,7 @@
                             wire:key="category-desktop-{{ $item->id }}"
                             @class([
                             'px-4 py-2 text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-2 whitespace-nowrap',
-                            'bg-skin-base text-white shadow-sm' => $filterCategories == $item->id,
+                            'bg-[#011646] text-white shadow-sm' => $filterCategories == $item->id,
                             'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' =>
                                 $filterCategories != $item->id,
                         ])>
@@ -572,7 +572,7 @@
             <div class="flex items-center justify-center py-6 px-4">
                 @if(!$this->allItemsLoaded)
                     <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
-                        <svg class="inline animate-spin h-6 w-6 text-skin-base" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg class="inline animate-spin h-6 w-6" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/>
                         </svg>
@@ -599,7 +599,7 @@
 
             @if ($cartQty > 0)
                 <div
-                    class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto -ml-4 antialiased font-bold text-white rounded-md bg-skin-base lg:max-w-screen-xl dark:bg-gray-800 bottom-1">
+                    class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto -ml-4 antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1" style="background-color: #011646;">
                     <div>@lang('modules.order.totalItem'): {{ $cartQty }} &nbsp;|&nbsp;
                         {{ currency_format($subTotal, $restaurant->currency_id) }} + @lang('modules.order.taxes')</div>
 
@@ -708,9 +708,9 @@
                                 <div class="flex flex-wrap gap-2 mt-2">
                                     @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
                                         <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-skin-base/10 text-skin-base">
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[#011646]/10" style="color: #011646;">
                                             {{ $this->modifierOptions[$modifierOptionId]->name }}
-                                            <span class="ml-1 text-skin-base">
+                                            <span class="ml-1" style="color: #011646;">
                                                 {{ currency_format($this->modifierOptions[$modifierOptionId]->price, $this->modifierOptions[$modifierOptionId]->modifierGroup->branch->restaurant->currency_id) }}
                                             </span>
                                         </span>
@@ -744,7 +744,7 @@
                                     <div x-data="{ showNoteInput: false, noteText: '' }" class="mt-2">
                                         <button x-show="!showNoteInput"
                                             @click="showNoteInput = true; $nextTick(() => $refs.noteInput.focus())"
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-full text-gray-700 hover:bg-skin-base/10  hover:text-skin-base dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-600 transition-all duration-200 group">
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-full text-gray-700 hover:bg-[#011646]/10 hover:text-[#011646] dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-600 transition-all duration-200 group">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
                                                 class="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-200"
                                                 xml:space="preserve">
@@ -763,14 +763,14 @@
                                             <div class="flex w-full">
                                                 <div class="relative flex-1">
                                                     <x-input x-ref="noteInput" x-model="noteText" type="text"
-                                                        class="w-full pr-20 text-sm border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-skin-base focus:border-skin-base"
+                                                        class="w-full pr-20 text-sm border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-[#011646] focus:border-[#011646]"
                                                         :placeholder="__('placeholders.addItemNotesPlaceholder')"
                                                         @keydown.enter="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false" />
                                                     <div
                                                         class="absolute inset-y-0 right-0 flex items-center gap-1 pr-2">
                                                         <button
                                                             @click="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false"
-                                                            class="p-1.5 text-white rounded-md bg-skin-base hover:bg-skin-base/90 transition-colors duration-200"
+                                                            class="p-1.5 text-white rounded-md hover:opacity-90 transition-colors duration-200" style="background-color: #011646;"
                                                             title="@lang('app.save')">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="w-3.5 h-3.5" fill="none"
@@ -872,7 +872,7 @@
 
                                         <!-- Edit Button -->
                                         <button @click="showNotes = true"
-                                            class="flex items-center gap-1.5 text-skin-base hover:text-skin-base/80 hover:scale-110 p-1">
+                                            class="flex items-center gap-1.5 hover:opacity-80 hover:scale-110 p-1" style="color: #011646;">
                                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1133,7 +1133,8 @@
                         @lang('messages.cartEmpty')
                     </h3>
 
-                    <a class="inline-flex items-center justify-center px-3 py-2 mt-3 text-sm font-medium text-white border border-transparent rounded-lg gap-x-2 bg-skin-base hover:bg-skin-base focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                    <a class="inline-flex items-center justify-center px-3 py-2 mt-3 text-sm font-medium text-white border border-transparent rounded-lg gap-x-2 hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+ style="background-color: #011646;"
                         href="{{ module_enabled('Subdomain') ? url('/') : route('shop_restaurant', [$restaurant->hash]) }}"
                         wire:navigate>
                         @lang('modules.order.placeOrder')
@@ -1392,7 +1393,7 @@
                                         <span x-show="expanded">{{ $selectedItem->description }}</span>
                                     </p>
                                     <button @click="expanded = !expanded"
-                                        class="mt-1 text-sm font-medium text-skin-base">
+                                        class="mt-1 text-sm font-medium" style="color: #011646;">
                                         <span x-text="expanded ? '@lang('modules.menu.showLess')' : '@lang('modules.menu.showMore')'"></span>
                                     </button>
                                 </div>
