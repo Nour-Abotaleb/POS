@@ -2,10 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
     :root {
-      --color-base: 1, 22, 70; /* #011646 */
+        --color-base: 1, 22, 70; /* #011646 */
     }
 }
 
@@ -35,25 +34,55 @@
     color: #011646 !important;
 }
 /* Opacity variants using rgba(1,22,70,...) */
-.bg-skin-base\/10 { background-color: rgba(1, 22, 70, 0.1) !important; }
-.bg-skin-base\/20 { background-color: rgba(1, 22, 70, 0.2) !important; }
-.border-skin-base\/20 { border-color: rgba(1, 22, 70, 0.2) !important; }
-.border-skin-base\/30 { border-color: rgba(1, 22, 70, 0.3) !important; }
-.border-skin-base\/40 { border-color: rgba(1, 22, 70, 0.4) !important; }
-.border-skin-base\/50 { border-color: rgba(1, 22, 70, 0.5) !important; }
-.fill-skin-base { fill: #011646 !important; }
-.fill-skin-base\/80 { fill: rgba(1, 22, 70, 0.8) !important; }
-.ring-skin-base:focus { --tw-ring-color: #011646 !important; }
-.focus\:ring-skin-base:focus { --tw-ring-color: #011646 !important; }
-.peer-checked\:bg-skin-base:checked ~ * { background-color: #011646 !important; }
+.bg-skin-base\/10 {
+    background-color: rgba(1, 22, 70, 0.1) !important;
+}
+.bg-skin-base\/20 {
+    background-color: rgba(1, 22, 70, 0.2) !important;
+}
+.border-skin-base\/20 {
+    border-color: rgba(1, 22, 70, 0.2) !important;
+}
+.border-skin-base\/30 {
+    border-color: rgba(1, 22, 70, 0.3) !important;
+}
+.border-skin-base\/40 {
+    border-color: rgba(1, 22, 70, 0.4) !important;
+}
+.border-skin-base\/50 {
+    border-color: rgba(1, 22, 70, 0.5) !important;
+}
+.fill-skin-base {
+    fill: #011646 !important;
+}
+.fill-skin-base\/80 {
+    fill: rgba(1, 22, 70, 0.8) !important;
+}
+.ring-skin-base:focus {
+    --tw-ring-color: #011646 !important;
+}
+.focus\:ring-skin-base:focus {
+    --tw-ring-color: #011646 !important;
+}
+.peer-checked\:bg-skin-base:checked ~ * {
+    background-color: #011646 !important;
+}
 /* Focus ring/border for inputs (use class="theme-focus" when Tailwind arbitrary not applied) */
 .theme-focus:focus {
     border-color: #011646 !important;
     box-shadow: 0 0 0 3px rgba(1, 22, 70, 0.25) !important;
     outline: none;
 }
+/* Group hover: when parent .group is hovered, child with this class gets theme color */
+.group:hover .group-hover-text-theme {
+    color: #011646 !important;
+}
+/* Settings tabs - active tab text and border (fallback; inline styles in views take precedence) */
+.settings-tab-bar .active {
+    color: #011646 !important;
+    border-bottom-color: #011646 !important;
+}
 
-  
 [x-cloak] {
     display: none;
 }
@@ -88,46 +117,45 @@
 
 /* Trix Content Styles */
 .trix-content {
-  @apply w-full;
+    @apply w-full;
 }
 
 .trix-content h1 {
-  font-size: 1.25rem !important;
-  line-height: 1.25rem !important;
-  @apply leading-5 font-semibold mb-4;
+    font-size: 1.25rem !important;
+    line-height: 1.25rem !important;
+    @apply leading-5 font-semibold mb-4;
 }
 
 .trix-content a:not(.no-underline) {
-  @apply underline;
+    @apply underline;
 }
 
-
 .trix-content ul {
-  list-style-type: disc;
-  padding-left: 1rem;
+    list-style-type: disc;
+    padding-left: 1rem;
 }
 
 .trix-content ol {
-  list-style-type: decimal;
-  padding-left: 1rem;
+    list-style-type: decimal;
+    padding-left: 1rem;
 }
 
 .trix-content pre {
-  display: inline-block;
-  width: 100%;
-  vertical-align: top;
-  font-family: monospace;
-  font-size: 1.5em;
-  padding: 0.5em;
-  white-space: pre;
-  background-color: #eee;
-  overflow-x: auto;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    font-family: monospace;
+    font-size: 1.5em;
+    padding: 0.5em;
+    white-space: pre;
+    background-color: #eee;
+    overflow-x: auto;
 }
 
 .trix-content blockquote {
-  border: 0 solid #ccc;
-  border-left-width: 0px;
-  border-left-width: 0.3em;
-  margin-left: 0.3em;
-  padding-left: 0.6em;
+    border: 0 solid #ccc;
+    border-left-width: 0px;
+    border-left-width: 0.3em;
+    margin-left: 0.3em;
+    padding-left: 0.6em;
 }

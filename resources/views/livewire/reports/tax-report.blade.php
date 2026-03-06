@@ -17,9 +17,9 @@
         </div>
 
         <!-- Today's Tax Summary (Prominent) -->
-        <div class="mb-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
+        <div class="mb-6 p-6 rounded-xl border" style="background: rgba(194, 194, 194, 0.08); border-color: rgba(206, 206, 206, 0.25);">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #011646;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 Today's Tax Summary
@@ -27,7 +27,7 @@
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Today's Tax Collection</p>
-                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    <p class="text-2xl font-bold" style="color: #011646;">
                         {{ currency_format($todayTaxTotal, restaurant()->currency_id) }}
                     </p>
                 </div>
@@ -47,14 +47,14 @@
         <!-- Overall Statistics -->
         <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-4">
             <!-- Total Tax Card -->
-            <div class="p-4 bg-skin-base/10 rounded-xl shadow-sm dark:bg-skin-base/10 border border-skin-base/30 dark:border-skin-base/40">
+            <div class="p-4 rounded-xl shadow-sm border" style="background-color: rgba(1, 22, 70, 0.05); border-color: rgba(1, 22, 70, 0.3);">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-medium text-skin-base dark:text-skin-base">@lang('modules.report.totalTaxes')</h3>
-                    <div class="p-2 bg-skin-base/10 rounded-lg dark:bg-skin-base/10">
-                        <svg class="w-4 h-4 text-skin-base dark:text-skin-base" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"/><g stroke-linecap="round" stroke-linejoin="round"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
+                    <h3 class="text-sm font-medium" style="color: #011646;">@lang('modules.report.totalTaxes')</h3>
+                    <div class="p-2 rounded-lg" style="background-color: rgba(1, 22, 70, 0.1);">
+                        <svg class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;"><g stroke-width="0"/><g stroke-linecap="round" stroke-linejoin="round"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
                     </div>
                 </div>
-                <p class="text-3xl break-words font-bold text-skin-base dark:text-skin-base">
+                <p class="text-3xl break-words font-bold" style="color: #011646;">
                     {{ currency_format($totalTax, restaurant()->currency_id) }}
                 </p>
             </div>
@@ -161,12 +161,12 @@
     <!-- Tabs Navigation -->
     <div class="p-4 bg-white dark:bg-gray-800 mb-6">
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-            <ul class="flex flex-wrap items-center -mb-px">
+            <ul class="flex flex-wrap items-center -mb-px settings-tab-bar">
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'byTaxType')" @class([
                         'inline-flex items-center gap-x-2 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activeTab != 'byTaxType',
-                        'active border-blue-600 dark:text-blue-500 dark:border-blue-500 text-blue-600 font-semibold' => $activeTab == 'byTaxType',
+                        'active font-semibold' => $activeTab == 'byTaxType',
                     ])>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -178,7 +178,7 @@
                     <span wire:click="$set('activeTab', 'byDate')" @class([
                         'inline-flex items-center gap-x-2 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activeTab != 'byDate',
-                        'active border-blue-600 dark:text-blue-500 dark:border-blue-500 text-blue-600 font-semibold' => $activeTab == 'byDate',
+                        'active font-semibold' => $activeTab == 'byDate',
                     ])>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -190,7 +190,7 @@
                     <span wire:click="$set('activeTab', 'byOrder')" @class([
                         'inline-flex items-center gap-x-2 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activeTab != 'byOrder',
-                        'active border-blue-600 dark:text-blue-500 dark:border-blue-500 text-blue-600 font-semibold' => $activeTab == 'byOrder',
+                        'active font-semibold' => $activeTab == 'byOrder',
                     ])>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -294,7 +294,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </td>
-                            <td class="px-6 py-4 font-semibold text-blue-600 dark:text-blue-400">
+                            <td class="px-6 py-4 font-semibold" style="color: #011646;">
                                 {{ currency_format($dateData['total_tax'], restaurant()->currency_id) }}
                             </td>
                             <td class="px-6 py-4 font-semibold text-emerald-600 dark:text-emerald-400">
@@ -325,7 +325,7 @@
                     @endforeach
                     <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
                         <td class="px-6 py-4">Total</td>
-                        <td class="px-6 py-4 text-blue-600 dark:text-blue-400">
+                        <td class="px-6 py-4" style="color: #011646;">
                             {{ currency_format($totalTax, restaurant()->currency_id) }}
                         </td>
                         <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400">
@@ -422,7 +422,7 @@
     <x-dialog-modal wire:model.live="showDateOrdersModal" maxWidth="4xl" maxHeight="full">
         <x-slot name="title">
             <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #011646;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
                 <span>Tax Details for {{ $selectedDate ? \Carbon\Carbon::createFromFormat('Y-m-d', $selectedDate)->format('M d, Y') : '' }}</span>
@@ -470,7 +470,7 @@
                                         <span class="text-gray-400 text-xs">No tax breakdown</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 font-semibold text-blue-600 dark:text-blue-400">
+                                <td class="px-6 py-4 font-semibold" style="color: #011646;">
                                     {{ currency_format($orderDetail['tax_amount'], restaurant()->currency_id) }}
                                 </td>
                                 <td class="px-6 py-4 font-bold text-emerald-600 dark:text-emerald-400">
@@ -484,7 +484,7 @@
                                 {{ currency_format($selectedDateTotals['subtotal'], restaurant()->currency_id) }}
                             </td>
                             <td class="px-6 py-4">-</td>
-                            <td class="px-6 py-4 text-blue-600 dark:text-blue-400">
+                            <td class="px-6 py-4" style="color: #011646;">
                                 {{ currency_format($selectedDateTotals['tax'], restaurant()->currency_id) }}
                             </td>
                             <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400">

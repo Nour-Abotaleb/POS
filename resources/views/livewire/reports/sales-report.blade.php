@@ -19,23 +19,23 @@
 
         <div class="grid grid-cols-1 gap-3 mb-4 sm:grid-cols-2 lg:grid-cols-6">
             <!-- Total Sales Card -->
-            <div class="p-3 bg-skin-base/10 rounded-xl shadow-sm dark:bg-skin-base/10 border border-skin-base/30 dark:border-skin-base/40">
+            <div class="p-3 rounded-xl shadow-sm border" style="background-color: rgba(1, 22, 70, 0.05); border-color: rgba(1, 22, 70, 0.3);">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs font-medium text-skin-base dark:text-skin-base">@lang('modules.report.totalSales')</h3>
-                    <div class="p-1.5 bg-skin-base/10 rounded-lg dark:bg-skin-base/10">
-                        <svg class="w-3.5 h-3.5 text-skin-base dark:text-skin-base" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"/><g stroke-linecap="round" stroke-linejoin="round"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
+                    <h3 class="text-xs font-medium" style="color: #011646;">@lang('modules.report.totalSales')</h3>
+                    <div class="p-1.5 rounded-lg" style="background-color: rgba(1, 22, 70, 0.1);">
+                        <svg class="w-3.5 h-3.5" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;"><g stroke-width="0"/><g stroke-linecap="round" stroke-linejoin="round"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
                     </div>
                 </div>
-                <p class="text-xl break-words font-bold text-skin-base dark:text-skin-base mb-2">
+                <p class="text-xl break-words font-bold mb-2" style="color: #011646;">
                     {{ currency_format($menuItems->sum('total_amount'), $currencyId) }}
                 </p>
 
                 <div class="space-y-1.5">
-                    <div class="flex items-center justify-between rounded-lg bg-skin-base/10 p-2 dark:bg-skin-base/10">
-                        <span class="text-xs font-medium text-skin-base dark:text-skin-base">
+                    <div class="flex items-center justify-between rounded-lg p-2" style="background-color: rgba(1, 22, 70, 0.1);">
+                        <span class="text-xs font-medium" style="color: #011646;">
                             @lang('modules.report.orders')
                         </span>
-                        <span class="text-xs font-bold text-skin-base dark:text-skin-base">
+                        <span class="text-xs font-bold" style="color: #011646;">
                             {{ $menuItems->sum('total_orders') }}
                         </span>
                     </div>

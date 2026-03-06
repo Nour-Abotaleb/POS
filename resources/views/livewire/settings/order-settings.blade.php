@@ -5,15 +5,16 @@
 
         <!-- tabs -->
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-            <ul class="flex flex-wrap items-center -mb-px">
+            <ul class="flex flex-wrap items-center -mb-px settings-tab-bar">
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'prefix')"
+                        style="{{ $activeTab == 'prefix' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-2 cursor-pointer select-none p-3 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'prefix',
-                            'active border-skin-base dark:text-skin-base dark:border-skin-base text-skin-base' => $activeTab == 'prefix',
+                            'active' => $activeTab == 'prefix',
                         ])>
-                        <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg bg-skin-base/20 text-skin-base font-extrabold text-md shadow dark:bg-skin-base/20">
+                        <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg font-extrabold text-md shadow" style="background-color: rgba(1, 22, 70, 0.2); color: #011646;">
                             #
                         </span>
                         @lang('modules.order.prefixSettings')
@@ -21,10 +22,11 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'menuItemImage')"
+                        style="{{ $activeTab == 'menuItemImage' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'menuItemImage',
-                            'active border-skin-base dark:text-skin-base dark:border-skin-base text-skin-base' => $activeTab == 'menuItemImage',
+                            'active' => $activeTab == 'menuItemImage',
                         ])>
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
@@ -34,10 +36,11 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'tokenSettings')"
+                        style="{{ $activeTab == 'tokenSettings' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'tokenSettings',
-                            'active border-skin-base dark:text-skin-base dark:border-skin-base text-skin-base' => $activeTab == 'tokenSettings',
+                            'active' => $activeTab == 'tokenSettings',
                         ])>
                         <!-- SVG: Token Icon -->
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -48,10 +51,11 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'customOrderTypes')"
+                        style="{{ $activeTab == 'customOrderTypes' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'customOrderTypes',
-                            'active border-skin-base dark:text-skin-base dark:border-skin-base text-skin-base' => $activeTab == 'customOrderTypes',
+                            'active' => $activeTab == 'customOrderTypes',
                         ])>
                         <!-- SVG: Custom Order Types Icon -->
                         <svg class="w-4 h-4 text-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
@@ -60,10 +64,11 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'deliveryApps')"
+                        style="{{ $activeTab == 'deliveryApps' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'deliveryApps',
-                            'active border-skin-base dark:text-skin-base dark:border-skin-base text-skin-base' => $activeTab == 'deliveryApps',
+                            'active' => $activeTab == 'deliveryApps',
                         ])>
                         <!-- SVG: Delivery Apps Icon -->
                         <svg class="w-5 h-5 text-current" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><g style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:2"><path d="M31.098 5.76H9.327v17.893h11.286m5.173 0h2.19V17.27M2.528 23.653H.902v-6.065l4.212-4.949h4.213v11.014H7.7"/><circle cx="23.2" cy="23.653" r="2.586"/><circle cx="5.114" cy="23.653" r="2.586"/><path d="M27.976 9.906h-4.777m6.827 4.149h-4.24"/></g></svg>

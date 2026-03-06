@@ -94,45 +94,45 @@
                 'sm:grid-cols-3' => $kotSettings->default_status == 'cooking',
                 ])>
                 @if ($kotSettings->default_status == 'pending')
-                    <div wire:click="$set('filterOrders', 'pending_confirmation')" @class([
+                    <div wire:click="$set('filterOrders', 'pending_confirmation')"
+                        style="{{ $filterOrders == 'pending_confirmation' ? 'border: 2px solid #011646;' : '' }}"
+                        @class([
                         'whitespace-nowrap items-center font-medium
                                                             cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
                                                             hover:bg-gray-200 w-full dark:bg-gray-800 dark:hover:bg-gray-700 cols
                                                             dark:hover:text-white dark:text-neutral-400',
-                        ' border-2 border-skin-base dark:border-skin-base' =>
-                            $filterOrders == 'pending_confirmation',
                     ])>
                         @lang('modules.reservation.Pending') ({{ $pendingConfirmationCount }})
                     </div>
                 @endif
 
-                <div wire:click="$set('filterOrders', 'in_kitchen')" @class([
+                <div wire:click="$set('filterOrders', 'in_kitchen')"
+                    style="{{ $filterOrders == 'in_kitchen' ? 'border: 2px solid #011646;' : '' }}"
+                    @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
                                                     hover:bg-gray-200 w-full dark:bg-gray-800 dark:hover:bg-gray-700
                                                     dark:hover:text-white dark:text-neutral-400',
-                    ' border-2 border-skin-base dark:border-skin-base' =>
-                        $filterOrders == 'in_kitchen',
                 ])>
                     @lang('modules.order.in_kitchen') ({{ $inKitchenCount }})
                 </div>
-                <div wire:click="$set('filterOrders', 'food_ready')" @class([
+                <div wire:click="$set('filterOrders', 'food_ready')"
+                    style="{{ $filterOrders == 'food_ready' ? 'border: 2px solid #011646;' : '' }}"
+                    @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
                                                     hover:bg-gray-200 w-full dark:bg-gray-800 dark:hover:bg-gray-700
                                                     dark:hover:text-white dark:text-neutral-400',
-                    ' border-2 border-skin-base dark:border-skin-base' =>
-                        $filterOrders == 'food_ready',
                 ])>
                     @lang('modules.order.food_ready') ({{ $foodReadyCount }})
                 </div>
-                <div wire:click="$set('filterOrders', 'cancelled')" @class([
+                <div wire:click="$set('filterOrders', 'cancelled')"
+                    style="{{ $filterOrders == 'cancelled' ? 'border: 2px solid #011646;' : '' }}"
+                    @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
                                                     hover:bg-gray-200 w-full dark:bg-gray-800 dark:hover:bg-gray-700
                                                     dark:hover:text-white dark:text-neutral-400',
-                    ' border-2 border-skin-base dark:border-skin-base' =>
-                        $filterOrders == 'cancelled',
                 ])>
                     @lang('modules.order.cancelled') ({{ $cancelledCount }})
                 </div>

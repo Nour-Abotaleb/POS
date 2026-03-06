@@ -9,8 +9,9 @@
                     <!-- View Toggle -->
                     <div class="inline-flex rounded-lg shadow-sm">
                         <button type="button" wire:click="$set('viewType', 'list')"
+                            style="{{ $viewType === 'list' ? 'background-color: #011646; color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg focus:z-10',
-                            'bg-skin-base text-white dark:bg-skin-base/50 dark:text-white' => $viewType === 'list',
+                            'text-white' => $viewType === 'list',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'list'])>
                             <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -18,8 +19,9 @@
                             @lang('app.list')
                         </button>
                         <button type="button" wire:click="$set('viewType', 'grid')"
+                            style="{{ $viewType === 'grid' ? 'background-color: #011646; color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium focus:z-10',
-                            'bg-skin-base text-white dark:bg-skin-base/50 dark:text-white' => $viewType === 'grid',
+                            'text-white' => $viewType === 'grid',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'grid'])>
                             <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -27,8 +29,9 @@
                             @lang('app.grid')
                         </button>
                         <button type="button" wire:click="$set('viewType', 'layout')"
+                            style="{{ $viewType === 'layout' ? 'background-color: #011646; color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-r-lg focus:z-10',
-                            'bg-skin-base text-white dark:bg-skin-base/50 dark:text-white' => $viewType === 'layout',
+                            'text-white' => $viewType === 'layout',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'layout'])>
                             <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
@@ -97,13 +100,15 @@
             <ul class="inline-flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 mb-4">
                 <li class="me-2" wire:key='area-fltr-{{ microtime() }}'>
                     <a href="javascript:;" wire:click="$set('areaID', null)"
-                    @class(['inline-block px-4 py-3 rounded-lg', 'text-skin-base dark:bg-skin-base/[.1] bg-skin-base/[.2]' => (is_null($areaID)), 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => (!is_null($areaID))]) >@lang('modules.table.allAreas')</a>
+                    style="{{ is_null($areaID) ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                    @class(['inline-block px-4 py-3 rounded-lg', 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => (!is_null($areaID))]) >@lang('modules.table.allAreas')</a>
                 </li>
 
                 @foreach ($areas as $item)
                     <li class="me-2" wire:key='area-fltr-{{ $item->id.microtime() }}'>
                         <a href="javascript:;" wire:click="$set('areaID', '{{ $item->id }}')"
-                            @class(['inline-block px-4 py-3 rounded-lg', 'text-skin-base dark:bg-skin-base/[.1] bg-skin-base/[.2]' => ($areaID == $item->id), 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => ($areaID != $item->id)]) >
+                            style="{{ $areaID == $item->id ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                            @class(['inline-block px-4 py-3 rounded-lg', 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => ($areaID != $item->id)]) >
                             {{ $item->area_name }}
                         </a>
                     </li>

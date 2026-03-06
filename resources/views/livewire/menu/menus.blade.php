@@ -35,7 +35,8 @@
             @forelse ($menus as $item)
             <!-- Card -->
             <a
-            @class(['group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600', 'bg-skin-base dark:bg-skin-base' => ($menuId == $item->id), 'bg-white' => ($menuId != $item->id)])
+            style="{{ $menuId == $item->id ? 'background-color: #011646;' : '' }}"
+            @class(['group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600', 'bg-white dark:bg-gray-700' => ($menuId != $item->id)])
             wire:key='menu-{{ $item->id . microtime() }}' wire:click='showMenuItems({{ $item->id }})'
                 href="javascript:;">
                 <div class="p-3">
@@ -50,7 +51,7 @@
 
                         <div class="grow ms-5">
                             <h3 wire:loading.class.delay='opacity-50'
-                                @class(['font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200', 'text-gray-800 group-hover:text-skin-base' => ($menuId != $item->id), 'text-white group-hover:text-white' => ($menuId == $item->id)])>
+                                @class(['font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200', 'text-gray-800 group-hover-text-theme' => ($menuId != $item->id), 'text-white group-hover:text-white' => ($menuId == $item->id)])>
                                 {{ $item->menu_name }}
                             </h3>
                             <p
