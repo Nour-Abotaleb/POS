@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\GeneratesQrCode;
+use App\Models\StorageSetting;
 use App\Models\BaseModel;
 
 class Table extends BaseModel
@@ -44,7 +45,22 @@ class Table extends BaseModel
 
     public function qRCodeUrl(): Attribute
     {
-        return Attribute::get(fn(): string => asset_url_local_s3('qrcodes/' . $this->getQrCodeFileName()));
+        return Attribute::get(function (): string {
+            if (!$this->qrCodeFileExists()) {
+                return '';
+            }
+            return asset_url_local_s3('qrcodes/' . $this->getQrCodeFileName());
+        });
+    }
+
+    /** Whether the QR code image file exists (avoids 404 when not yet generated). */
+    public function qrCodeFileExists(): bool
+    {
+        $filename = $this->getQrCodeFileName();
+        if (in_array(config('filesystems.default'), StorageSetting::S3_COMPATIBLE_STORAGE)) {
+            return Storage::disk(config('filesystems.default'))->exists('qrcodes/' . $filename);
+        }
+        return FileFacade::exists(public_path(Files::UPLOAD_FOLDER . '/qrcodes/' . $filename));
     }
 
     public function generateQrCode()

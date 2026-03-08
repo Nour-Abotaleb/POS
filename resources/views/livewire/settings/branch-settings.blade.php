@@ -254,27 +254,6 @@
                     dragToAdjust: "@lang('modules.delivery.dragMarkerToAdjust')",
                 };
 
-                // Load Google Maps JS if not already loaded
-                if (!window.google || !google.maps) {
-                    const script = document.createElement('script');
-                    script.src = MAP_API_KEY ?
-                        `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&loading=async&libraries=places,geocoding,marker&callback=setupAddressMap` :
-                        `https://maps.googleapis.com/maps/api/js?&loading=async&libraries=places,geocoding,marker&callback=setupAddressMap`;
-                    document.head.appendChild(script);
-                } else {
-                    setupAddressMap();
-                }
-
-                document.addEventListener('livewire:navigated', () => {
-                    Livewire.on('initAddressMap', (params) => {
-                        setTimeout(() => setupAddressMap(params), 300);
-                    });
-                });
-
-                if (document.getElementById('branch-address-map')) {
-                    setTimeout(() => setupAddressMap(), 300);
-                }
-
                 let map, addressMarker;
 
                 function setupAddressMap() {
@@ -411,10 +390,11 @@
                     }
 
                     const card = document.getElementById('place-autocomplete-card');
-                    card.appendChild(placeAutocomplete);
+                    if (card) {
+                        card.appendChild(window.placeAutocomplete);
+                    }
 
-
-                    placeAutocomplete.addEventListener('gmp-select', async ({
+                    window.placeAutocomplete.addEventListener('gmp-select', async ({
                         placePrediction
                     }) => {
                         const place = placePrediction.toPlace();
@@ -429,6 +409,29 @@
                             updateLatLng(location.lat(), location.lng());
                         }
                     });
+                }
+
+                // Expose callback on window so Google Maps API can call it when script loads
+                window.setupAddressMap = setupAddressMap;
+
+                if (!window.google || !google.maps) {
+                    const script = document.createElement('script');
+                    script.src = MAP_API_KEY ?
+                        `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&loading=async&libraries=places,geocoding,marker&callback=setupAddressMap` :
+                        `https://maps.googleapis.com/maps/api/js?&loading=async&libraries=places,geocoding,marker&callback=setupAddressMap`;
+                    document.head.appendChild(script);
+                } else {
+                    setupAddressMap();
+                }
+
+                document.addEventListener('livewire:navigated', () => {
+                    Livewire.on('initAddressMap', (params) => {
+                        setTimeout(() => setupAddressMap(params), 300);
+                    });
+                });
+
+                if (document.getElementById('branch-address-map')) {
+                    setTimeout(() => setupAddressMap(), 300);
                 }
             </script>
         @endscript

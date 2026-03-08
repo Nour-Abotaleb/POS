@@ -15,7 +15,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @unless(request()->routeIs('pos.*'))
     <link rel="stylesheet" href="{{ asset('vendor/trix/trix.css') }}" />
+    @endunless
 
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{ restaurantOrGlobalSetting()->upload_fav_icon_apple_touch_icon_url }}">
@@ -113,16 +115,15 @@
 
     <div class="flex rtl:flex-row-reverse pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen">
 
-        @if (!request()->routeIs('pos.*'))
-            @if (user()->restaurant_id)
-                @livewire('sidebar')
-            @else
-                @livewire('superadmin-sidebar')
-            @endif
+        @if (user()->restaurant_id)
+            @livewire('sidebar')
+        @else
+            @livewire('superadmin-sidebar')
         @endif
 
 
         <div id="main-content"
+            @if (request()->routeIs('pos.*')) data-pos-page="true" @endif
             @class([
                 'relative w-full h-full overflow-y-auto bg-gray-50 dark:bg-gray-900',
                 'ltr:lg:ml-0 rtl:lg:mr-0' => request()->routeIs('pos.*'),
@@ -333,10 +334,11 @@
 
     @include('layouts.service-worker-js')
     @stack('scripts')
+    @unless(request()->routeIs('pos.*'))
     <script src="{{ asset('vendor/trix/trix.umd.min.js') }}"></script>
-
-    <!-- Print Image Handler -->
+    <!-- Print Image Handler (not needed on POS) -->
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js" data-navigate-track></script>
     <script src="{{ asset('js/print-image-handler.js') }}" data-navigate-track></script>
+    @endunless
 </body>
 </html>

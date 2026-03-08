@@ -34,20 +34,28 @@
           node.style.overflow = 'visible';
           node.style.display = 'inline-block';
 
-          // Get the actual content width
+          // Force layout so scrollWidth is valid (avoids NaN in html-to-image foreignObject/transform)
+          void node.offsetHeight;
+
           const contentWidth = node.scrollWidth;
-          const actualWidth = Math.min(contentWidth, 576); // Cap at 576px (80mm standard)
+          const rawWidth = Number(contentWidth);
+          let actualWidth = (isNaN(rawWidth) || rawWidth <= 0) ? 576 : Math.max(200, Math.min(rawWidth, 576));
+          actualWidth = Math.round(actualWidth);
+
+          // Ensure html-to-image never sees NaN: set explicit pixel size on node so clone has valid dimensions
+          node.style.width = actualWidth + 'px';
+          node.style.minHeight = '1px';
+          void node.offsetHeight;
 
           console.log('Content width:', contentWidth, 'Actual width:', actualWidth);
 
-          // Use deviceScaleFactor(2) equivalent for sharper output
           const dataUrl = await htmlToImage.toPng(node, {
             canvasWidth: actualWidth,
             backgroundColor: '#fff',
-            pixelRatio: 2, // Equivalent to Browsershot deviceScaleFactor(2)
+            pixelRatio: 2,
             cacheBust: true,
             width: actualWidth,
-            height: undefined // Let height be calculated automatically (like fullPage)
+            height: undefined
           });
 
           return { dataUrl, actualWidth: actualWidth };

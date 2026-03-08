@@ -53,7 +53,7 @@
 
         </div>
 
-        <livewire:customer.customer-table :search='$search' key='customer-table-{{ microtime() }}' />
+        <livewire:customer.customer-table :search='$search' key="customer-table" />
 
 
     </div>
@@ -64,9 +64,8 @@
         </x-slot>
 
         <x-slot name="content">
-            @if ($showAddCustomer)
-                <livewire:forms.add-customer-form />
-            @endif
+            {{-- Form always in DOM so modal is never empty when opened (avoids empty-then-load flash) --}}
+            <livewire:forms.add-customer-form />
         </x-slot>
     </x-right-modal>
 

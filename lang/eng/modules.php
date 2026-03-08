@@ -192,6 +192,7 @@ return [
         'selectTable' => 'Select Table',
         'tableAvailability' => 'Table Availability',
         'generateQrCode' => 'Generate QR Code',
+        'qrCodeNotGenerated' => 'QR code not generated. Click Generate below.',
         'tableLockManager' => 'Table Lock Manager',
         'totalLocked' => 'Total Locked',
         'expiredLocks' => 'Expired Locks',

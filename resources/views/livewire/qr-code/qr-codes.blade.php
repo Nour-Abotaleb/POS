@@ -64,30 +64,36 @@
 
         <!-- Card Section -->
         <div class="space-y-8">
-            @if (is_null($areaID) && branch()->qRCodeUrl)
+            @if (is_null($areaID))
                 <div class="flex flex-col gap-3 sm:gap-4 space-y-1" wire:key='area-mainqr-{{ microtime() }}'>
                     <!-- Card -->
                     <div class="grid sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
                         <div class='group flex flex-col gap-3 border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600 p-3'
                             href="javascript:;">
-                            <div class="w-full flex justify-center">
-                                <img src="{{ branch()->qRCodeUrl }}" alt="QR Code">
+                            <div class="w-full flex justify-center min-h-[120px] items-center bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                @if (branch()->qrCodeFileExists())
+                                    <img src="{{ branch()->qRCodeUrl }}" alt="QR Code">
+                                @else
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 px-4 text-center">@lang('modules.table.qrCodeNotGenerated')</p>
+                                @endif
                             </div>
                             <div class="flex items-center gap-4 justify-center w-full">
-                                <x-secondary-button wire:click="downloadBranchQrCode" class="text-xs"
-                                    data-tooltip-target="download-tooltip-toggle" type="button"
-                                    data-tooltip-placement="top">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                    </svg>
-                                </x-secondary-button>
-                                <div id="download-tooltip-toggle" role="tooltip"
-                                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-                                    @lang('app.download')
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div>
+                                @if (branch()->qrCodeFileExists())
+                                    <x-secondary-button wire:click="downloadBranchQrCode" class="text-xs"
+                                        data-tooltip-target="download-tooltip-toggle" type="button"
+                                        data-tooltip-placement="top">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                        </svg>
+                                    </x-secondary-button>
+                                    <div id="download-tooltip-toggle" role="tooltip"
+                                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                                        @lang('app.download')
+                                        <div class="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
+                                @endif
                                 <x-secondary-link target="_blank" :href="route('table_order', [restaurant()->id]) .
                                     '?branch=' .branch()->unique_hash .'&hash='. restaurant()->hash .'&from_qr=1'" class="text-xs"
                                     data-tooltip-target="visit-tooltip-toggle" type="button"
@@ -173,28 +179,34 @@
                                     </div>
                                 </div>
 
-                                <div class="w-full flex justify-center">
-                                    <img src="{{ $item->qRCodeUrl }}" alt="">
+                                <div class="w-full flex justify-center min-h-[120px] items-center bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    @if ($item->qrCodeFileExists())
+                                        <img src="{{ $item->qRCodeUrl }}" alt="">
+                                    @else
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 px-4 text-center">@lang('modules.table.qrCodeNotGenerated')</p>
+                                    @endif
                                 </div>
 
                                 <div class="flex items-center gap-4 justify-center w-full">
-                                    <x-secondary-button
-                                        wire:click="downloadQrCode('{{ $item->table_code }}', '{{ $item->branch_id }}')"
-                                        class="text-xs"
-                                        data-tooltip-target="download-tooltip-toggle-{{ $item->id }}"
-                                        type="button" data-tooltip-placement="top">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                        </svg>
-                                    </x-secondary-button>
+                                    @if ($item->qrCodeFileExists())
+                                        <x-secondary-button
+                                            wire:click="downloadQrCode('{{ $item->table_code }}', '{{ $item->branch_id }}')"
+                                            class="text-xs"
+                                            data-tooltip-target="download-tooltip-toggle-{{ $item->id }}"
+                                            type="button" data-tooltip-placement="top">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                            </svg>
+                                        </x-secondary-button>
 
-                                    <div id="download-tooltip-toggle-{{ $item->id }}" role="tooltip"
-                                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-                                        @lang('app.download')
-                                        <div class="tooltip-arrow" data-popper-arrow></div>
-                                    </div>
+                                        <div id="download-tooltip-toggle-{{ $item->id }}" role="tooltip"
+                                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                                            @lang('app.download')
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
+                                    @endif
 
                                     <x-secondary-link target="_blank"
                                         href="{{ route('table_order', [$item->hash]) . '?hash=' . restaurant()->hash }}"

@@ -15,7 +15,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <?php if (! (request()->routeIs('pos.*'))): ?>
     <link rel="stylesheet" href="<?php echo e(asset('vendor/trix/trix.css')); ?>" />
+    <?php endif; ?>
 
 
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo e(restaurantOrGlobalSetting()->upload_fav_icon_apple_touch_icon_url); ?>">
@@ -144,9 +146,8 @@ if (isset($__slots)) unset($__slots);
 
     <div class="flex rtl:flex-row-reverse pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen">
 
-        <?php if(!request()->routeIs('pos.*')): ?>
-            <?php if(user()->restaurant_id): ?>
-                <?php
+        <?php if(user()->restaurant_id): ?>
+            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -162,8 +163,8 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-            <?php else: ?>
-                <?php
+        <?php else: ?>
+            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -179,11 +180,11 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-            <?php endif; ?>
         <?php endif; ?>
 
 
         <div id="main-content"
+            <?php if(request()->routeIs('pos.*')): ?> data-pos-page="true" <?php endif; ?>
             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                 'relative w-full h-full overflow-y-auto bg-gray-50 dark:bg-gray-900',
                 'ltr:lg:ml-0 rtl:lg:mr-0' => request()->routeIs('pos.*'),
@@ -490,11 +491,12 @@ if (isset($__slots)) unset($__slots);
 
     <?php echo $__env->make('layouts.service-worker-js', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php echo $__env->yieldPushContent('scripts'); ?>
+    <?php if (! (request()->routeIs('pos.*'))): ?>
     <script src="<?php echo e(asset('vendor/trix/trix.umd.min.js')); ?>"></script>
-
-    <!-- Print Image Handler -->
+    <!-- Print Image Handler (not needed on POS) -->
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js" data-navigate-track></script>
     <script src="<?php echo e(asset('js/print-image-handler.js')); ?>" data-navigate-track></script>
+    <?php endif; ?>
 </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\script\resources\views/layouts/app.blade.php ENDPATH**/ ?>

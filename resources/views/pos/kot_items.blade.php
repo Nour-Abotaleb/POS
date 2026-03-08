@@ -744,8 +744,9 @@
             </x-slot>
         </x-dialog-modal>
 
-        <!-- Merge Table Modal -->
-        <x-dialog-modal wire:model.live="showMergeTableModal" maxWidth="lg">
+        <!-- Merge Table Modal: teleport to body + forceAboveHeader so it appears fully above the app header (Select one or more tables with unpaid orders...) -->
+        @teleport('body')
+        <x-dialog-modal wire:model.live="showMergeTableModal" maxWidth="lg" :forceAboveHeader="true">
             <x-slot name="title">
                 <div class="flex items-center gap-2">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -854,4 +855,5 @@
                 </div>
             </x-slot>
         </x-dialog-modal>
+        @endteleport
     </div>

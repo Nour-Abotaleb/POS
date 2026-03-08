@@ -30,7 +30,7 @@
             @endif
         </div>
 
-        <x-dialog-modal wire:model.live="showVariationModal" maxWidth="xl">
+        <x-dialog-modal wire:model="showVariationModal" maxWidth="xl">
             <x-slot name="title">
                 @lang('modules.menu.itemVariations')
             </x-slot>
@@ -52,7 +52,7 @@
             </x-slot>
         </x-dialog-modal>
 
-        <x-dialog-modal wire:model.live="showKotNote" maxWidth="xl">
+        <x-dialog-modal wire:model="showKotNote" maxWidth="xl">
             <x-slot name="title">
                 @lang('modules.order.addNote')
             </x-slot>
@@ -60,7 +60,7 @@
             <x-slot name="content">
                 <div>
                     <x-label for="orderNote" :value="__('modules.order.orderNote')" />
-                    <x-textarea data-gramm="false"  class="block mt-1 w-full"  wire:model='orderNote' rows='2' />
+                    <x-textarea data-gramm="false"  class="block mt-1 w-full"  wire:model.defer="orderNote" rows="2" />
                     <x-input-error for="orderNote" class="mt-2" />
                 </div>
             </x-slot>
@@ -70,7 +70,7 @@
             </x-slot>
         </x-dialog-modal>
 
-        <x-dialog-modal wire:model.live="showTableModal" maxWidth="2xl">
+        <x-dialog-modal wire:model="showTableModal" maxWidth="2xl">
             <x-slot name="title">
                 @lang('modules.table.availableTables')
             </x-slot>
@@ -88,7 +88,7 @@
             </x-slot>
         </x-dialog-modal>
 
-        <x-dialog-modal wire:model.live="showDiscountModal" maxWidth="xl">
+        <x-dialog-modal wire:model="showDiscountModal" maxWidth="xl">
             <x-slot name="title">
                 @lang('modules.order.addDiscount')
             </x-slot>
@@ -148,7 +148,7 @@
             </x-dialog-modal>
         @endif
 
-        <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="xl">
+        <x-dialog-modal wire:model="showModifiersModal" maxWidth="xl">
             <x-slot name="title">
                 @lang('modules.modifier.itemModifiers')
             </x-slot>

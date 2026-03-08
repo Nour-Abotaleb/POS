@@ -28,9 +28,9 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700" wire:key='customer-list-{{ microtime() }}'>
+                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700" wire:key="customer-list">
                             @forelse ($customers as $item)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700" wire:key='customer-{{ $item->id . rand(1111, 9999) . microtime() }}' wire:loading.class.delay='opacity-10'>
+                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700" wire:key="customer-row-{{ $item->id }}" wire:loading.class.delay='opacity-10'>
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $item->name }}
                                 </td>
@@ -53,8 +53,7 @@
 
                                 <td class="py-2.5 px-4 space-x-2 whitespace-nowrap text-right rtl:space-x-reverse">
                                     @if(user_can('Update Customer'))
-                                    <x-secondary-button-table wire:click='showEditCustomer({{ $item->id }})' wire:key='customer-edit-{{ $item->id . microtime() }}'
-                                        wire:key='editmenu-item-button-{{ $item->id }}'>
+                                    <x-secondary-button-table wire:click='showEditCustomer({{ $item->id }})' wire:key='customer-edit-{{ $item->id }}'>
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -69,7 +68,7 @@
                                     @endif
 
                                     @if(user_can('Delete Customer'))
-                                    <x-danger-button-table  wire:click="showDeleteCustomer({{ $item->id }})"  wire:key='customer-del-{{ $item->id . microtime() }}'>
+                                    <x-danger-button-table  wire:click="showDeleteCustomer({{ $item->id }})"  wire:key="customer-del-{{ $item->id }}">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd"
@@ -97,7 +96,7 @@
         </div>
     </div>
 
-    <div wire:key='customer-table-paginate-{{ microtime() }}'
+    <div wire:key="customer-table-paginate"
         class="sticky bottom-0 right-0 items-center w-full py-2.5 px-4 bg-white border-t border-gray-200 sm:flex sm:justify-between dark:bg-gray-800 dark:border-gray-700">
         <div class="flex items-center mb-4 sm:mb-0 w-full">
             {{ $customers->links() }}

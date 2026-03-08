@@ -30,15 +30,21 @@
     </div>
 
     <div class="flex flex-col my-4 px-4">
-        <!-- Card Section -->
+        <!-- Card Section: server-driven selection only (single source of truth, no jump on late responses) -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            @forelse ($menus as $item)
+            @forelse ($this->menus as $item)
             <!-- Card -->
             <a
-            style="{{ $menuId == $item->id ? 'background-color: #011646;' : '' }}"
-            @class(['group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600', 'bg-white dark:bg-gray-700' => ($menuId != $item->id)])
-            wire:key='menu-{{ $item->id . microtime() }}' wire:click='showMenuItems({{ $item->id }})'
-                href="javascript:;">
+            wire:key="menu-{{ $item->id }}"
+            href="javascript:;"
+            wire:click="showMenuItems({{ $item->id }})"
+            wire:loading.class.delay="opacity-60"
+            wire:target="showMenuItems"
+            style="{{ $menuId == $item->id ? 'background-color: #011646; border-color: #011646;' : '' }}"
+            @class([
+                'group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600',
+                'bg-white dark:bg-gray-700' => $menuId != $item->id,
+            ])>
                 <div class="p-3">
                     <div class="flex items-center">
                         <div class="bg-gray-100 p-2 rounded-md">
@@ -50,12 +56,18 @@
                         </div>
 
                         <div class="grow ms-5">
-                            <h3 wire:loading.class.delay='opacity-50'
-                                @class(['font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200', 'text-gray-800 group-hover-text-theme' => ($menuId != $item->id), 'text-white group-hover:text-white' => ($menuId == $item->id)])>
+                            <h3 @class([
+                                'font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200',
+                                'text-white' => $menuId == $item->id,
+                                'text-gray-800 group-hover-text-theme' => $menuId != $item->id,
+                            ])>
                                 {{ $item->menu_name }}
                             </h3>
-                            <p
-                            @class(['text-sm dark:text-neutral-500', 'text-gray-500' => ($menuId != $item->id), 'text-gray-100' => ($menuId == $item->id)])>
+                            <p @class([
+                                'text-sm dark:text-neutral-500',
+                                'text-gray-100' => $menuId == $item->id,
+                                'text-gray-500' => $menuId != $item->id,
+                            ])>
                                 {{ $item->items_count }} @lang('modules.menu.item')
                             </p>
                         </div>
@@ -71,14 +83,14 @@
         <!-- End Card Section -->
 
 
-        @if ($menuItems)
+        @if ($menuItems && $this->activeMenu)
         <div class="w-full">
             <div class="my-4 flex items-center gap-4">
-                <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $activeMenu->menu_name }}</h1>
+                <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $this->activeMenu->menu_name }}</h1>
 
                 @if(user_can('Update Menu'))
-                <x-secondary-button-table wire:click='showEditMenu({{ $activeMenu->id }})'
-                    wire:key='editmenu-button-{{ $activeMenu->id }}'>
+                <x-secondary-button-table wire:click='showEditMenu({{ $this->activeMenu->id }})'
+                    wire:key='editmenu-button-{{ $this->activeMenu->id }}'>
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -107,21 +119,20 @@
         </div>
 
             @if(user_can('Show Menu Item'))
-            <livewire:menu.menu-items :menuID='$menuId' key='menu-item-{{ microtime() }}' />
+            <livewire:menu.menu-items :menuID='$menuId' :key="'menu-item-' . $menuId" defer />
             @endif
         @endif
     </div>
 
 
-    @if ($activeMenu)
-    <x-right-modal wire:model.live="showEditMenuModal">
+    <x-right-modal wire:model="showEditMenuModal">
         <x-slot name="title">
             {{ __("modules.menu.editMenuItem") }}
         </x-slot>
 
         <x-slot name="content">
-            @if ($activeMenu)
-            @livewire('forms.editMenu', ['activeMenu' => $activeMenu], key(str()->random(50)))
+            @if ($this->editingMenu)
+            @livewire('forms.editMenu', ['activeMenu' => $this->editingMenu], key('edit-menu-'.$this->editingMenuId))
             @endif
         </x-slot>
 
@@ -132,6 +143,7 @@
         </x-slot>
     </x-right-modal>
 
+    @if ($this->activeMenu)
     <x-confirmation-modal wire:model="confirmDeleteMenuModal">
         <x-slot name="title">
             @lang('modules.menu.deleteMenu')?
@@ -146,7 +158,7 @@
                 {{ __('app.cancel') }}
             </x-secondary-button>
 
-            <x-danger-button class="ml-3" wire:click='deleteMenu({{ $activeMenu->id }})' wire:loading.attr="disabled">
+            <x-danger-button class="ml-3" wire:click='deleteMenu({{ $this->activeMenu->id }})' wire:loading.attr="disabled">
                 {{ __('app.delete') }}
             </x-danger-button>
         </x-slot>

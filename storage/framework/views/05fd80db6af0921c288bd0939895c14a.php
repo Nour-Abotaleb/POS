@@ -990,17 +990,18 @@
 <?php unset($__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f); ?>
 <?php endif; ?>
 
-        <!-- Merge Table Modal -->
+        <!-- Merge Table Modal: teleport to body + forceAboveHeader so it appears fully above the app header (Select one or more tables with unpaid orders...) -->
+        <template x-teleport="<?php echo e('body'); ?>">
         <?php if (isset($component)) { $__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal49bd1c1dd878e22e0fb84faabf295a3f = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dialog-modal','data' => ['wire:model.live' => 'showMergeTableModal','maxWidth' => 'lg']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dialog-modal','data' => ['wire:model.live' => 'showMergeTableModal','maxWidth' => 'lg','forceAboveHeader' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('dialog-modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'showMergeTableModal','maxWidth' => 'lg']); ?>
+<?php $component->withAttributes(['wire:model.live' => 'showMergeTableModal','maxWidth' => 'lg','forceAboveHeader' => true]); ?>
              <?php $__env->slot('title', null, []); ?> 
                 <div class="flex items-center gap-2">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1138,5 +1139,6 @@
 <?php $component = $__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f; ?>
 <?php unset($__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f); ?>
 <?php endif; ?>
+        </template>
     </div>
 <?php /**PATH C:\xampp\htdocs\script\resources\views/pos/kot_items.blade.php ENDPATH**/ ?>

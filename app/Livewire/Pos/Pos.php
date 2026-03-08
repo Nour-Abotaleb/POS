@@ -136,6 +136,9 @@ class Pos extends Component
     /** @var int Start at 0 so initial HTML is small; first batch loads via wire:init after hydration. */
     public $menuItemsLoaded = 0;
 
+    /** @var float Unix timestamp of last loadMoreMenuItems call; used to throttle and prevent stacked updates. */
+    public $lastLoadMoreAt = 0;
+
     // MultiPOS properties
     public $hasPosMachine = false;
     public $machineStatus = null;
@@ -294,7 +297,7 @@ class Pos extends Component
         );
 
         // Eager load menu with categories (cached 5 min to speed up POS)
-        $this->menuList = Cache::remember('pos_menulist_' . branch()->id, 60 * 5, function () {
+        $this->menuList = Cache::remember('pos_menulist_' . branch()->id, 3600, function () {
             return Menu::withoutGlobalScopes()
                 ->where('branch_id', branch()->id)
                 ->orderBy('sort_order')
@@ -1989,6 +1992,23 @@ class Pos extends Component
             $orderTypeName = $orderType->order_type_name ?? $orderTypeName;
         }
 
+        // Ensure order type is set before save (e.g. save draft without user clicking a type - default to dine in like Order Panel/KOT)
+        if (!$this->orderTypeId || !$this->orderType) {
+            $defaultOrderTypes = OrderType::where('branch_id', branch()->id)
+                ->where('is_active', true)
+                ->orderByRaw("CASE WHEN slug = 'dine_in' THEN 0 WHEN slug = 'delivery' THEN 1 ELSE 2 END")
+                ->orderBy('order_type_name')
+                ->get();
+            $dineIn = $defaultOrderTypes->firstWhere('slug', 'dine_in');
+            $defaultOrderType = $dineIn ?? $defaultOrderTypes->first();
+            if ($defaultOrderType) {
+                $this->orderTypeId = $defaultOrderType->id;
+                $this->orderType = $defaultOrderType->type;
+                $this->orderTypeSlug = $defaultOrderType->slug;
+                $orderTypeName = $defaultOrderType->order_type_name ?? $orderTypeName;
+            }
+        }
+
         if ((!$this->tableOrderID && !$this->orderID) || ($this->tableOrderID && !$this->tableOrder->activeOrder)) {
 
             // For draft orders, don't generate order number
@@ -2795,46 +2815,21 @@ class Pos extends Component
         $this->orderItemQty = [];
         $this->orderItemAmount = [];
 
-        // Set default order type based on restaurant settings
-        $disablePopup = restaurant()->disable_order_type_popup ?? false;
-        if ($disablePopup && restaurant()->default_order_type_id) {
-            // Use the configured default order type
-            $defaultOrderType = OrderType::find(restaurant()->default_order_type_id);
-            if ($defaultOrderType && $defaultOrderType->is_active) {
-                $this->orderType = $defaultOrderType->type;
-                $this->orderTypeSlug = $defaultOrderType->slug;
-                $this->orderTypeId = $defaultOrderType->id;
-            } else {
-                // Fallback to Dine In if configured default is not available
-                $defaultOrderType = OrderType::where('type', 'dine_in')
-                    ->where('is_active', true)
-                    ->first();
-                if ($defaultOrderType) {
-                    $this->orderType = $defaultOrderType->type;
-                    $this->orderTypeSlug = $defaultOrderType->slug;
-                    $this->orderTypeId = $defaultOrderType->id;
-                } else {
-                    $this->orderType = 'dine_in';
-                    $this->orderTypeSlug = 'dine_in';
-                    $this->orderTypeId = null;
-                }
-            }
+        // POS Order Panel / KOT: always default to Dine In when resetting (match mount/render behavior)
+        $orderTypes = OrderType::where('branch_id', branch()->id)
+            ->where('is_active', true)
+            ->orderByRaw("CASE WHEN slug = 'dine_in' THEN 0 WHEN slug = 'delivery' THEN 1 ELSE 2 END")
+            ->orderBy('order_type_name')
+            ->get();
+        $defaultOrderType = $orderTypes->firstWhere('slug', 'dine_in') ?? $orderTypes->first();
+        if ($defaultOrderType) {
+            $this->orderType = $defaultOrderType->type;
+            $this->orderTypeSlug = $defaultOrderType->slug;
+            $this->orderTypeId = $defaultOrderType->id;
         } else {
-            // Set default order type to Dine In (when popup is enabled)
-            $defaultOrderType = OrderType::where('type', 'dine_in')
-                ->where('is_active', true)
-                ->first();
-
-            if ($defaultOrderType) {
-                $this->orderType = $defaultOrderType->type;
-                $this->orderTypeSlug = $defaultOrderType->slug;
-                $this->orderTypeId = $defaultOrderType->id;
-            } else {
-                //  if no default order type found
-                $this->orderType = 'dine_in';
-                $this->orderTypeSlug = 'dine_in';
-                $this->orderTypeId = null;
-            }
+            $this->orderType = 'dine_in';
+            $this->orderTypeSlug = 'dine_in';
+            $this->orderTypeId = null;
         }
 
         $this->discountType = null;
@@ -3207,7 +3202,7 @@ class Pos extends Component
     {
         $branchId = branch()->id;
         $showCustomOrderTypes = restaurant()->show_order_type_options;
-        return Cache::remember('pos_order_types_' . $branchId . '_' . ($showCustomOrderTypes ? '1' : '0'), 60 * 5, function () use ($showCustomOrderTypes) {
+        return Cache::remember('pos_order_types_' . $branchId . '_' . ($showCustomOrderTypes ? '1' : '0'), 3600, function () use ($showCustomOrderTypes) {
             return OrderType::where('branch_id', branch()->id)
                 ->where('is_active', true)
                 ->when(!$showCustomOrderTypes, fn($q) => $q->where('is_default', true))
@@ -3621,7 +3616,7 @@ class Pos extends Component
     {
         $branchId = branch()->id;
         $menuId = $this->menuId;
-        return Cache::remember('pos_category_list_' . $branchId . '_' . ($menuId ?? 'all'), 60 * 5, function () use ($menuId) {
+        return Cache::remember('pos_category_list_' . $branchId . '_' . ($menuId ?? 'all'), 3600, function () use ($menuId) {
             return ItemCategory::select('id', 'category_name')
                 ->withCount(['items' => function ($query) use ($menuId) {
                     if (!empty($menuId)) {
@@ -3643,14 +3638,20 @@ class Pos extends Component
     }
 
     /**
-     * Load more menu items on scroll
+     * Load more menu items on scroll.
+     * Throttle prevents stacking multiple requests (infinite update loop) when scroll fires every 100ms.
      */
     public function loadMoreMenuItems()
     {
-        // Don't load more if all items are already loaded
         if ($this->allItemsLoaded) {
             return;
         }
+
+        $now = microtime(true);
+        if (($now - $this->lastLoadMoreAt) < 1.5) {
+            return;
+        }
+        $this->lastLoadMoreAt = $now;
 
         $this->menuItemsLoaded += $this->menuItemsPerPage;
     }

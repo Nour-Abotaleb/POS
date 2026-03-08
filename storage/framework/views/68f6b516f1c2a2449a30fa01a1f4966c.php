@@ -174,20 +174,20 @@
                 x-data="{
                     loadedCount: <?php if ((object) ('menuItemsLoaded') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'->value()); ?>')<?php echo e('menuItemsLoaded'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'); ?>')<?php endif; ?>,
                     totalCount: <?php echo e($this->totalMenuItemsCount); ?>,
-                    
+                    lastLoadMoreAt: 0,
+
                     get allItemsLoaded() {
                         return this.loadedCount >= this.totalCount;
                     },
-                    
+
                     scrollHandler(scrollEl = $el) {
-                        if (this.allItemsLoaded) {
-                            return;
-                        }
-                        if (!scrollEl) {
-                            return;
-                        }
+                        if (this.allItemsLoaded) return;
+                        if (!scrollEl) return;
+                        const now = Date.now();
+                        if (now - this.lastLoadMoreAt < 1500) return;
 
                         if (scrollEl.scrollHeight - scrollEl.scrollTop <= scrollEl.clientHeight + 250) {
+                            this.lastLoadMoreAt = now;
                             $wire.loadMoreMenuItems();
                         }
                     }
@@ -232,11 +232,12 @@
                                             src="<?php echo e($item->item_photo_url); ?>"
                                             alt="<?php echo e($item->item_name); ?>"
                                             loading="lazy"
+                                            decoding="async"
                                             onerror="this.onerror=null; this.src='<?php echo e(asset('img/food.svg')); ?>';" />
                                         <span class="absolute top-1 right-1 bg-white/90 dark:bg-gray-800/90 rounded-full p-1 shadow-sm">
                                             <img src="<?php echo e(asset('img/' . $item->type . '.svg')); ?>"
                                                 class="h-4 w-4" title="<?php echo app('translator')->get('modules.menu.' . $item->type); ?>"
-                                                alt="" />
+                                                alt="" loading="lazy" decoding="async" />
                                         </span>
                                     </div>
                                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->

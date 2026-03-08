@@ -236,8 +236,14 @@ async function saveKotImageFromPrint(kotId, kotPlaceId, content) {
         iframeBody.style.overflow = "visible";
         iframeBody.style.display = "inline-block";
 
+        void iframeBody.offsetHeight;
         const contentWidth = iframeBody.scrollWidth;
-        const actualWidth = Math.min(contentWidth, 576); // Cap at 576px (80mm standard)
+        const rawWidth = Number(contentWidth);
+        let actualWidth = (isNaN(rawWidth) || rawWidth <= 0) ? 576 : Math.max(200, Math.min(rawWidth, 576));
+        actualWidth = Math.round(actualWidth);
+        iframeBody.style.width = actualWidth + "px";
+        iframeBody.style.minHeight = "1px";
+        void iframeBody.offsetHeight;
 
         // Mobile-specific optimizations
         const pixelRatio = window.isMobileDevice ? 1.5 : 2; // Lower quality on mobile to reduce memory usage
@@ -442,8 +448,14 @@ async function saveOrderImageFromPrint(orderId, content) {
         iframeBody.style.overflow = "visible";
         iframeBody.style.display = "inline-block";
 
+        void iframeBody.offsetHeight;
         const contentWidth = iframeBody.scrollWidth;
-        const actualWidth = Math.min(contentWidth, 576); // Cap at 576px (80mm standard)
+        const rawWidth = Number(contentWidth);
+        let actualWidth = (isNaN(rawWidth) || rawWidth <= 0) ? 576 : Math.max(200, Math.min(rawWidth, 576));
+        actualWidth = Math.round(actualWidth);
+        iframeBody.style.width = actualWidth + "px";
+        iframeBody.style.minHeight = "1px";
+        void iframeBody.offsetHeight;
 
         // Mobile-specific optimizations
         const pixelRatio = window.isMobileDevice ? 1.5 : 2; // Lower quality on mobile to reduce memory usage
@@ -648,8 +660,14 @@ async function saveReportImageFromPrint(sessionId, content, reportType) {
         iframeBody.style.overflow = "visible";
         iframeBody.style.display = "inline-block";
 
+        void iframeBody.offsetHeight;
         const contentWidth = iframeBody.scrollWidth;
-        const actualWidth = Math.min(contentWidth, 576);
+        const rawWidth = Number(contentWidth);
+        let actualWidth = (isNaN(rawWidth) || rawWidth <= 0) ? 576 : Math.max(200, Math.min(rawWidth, 576));
+        actualWidth = Math.round(actualWidth);
+        iframeBody.style.width = actualWidth + "px";
+        iframeBody.style.minHeight = "1px";
+        void iframeBody.offsetHeight;
 
         // Mobile-specific optimizations
         const pixelRatio = window.isMobileDevice ? 1.5 : 2;

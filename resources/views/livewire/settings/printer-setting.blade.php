@@ -303,8 +303,8 @@
 
     {{-- Add/Edit Printer Modal --}}
     @if ($showModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div class="relative w-full max-w-4xl mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 animate-fade-in transform -translate-y-20">
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 pt-12">
+            <div class="relative w-full max-w-4xl mx-4 mt-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 animate-fade-in">
                 <!-- Close Button -->
                 <button wire:click="closeModal"
                     class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-2xl font-bold focus:outline-none"

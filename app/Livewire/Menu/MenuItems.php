@@ -45,6 +45,10 @@ class MenuItems extends Component
         $this->menus = Menu::all();
     }
 
+    public function placeholder(array $params = [])
+    {
+        return view('livewire.menu.menu-items-placeholder');
+    }
 
     public function showEditMenu($id)
     {

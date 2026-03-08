@@ -38,7 +38,7 @@
 
         </div>
 
-        <livewire:staff.staff-table :search='$search' key='staff-table-{{ microtime() }}' />
+        <livewire:staff.staff-table :search='$search' key="staff-table" />
 
 
     </div>
@@ -50,9 +50,8 @@
         </x-slot>
 
         <x-slot name="content">
-            @if ($showAddMember)
-                <livewire:forms.add-staff :key="'add-staff-' . now()->timestamp" />
-            @endif
+            {{-- Form always in DOM so modal is never empty when opened (avoids empty-then-load flash) --}}
+            <livewire:forms.add-staff key="add-staff-form" />
         </x-slot>
     </x-right-modal>
 

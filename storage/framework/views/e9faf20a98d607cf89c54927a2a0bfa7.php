@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['id', 'maxWidth', 'maxHeight']));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['id', 'maxWidth', 'maxHeight', 'forceAboveHeader' => false]));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['id', 'maxWidth', 'maxHeight']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['id', 'maxWidth', 'maxHeight', 'forceAboveHeader' => false]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -63,8 +63,9 @@ $maxHeight = [
     x-on:keydown.escape.window="show = false"
     x-show="show"
     id="<?php echo e($id); ?>"
-    class="jetstream-modal fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
-    style="display: none;"
+    <?php echo e($attributes->merge(['class' => 'jetstream-modal fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50'])->except(['wire:model', 'wire:model.live'])); ?>
+
+    style="display: none;<?php echo e($forceAboveHeader ? ' z-index: 99999; padding-top: 5rem;' : ''); ?>"
 >
     <div x-show="show" class="fixed inset-0 transform transition-all" x-on:click="show = false" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0"

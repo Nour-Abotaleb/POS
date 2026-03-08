@@ -21,6 +21,14 @@ document.addEventListener("livewire:navigating", () => {
     initFlowbite();
 });
 
+// Re-init Flowbite after any Livewire DOM update (e.g. menus card switch, deferred load)
+// Fixes: "Drawer with id drawer-create-product-default has not been initialized"
+document.addEventListener("livewire:morphed", () => {
+    if (typeof initFlowbite === "function") {
+        initFlowbite();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeThemeToggle();
 });
@@ -124,9 +132,15 @@ document.addEventListener("livewire:navigated", () => {
     // Check initial state on page load
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
+    const isPosPage = mainContent && mainContent.getAttribute('data-pos-page') === 'true';
 
-    // Initial state without transitions
-    if (window.innerWidth >= 1024 && sidebar != null) { // Only apply on desktop (lg breakpoint)
+    // On POS desktop, sidebar starts collapsed so the expand arrow works
+    if (isPosPage && sidebar && window.innerWidth >= 1024) {
+        localStorage.setItem('menu-collapsed', 'true');
+    }
+
+    // Initial state without transitions (skip on POS so sidebar stays hidden on desktop)
+    if (window.innerWidth >= 1024 && sidebar != null && !isPosPage) {
         if (localStorage.getItem("menu-collapsed") === "true") {
             sidebar.classList.add('hidden');
             sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
@@ -141,9 +155,12 @@ document.addEventListener("livewire:navigated", () => {
     const openIcon = document.getElementById('toggle-sidebar-open');
     const closeIcon = document.getElementById('toggle-sidebar-close');
 
-    // Initial state
+    // Initial state (on POS desktop sidebar starts collapsed, so show expand icon)
     if (openIcon && closeIcon) {
-        if (localStorage.getItem("menu-collapsed") === "true") {
+        if (isPosPage) {
+            openIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        } else if (localStorage.getItem("menu-collapsed") === "true") {
             openIcon.classList.remove('hidden');
             closeIcon.classList.add('hidden');
         } else {
@@ -218,32 +235,21 @@ document.addEventListener("livewire:navigated", () => {
             "toggleSidebarMobileSearch"
         );
 
-        toggleSidebarMobileSearch.addEventListener("click", () => {
-            toggleSidebarMobile(
-                sidebar,
-                sidebarBackdrop,
-                toggleSidebarMobileHamburger,
-                toggleSidebarMobileClose
-            );
-        });
-
-        toggleSidebarMobileEl.addEventListener("click", () => {
-            toggleSidebarMobile(
-                sidebar,
-                sidebarBackdrop,
-                toggleSidebarMobileHamburger,
-                toggleSidebarMobileClose
-            );
-        });
-
-        sidebarBackdrop.addEventListener("click", () => {
-            toggleSidebarMobile(
-                sidebar,
-                sidebarBackdrop,
-                toggleSidebarMobileHamburger,
-                toggleSidebarMobileClose
-            );
-        });
+        if (sidebarBackdrop && toggleSidebarMobileHamburger && toggleSidebarMobileClose) {
+            if (toggleSidebarMobileSearch) {
+                toggleSidebarMobileSearch.addEventListener("click", () => {
+                    toggleSidebarMobile(sidebar, sidebarBackdrop, toggleSidebarMobileHamburger, toggleSidebarMobileClose);
+                });
+            }
+            if (toggleSidebarMobileEl) {
+                toggleSidebarMobileEl.addEventListener("click", () => {
+                    toggleSidebarMobile(sidebar, sidebarBackdrop, toggleSidebarMobileHamburger, toggleSidebarMobileClose);
+                });
+            }
+            sidebarBackdrop.addEventListener("click", () => {
+                toggleSidebarMobile(sidebar, sidebarBackdrop, toggleSidebarMobileHamburger, toggleSidebarMobileClose);
+            });
+        }
     }
 
     // Reinitialize Flowbite components

@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['id' => null, 'maxWidth' => null, 'maxHeight' => null]));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['id' => null, 'maxWidth' => null, 'maxHeight' => null, 'forceAboveHeader' => false]));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['id' => null, 'maxWidth' => null, 'maxHeight' => null]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['id' => null, 'maxWidth' => null, 'maxHeight' => null, 'forceAboveHeader' => false]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -30,14 +30,14 @@ unset($__defined_vars, $__key, $__value); ?>
 
 <?php if (isset($component)) { $__componentOriginal9f64f32e90b9102968f2bc548315018c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal9f64f32e90b9102968f2bc548315018c = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.modal','data' => ['id' => $id,'maxWidth' => $maxWidth,'maxHeight' => $maxHeight,'attributes' => $attributes]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.modal','data' => ['id' => $id,'maxWidth' => $maxWidth,'maxHeight' => $maxHeight,'forceAboveHeader' => $forceAboveHeader,'attributes' => $attributes]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['id' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($id),'maxWidth' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxWidth),'maxHeight' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxHeight),'attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes)]); ?>
+<?php $component->withAttributes(['id' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($id),'maxWidth' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxWidth),'maxHeight' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxHeight),'forceAboveHeader' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($forceAboveHeader),'attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes)]); ?>
     <div class="px-6 py-4">
         <div class="text-lg font-medium text-gray-900 dark:text-gray-100">
             <?php echo e($title); ?>
