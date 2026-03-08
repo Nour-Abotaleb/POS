@@ -121,6 +121,7 @@
                                 </div>
                             </template>
 
+                            @if($this->menuItemsLoaded > 0)
                             <template x-if="filterView === 'grid'">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Category:</span>
@@ -155,6 +156,7 @@
                                     @endforeach
                                 </div>
                             </template>
+                            @endif
                             </div>
                         </div>
 
@@ -217,8 +219,9 @@
                 </div>
             </div>
 
-            {{-- Menu Items Grid --}}
+            {{-- Menu Items Grid: wire:init loads first batch after page load to keep initial response small --}}
             <div
+                wire:init="loadInitialMenuItems"
                 class="mt-4 overflow-y-auto ]
                     [&::-webkit-scrollbar]:w-2
                     [&::-webkit-scrollbar-track]:bg-gray-300
@@ -327,12 +330,19 @@
                         </li>
                     @empty
                         <li class="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
-                            <div class="flex flex-col items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-                                </svg>
-                                <p>@lang('messages.noItemAdded')</p>
-                            </div>
+                            @if($this->menuItemsLoaded === 0 && $this->totalMenuItemsCount > 0)
+                                <div class="flex flex-col items-center gap-3 text-gray-600 dark:text-gray-400">
+                                    <svg class="animate-spin h-10 w-10" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
+                                    <p class="text-sm font-medium">@lang('messages.loadingData')</p>
+                                </div>
+                            @else
+                                <div class="flex flex-col items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                                    </svg>
+                                    <p>@lang('messages.noItemAdded')</p>
+                                </div>
+                            @endif
                         </li>
                     @endforelse
 
@@ -341,6 +351,7 @@
                 
                 <div class="flex items-center justify-center py-6 px-4">
                     @if(!$this->allItemsLoaded)
+                        {{-- Only show bottom loading when loading MORE (we already have items). Initial load is shown in the @empty block above. --}}
                         <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
                             <svg class="inline animate-spin h-6 w-6" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
                             <span class="text-sm font-medium">@lang('messages.loadingData')</span>

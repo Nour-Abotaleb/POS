@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\script\resources\views\components\select-translations.blade.php ENDPATH**/ ?>

@@ -36,12 +36,14 @@
             </x-slot>
 
             <x-slot name="content">
-                @if ($menuItem)
+                @if ($showVariationModal && $menuItem)
                 @livewire('pos.itemVariations', [
                     'menuItemId' => $menuItem->id,
                     'orderTypeId' => $orderTypeId,
                     'deliveryAppId' => $this->normalizedDeliveryAppId
                 ], key(str()->random(50)))
+                @elseif($showVariationModal)
+                    <div class="py-8 text-center text-gray-500 dark:text-gray-400">@lang('messages.loadingData')</div>
                 @endif
             </x-slot>
 
@@ -74,7 +76,11 @@
             </x-slot>
 
             <x-slot name="content">
-                @livewire('pos.setTable')
+                @if($showTableModal)
+                    @livewire('pos.setTable')
+                @else
+                    <div class="py-8 text-center text-gray-500 dark:text-gray-400">@lang('messages.loadingData')</div>
+                @endif
             </x-slot>
 
             <x-slot name="footer">
@@ -148,12 +154,14 @@
             </x-slot>
 
             <x-slot name="content">
-                @if ($selectedModifierItem)
+                @if ($showModifiersModal && $selectedModifierItem)
                     @livewire('pos.itemModifiers', [
                         'menuItemId' => $selectedModifierItem,
                         'orderTypeId' => $orderTypeId,
                         'deliveryAppId' => $selectedDeliveryApp
                     ], key(str()->random(50)))
+                @elseif($showModifiersModal)
+                    <div class="py-8 text-center text-gray-500 dark:text-gray-400">@lang('messages.loadingData')</div>
                 @endif
             </x-slot>
         </x-dialog-modal>

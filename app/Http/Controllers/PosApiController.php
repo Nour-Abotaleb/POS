@@ -39,14 +39,14 @@ class PosApiController extends Controller
 
     public function __construct()
     {
-        $this->branch = Branch::find(1);
-        $this->restaurant = Restaurant::find(1);
+        $this->branch = cache()->remember('pos_branch_1', 3600, fn () => Branch::find(1));
+        $this->restaurant = cache()->remember('pos_restaurant_1', 3600, fn () => Restaurant::find(1));
     }
 
     public function getMenus()
     {
 
-        $menus = cache()->remember('menus_' . $this->branch->id, 60, function () {
+        $menus = cache()->remember('menus_' . $this->branch->id, 3600, function () {
             return Menu::where('branch_id', $this->branch->id)->get()->map(function ($menu) {
                 return [
                     'id' => $menu->id,
@@ -62,22 +62,26 @@ class PosApiController extends Controller
 
     public function getCategories()
     {
-        $categories = cache()->remember('categories_' . $this->branch->id, 60, function () {
-            return ItemCategory::where('branch_id', $this->branch->id)->get()->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'count' => $category->items()->count(),
-                    'category_name' => $category->getTranslation('category_name', session('locale', app()->getLocale())),
-                    'sort_order' => $category->sort_order,
-                ];
-            });
+        $categories = cache()->remember('categories_' . $this->branch->id, 3600, function () {
+            return ItemCategory::where('branch_id', $this->branch->id)
+                ->withCount('items')
+                ->orderBy('sort_order')
+                ->get()
+                ->map(function ($category) {
+                    return [
+                        'id' => $category->id,
+                        'count' => $category->items_count,
+                        'category_name' => $category->getTranslation('category_name', session('locale', app()->getLocale())),
+                        'sort_order' => $category->sort_order,
+                    ];
+                });
         });
         return response()->json($categories);
     }
 
     public function getMenuItems()
     {
-        $menuItems = cache()->remember('menu_items_' . $this->branch->id, 60, function () {
+        $menuItems = cache()->remember('menu_items_' . $this->branch->id, 3600, function () {
             return MenuItem::where('branch_id', $this->branch->id)
                 ->with('prices:id,menu_item_id,order_type_id,final_price', 'prices.orderType:id,order_type_name')
                 ->withCount('variations', 'modifierGroups')
@@ -86,9 +90,37 @@ class PosApiController extends Controller
         return response()->json($menuItems);
     }
 
+    /**
+     * Get menu items filtered by category (for POS API; avoids loading all items when one category is selected).
+     */
+    public function getMenuItemsByCategory($categoryId)
+    {
+        $menuItems = MenuItem::where('branch_id', $this->branch->id)
+            ->where('item_category_id', $categoryId)
+            ->with('prices:id,menu_item_id,order_type_id,final_price', 'prices.orderType:id,order_type_name')
+            ->withCount('variations', 'modifierGroups')
+            ->get();
+
+        return response()->json($menuItems);
+    }
+
+    /**
+     * Get menu items filtered by menu (for POS API; avoids loading all items when one menu is selected).
+     */
+    public function getMenuItemsByMenu($menuId)
+    {
+        $menuItems = MenuItem::where('branch_id', $this->branch->id)
+            ->where('menu_id', $menuId)
+            ->with('prices:id,menu_item_id,order_type_id,final_price', 'prices.orderType:id,order_type_name')
+            ->withCount('variations', 'modifierGroups')
+            ->get();
+
+        return response()->json($menuItems);
+    }
+
     public function getWaiters()
     {
-        $waiters = cache()->remember('waiters_' . $this->branch->id, 60, function () {
+        $waiters = cache()->remember('waiters_' . $this->branch->id, 3600, function () {
             return User::where('restaurant_id', $this->restaurant->id)->get();
         });
         return response()->json($waiters);

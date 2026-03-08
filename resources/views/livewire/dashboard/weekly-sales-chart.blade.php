@@ -27,24 +27,42 @@
         </div>
 
     </div>
-    <div id="main-chart"></div>
+    <div id="main-chart" class="min-h-[420px] w-full" style="min-height: 420px;"></div>
     <!-- Card Footer -->
 
 
     @script
     <script>
 
-        if (document.getElementById('main-chart')) {
-            const chart = new ApexCharts(document.getElementById('main-chart'), getMainChartOptions());
-            chart.render();
+        (function initMainChart() {
+            const el = document.getElementById('main-chart');
+            if (!el) return;
 
-            // init again when toggling dark mode
-            document.addEventListener('dark-mode', function () {
-                chart.updateOptions(getMainChartOptions());
-            });
+            // Destroy existing instance to avoid duplicate charts and NaN on re-render
+            if (el._apexChart) {
+                try { el._apexChart.destroy(); } catch (e) {}
+                el._apexChart = null;
+            }
 
-            
-        }
+            function renderWhenReady() {
+                if (!el.isConnected) return;
+                const w = el.offsetWidth || el.clientWidth;
+                if (w <= 0) {
+                    requestAnimationFrame(renderWhenReady);
+                    return;
+                }
+                const options = getMainChartOptions();
+                const chart = new ApexCharts(el, options);
+                el._apexChart = chart;
+                chart.render();
+
+                document.addEventListener('dark-mode', function onDarkMode() {
+                    if (el._apexChart) el._apexChart.updateOptions(getMainChartOptions());
+                });
+            }
+
+            requestAnimationFrame(renderWhenReady);
+        })();
 
         function getMainChartOptions()
         {

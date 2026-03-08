@@ -1,5 +1,5 @@
 <div class="relative">
-    <a @if(pusherSettings()->is_enabled_pusher_broadcast) wire:poll.15s @else wire:poll.10s @endif
+    <a @if(pusherSettings()->is_enabled_pusher_broadcast) wire:poll.15s.visible @else wire:poll.10s.visible @endif
     href="{{ route('waiter-requests.index') }}" wire:navigate
     class="hidden lg:inline-flex items-center px-2 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
     data-tooltip-target="active-waiter-requests-tooltip-toggle"

@@ -132,8 +132,9 @@ class Pos extends Component
     public $customer;
     public $menuList;
     public $menuId;
-    public $menuItemsPerPage = 75;
-    public $menuItemsLoaded = 75;
+    public $menuItemsPerPage = 40;
+    /** @var int Start at 0 so initial HTML is small; first batch loads via wire:init after hydration. */
+    public $menuItemsLoaded = 0;
 
     // MultiPOS properties
     public $hasPosMachine = false;
@@ -3628,6 +3629,17 @@ class Pos extends Component
                     }
                 }])->having('items_count', '>', 0)->get();
         });
+    }
+
+    /**
+     * Load first batch of menu items after initial page load (keeps initial HTML small).
+     * Called via wire:init from the menu view.
+     */
+    public function loadInitialMenuItems()
+    {
+        if ($this->menuItemsLoaded === 0) {
+            $this->menuItemsLoaded = $this->menuItemsPerPage;
+        }
     }
 
     /**

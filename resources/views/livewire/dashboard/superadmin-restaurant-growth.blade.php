@@ -70,7 +70,7 @@
     </div>
 
     <!-- Growth Chart -->
-    <div id="restaurant-growth-chart" class="mb-6"></div>
+    <div id="restaurant-growth-chart" class="mb-6 min-h-[320px] w-full" style="min-height: 320px;"></div>
 
     <!-- Recent Restaurants Section -->
     <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -115,15 +115,20 @@
 
     @script
     <script>
-        if (document.getElementById('restaurant-growth-chart')) {
-            const chart = new ApexCharts(document.getElementById('restaurant-growth-chart'), getRestaurantGrowthChartOptions());
-            chart.render();
-
-            // init again when toggling dark mode
-            document.addEventListener('dark-mode', function () {
-                chart.updateOptions(getRestaurantGrowthChartOptions());
-            });
-        }
+        (function initGrowthChart() {
+            const el = document.getElementById('restaurant-growth-chart');
+            if (!el) return;
+            if (el._apexChart) { try { el._apexChart.destroy(); } catch (e) {} el._apexChart = null; }
+            function renderWhenReady() {
+                if (!el.isConnected) return;
+                if ((el.offsetWidth || el.clientWidth) <= 0) { requestAnimationFrame(renderWhenReady); return; }
+                const chart = new ApexCharts(el, getRestaurantGrowthChartOptions());
+                el._apexChart = chart;
+                chart.render();
+                document.addEventListener('dark-mode', function () { if (el._apexChart) el._apexChart.updateOptions(getRestaurantGrowthChartOptions()); });
+            }
+            requestAnimationFrame(renderWhenReady);
+        })();
 
         function getRestaurantGrowthChartOptions() {
             let chartColors = {}

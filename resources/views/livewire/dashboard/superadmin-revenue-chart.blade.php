@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    <div id="superadmin-revenue-chart" class="mb-6"></div>
+    <div id="superadmin-revenue-chart" class="mb-6 min-h-[320px] w-full" style="min-height: 320px;"></div>
 
     <!-- Top Paying Restaurants Section -->
     <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -112,15 +112,20 @@
 
     @script
     <script>
-        if (document.getElementById('superadmin-revenue-chart')) {
-            const chart = new ApexCharts(document.getElementById('superadmin-revenue-chart'), getSuperadminRevenueChartOptions());
-            chart.render();
-
-            // init again when toggling dark mode
-            document.addEventListener('dark-mode', function () {
-                chart.updateOptions(getSuperadminRevenueChartOptions());
-            });
-        }
+        (function initRevenueChart() {
+            const el = document.getElementById('superadmin-revenue-chart');
+            if (!el) return;
+            if (el._apexChart) { try { el._apexChart.destroy(); } catch (e) {} el._apexChart = null; }
+            function renderWhenReady() {
+                if (!el.isConnected) return;
+                if ((el.offsetWidth || el.clientWidth) <= 0) { requestAnimationFrame(renderWhenReady); return; }
+                const chart = new ApexCharts(el, getSuperadminRevenueChartOptions());
+                el._apexChart = chart;
+                chart.render();
+                document.addEventListener('dark-mode', function () { if (el._apexChart) el._apexChart.updateOptions(getSuperadminRevenueChartOptions()); });
+            }
+            requestAnimationFrame(renderWhenReady);
+        })();
 
         function getSuperadminRevenueChartOptions() {
             let chartColors = {}
