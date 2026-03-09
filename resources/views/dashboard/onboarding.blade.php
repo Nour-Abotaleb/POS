@@ -32,7 +32,7 @@
                         </svg>
                     </span>
                 </div>
-                <div class="ml-4">
+                <div class="ms-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">1. @lang('modules.dashboard.installation')</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         @lang('modules.dashboard.installationCompleted')
@@ -86,7 +86,7 @@
                         @endif
                     </span>
                 </div>
-                <div class="ml-4">
+                <div class="ms-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ $urlHasPublic ? '3' : '2' }}. @lang('modules.dashboard.smtpConfiguration')</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         @lang('modules.dashboard.smtpConfigurationDescription')
@@ -121,7 +121,7 @@
                         @endif
                     </span>
                 </div>
-                <div class="ml-4">
+                <div class="ms-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ $urlHasPublic ? '4' : '3' }}. @lang('modules.dashboard.cronJobConfiguration')</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         @lang('modules.dashboard.cronJobConfigurationDescription')
@@ -151,7 +151,7 @@
                         @endif
                     </span>
                 </div>
-                <div class="ml-4">
+                <div class="ms-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ $urlHasPublic ? '5' : '4' }}. @lang('modules.dashboard.applicationNameChange')</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         @lang('modules.dashboard.applicationNameChangeDescription')
@@ -179,7 +179,7 @@
                         </svg>
                     </span>
                 </div>
-                <div class="ml-4">
+                <div class="ms-4">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Need Additional Help?</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         If you encounter any issues during the setup process or have questions about any of the configuration steps, our support team is here to help.

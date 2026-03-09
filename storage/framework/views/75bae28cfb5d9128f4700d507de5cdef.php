@@ -43,7 +43,7 @@
                         </svg>
                     </div>
 
-                    <div class="flex items-center space-x-6">
+                    <div class="flex items-center gap-6">
                         
                         <div class="flex-shrink-0">
                             <div class="relative h-24 w-24">
@@ -180,7 +180,7 @@
                 
                 <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
+                        <div class="flex items-center gap-3">
                             <?php if (isset($component)) { $__componentOriginal74b62b190a03153f11871f645315f4de = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal74b62b190a03153f11871f645315f4de = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.checkbox','data' => ['name' => 'showLogoText','id' => 'showLogoText','wire:model' => 'showLogoText']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

@@ -82,7 +82,7 @@
         <div class="space-y-3">
             <?php $__currentLoopData = $recentRestaurants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $restaurant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-blue-500 rounded-lg flex items-center justify-center">
                             <img src="<?php echo e($restaurant->logo_url); ?>" alt="<?php echo e($restaurant->name); ?>" class="w-full h-full object-cover rounded-lg">
                         </div>

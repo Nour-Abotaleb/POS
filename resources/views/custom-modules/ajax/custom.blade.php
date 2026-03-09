@@ -290,7 +290,7 @@
                 @endphp
                 <tr class="{{ $rowClass }}">
                     <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm">
-                        <div class="flex items-center space-x-3">
+                        <div class="flex items-center gap-3">
                             <!-- Status Icon -->
                             @if (($isInstalled && $isLicensed) || ($universalBundle && $isInstalled))
                                 <div class="flex-shrink-0">

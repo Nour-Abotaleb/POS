@@ -74,7 +74,7 @@
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-                                            <div class="ml-4">
+                                            <div class="ms-4">
                                                 <p class="text-base font-semibold <?php echo e(!$isFree ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-gray-100'); ?>"><?php echo app('translator')->get('modules.package.paidPlan'); ?></p>
                                                 <p class="text-sm <?php echo e(!$isFree ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'); ?>">Full access to all features</p>
                                             </div>
@@ -103,7 +103,7 @@
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-                                            <div class="ml-4">
+                                            <div class="ms-4">
                                                 <p class="text-base font-semibold <?php echo e($isFree ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-gray-100'); ?>"><?php echo app('translator')->get('modules.package.freePlan'); ?></p>
                                                 <p class="text-sm <?php echo e($isFree ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'); ?>">Limited access to basic features</p>
                                             </div>

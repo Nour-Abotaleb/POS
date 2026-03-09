@@ -3,7 +3,7 @@
         class="mx-4 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
 
         <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center gap-3">
                 <h3 class="text-xl font-semibold dark:text-white"><?php echo app('translator')->get('modules.settings.receiptSetting'); ?></h3>
             </div>
 
@@ -334,7 +334,7 @@
                         </div>
 
                         <div class="space-y-3">
-                            <div class="flex items-center space-x-6">
+                            <div class="flex items-center gap-6">
                                 
                                 <div class="flex-shrink-0">
                                     <div class="relative h-24 w-24">

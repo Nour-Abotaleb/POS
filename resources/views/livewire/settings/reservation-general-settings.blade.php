@@ -44,7 +44,7 @@
                                 @lang('modules.reservation.minimumPartySizeDescription')
                             </p>
                         </div>
-                        <div class="ml-4">
+                        <div class="ms-4">
                             <input
                                 type="number"
                                 id="minimum_party_size"
@@ -68,7 +68,7 @@
                                 @lang('modules.reservation.disableSlotMinutesInfo')
                             </p>
                         </div>
-                        <div class="ml-4">
+                        <div class="ms-4">
                             <div class="relative w-32">
                                 <input
                                     type="number"

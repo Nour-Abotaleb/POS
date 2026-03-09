@@ -974,7 +974,7 @@
                         <!-- Delivery Apps -->
                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $deliveryApps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $app): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-3">
                                 <div class="w-8 h-8">
                                     <!--[if BLOCK]><![endif]--><?php if($app->logo): ?>
                                     <img class="w-8 h-8 rounded-lg object-cover border border-gray-200"
@@ -995,7 +995,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-3">
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox"
                                         wire:model.live="optionPlatformAvailability.<?php echo e($index); ?>.<?php echo e($app->id); ?>"

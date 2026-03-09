@@ -21,7 +21,7 @@
                     </svg>
                 </div>
 
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center gap-6">
                     {{-- Logo Preview --}}
                     <div class="flex-shrink-0">
                         <div class="relative h-24 w-24">
@@ -99,7 +99,7 @@
             {{-- Show Logo Text Toggle --}}
             <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center gap-3">
                         <x-checkbox name="showLogoText" id="showLogoText" wire:model="showLogoText" />
 
                         <div>
@@ -116,7 +116,7 @@
             {{-- Show PWA install prompt --}}
             <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center gap-3">
                         <x-checkbox name="pwaAlertShow" id="pwaAlertShow" wire:model="pwaAlertShow" />
                         <div>
                             <label for="enbalePwaApp" class="font-medium text-gray-900 dark:text-white">

@@ -10,7 +10,7 @@
         <!-- Header Section with Gradient -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600 px-4 py-2.5">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center gap-3">
                     <!-- Icon Container -->
                     <div class="flex-shrink-0 bg-white dark:bg-gray-600 p-2 rounded-lg shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 148.319 148.319">

@@ -17,7 +17,7 @@
             <form @submit.prevent="handleSave">
                 <div class="px-6 py-4">
                     <!-- Header -->
-                    <div class="flex items-center space-x-3 mb-4">
+                    <div class="flex items-center gap-3 mb-4">
                         <div class="flex-shrink-0">
                             <div
                                 class="w-8 h-8 bg-skin-base rounded-lg flex items-center justify-center"
@@ -120,9 +120,7 @@
                                                 class="text-xs font-medium text-gray-700 dark:text-gray-300"
                                             >
                                                 Found
-                                                {{
-                                                    searchResults.length
-                                                }}
+                                                {{ searchResults.length }}
                                                 customer(s)
                                             </p>
                                         </div>

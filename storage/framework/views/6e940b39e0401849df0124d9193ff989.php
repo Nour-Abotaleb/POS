@@ -75,7 +75,7 @@
                             <div class="w-full max-w-[7rem]">
                                 <label for="start-time" class="sr-only"><?php echo app('translator')->get('modules.reservation.timeStart'); ?>:</label>
                                 <div class="relative">
-                                    <div class="absolute inset-y-0 end-0 top-0 flex items-center pointer-events-none">
+                                    <div class="absolute inset-y-0 mr-3 top-0 flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" width="24" height="24" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0m7 0V3h1v4.293l2.854 2.853-.708.708-3-3A.5.5 0 0 1 7 7.5" fill="currentColor"/></svg>
                                     </div>
                                     <?php if (isset($component)) { $__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1 = $component; } ?>
@@ -104,7 +104,7 @@
                             <div class="w-full max-w-[7rem]">
                                 <label for="end-time" class="sr-only"><?php echo app('translator')->get('modules.reservation.timeEnd'); ?>:</label>
                                 <div class="relative">
-                                    <div class="absolute inset-y-0 end-0 top-0 flex items-center pointer-events-none">
+                                    <div class="absolute inset-y-0 mr-3 top-0 flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" width="24" height="24" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0m7 0V3h1v4.293l2.854 2.853-.708.708-3-3A.5.5 0 0 1 7 7.5" fill="currentColor"/></svg>
                                     </div>
                                     <?php if (isset($component)) { $__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1 = $component; } ?>

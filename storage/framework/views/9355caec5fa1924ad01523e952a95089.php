@@ -42,7 +42,7 @@
     
     <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
         <div class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 me-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <div>
@@ -785,7 +785,7 @@
 <?php unset($__componentOriginald8ba2b4c22a13c55321e34443c386276); ?>
 <?php endif; ?>
                                     <select id="selectprintFormat" wire:model.defer="selectprintFormat" class="mt-1 block w-full border-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:text-white rounded-md shadow-sm">
-                                        <option value=""><?php echo app('translator')->get('Select'); ?></option>
+                                        <option value=""><?php echo e(__('app.select')); ?></option>
                                         <option value="thermal56mm"><?php echo app('translator')->get('modules.printerSetting.thermal56mm'); ?></option>
                                         <option value="thermal80mm"><?php echo app('translator')->get('modules.printerSetting.thermal80mm'); ?></option>
                                         <option value="thermal112mm"><?php echo app('translator')->get('modules.printerSetting.thermal112mm'); ?></option>
@@ -884,7 +884,7 @@
                                 <!-- Desktop App Requirement Notice -->
                                 <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                                     <div class="flex items-start">
-                                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 me-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <div>
@@ -968,7 +968,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:click' => '$toggle(\'confrimDeletePrinter\')','wire:loading.attr' => 'disabled']); ?><?php echo e(__('Cancel')); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['wire:click' => '$toggle(\'confrimDeletePrinter\')','wire:loading.attr' => 'disabled']); ?><?php echo e(__('app.cancel')); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af)): ?>
 <?php $attributes = $__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af; ?>
@@ -988,7 +988,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['class' => 'ml-3','wire:click' => 'confirmdeletePrinter','wire:loading.attr' => 'disabled']); ?><?php echo e(__('Delete')); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['class' => 'ml-3','wire:click' => 'confirmdeletePrinter','wire:loading.attr' => 'disabled']); ?><?php echo e(__('app.delete')); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal656e8c5ea4d9a4fa173298297bfe3f11)): ?>
 <?php $attributes = $__attributesOriginal656e8c5ea4d9a4fa173298297bfe3f11; ?>

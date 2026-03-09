@@ -11,7 +11,7 @@
                             <input type="checkbox" id="enableItemLevelStatus" wire:model="enableItemLevelStatus" 
                                 class="w-5 h-5 border-gray-300 rounded text-primary-600 focus:ring-primary-500">
                         </div>
-                        <div class="ml-4">
+                        <div class="ms-4">
                             <label for="enableItemLevelStatus" class="text-base font-medium text-gray-900 dark:text-white">
                                 <?php echo app('translator')->get('modules.settings.enableItemLevelStatus'); ?>
                             </label>
@@ -50,7 +50,7 @@
                                 <input id="statusPending" type="radio" wire:model="defaultKotStatus" value="pending" 
                                     class="w-5 h-5 border-gray-300 text-primary-600 focus:ring-primary-500">
                             </div>
-                            <div class="ml-4">
+                            <div class="ms-4">
                                 <label for="statusPending" class="text-base font-medium text-gray-900 dark:text-white"><?php echo app('translator')->get('modules.settings.kotStatusesPending'); ?></label>
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo app('translator')->get('modules.settings.kotStatusesPendingDescription'); ?></p>
                             </div>
@@ -61,7 +61,7 @@
                                 <input id="statusCooking" type="radio" wire:model="defaultKotStatus" value="cooking" 
                                     class="w-5 h-5 border-gray-300 text-primary-600 focus:ring-primary-500">
                             </div>
-                            <div class="ml-4">
+                            <div class="ms-4">
                                 <label for="statusCooking" class="text-base font-medium text-gray-900 dark:text-white"><?php echo app('translator')->get('modules.settings.kotStatusesCooking'); ?></label>
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo app('translator')->get('modules.settings.kotStatusesCookingDescription'); ?></p>
                             </div>

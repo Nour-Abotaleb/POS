@@ -147,7 +147,7 @@
         <form wire:submit="submitForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div class="col-span-2 mb-4">
-                    <div class="flex items-center space-x-6 rtl:space-x-reverse dark:text-gray-200">
+                    <div class="flex items-center gap-6 rtl:space-x-reverse dark:text-gray-200">
                         <label class="flex items-center cursor-pointer">
                             <input type="radio" name="landingType" value="static"
                                 wire:model="landingType"
