@@ -65,7 +65,7 @@
                             <!--[if BLOCK]><![endif]--><?php if($this->menuItemsLoaded > 0): ?>
                             <template x-if="filterView === 'grid'">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Category:</span>
+                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posCategory'); ?>:</span>
                                     <button type="button"
                                         wire:click="$set('menuId', null)"
                                         style="<?php echo e($menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
@@ -75,7 +75,7 @@
                                             'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
                                         ]); ?>">
                                         <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
+                                            <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
                                         </div>
                                     </button>
                                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $menuList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -122,7 +122,7 @@
 
                             <template x-if="filterView === 'grid'">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Products:</span>
+                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posProducts'); ?>:</span>
                                     <button type="button"
                                         wire:click="$set('filterCategories', null)"
                                         style="<?php echo e($filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
@@ -132,7 +132,7 @@
                                             'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
                                         ]); ?>">
                                         <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
+                                            <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
                                         </div>
                                     </button>
                                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

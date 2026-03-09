@@ -124,7 +124,7 @@
                             @if($this->menuItemsLoaded > 0)
                             <template x-if="filterView === 'grid'">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Category:</span>
+                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">@lang('app.posCategory'):</span>
                                     <button type="button"
                                         wire:click="$set('menuId', null)"
                                         style="{{ $menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
@@ -134,7 +134,7 @@
                                             'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
                                         ])>
                                         <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
+                                            <span class="font-medium">@lang('app.showAll')</span>
                                         </div>
                                     </button>
                                     @foreach ($menuList as $menu)
@@ -181,7 +181,7 @@
 
                             <template x-if="filterView === 'grid'">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Products:</span>
+                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">@lang('app.posProducts'):</span>
                                     <button type="button"
                                         wire:click="$set('filterCategories', null)"
                                         style="{{ $filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
@@ -191,7 +191,7 @@
                                             'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
                                         ])>
                                         <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
+                                            <span class="font-medium">@lang('app.showAll')</span>
                                         </div>
                                     </button>
                                     @foreach ($this->categoryList as $category)

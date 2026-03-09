@@ -4,7 +4,7 @@
             <img class="w-16 h-16 rounded-md  object-cover" src="<?php echo e($menuItem->item_photo_url); ?>" alt="<?php echo e($menuItem->item_name); ?>">
             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <div class="text-base font-semibold text-gray-900 dark:text-white inline-flex items-center">
-                    <img src="<?php echo e(asset('img/'.$menuItem->type.'.svg')); ?>" class="h-4 mr-2"
+                    <img src="<?php echo e(asset('img/'.$menuItem->type.'.svg')); ?>" class="h-4 me-2"
                         title="<?php echo app('translator')->get('modules.menu.' . $menuItem->type); ?>" alt="" />
                     <?php echo e($menuItem->item_name); ?>
 

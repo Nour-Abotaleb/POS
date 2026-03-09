@@ -127,7 +127,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-link','data' => ['href' => 'javascript:;','onclick' => '
               try { window.dispatchEvent(new CustomEvent(\'pos:show-add-customer\')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === \'function\') window.Livewire.dispatch(\'showAddCustomerModal\'); } catch (e) {}
-            ','class' => 'inline-flex items-center px-1 py-2 gap-1 text-xs ltr:mr-2 rtl:ml-2','title' => 'Add Customer Details']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+            ','class' => 'inline-flex items-center px-1 py-2 gap-1 text-xs ltr:mr-2 rtl:ml-2','title' => '@lang(\'app.addCustomerDetails\')']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('primary-link'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
@@ -137,12 +137,12 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['href' => 'javascript:;','onclick' => '
               try { window.dispatchEvent(new CustomEvent(\'pos:show-add-customer\')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === \'function\') window.Livewire.dispatch(\'showAddCustomerModal\'); } catch (e) {}
-            ','class' => 'inline-flex items-center px-1 py-2 gap-1 text-xs ltr:mr-2 rtl:ml-2','title' => 'Add Customer Details']); ?>
+            ','class' => 'inline-flex items-center px-1 py-2 gap-1 text-xs ltr:mr-2 rtl:ml-2','title' => '@lang(\'app.addCustomerDetails\')']); ?>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M11 16.5V5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-            <span class="hidden lg:block">Customer</span>
+            <span class="hidden lg:block"><?php echo app('translator')->get('app.customer'); ?></span>
            <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalecbfaf65020c31547e71f42b3a8afb5f)): ?>
@@ -205,33 +205,13 @@ if (isset($__slots)) unset($__slots);
         </button>
 
 
-        <!--[if BLOCK]><![endif]--><?php if(languages()->count() > 1): ?>
-         <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
-[$__name, $__params] = $__split('settings.languageSwitcher');
-
-$__html = app('livewire')->mount($__name, $__params, 'lw-355412944-3', $__slots ?? [], get_defined_vars());
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
-        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-
         <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
 [$__name, $__params] = $__split('restaurant.stop-impersonate-restaurant');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-355412944-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-355412944-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -305,7 +285,7 @@ if (isset($__slots)) unset($__slots);
 
         <div id="fullscreen-tooltip-toggle" role="tooltip"
           class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          View in Fullscreen
+          <?php echo app('translator')->get('app.viewInFullscreen'); ?>
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
 
@@ -330,6 +310,22 @@ if (isset($__slots)) unset($__slots);
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
 
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('settings.languageSwitcher');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-355412944-4', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
 
         <!-- Profile -->
         <div class="flex items-center w-8">

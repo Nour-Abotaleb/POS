@@ -6,10 +6,10 @@
             </div>
             <div class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                 <div class="flex items-center mb-4 sm:mb-0">
-                    <form class="sm:pr-3" action="#" method="GET">
+                    <form class="pe-3" action="#" method="GET">
                         <label for="products-search" class="sr-only">Search</label>
                         <div class="relative w-48 mt-1 sm:w-64 xl:w-96">
-                            <x-input id="menu_name" class="block mt-1 w-full" type="text" placeholder="{{ __('placeholders.searchItemCategory') }}" wire:model.live.debounce.500ms="search" />
+                            <x-input id="menu_name" class="block mt-1 w-full" type="text" placeholder="{{ __('placeholders.searchModifierGroups') }}" wire:model.live.debounce.500ms="search" />
                         </div>
                     </form>
                 </div>
@@ -52,7 +52,7 @@
                                 </td>
                                 <td class="py-2.5 px-4 space-x-2 whitespace-nowrap ltr:text-right rtl:text-left">
                                     <x-secondary-link href="{{ route('modifier-groups.edit', $group->id) }}" wire:navigate>
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
+                                        <svg class="w-4 h-4 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
                                         @lang('app.update')
                                     </x-secondary-link>
 
@@ -97,7 +97,7 @@
 
         <x-slot name="footer">
             <x-secondary-button wire:click="$set('editModifierGroupModal', false)" wire:loading.attr="disabled">
-                {{ __('Close') }}
+                @lang('app.close')
             </x-secondary-button>
         </x-slot>
     </x-right-modal>
@@ -124,12 +124,12 @@
 
         <x-slot name="footer">
             <x-secondary-button wire:click="$toggle('confirmDeleteModifierModal')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
+                @lang('app.cancel')
             </x-secondary-button>
 
             @if ($modifierGroupId)
             <x-danger-button class="ml-3" wire:click='deleteModifierGroup({{ $modifierGroupId }})' wire:loading.attr="disabled">
-                {{ __('Delete') }}
+                @lang('app.delete')
             </x-danger-button>
             @endif
         </x-slot>

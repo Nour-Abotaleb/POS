@@ -31,6 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Add CORS middleware globally to handle all CORS requests
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
+
+        // Set app locale from user preference for i18n (AR / En)
+        $middleware->appendToGroup('web', \App\Http\Middleware\SetLocaleMiddleware::class);
     })
 
     ->withExceptions(function (Exceptions $exceptions) {

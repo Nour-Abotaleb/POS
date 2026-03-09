@@ -36,6 +36,8 @@ return array(
     'inactive' => 'Inactive',
     'status' => 'Status',
     'showAll' => 'Show All',
+    'posCategory' => 'Category',
+    'posProducts' => 'Products',
     'clear' => 'Clear',
     'error' => 'Error',
     'print' => 'PRINT',
@@ -262,6 +264,8 @@ return array(
     'via_shop' => 'Shop',
     'via_kiosk' => 'Kiosk',
     'toggleDarkMode' => 'Toggle Dark Mode',
+    'viewInFullscreen' => 'View in Fullscreen',
+    'language' => 'Language',
     'opening_float' => 'Opening Float',
     // Location Access
     'locationAccess' => 'Location Access',
@@ -280,4 +284,6 @@ return array(
     'loadMore' => 'Load More',
     'filterByMenu' => 'Filter by Menu',
     'filterByCategory' => 'Filter by Category',
+    'addCustomerDetails' => 'Add Customer Details',
+    'customer' => 'Customer',
 );

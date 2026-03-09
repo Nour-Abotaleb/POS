@@ -6,7 +6,7 @@
             </div>
             <div class="items-center justify-between block sm:flex ">
                 <div class="flex items-center mb-4 sm:mb-0">
-                    <form class="sm:pr-3" action="#" method="GET">
+                    <form class="pe-3" action="#" method="GET">
                         <label for="products-search" class="sr-only">Search</label>
                         <div class="relative w-48 mt-1 sm:w-64 xl:w-96">
                             <x-input id="menu_name" class="block mt-1 w-full" type="text" placeholder="{{ __('placeholders.searchItemCategory') }}" wire:model.live.debounce.500ms="search" />
@@ -64,7 +64,7 @@
                                     @if(user_can('Update Item Category'))
                                     <x-secondary-button-table wire:click='showEditCategory({{ $item->id }})'
                                         wire:key='edit-cat-button-{{ $item->id }}'>
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
+                                        <svg class="w-4 h-4 me-1" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z">

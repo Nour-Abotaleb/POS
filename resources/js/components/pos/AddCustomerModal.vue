@@ -19,8 +19,15 @@
                     <!-- Header -->
                     <div class="flex items-center space-x-3 mb-4">
                         <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-skin-base rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div
+                                class="w-8 h-8 bg-skin-base rounded-lg flex items-center justify-center"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-white"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -31,7 +38,9 @@
                             </div>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            <h2
+                                class="text-lg font-semibold text-gray-900 dark:text-white"
+                            >
                                 Add Customer Details
                             </h2>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -42,7 +51,9 @@
 
                     <div class="space-y-4">
                         <!-- Search Section -->
-                        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                        <div
+                            class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600"
+                        >
                             <div class="flex items-center space-x-2 mb-3">
                                 <svg
                                     class="w-4 h-4 text-gray-600 dark:text-gray-400"
@@ -57,12 +68,23 @@
                                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                     />
                                 </svg>
-                                <h3 class="text-base font-medium text-gray-900 dark:text-white">Search Customer</h3>
+                                <h3
+                                    class="text-base font-medium text-gray-900 dark:text-white"
+                                >
+                                    Search Customer
+                                </h3>
                             </div>
 
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                                >
+                                    <svg
+                                        class="h-5 w-5 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
                                         <path
                                             stroke-linecap="round"
                                             stroke-linejoin="round"
@@ -82,15 +104,26 @@
                             </div>
 
                             <!-- Search Results Dropdown -->
-                            <div class="relative mt-3" v-if="searchQuery && searchQuery.length >= 2">
+                            <div
+                                class="relative mt-3"
+                                v-if="searchQuery && searchQuery.length >= 2"
+                            >
                                 <div
                                     v-if="searchResults.length > 0"
                                     class="absolute z-50 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden"
                                 >
                                     <div class="max-h-60 overflow-y-auto">
-                                        <div class="p-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">
-                                                Found {{ searchResults.length }} customer(s)
+                                        <div
+                                            class="p-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600"
+                                        >
+                                            <p
+                                                class="text-xs font-medium text-gray-700 dark:text-gray-300"
+                                            >
+                                                Found
+                                                {{
+                                                    searchResults.length
+                                                }}
+                                                customer(s)
                                             </p>
                                         </div>
                                         <div
@@ -100,17 +133,30 @@
                                             class="group flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-600 last:border-b-0"
                                         >
                                             <div class="flex-shrink-0 mr-3">
-                                                <div class="w-8 h-8 rounded-full bg-skin-base flex items-center justify-center">
-                                                    <span class="text-white font-medium text-sm">{{
-                                                        result.name ? result.name.charAt(0).toUpperCase() : '?'
-                                                    }}</span>
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-skin-base flex items-center justify-center"
+                                                >
+                                                    <span
+                                                        class="text-white font-medium text-sm"
+                                                        >{{
+                                                            result.name
+                                                                ? result.name
+                                                                      .charAt(0)
+                                                                      .toUpperCase()
+                                                                : "?"
+                                                        }}</span
+                                                    >
                                                 </div>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900 dark:text-white mb-1">
+                                                <p
+                                                    class="text-sm font-medium text-gray-900 dark:text-white mb-1"
+                                                >
                                                     {{ result.name }}
                                                 </p>
-                                                <div class="flex flex-wrap gap-3">
+                                                <div
+                                                    class="flex flex-wrap gap-3"
+                                                >
                                                     <span
                                                         v-if="result.phone"
                                                         class="inline-flex items-center text-xs text-gray-600 dark:text-gray-400"
@@ -191,18 +237,29 @@
                                                 />
                                             </svg>
                                         </div>
-                                        <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-1">
+                                        <h3
+                                            class="text-sm font-medium text-gray-900 dark:text-white mb-1"
+                                        >
                                             No customers found
                                         </h3>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                                            No customers matching "{{ searchQuery }}"
+                                        <p
+                                            class="text-xs text-gray-500 dark:text-gray-400 mb-3"
+                                        >
+                                            No customers matching "{{
+                                                searchQuery
+                                            }}"
                                         </p>
                                         <button
                                             type="button"
                                             @click="createNewCustomer"
                                             class="inline-flex items-center px-3 py-2 bg-skin-base hover:bg-skin-base/80 text-white text-sm font-medium rounded-lg transition-colors"
                                         >
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg
+                                                class="w-4 h-4 me-1"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
                                                 <path
                                                     stroke-linecap="round"
                                                     stroke-linejoin="round"
@@ -234,9 +291,16 @@
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         />
                                     </svg>
-                                    <h3 class="text-base font-medium text-gray-900 dark:text-white">Customer Details</h3>
+                                    <h3
+                                        class="text-base font-medium text-gray-900 dark:text-white"
+                                    >
+                                        Customer Details
+                                    </h3>
                                 </div>
-                                <div v-if="selectedCustomerId" class="flex items-center space-x-2">
+                                <div
+                                    v-if="selectedCustomerId"
+                                    class="flex items-center space-x-2"
+                                >
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                     >
@@ -279,10 +343,14 @@
                                             id="customerName"
                                             v-model="customerForm.name"
                                             type="text"
-                                            :readonly="selectedCustomerId && !editingFields.name"
+                                            :readonly="
+                                                selectedCustomerId &&
+                                                !editingFields.name
+                                            "
                                             :class="[
                                                 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200',
-                                                selectedCustomerId && !editingFields.name
+                                                selectedCustomerId &&
+                                                !editingFields.name
                                                     ? 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                                     : '',
                                             ]"
@@ -337,21 +405,40 @@
                                     </label>
                                     <div class="flex gap-2">
                                         <!-- Phone Code Dropdown -->
-                                        <div class="relative w-32" ref="phoneCodeDropdown">
+                                        <div
+                                            class="relative w-32"
+                                            ref="phoneCodeDropdown"
+                                        >
                                             <div
-                                                @click="phoneCodeIsOpen = !phoneCodeIsOpen"
+                                                @click="
+                                                    phoneCodeIsOpen =
+                                                        !phoneCodeIsOpen
+                                                "
                                                 :class="[
                                                     'p-2 bg-gray-100 border rounded cursor-pointer dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
-                                                    selectedCustomerId && !editingFields.phone
+                                                    selectedCustomerId &&
+                                                    !editingFields.phone
                                                         ? 'opacity-50 cursor-not-allowed'
                                                         : '',
                                                 ]"
                                             >
-                                                <div class="flex items-center justify-between">
+                                                <div
+                                                    class="flex items-center justify-between"
+                                                >
                                                     <span class="text-sm">
-                                                        {{ customerForm.phone_code ? '+' + customerForm.phone_code : 'Select' }}
+                                                        {{
+                                                            customerForm.phone_code
+                                                                ? "+" +
+                                                                  customerForm.phone_code
+                                                                : "Select"
+                                                        }}
                                                     </span>
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg
+                                                        class="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
                                                         <path
                                                             stroke-linecap="round"
                                                             stroke-linejoin="round"
@@ -367,10 +454,16 @@
                                                 v-if="phoneCodeIsOpen"
                                                 class="absolute z-10 w-full mt-1 overflow-auto bg-white rounded-lg shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                                             >
-                                                <li class="sticky top-0 px-3 py-2 bg-white dark:bg-gray-900 z-10">
+                                                <li
+                                                    class="sticky top-0 px-3 py-2 bg-white dark:bg-gray-900 z-10"
+                                                >
                                                     <input
-                                                        v-model="phoneCodeSearch"
-                                                        @input="filterPhoneCodes"
+                                                        v-model="
+                                                            phoneCodeSearch
+                                                        "
+                                                        @input="
+                                                            filterPhoneCodes
+                                                        "
                                                         class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                                         type="text"
                                                         placeholder="Search"
@@ -379,21 +472,40 @@
                                                 <li
                                                     v-for="phonecode in filteredPhoneCodes"
                                                     :key="phonecode"
-                                                    @click="selectPhoneCode(phonecode)"
+                                                    @click="
+                                                        selectPhoneCode(
+                                                            phonecode,
+                                                        )
+                                                    "
                                                     :class="[
                                                         'relative py-2 pl-3 text-gray-900 transition-colors duration-150 cursor-pointer select-none pr-9 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300',
-                                                        phonecode === customerForm.phone_code
+                                                        phonecode ===
+                                                        customerForm.phone_code
                                                             ? 'bg-gray-100 dark:bg-gray-800'
                                                             : '',
                                                     ]"
                                                 >
-                                                    <div class="flex items-center">
-                                                        <span class="block ml-3 text-sm whitespace-nowrap">+{{ phonecode }}</span>
+                                                    <div
+                                                        class="flex items-center"
+                                                    >
                                                         <span
-                                                            v-if="phonecode === customerForm.phone_code"
+                                                            class="block ml-3 text-sm whitespace-nowrap"
+                                                            >+{{
+                                                                phonecode
+                                                            }}</span
+                                                        >
+                                                        <span
+                                                            v-if="
+                                                                phonecode ===
+                                                                customerForm.phone_code
+                                                            "
                                                             class="absolute inset-y-0 right-0 flex items-center pr-4 text-black dark:text-gray-300"
                                                         >
-                                                            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                                            <svg
+                                                                class="w-5 h-5"
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
                                                                 <path
                                                                     fill-rule="evenodd"
                                                                     d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
@@ -404,7 +516,10 @@
                                                     </div>
                                                 </li>
                                                 <li
-                                                    v-if="filteredPhoneCodes.length === 0"
+                                                    v-if="
+                                                        filteredPhoneCodes.length ===
+                                                        0
+                                                    "
                                                     class="relative py-2 pl-3 text-gray-500 cursor-default select-none pr-9 dark:text-gray-400"
                                                 >
                                                     No phone codes found
@@ -418,10 +533,14 @@
                                                 id="customerPhone"
                                                 v-model="customerForm.phone"
                                                 type="tel"
-                                                :readonly="selectedCustomerId && !editingFields.phone"
+                                                :readonly="
+                                                    selectedCustomerId &&
+                                                    !editingFields.phone
+                                                "
                                                 :class="[
                                                     'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200',
-                                                    selectedCustomerId && !editingFields.phone
+                                                    selectedCustomerId &&
+                                                    !editingFields.phone
                                                         ? 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                                         : '',
                                                 ]"
@@ -431,7 +550,9 @@
                                             <button
                                                 v-if="selectedCustomerId"
                                                 type="button"
-                                                @click="toggleFieldEdit('phone')"
+                                                @click="
+                                                    toggleFieldEdit('phone')
+                                                "
                                                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
                                             >
                                                 <svg
@@ -481,10 +602,14 @@
                                         id="customerEmail"
                                         v-model="customerForm.email"
                                         type="email"
-                                        :readonly="selectedCustomerId && !editingFields.email"
+                                        :readonly="
+                                            selectedCustomerId &&
+                                            !editingFields.email
+                                        "
                                         :class="[
                                             'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200',
-                                            selectedCustomerId && !editingFields.email
+                                            selectedCustomerId &&
+                                            !editingFields.email
                                                 ? 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                                 : '',
                                         ]"
@@ -541,10 +666,14 @@
                                         id="customerAddress"
                                         v-model="customerForm.address"
                                         rows="3"
-                                        :readonly="selectedCustomerId && !editingFields.address"
+                                        :readonly="
+                                            selectedCustomerId &&
+                                            !editingFields.address
+                                        "
                                         :class="[
                                             'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none',
-                                            selectedCustomerId && !editingFields.address
+                                            selectedCustomerId &&
+                                            !editingFields.address
                                                 ? 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                                 : '',
                                         ]"
@@ -595,8 +724,15 @@
                 <div
                     class="flex items-center justify-between px-6 py-4 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-600"
                 >
-                    <div class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div
+                        class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400"
+                    >
+                        <svg
+                            class="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -621,7 +757,7 @@
                         >
                             <svg
                                 v-if="!saving"
-                                class="w-4 h-4 mr-1"
+                                class="w-4 h-4 me-1"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -723,7 +859,10 @@ onMounted(async () => {
         allPhoneCodes.value = response.data || [];
         filteredPhoneCodes.value = allPhoneCodes.value;
         // Set default phone code (first one, or can be set from restaurant settings)
-        if (customerForm.value.phone_code === "" && allPhoneCodes.value.length > 0) {
+        if (
+            customerForm.value.phone_code === "" &&
+            allPhoneCodes.value.length > 0
+        ) {
             customerForm.value.phone_code = allPhoneCodes.value[0];
         }
     } catch (error) {
@@ -740,12 +879,14 @@ watch(
                 name: newCustomer.name || "",
                 email: newCustomer.email || "",
                 phone: newCustomer.phone || "",
-                phone_code: newCustomer.phone_code || allPhoneCodes.value[0] || "",
-                address: newCustomer.address || newCustomer.delivery_address || "",
+                phone_code:
+                    newCustomer.phone_code || allPhoneCodes.value[0] || "",
+                address:
+                    newCustomer.address || newCustomer.delivery_address || "",
             };
         }
     },
-    { immediate: true }
+    { immediate: true },
 );
 
 // Watch for modal show/hide
@@ -755,7 +896,7 @@ watch(
         if (!isShowing) {
             resetForm();
         }
-    }
+    },
 );
 
 const handleSearch = () => {
@@ -848,7 +989,7 @@ const filterPhoneCodes = () => {
         return;
     }
     filteredPhoneCodes.value = allPhoneCodes.value.filter((code) =>
-        code.toString().includes(phoneCodeSearch.value)
+        code.toString().includes(phoneCodeSearch.value),
     );
 };
 
@@ -903,7 +1044,9 @@ const handleSave = async () => {
         if (!name) missingFields.push("Name");
         if (!phone) missingFields.push("Phone");
         if (!phone_code) missingFields.push("Phone Code");
-        alert(`Please fill in all required fields: ${missingFields.join(", ")}`);
+        alert(
+            `Please fill in all required fields: ${missingFields.join(", ")}`,
+        );
         return;
     }
 
@@ -924,9 +1067,11 @@ const handleSave = async () => {
     } catch (error) {
         console.error("Error saving customer:", error);
         const errorMessage =
-            error.response?.data?.message || 
-            (error.response?.data?.errors ? JSON.stringify(error.response.data.errors) : null) ||
-            error.message || 
+            error.response?.data?.message ||
+            (error.response?.data?.errors
+                ? JSON.stringify(error.response.data.errors)
+                : null) ||
+            error.message ||
             "Failed to save customer";
         alert(errorMessage);
     } finally {
@@ -950,7 +1095,7 @@ if (typeof window !== "undefined") {
                     window.removeEventListener("keydown", handleEscape);
                 };
             }
-        }
+        },
     );
 }
 
@@ -973,7 +1118,7 @@ watch(
         } else {
             document.removeEventListener("click", handleClickOutside);
         }
-    }
+    },
 );
 
 onUnmounted(() => {

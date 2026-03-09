@@ -94,7 +94,7 @@
         <!-- Filter Section -->
         <div class="flex flex-wrap justify-between items-center gap-4 p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
             <div class="lg:flex items-center mb-4 sm:mb-0">
-                <form class="sm:pr-3" action="#" method="GET">
+                <form class="pe-3" action="#" method="GET">
                     <div class="lg:flex gap-2 items-center">
                         <x-select id="dateRangeType" class="block w-full sm:w-fit mb-2 lg:mb-0" wire:model="dateRangeType" wire:change="setDateRange">
                             <option value="today">@lang('app.today')</option>

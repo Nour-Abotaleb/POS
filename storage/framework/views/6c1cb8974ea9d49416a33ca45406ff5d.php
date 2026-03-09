@@ -338,7 +338,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><?php echo app('translator')->get('modules.printerSetting.downloadDesktopAppWindows'); ?></p>
                     <a href="<?php echo e($desktopApp->windows_file_path); ?>" target="_blank"
                        class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
                         <?php echo app('translator')->get('modules.printerSetting.downloadForWindows'); ?>
@@ -364,7 +364,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><?php echo app('translator')->get('modules.printerSetting.downloadDesktopAppMac'); ?></p>
                     <a href="<?php echo e($desktopApp->mac_file_path); ?>" target="_blank"
                        class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-transparent rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
                         <?php echo app('translator')->get('modules.printerSetting.downloadForMac'); ?>

@@ -171,7 +171,7 @@
 <?php $attributes = $attributes->except(\App\View\Components\Button::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-                            <svg class="w-4 h-4 mr-2 inline-flex" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="w-4 h-4 me-2 inline-flex" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                             <?php echo app('translator')->get('app.save'); ?>
@@ -223,7 +223,7 @@
 <?php $attributes = $attributes->except(\App\View\Components\Button::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['type' => 'button','wire:click' => 'showAddCurrency']); ?>
-                        <svg class="w-4 h-4 mr-1 inline-flex" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 me-1 inline-flex" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
                         <?php echo app('translator')->get('modules.settings.addTax'); ?>
@@ -285,7 +285,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'showEditCurrency('.e($item->id).')','wire:key' => 'editmenu-item-button-'.e($item->id).'']); ?>
-                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
+                                                <svg class="w-4 h-4 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
                                                 <?php echo app('translator')->get('app.update'); ?>
                                              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

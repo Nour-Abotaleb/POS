@@ -343,6 +343,7 @@ return [
         'todayOrder' => 'Today\'s Orders',
         'dine_in' => 'Dine In',
         'delivery' => 'Delivery',
+        'delivery_in_car' => 'Delivery in car',
         'pickup' => 'Pickup',
         'pickupAt' => 'Pickup At',
         'out_for_delivery' => 'Out For Delivery',

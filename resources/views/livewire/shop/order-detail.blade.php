@@ -843,7 +843,7 @@
                         @if($paymentGateway->epay_status)
                             <x-secondary-button wire:click='initiateEpayPayment({{  $paymentOrder->id  }})'>
                                 <span class="inline-flex items-center">
-                                    <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none"
+                                    <svg class="w-4 h-4 me-2" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                         <rect x="1.5" y="1.5" width="21" height="21" rx="3" ry="3"
                                             stroke="currentColor" stroke-width="2"/>

@@ -241,7 +241,7 @@ if (isset($__slots)) unset($__slots);
              <?php $__env->slot('title', null, []); ?> 
                 <div>
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white"><?php echo app('translator')->get('modules.order.cancelKot'); ?></h3>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">This action cannot be undone</p>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400"><?php echo app('translator')->get('modules.order.actionCannotBeUndone'); ?></p>
                 </div>
              <?php $__env->endSlot(); ?>
 
@@ -267,8 +267,7 @@ if (isset($__slots)) unset($__slots);
                             <div>
                                 <p class="text-sm font-semibold text-amber-800 dark:text-amber-200"><?php echo app('translator')->get('modules.order.cancelKotMessage'); ?>
                                 </p>
-                                <p class="mt-1 text-sm text-amber-700 dark:text-amber-300">Please select a reason for
-                                    cancellation</p>
+                                <p class="mt-1 text-sm text-amber-700 dark:text-amber-300"><?php echo app('translator')->get('modules.order.pleaseSelectReasonForCancellation'); ?></p>
                             </div>
                         </div>
                      <?php echo $__env->renderComponent(); ?>

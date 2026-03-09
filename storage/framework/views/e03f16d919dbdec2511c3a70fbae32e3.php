@@ -31,7 +31,7 @@
 
         <div class="items-center justify-between block sm:flex bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
             <div class="lg:flex items-center mb-4 sm:mb-0">
-                <form class="sm:pr-3" action="#" method="GET">
+                <form class="pe-3" action="#" method="GET">
                     <div class="lg:flex gap-2 items-center">
                         <?php if (isset($component)) { $__componentOriginaled2cde6083938c436304f332ba96bb7c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginaled2cde6083938c436304f332ba96bb7c = $attributes; } ?>

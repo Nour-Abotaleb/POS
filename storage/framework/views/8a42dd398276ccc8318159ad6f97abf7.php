@@ -16,6 +16,11 @@
                 class="<?php echo \Illuminate\Support\Arr::toCssClasses(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'app'), 'active' => ($activeSetting == 'app')]); ?>"><?php echo app('translator')->get('modules.settings.appSettings'); ?></a>
             </li>
             <li class="me-2">
+                <a href="<?php echo e(route('settings.index').'?tab=language'); ?>" wire:navigate
+                style="<?php echo e($activeSetting == 'language' ? 'color: #011646; border-bottom-color: #011646;' : ''); ?>"
+                class="<?php echo \Illuminate\Support\Arr::toCssClasses(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'language'), 'active' => ($activeSetting == 'language')]); ?>"><?php echo app('translator')->get('modules.settings.languageSettings'); ?></a>
+            </li>
+            <li class="me-2">
                 <a href="<?php echo e(route('settings.index').'?tab=branch'); ?>" wire:navigate
                 style="<?php echo e($activeSetting == 'branch' ? 'color: #011646; border-bottom-color: #011646;' : ''); ?>"
                 class="<?php echo \Illuminate\Support\Arr::toCssClasses(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'branch'), 'active' => ($activeSetting == 'branch')]); ?>"><?php echo app('translator')->get('modules.settings.branchSettings'); ?></a>
@@ -161,6 +166,25 @@ if (isset($__slots)) unset($__slots);
 ?>
                 <?php break; ?>
 
+                <?php case ('language'): ?>
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('settings.languageSettings');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-2', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+                <?php break; ?>
+
                 <?php case ('email'): ?>
                 <?php
 $__split = function ($name, $params = []) {
@@ -168,7 +192,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.notificationSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-2', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -187,7 +211,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.currencySettings');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-3', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-4', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -206,7 +230,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.paymentSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -225,7 +249,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.themeSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-5', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-6', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -244,7 +268,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.roleSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-6', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-7', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -263,7 +287,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.taxSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-7', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-8', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -282,7 +306,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.reservationSettings');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-8', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-9', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -301,7 +325,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.branchSettings');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-9', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-10', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -319,7 +343,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.billingSettings');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-10', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-11', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -338,7 +362,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.aboutUsSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-11', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-12', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -357,7 +381,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.customerSiteSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-12', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-13', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -376,7 +400,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.ReceiptSetting', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-13', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-14', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -395,7 +419,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.PrinterSetting', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-14', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-15', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -414,7 +438,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.branchDeliverySettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-15', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-16', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -433,7 +457,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.kotSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-16', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-17', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -452,7 +476,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.CancellationSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-17', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-18', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -471,7 +495,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('settings.OrderSettings', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-18', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-19', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -496,7 +520,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split(strtolower($item).'::restaurant.setting', ['settings' => $settings]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-19', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1092916606-20', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

@@ -98,7 +98,7 @@ unset($__errorArgs, $__bag); ?>
                                 <?php endif; ?>
                                 <?php if(!empty($windows_file_path)): ?>
                                     <a href="<?php echo e($windows_file_path); ?>" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                         </svg>
                                         <?php echo app('translator')->get('superadmin.downloadNow'); ?>
@@ -143,7 +143,7 @@ unset($__errorArgs, $__bag); ?>
                                 <?php endif; ?>
                                 <?php if(!empty($mac_file_path)): ?>
                                     <a href="<?php echo e($mac_file_path); ?>" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                         </svg>
                                         <?php echo app('translator')->get('superadmin.downloadNow'); ?>

@@ -1,8 +1,8 @@
 <div >
     <div class="p-4 bg-white block  dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
             <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">@lang('menu.orders') ({{ $orders->count() }})</h1>
-            <div class="ml-auto flex items-center gap-4">
+            <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2">
                     @if(pusherSettings()->is_enabled_pusher_broadcast)
                         <div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -45,7 +45,7 @@
 
         <div class="items-center justify-between block sm:flex ">
             <div class="lg:flex items-center mb-4 sm:mb-0">
-                <form class="ltr:sm:pr-3 rtl:sm:pl-3" action="#" method="GET">
+                <form class="ltr:pe-3 rtl:sm:pl-3" action="#" method="GET">
 
                     <div class="lg:flex gap-2 items-center">
                         <x-select id="dateRangeType" class="block w-fit" wire:model="dateRangeType"

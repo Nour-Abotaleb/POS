@@ -1,8 +1,8 @@
 <div <?php if(!pusherSettings()->is_enabled_pusher_broadcast && $pollingEnabled): ?> wire:poll.<?php echo e($pollingInterval); ?>s <?php endif; ?>>
-    <div class="p-4 bg-white block  dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex mb-4">
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"><?php echo app('translator')->get('menu.waiterRequest'); ?> (<?php echo e($tables->sum(function($area) { return $area->tables->count(); })); ?>)</h1>
-            <div class="ml-auto flex items-center gap-4">
+    <div class="p-4 bg-white block  dark:bg-gray-800 dark:border-gray-700 w-full">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4 w-full">
+            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white shrink-0"><?php echo app('translator')->get('menu.waiterRequest'); ?> (<?php echo e($tables->sum(function($area) { return $area->tables->count(); })); ?>)</h1>
+            <div class="flex items-center gap-4 shrink-0">
                 <div class="flex items-center gap-2">
                     <!--[if BLOCK]><![endif]--><?php if(pusherSettings()->is_enabled_pusher_broadcast): ?>
                         <div class="flex items-center gap-2 px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">

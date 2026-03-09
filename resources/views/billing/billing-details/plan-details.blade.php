@@ -18,7 +18,7 @@
             <a href="{{ route('staff.index') }}">
                 <x-button class="inline-flex items-center shadow-md hover:origin-center group p-3 px-4 mb-4">
 
-                <x-heroicon-o-pencil-square class="w-4 h-4 mr-1" />
+                <x-heroicon-o-pencil-square class="w-4 h-4 me-1" />
                 {{ __('modules.staff.manageStaff') }}
                 </x-button>
             </a>
@@ -36,7 +36,7 @@
 
             <a href="{{ route('menu-items.index') }}">
                 <x-button class="inline-flex items-center shadow-md hover:origin-center group p-3 px-4 mb-4">
-                    <x-heroicon-o-pencil-square class="w-4 h-4 mr-1" />
+                    <x-heroicon-o-pencil-square class="w-4 h-4 me-1" />
                     {{ __('modules.staff.manageMenuItems') }}
                 </x-button>
             </a>

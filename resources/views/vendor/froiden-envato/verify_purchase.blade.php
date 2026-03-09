@@ -16,7 +16,7 @@
         <div class="bg-white rounded-lg shadow-md">
             <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <svg class="w-5 h-5 me-2 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L19.09 8 12 11.764 4.91 8 12 4.236zM4 9.618v7.764L11 21v-7.764L4 9.618zm16 0L13 13.382V21l7-3.618V9.618z"/>
                     </svg>
                     Verify Your Purchase
@@ -117,7 +117,7 @@
                         <div class="flex justify-end">
                             <button type="button" onclick="validateCode();return false;"
                                     class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center">
-                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                                 </svg>
                                 Verify Purchase

@@ -7,7 +7,7 @@
             <?php endif; ?>
             <div class="text-sm font-normal text-gray-500 dark:text-gray-400 space-y-1">
                 <div class="text-base font-semibold text-gray-900 dark:text-white inline-flex items-center">
-                    <img src="<?php echo e(asset('img/'.$selectedModifierItem->type.'.svg')); ?>" class="h-4 mr-2"
+                    <img src="<?php echo e(asset('img/'.$selectedModifierItem->type.'.svg')); ?>" class="h-4 me-2"
                         title="<?php echo app('translator')->get('modules.menu.' . $selectedModifierItem->type); ?>" alt="" />
                     <?php echo e($selectedModifierItem->item_name); ?>
 

@@ -389,7 +389,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['type' => 'button','x-on:click.prevent' => '$refs.paymentQrCode.click()','class' => 'flex items-center']); ?>
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                            <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />

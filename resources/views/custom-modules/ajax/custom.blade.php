@@ -117,7 +117,7 @@
     @if(count($allModules) > 0)
     <div class="flex mb-4">
         <x-primary-link href="{{ route('superadmin.custom-modules.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg> @lang('app.moduleSettingsInstall')
         </x-primary-link>
@@ -502,7 +502,7 @@
                             <p class="text-sm text-gray-600">@lang('messages.moduleSettingsInstall')</p>
 
                             <x-primary-link href="{{ route('superadmin.custom-modules.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase ">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg> @lang('app.moduleSettingsInstall')
                             </x-primary-link>

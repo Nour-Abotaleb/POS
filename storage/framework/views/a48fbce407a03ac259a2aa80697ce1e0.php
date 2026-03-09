@@ -658,7 +658,7 @@ unset($__errorArgs, $__bag); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'showItemVariations('.e($item->id).')']); ?>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                        height="16" fill="currentColor" class="w-4 h-4 mr-1"
+                                                        height="16" fill="currentColor" class="w-4 h-4 me-1"
                                                         viewBox="0 0 16 16">
                                                         <path fill-rule="evenodd"
                                                             d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
@@ -818,7 +818,7 @@ if (isset($__slots)) unset($__slots);
                                 <div class="flex flex-wrap items-center gap-2">
                                     <div
                                         class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        <img src="<?php echo e(asset('img/' . $item->type . '.svg')); ?>" class="h-4 mr-2"
+                                        <img src="<?php echo e(asset('img/' . $item->type . '.svg')); ?>" class="h-4 me-2"
                                             title="<?php echo app('translator')->get('modules.menu.' . $item->type); ?>" alt="" />
                                         <?php echo e($item->item_name); ?>
 
@@ -2639,7 +2639,7 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'initiateEpayPayment('.e($paymentOrder->id).')']); ?>
                                 <span class="inline-flex items-center">
-                                    <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none"
+                                    <svg class="w-4 h-4 me-2" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                         <rect x="1.5" y="1.5" width="21" height="21" rx="3" ry="3"
                                             stroke="currentColor" stroke-width="2"/>
@@ -2927,7 +2927,7 @@ if (isset($__slots)) unset($__slots);
                             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                 <div
                                     class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    <img src="<?php echo e(asset('img/' . $menuItem->type . '.svg')); ?>" class="h-4 mr-2"
+                                    <img src="<?php echo e(asset('img/' . $menuItem->type . '.svg')); ?>" class="h-4 me-2"
                                         title="<?php echo app('translator')->get('modules.menu.' . $menuItem->type); ?>" alt="" />
                                     <?php echo e($menuItem->item_name); ?>
 

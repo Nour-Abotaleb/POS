@@ -14,17 +14,21 @@
                     {{ $orderTypeId === $type->id
                         ? 'text-white'
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
-                    {{ $type->order_type_name }}
+                    @php
+                        $orderTypeKey = 'modules.order.' . ($type->slug ?? '');
+                        $orderTypeLabel = __($orderTypeKey);
+                    @endphp
+                    {{ $orderTypeLabel !== $orderTypeKey ? $orderTypeLabel : $type->order_type_name }}
                 </button>
             @endforeach
 
             @if($orderTypeSlug === 'delivery' && $selectedDeliveryApp)
                 <span class="text-xs text-gray-500 dark:text-gray-400 mx-2">•</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400">Platform:</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">@lang('modules.order.deliveryPlatformLabel'):</span>
 
                 <span class="text-sm font-medium text-gray-900 dark:text-white">
                     @if($selectedDeliveryApp === 'default')
-                        Default
+                        @lang('modules.order.defaultDeliveryPlatform')
                     @else
                         {{ \App\Models\DeliveryPlatform::find($selectedDeliveryApp)?->name ?? 'Unknown' }}
                     @endif
@@ -38,7 +42,7 @@
 
             {{-- ORDER NUMBER --}}
             <div class="inline-flex items-center gap-1 text-sm !text-[#298000] 
-            !bg-[#E6FFF0] rounded-lg px-2 py-2" style="background:#E6FFF0;color:#298000">
+            !bg-[#E6FFF0] rounded-lg px-2 py-2 text-nowrap" style="background:#E6FFF0;color:#298000">
 
                 @if(!isOrderPrefixEnabled())
                     @lang('modules.order.orderNumber') #{{ $orderNumber }}
