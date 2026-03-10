@@ -15,7 +15,7 @@
                     @endif
                 @else
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-14v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-                    @lang('modules.delivery.deliveryFee'): <span class="font-semibold ml-1">{{ currency_format($deliveryFee, $currencyId) }}</span>
+                    @lang('modules.delivery.deliveryFee'): <span class="font-semibold ml-1">{!! currency_format($deliveryFee, $currencyId) !!}</span>
                     @if($distance)
                         <span class="ml-2 text-sm text-gray-600 dark:text-gray-300">
                             ({{ number_format($branch->deliverySetting->unit === 'miles' ? $distance / 1.60934 : $distance, 2) }} {{ $branch->deliverySetting->unit === 'miles' ? 'miles' : 'km' }})

@@ -3,7 +3,7 @@
     <div class="w-full">
         <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">@lang('modules.dashboard.averageDailyEarning') ({{ now()->translatedFormat('F') }})
         </h3>
-        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{  currency_format(round($orderCount, 2), restaurant()->currency_id) }}</span>
+        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{!! currency_format(round($orderCount, 2), restaurant()->currency_id) !!}</span>
         <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
             <span @class(["flex items-center mr-1.5 text-sm", 'text-green-500 dark:text-green-400'=> ($percentChange >
                 0), 'text-red-600 dark:text-red-600' => ($percentChange < 0)])>

@@ -85,6 +85,22 @@
                             <x-input-error for="restaurantEmailAddress" class="mt-2" />
                         </div>
 
+                        <!-- VAT Number -->
+                        <div>
+                            <x-label class="mt-4" for="vatNumber" value="{{ __('settings.vat_number') }}" />
+                            <x-input id="vatNumber" class="block mt-2 w-full" type="text" 
+                                wire:model='vatNumber' maxlength="15" placeholder="300000000000003" />
+                            <x-input-error for="vatNumber" class="mt-2" />
+                        </div>
+
+                        <!-- Commercial Registration -->
+                        <div>
+                            <x-label class="mt-4" for="commercialRegistration" value="{{ __('settings.commercial_registration') }}" />
+                            <x-input id="commercialRegistration" class="block mt-2 w-full" type="text" 
+                                wire:model='commercialRegistration' maxlength="10" placeholder="1010123456" />
+                            <x-input-error for="commercialRegistration" class="mt-2" />
+                        </div>
+
                         <div>
                             <x-label class="mt-4" for="restaurantAddress"
                                 value="{{ __('modules.settings.restaurantAddress') }}" />
@@ -296,7 +312,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     @foreach($predefinedAmounts as $amount)
                     <div class="p-3 text-center rounded-lg border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <span class="font-medium">{{ currency_format($amount['amount']) }}</span>
+                        <span class="font-medium">{!! currency_format($amount['amount']) !!}</span>
                     </div>
                     @endforeach
                 </div>

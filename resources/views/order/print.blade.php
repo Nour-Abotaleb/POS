@@ -10,21 +10,21 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        body {
+            direction: rtl;
+            text-align: center;
             font-family: 'DejaVu Sans', 'Arial', sans-serif;
-        }
-
-        [dir="rtl"] {
-            text-align: right;
-        }
-
-        [dir="ltr"] {
-            text-align: left;
+            width: 100%;
         }
 
         .receipt {
             width: {{ $width - 5 }}mm;
             padding: {{ $thermal ? '1mm' : '6.35mm' }};
             page-break-after: always;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .header {
@@ -35,7 +35,8 @@
         .restaurant-logo {
             width: 80px;
             height: 80px;
-            margin-top: 3px;
+            margin: 3px auto;
+            display: block;
             object-fit: contain;
         }
 
@@ -58,6 +59,7 @@
         .restaurant-info {
             font-size: 9pt;
             margin-bottom: 1mm;
+            text-align: center;
         }
 
         .order-info {
@@ -66,108 +68,53 @@
             padding: 2mm 0;
             margin-bottom: 3mm;
             font-size: 9pt;
-        }
-
-        . {
-            font-weight: bold;
+            text-align: center;
         }
 
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 3mm;
+            margin: 0 auto 3mm auto;
             font-size: 9pt;
         }
 
         .items-table th {
             padding: 1mm;
             border-bottom: 1px solid #000;
-        }
-
-        [dir="rtl"] .items-table th {
-            text-align: right;
-        }
-
-        [dir="ltr"] .items-table th {
-            text-align: left;
+            text-align: center;
         }
 
         .items-table td {
             padding: 1mm 0;
             vertical-align: top;
-        }
-
-        .qty {
-            width: 10%;
             text-align: center;
-        }
-
-        .description {
-            width: 50%;
-        }
-
-        .payment-method {
-            width: 28%;
-        }
-
-        [dir="rtl"] .price,
-        [dir="rtl"] .amount {
-            text-align: left;
-        }
-
-        [dir="ltr"] .price,
-        [dir="ltr"] .amount {
-            text-align: right;
-        }
-
-        .price {
-            width: 20%;
-        }
-
-        .amount {
-            width: 20%;
         }
 
         .summary {
             font-size: 9pt;
             margin-top: 2mm;
+            text-align: center;
         }
 
         .summary-row {
             width: 100%;
             margin-bottom: 1mm;
+            text-align: center;
         }
         .summary-row table {
-            width: 100%;
+            width: 80%;
             border-collapse: collapse;
+            margin: 0 auto;
         }
         .summary-row td {
-            padding: 0;
+            padding: 1mm 2mm;
+            text-align: center;
         }
         .summary-row td:first-child {
-            text-align: left;
-        }
-        .summary-row td:last-child {
             text-align: right;
         }
-        .summary-row.secondary {
-            font-size: 8pt;
-            color: #555;
-            margin-bottom: 0.5mm;
-        }
-
-        .summary-grid {
-            width: 100%;
-            margin-bottom: 1mm;
-        }
-        .summary-grid table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary-grid td {
-            width: 50%;
-            padding: 2px 5px;
-            vertical-align: top;
+        .summary-row td:last-child {
+            text-align: left;
         }
 
         .total {
@@ -176,6 +123,7 @@
             border-top: 1px solid #000;
             padding-top: 1mm;
             margin-top: 1mm;
+            text-align: center;
         }
 
         .footer {
@@ -238,6 +186,14 @@
     </button>
     <div class="receipt">
         <div class="header">
+            <!-- ZATCA Compliant Invoice Title -->
+            <div style="text-align: center; margin-bottom: 3mm; direction: rtl;">
+                <h2 style="font-size: 12pt; font-weight: bold; margin: 0;">
+                    فاتورة ضريبية مبسطة<br>
+                    <span style="font-size: 10pt; direction: ltr;">Simplified Tax Invoice</span>
+                </h2>
+            </div>
+            
             <div class="restaurant-name">
                 @if ($receiptSettings->show_restaurant_logo)
                     @php
@@ -269,8 +225,21 @@
 
             <div class="restaurant-info">{!! nl2br(branch()->address) !!}</div>
             <div class="restaurant-info">@lang('modules.customer.phone'):<span dir="ltr" style="unicode-bidi: embed;">{{ restaurant()->phone_number }}</span></div>
+            
+            <!-- ZATCA Required Fields -->
+            @if(restaurant()->vat_number)
+                <div class="restaurant-info" style="direction: rtl;">
+                    <strong>الرقم الضريبي / VAT Number:</strong> {{ restaurant()->vat_number }}
+                </div>
+            @endif
+            
+            @if(restaurant()->commercial_registration)
+                <div class="restaurant-info" style="direction: rtl;">
+                    <strong>السجل التجاري / C.R.:</strong> {{ restaurant()->commercial_registration }}
+                </div>
+            @endif
+            
             @if ($receiptSettings->show_tax)
-
                 @foreach ($taxDetails as $taxDetail)
                     <div class="restaurant-info">{{ $taxDetail->tax_name }}: {{ $taxDetail->tax_id }}</div>
                 @endforeach
@@ -385,13 +354,13 @@
                                     }
                                 @endphp
                                 <div class="modifiers">• {{ $modifier->name ?? $modifier->pivot->modifier_option_name }}
-                                    (+{{ currency_format($modifier->pivot->modifier_option_price ?? $modifier->price, restaurant()->currency_id) }})
+                                    (+{!! currency_format($modifier->pivot->modifier_option_price ?? $modifier->price, restaurant()->currency_id) !!})
                                 </div>
                             @endforeach
                         </td>
-                        <td class="price">{{ currency_format($item->price, restaurant()->currency_id) }}</td>
+                        <td class="price">{!! currency_format($item->price, restaurant()->currency_id) !!}</td>
                         <td class="amount">
-                            {{ currency_format($item->amount, restaurant()->currency_id) }}
+                            {!! currency_format($item->amount, restaurant()->currency_id) !!}
                         </td>
                     </tr>
                 @endforeach
@@ -403,7 +372,7 @@
                 <table>
                     <tr>
                         <td>@lang('modules.order.subTotal'):</td>
-                        <td>{{ currency_format($order->sub_total, restaurant()->currency_id) }}</td>
+                        <td>{!! currency_format($order->sub_total, restaurant()->currency_id) !!}</td>
                     </tr>
                 </table>
             </div>
@@ -416,7 +385,7 @@
                                     ({{ rtrim(rtrim($order->discount_value, '0'), '.') }}%)
                                 @endif
                             </td>
-                            <td>-{{ currency_format($order->discount_amount, restaurant()->currency_id) }}</td>
+                            <td>-{!! currency_format($order->discount_amount, restaurant()->currency_id) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -432,7 +401,7 @@
                             @endif:
                         </td>
                         <td>
-                            {{ currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), restaurant()->currency_id) }}
+                            {!! currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), restaurant()->currency_id) !!}
                         </td>
                     </tr>
                 </table>
@@ -444,7 +413,7 @@
                     <table>
                         <tr>
                             <td>@lang('modules.order.tip'):</td>
-                            <td>{{ currency_format($order->tip_amount, restaurant()->currency_id) }}</td>
+                            <td>{!! currency_format($order->tip_amount, restaurant()->currency_id) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -457,7 +426,7 @@
                             <td>@lang('modules.delivery.deliveryFee')</td>
                             <td>
                                 @if($order->delivery_fee > 0)
-                                    {{ currency_format($order->delivery_fee, restaurant()->currency_id) }}
+                                    {!! currency_format($order->delivery_fee, restaurant()->currency_id) !!}
                                 @else
                                     @lang('modules.delivery.freeDelivery')
                                 @endif
@@ -473,7 +442,7 @@
                         <table>
                             <tr>
                                 <td>{{ $item->tax->tax_name }} ({{ $item->tax->tax_percent }}%):</td>
-                                <td>{{ currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id) }}</td>
+                                <td>{!! currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id) !!}</td>
                             </tr>
                         </table>
                     </div>
@@ -505,7 +474,7 @@
                             <table>
                                 <tr>
                                     <td>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</td>
-                                    <td>{{ currency_format($taxInfo['amount'], restaurant()->currency_id) }}</td>
+                                    <td>{!! currency_format($taxInfo['amount'], restaurant()->currency_id) !!}</td>
                                 </tr>
                             </table>
                         </div>
@@ -515,7 +484,7 @@
                         <table>
                             <tr>
                                 <td>@lang('modules.order.totalTax'):</td>
-                                <td>{{ currency_format($totalTax, restaurant()->currency_id) }}</td>
+                                <td>{!! currency_format($totalTax, restaurant()->currency_id) !!}</td>
                             </tr>
                         </table>
                     </div>
@@ -527,7 +496,7 @@
                     <table>
                         <tr>
                             <td>@lang('modules.order.balanceReturn'):</td>
-                            <td>{{ currency_format($payment->balance, restaurant()->currency_id) }}</td>
+                            <td>{!! currency_format($payment->balance, restaurant()->currency_id) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -537,7 +506,7 @@
                 <table>
                     <tr>
                         <td>@lang('modules.order.total'):</td>
-                        <td>{{ currency_format($order->total, restaurant()->currency_id) }}</td>
+                        <td>{!! currency_format($order->total, restaurant()->currency_id) !!}</td>
                     </tr>
                 </table>
             </div>
@@ -562,7 +531,58 @@
         </div>
 
         <div class="footer">
-            <p>@lang('messages.thankYouVisit')</p>
+            <p style="text-align: center;">@lang('messages.thankYouVisit')</p>
+            
+            <!-- ZATCA QR Code -->
+            @if(isset($zatcaQrCode) && !empty($zatcaQrCode))
+                <div style="text-align: center; margin: 15mm 0; page-break-inside: avoid;">
+                    @php
+                        // Use multiple QR code services as fallbacks
+                        $qrCodeUrls = [
+                            'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($zatcaQrCode),
+                            'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' . urlencode($zatcaQrCode) . '&choe=UTF-8',
+                            'https://quickchart.io/qr?text=' . urlencode($zatcaQrCode) . '&size=200'
+                        ];
+                    @endphp
+                    
+                    <!-- Try multiple QR code services -->
+                    <img src="{{ $qrCodeUrls[0] }}" 
+                         alt="ZATCA QR Code" 
+                         style="width: 200px; height: 200px; display: block; margin: 0 auto; border: 1px solid #ddd;"
+                         onerror="this.src='{{ $qrCodeUrls[1] }}'; this.onerror=function(){this.src='{{ $qrCodeUrls[2] }}'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';}};">
+                    
+                    <!-- Fallback if all QR code services fail -->
+                    <div style="display: none; width: 200px; height: 200px; border: 2px solid #333; align-items: center; justify-content: center; margin: 0 auto; background-color: #fff; flex-direction: column; position: relative;">
+                        <div style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px; background: #000;"></div>
+                        <div style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; background: #000;"></div>
+                        <div style="position: absolute; bottom: 10px; left: 10px; width: 20px; height: 20px; background: #000;"></div>
+                        <p style="font-size: 10pt; color: #333; text-align: center; margin: 0; z-index: 1;">
+                            <strong>ZATCA QR Code</strong><br>
+                            <small style="font-size: 7pt; margin-top: 5px; display: block; word-break: break-all; padding: 0 10px;">{{ substr($zatcaQrCode, 0, 30) }}...</small>
+                        </p>
+                    </div>
+                    
+                    <p style="font-size: 9pt; margin-top: 5mm; text-align: center; direction: rtl;">
+                        امسح الرمز للتحقق من الفاتورة<br>
+                        <span style="direction: ltr; font-size: 8pt;">Scan to verify invoice</span>
+                    </p>
+                </div>
+            @else
+                <!-- Fallback if QR code data is not available -->
+                <div style="text-align: center; margin: 15mm 0; page-break-inside: avoid;">
+                    <div style="width: 200px; height: 200px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; margin: 0 auto; background-color: #f9f9f9; flex-direction: column;">
+                        <p style="font-size: 10pt; color: #666; text-align: center; margin: 0;">
+                            QR Code<br>
+                            <small style="font-size: 8pt;">ZATCA Compliant</small><br>
+                            <small style="font-size: 7pt; color: #999;">Data not available</small>
+                        </p>
+                    </div>
+                    <p style="font-size: 9pt; margin-top: 5mm; text-align: center; direction: rtl;">
+                        امسح الرمز للتحقق من الفاتورة<br>
+                        <span style="direction: ltr; font-size: 8pt;">Scan to verify invoice</span>
+                    </p>
+                </div>
+            @endif
 
             @if ($order->status != 'paid')
             <div>
@@ -610,7 +630,7 @@
                         <tbody>
                             @foreach ($order->payments as $payment)
                                 <tr>
-                                    <td class="qty" style="text-align: center">{{ currency_format($payment->amount, restaurant()->currency_id) }}</td>
+                                    <td class="qty" style="text-align: center">{!! currency_format($payment->amount, restaurant()->currency_id) !!}</td>
                                     <td class="payment-method" style="text-align: center">@lang('modules.order.' . $payment->payment_method)</td>
                                     <td class="price" style="text-align: center">
                                         @if($payment->payment_method != 'due')

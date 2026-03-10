@@ -33,7 +33,7 @@
                             @forelse ($payments as $item)
                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700" wire:key='customer-{{ $item->id . rand(1111, 9999) . microtime() }}' wire:loading.class.delay='opacity-10'>
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ currency_format($item->amount, restaurant()->currency_id) }}
+                                    {!! currency_format($item->amount, restaurant()->currency_id) !!}
                                 </td>
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white"">
                                     @lang('modules.order.due')

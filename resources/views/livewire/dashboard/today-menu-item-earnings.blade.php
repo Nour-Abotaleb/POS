@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="inline-flex items-center text-base font-medium text-gray-900 dark:text-white">
-                                {{ currency_format($item->orders->sum('amount'), restaurant()->currency_id) }}
+                                {!! currency_format($item->orders->sum('amount'), restaurant()->currency_id) !!}
                             </div>
                         </div>
                     </li>

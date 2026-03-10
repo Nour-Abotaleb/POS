@@ -61,11 +61,11 @@
                                 </td>
 
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $item->currency_code }} ({{ $item->currency_symbol }})
+                                    {{ $item->currency_code }} ({!! $item->currency_symbol !!})
                                 </td>
 
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ global_currency_format(12345.6789, $item->id) }}
+                                    {!! global_currency_format(12345.6789, $item->id) !!}
                                 </td>
 
                                 <td class="py-2.5 px-4 space-x-2 whitespace-nowrap text-right">

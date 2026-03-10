@@ -388,25 +388,25 @@
                     <div class="flex flex-col gap-1 text-xs">
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.basePrice'):</span>
-                            <span class="font-medium">{{ currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-medium">{!! currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                         @if(!empty($variationBreakdowns[$key]['breakdown']['tax_breakdown']))
                             <div class="ml-2 my-1">
                                 @foreach($variationBreakdowns[$key]['breakdown']['tax_breakdown'] as $tax)
                                     <div class="flex justify-between text-gray-500 dark:text-gray-400">
                                         <span>{{ $tax['name'] }} ({{ $tax['rate'] }}%)</span>
-                                        <span>{{ currency_format($tax['amount'], restaurant()->currency_id) }}</span>
+                                        <span>{!! currency_format($tax['amount'], restaurant()->currency_id) !!}</span>
                                     </div>
                                 @endforeach
                             </div>
                         @endif
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.tax') ({{ $variationBreakdowns[$key]['breakdown']['tax_percent'] ?? 0 }}%):</span>
-                            <span class="font-medium">{{ currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-medium">{!! currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                         <div class="flex justify-between pt-1 border-t border-gray-200 dark:border-gray-600 mt-1">
                             <span class="text-gray-700 dark:text-gray-300 font-semibold">@lang('modules.menu.total'):</span>
-                            <span class="font-semibold">{{ currency_format($variationBreakdowns[$key]['breakdown']['total_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-semibold">{!! currency_format($variationBreakdowns[$key]['breakdown']['total_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                     </div>
                     <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -417,16 +417,16 @@
                             <span>
                                 @lang('modules.menu.taxInclusiveInfo', [
                                     'percent' => $variationBreakdowns[$key]['breakdown']['tax_percent'],
-                                    'tax' => currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id),
-                                    'base' => currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id)
+                                    'tax' => '{!! ' . currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id) . ' !!}',
+                                    'base' => '{!! ' . currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id) . ' !!}'
                                 ])
                             </span>
                         @else
                             <span>
                                 @lang('modules.menu.taxExclusiveInfo', [
                                     'percent' => $variationBreakdowns[$key]['breakdown']['tax_percent'],
-                                    'tax' => currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id),
-                                    'base' => currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id)
+                                    'tax' => '{!! ' . currency_format($variationBreakdowns[$key]['breakdown']['tax_raw'] ?? 0, restaurant()->currency_id) . ' !!}',
+                                    'base' => '{!! ' . currency_format($variationBreakdowns[$key]['breakdown']['base_raw'] ?? 0, restaurant()->currency_id) . ' !!}'
                                 ])
                             </span>
                         @endif
@@ -472,25 +472,25 @@
                     <div class="flex flex-col gap-1 text-xs">
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.basePrice'):</span>
-                            <span class="font-medium">{{ currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-medium">{!! currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                         @if(!empty($taxInclusivePriceDetails['tax_breakdown']))
                             <div class="ml-2 my-1">
                                 @foreach($taxInclusivePriceDetails['tax_breakdown'] as $tax)
                                 <div class="flex justify-between text-gray-500 dark:text-gray-400">
                                     <span>{{ $tax['name'] }} ({{ $tax['rate'] }}%)</span>
-                                    <span>{{ currency_format($tax['amount'], restaurant()->currency_id) }}</span>
+                                    <span>{!! currency_format($tax['amount'], restaurant()->currency_id) !!}</span>
                                 </div>
                                 @endforeach
                             </div>
                         @endif
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.tax') ({{ $taxInclusivePriceDetails['tax_percent'] }}%):</span>
-                            <span class="font-medium">{{ currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-medium">{!! currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                         <div class="flex justify-between pt-1 border-t border-gray-200 dark:border-gray-600 mt-1">
                             <span class="text-gray-700 dark:text-gray-300 font-semibold">@lang('modules.menu.total'):</span>
-                            <span class="font-semibold">{{ currency_format($taxInclusivePriceDetails['total_raw'] ?? 0, restaurant()->currency_id) }}</span>
+                            <span class="font-semibold">{!! currency_format($taxInclusivePriceDetails['total_raw'] ?? 0, restaurant()->currency_id) !!}</span>
                         </div>
                     </div>
                     <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -501,16 +501,16 @@
                             <span>
                                 @lang('modules.menu.taxInclusiveInfo', [
                                     'percent' => $taxInclusivePriceDetails['tax_percent'],
-                                    'tax' => currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id),
-                                    'base' => currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id)
+                                    'tax' => '{!! ' . currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id) . ' !!}',
+                                    'base' => '{!! ' . currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id) . ' !!}'
                                 ])
                             </span>
                         @else
                             <span>
                                 @lang('modules.menu.taxExclusiveInfo', [
                                     'percent' => $taxInclusivePriceDetails['tax_percent'],
-                                    'tax' => currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id),
-                                    'base' => currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id)
+                                    'tax' => '{!! ' . currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0, restaurant()->currency_id) . ' !!}',
+                                    'base' => '{!! ' . currency_format($taxInclusivePriceDetails['base_raw'] ?? 0, restaurant()->currency_id) . ' !!}'
                                 ])
                             </span>
                         @endif

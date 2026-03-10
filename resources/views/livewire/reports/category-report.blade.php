@@ -112,7 +112,7 @@
                         {{ $item->orders->sum('quantity') }}
                     </td>
                     <td class="p-4 text-sm text-center text-gray-900 dark:text-white">
-                        {{ currency_format($item->orders->sum(function($order) { return $order->quantity * $order->price; }), restaurant()->currency_id) }}
+                        {!! currency_format($item->orders->sum(function($order) { return $order->quantity * $order->price; }), restaurant()->currency_id) !!}
                     </td>
                 </tr>
                 @empty

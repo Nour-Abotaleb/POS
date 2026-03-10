@@ -124,7 +124,8 @@ function currency()
     }
 
     if (restaurant()) {
-        session(['currency' => restaurant()->currency->currency_symbol]);
+        $currencySymbol = new \Illuminate\Support\HtmlString(restaurant()->currency->currency_symbol);
+        session(['currency' => $currencySymbol]);
 
         return session('currency');
     }
@@ -601,7 +602,7 @@ if (!function_exists('currency_format')) {
             default => $currency_symbol . $amount,
         };
 
-        return $amount;
+        return new \Illuminate\Support\HtmlString($amount);
     }
 }
 
@@ -648,7 +649,7 @@ if (!function_exists('global_currency_format')) {
             default => $currency_symbol . $amount,
         };
 
-        return $amount;
+        return new \Illuminate\Support\HtmlString($amount);
     }
 }
 

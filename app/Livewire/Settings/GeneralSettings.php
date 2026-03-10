@@ -26,6 +26,8 @@ class GeneralSettings extends Component
     public $restaurantPhoneCode;
     public $restaurantPhoneNumber;
     public $restaurantEmailAddress;
+    public $vatNumber;
+    public $commercialRegistration;
     public $taxName;
     public $taxId;
     public $showTax = false;
@@ -53,6 +55,8 @@ class GeneralSettings extends Component
         $this->restaurantEmailAddress = $this->settings->email;
         $this->restaurantPhoneCode = $this->settings->phone_code;
         $this->restaurantPhoneNumber = ltrim($this->settings->phone_number, '+');
+        $this->vatNumber = $this->settings->vat_number;
+        $this->commercialRegistration = $this->settings->commercial_registration;
 
         $this->fatchData();
 
@@ -140,6 +144,8 @@ class GeneralSettings extends Component
         $this->settings->phone_number = $this->restaurantPhoneNumber;
         $this->settings->phone_code = $this->restaurantPhoneCode;
         $this->settings->address = $this->restaurantAddress;
+        $this->settings->vat_number = $this->vatNumber;
+        $this->settings->commercial_registration = $this->commercialRegistration;
         $this->settings->save();
 
         session()->forget(['restaurant', 'timezone', 'currency']);

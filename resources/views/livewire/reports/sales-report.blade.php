@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <p class="text-xl break-words font-bold mb-2" style="color: #011646;">
-                    {{ currency_format($menuItems->sum('total_amount'), $currencyId) }}
+                    {!! currency_format($menuItems->sum('total_amount'), $currencyId) !!}
                 </p>
 
                 <div class="space-y-1.5">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <p class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                        {{ currency_format($menuItems->sum('cash_amount') + $menuItems->sum('card_amount') + $menuItems->sum('upi_amount') + $menuItems->sum('bank_transfer_amount'), $currencyId) }}
+                        {!! currency_format($menuItems->sum('cash_amount') + $menuItems->sum('card_amount') + $menuItems->sum('upi_amount') + $menuItems->sum('bank_transfer_amount'), $currencyId) !!}
                     </p>
                     <div class="space-y-1.5">
                         @php
@@ -71,7 +71,7 @@
                                     @lang("modules.order.{$method}")
                                 </span>
                                 <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">
-                                    {{ currency_format($amount, $currencyId) }}
+                                    {!! currency_format($amount, $currencyId) !!}
                                 </span>
                             </div>
                         @endforeach
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <p class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                        {{ currency_format($menuItems->sum('razorpay_amount') + $menuItems->sum('stripe_amount') + $menuItems->sum('flutterwave_amount'), $currencyId) }}
+                        {!! currency_format($menuItems->sum('razorpay_amount') + $menuItems->sum('stripe_amount') + $menuItems->sum('flutterwave_amount'), $currencyId) !!}
                     </p>
                     <div class="space-y-1.5">
                         @php
@@ -116,7 +116,7 @@
                                         @lang("modules.order.{$method}")
                                     </span>
                                     <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">
-                                        {{ currency_format($details['amount'], $currencyId) }}
+                                        {!! currency_format($details['amount'], $currencyId) !!}
                                     </span>
                                 </div>
                             @endif
@@ -160,7 +160,7 @@
                                     @lang($data['label'])
                                 </span>
                                 <span class="text-xs font-bold text-rose-800 dark:text-rose-200">
-                                    {{ currency_format($data['amount'], $currencyId) }}
+                                    {!! currency_format($data['amount'], $currencyId) !!}
                                 </span>
                             </div>
                         @endforeach
@@ -191,7 +191,7 @@
                             @lang('modules.report.totalTaxCollection')
                         </span>
                         <span class="text-xs font-bold text-purple-800 dark:text-purple-200">
-                            {{ currency_format($menuItems->sum('total_tax_amount'), $currencyId) }}
+                            {!! currency_format($menuItems->sum('total_tax_amount'), $currencyId) !!}
                         </span>
                     </div>
 
@@ -201,7 +201,7 @@
                                 {{ $taxName }} ({{ number_format($taxData['percent'], 2) }}%)
                             </span>
                             <span class="text-xs font-bold text-purple-800 dark:text-purple-200">
-                                {{ currency_format($taxData['total_amount'], $currencyId) }}
+                                {!! currency_format($taxData['total_amount'], $currencyId) !!}
                             </span>
                         </div>
                     @endforeach
@@ -220,7 +220,7 @@
                     </div>
                 </div>
                 <p class="text-xl break-words font-bold text-orange-700 dark:text-orange-200 mb-2">
-                    {{ currency_format($menuItems->sum('outstanding_amount'), $currencyId) }}
+                    {!! currency_format($menuItems->sum('outstanding_amount'), $currencyId) !!}
                 </p>
 
                 <div class="space-y-1.5">
@@ -441,66 +441,66 @@
 
                 @foreach ($charges as $charge)
                 <td class="p-4 text-sm font-normal text-right text-gray-900 dark:text-gray-100 bg-blue-50/50 dark:bg-blue-900/10">
-                {{ currency_format($item['charges'][$charge->charge_name] ?? 0, $currencyId) }}
+                {!! currency_format($item['charges'][$charge->charge_name] ?? 0, $currencyId) !!}
                 </td>
                 @endforeach
 
                 @foreach ($taxes as $tax)
                 <td class="p-4 text-sm font-normal text-right text-gray-900 dark:text-gray-100 bg-red-50/50 dark:bg-red-900/10">
-                    {{ currency_format($item['taxes'][$tax->tax_name] ?? 0, $currencyId) }}
+                    {!! currency_format($item['taxes'][$tax->tax_name] ?? 0, $currencyId) !!}
                 </td>
                 @endforeach
 
                 @if(count($taxes) > 0)
                 <td class="p-4 text-sm font-normal text-right text-gray-900 dark:text-gray-100 bg-red-50/50 dark:bg-red-900/10">
-                    {{ currency_format($item['total_tax_amount'], $currencyId) }}
+                    {!! currency_format($item['total_tax_amount'], $currencyId) !!}
                 </td>
                 @endif
 
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                {{ currency_format($item['cash_amount'], $currencyId) }}
+                {!! currency_format($item['cash_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                {{ currency_format($item['upi_amount'], $currencyId) }}
+                {!! currency_format($item['upi_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                {{ currency_format($item['card_amount'], $currencyId) }}
+                {!! currency_format($item['card_amount'], $currencyId) !!}
                 </td>
                 <td class="px-5 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                {{ currency_format($item['bank_transfer_amount'], $currencyId) }}
+                {!! currency_format($item['bank_transfer_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-orange-50/50 dark:bg-orange-900/10">
-                    {{ currency_format($item['outstanding_amount'], $currencyId) }}
+                    {!! currency_format($item['outstanding_amount'], $currencyId) !!}
                 </td>
                 @if($paymentGateway->razorpay_status)
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                    {{ currency_format($item['razorpay_amount'], $currencyId) }}
+                    {!! currency_format($item['razorpay_amount'], $currencyId) !!}
                 </td>
                 @endif
                 @if($paymentGateway->stripe_status)
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                    {{ currency_format($item['stripe_amount'], $currencyId) }}
+                    {!! currency_format($item['stripe_amount'], $currencyId) !!}
                 </td>
                 @endif
                 @if($paymentGateway->flutterwave_status)
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white bg-green-50/50 dark:bg-green-900/10">
-                    {{ currency_format($item['flutterwave_amount'], $currencyId) }}
+                    {!! currency_format($item['flutterwave_amount'], $currencyId) !!}
                 </td>
                 @endif
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white ">
-                    {{ currency_format($item['delivery_fee'], $currencyId) }}
+                    {!! currency_format($item['delivery_fee'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white">
-                    {{ currency_format($item['discount_amount'], $currencyId) }}
+                    {!! currency_format($item['discount_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm text-right text-gray-900 dark:text-white">
-                {{ currency_format($item['tip_amount'], $currencyId) }}
+                {!! currency_format($item['tip_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm font-bold text-right text-gray-900 dark:text-white">
-                {{ currency_format($item['total_amount'], $currencyId) }}
+                {!! currency_format($item['total_amount'], $currencyId) !!}
                 </td>
                 <td class="p-4 text-sm font-bold text-right text-gray-900 dark:text-white">
-                {{ currency_format($item['total_excluding_tip'], $currencyId) }}
+                {!! currency_format($item['total_excluding_tip'], $currencyId) !!}
                 </td>
             </tr>
             @empty
@@ -560,13 +560,13 @@
                                 {{ $dateItem['quantity'] }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
-                                {{ currency_format($dateItem['avg_price'], $currencyId) }}
+                                {!! currency_format($dateItem['avg_price'], $currencyId) !!}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white">
-                                {{ currency_format($dateItem['tax_amount'], $currencyId) }}
+                                {!! currency_format($dateItem['tax_amount'], $currencyId) !!}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-right text-gray-900 dark:text-white">
-                                {{ currency_format($dateItem['total_with_tax'], $currencyId) }}
+                                {!! currency_format($dateItem['total_with_tax'], $currencyId) !!}
                             </td>
                         </tr>
                         @endforeach
@@ -582,13 +582,13 @@
                                     $totalQuantity = array_sum(array_column($dateItems, 'quantity'));
                                     $avgPrice = $totalQuantity > 0 ? array_sum(array_column($dateItems, 'total_amount')) / $totalQuantity : 0;
                                 @endphp
-                                {{ currency_format($avgPrice, $currencyId) }}
+                                {!! currency_format($avgPrice, $currencyId) !!}
                             </td>
                             <td class="px-6 py-4 text-sm text-right text-gray-900 dark:text-white">
-                                {{ currency_format(array_sum(array_column($dateItems, 'tax_amount')), $currencyId) }}
+                                {!! currency_format(array_sum(array_column($dateItems, 'tax_amount')), $currencyId) !!}
                             </td>
                             <td class="px-6 py-4 text-sm text-right text-gray-900 dark:text-white">
-                                {{ currency_format(array_sum(array_column($dateItems, 'total_with_tax')), $currencyId) }}
+                                {!! currency_format(array_sum(array_column($dateItems, 'total_with_tax')), $currencyId) !!}
                             </td>
                         </tr>
                     </tbody>

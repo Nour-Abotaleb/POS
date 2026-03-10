@@ -28,7 +28,7 @@
                 </div>
             </div>
             <p class="text-3xl break-words font-bold" style="color: #011646;">
-                {{ currency_format($this->totalRevenue, restaurant()->currency_id) }}
+                {!! currency_format($this->totalRevenue, restaurant()->currency_id) !!}
             </p>
             </div>
 
@@ -198,12 +198,12 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white text-center">
-                                        {{ currency_format($variation->price, restaurant()->currency_id) }}
+                                        {!! currency_format($variation->price, restaurant()->currency_id) !!}
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white text-right">
-                                        {{ currency_format($variation->total_revenue, restaurant()->currency_id) }}
+                                        {!! currency_format($variation->total_revenue, restaurant()->currency_id) !!}
                                     </div>
                                 </td>
                             </tr>
@@ -226,12 +226,12 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium text-gray-900 dark:text-white text-center">
-                                    {{ currency_format($item->price, restaurant()->currency_id) }}
+                                    {!! currency_format($item->price, restaurant()->currency_id) !!}
                                 </div>
                             </td>
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium text-gray-900 dark:text-white text-right">
-                                    {{ currency_format($item->total_revenue, restaurant()->currency_id) }}
+                                    {!! currency_format($item->total_revenue, restaurant()->currency_id) !!}
                                 </div>
                             </td>
                         </tr>

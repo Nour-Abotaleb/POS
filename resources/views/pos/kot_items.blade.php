@@ -210,7 +210,7 @@
                                                 <span
                                                     class="text-gray-900 dark:text-white">{{ $this->modifierOptions[$modifierOptionId]->name }}</span>
                                                 <span
-                                                    class="text-gray-600 dark:text-gray-300">{{ currency_format($this->modifierOptions[$modifierOptionId]->price, $restaurant->currency_id) }}</span>
+                                                    class="text-gray-600 dark:text-gray-300">{!! currency_format($this->modifierOptions[$modifierOptionId]->price, $restaurant->currency_id) !!}</span>
                                             </div>
                                         @endforeach 
                                     </div>
@@ -223,10 +223,10 @@
                             @endphp
                             <div class="flex items-center gap-2">
                                 <div class="text-gray-500 dark:text-gray-400 text-xs">
-                                    {{ currency_format($displayPrice, restaurant()->currency_id) }}
+                                    {!! currency_format($displayPrice, restaurant()->currency_id) !!}
                                 </div>
                                 <div class="text-gray-500 dark:text-gray-400 text-xs font-bold">
-                                    {{ currency_format($totalAmount, restaurant()->currency_id) }}
+                                    {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                                 </div>
                             </div>
                         </div>
@@ -359,7 +359,7 @@
                     </div>
                 @endif
 
-                {{-- Items - commented out
+                {{-- Items --}}
                 <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                     <div>
                         @lang('modules.order.totalItem')
@@ -368,17 +368,16 @@
                         {{ count($orderItemList) }}
                     </div>
                 </div>
-                --}}
-                {{-- Subtotal - commented out
+                
+                {{-- Subtotal --}}
                 <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                     <div>
                         @lang('modules.order.subTotal')
                     </div>
                     <div>
-                        {{ currency_format($subTotal, $restaurant->currency_id) }}
+                        {!! currency_format($subTotal, $restaurant->currency_id) !!}
                     </div>
                 </div>
-                --}}
 
                 @if ($discountAmount)
                     <div wire:key="discountAmount"
@@ -397,7 +396,7 @@
                             </span>
                         </div>
                         <div>
-                            -{{ currency_format($discountAmount, $restaurant->currency_id) }}
+                            -{!! currency_format($discountAmount, $restaurant->currency_id) !!}
                         </div>
                     </div>
                 @endif
@@ -440,13 +439,13 @@
                                 </span>
                             </div>
                             <div>
-                                {{ currency_format($charge->getAmount($discountedTotal), $restaurant->currency_id) }}
+                                {!! currency_format($charge->getAmount($discountedTotal), $restaurant->currency_id) !!}
                             </div>
                         </div>
                     @endforeach
                 @endif
 
-                {{-- SGST, CGST and tax breakdown - commented out, keep only total
+                {{-- Tax breakdown --}}
                 @if ($taxMode == 'order')
                     @foreach ($taxes as $item)
                         <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
@@ -454,65 +453,53 @@
                                 {{ $item->tax_name }} ({{ $item->tax_percent }}%)
                             </div>
                             <div>
-                                {{ currency_format(($item->tax_percent / 100) * $discountedTotal, $restaurant->currency_id) }}
+                                {!! currency_format(($item->tax_percent / 100) * $discountedTotal, $restaurant->currency_id) !!}
                             </div>
                         </div>
                     @endforeach
                 @else
-                    @php
-                        // Show item-wise tax breakdown above total tax
-                        $taxTotals = [];
-                        $isInclusive = $restaurant->tax_inclusive ?? false;
-
-                        foreach ($orderItemTaxDetails as $item) {
-                            $qty = $item['qty'] ?? 1;
-                            if (!empty($item['tax_breakup'])) {
-                                foreach ($item['tax_breakup'] as $taxName => $taxInfo) {
+                    {{-- Item-level tax breakdown --}}
+                    @if(count($orderItemList) > 0)
+                        @php
+                            $taxTotals = [];
+                            $totalTax = 0;
+                            foreach ($orderItemList as $key => $item) {
+                                $qty = $orderItemQty[$key] ?? 1;
+                                $taxBreakdown = is_array($itemTaxBreakdown[$key] ?? []) ? ($itemTaxBreakdown[$key] ?? []) : (json_decode($itemTaxBreakdown[$key] ?? '[]', true) ?? []);
+                                foreach ($taxBreakdown as $taxName => $taxInfo) {
                                     if (!isset($taxTotals[$taxName])) {
                                         $taxTotals[$taxName] = [
-                                            'percent' => $taxInfo['percent'],
-                                            'amount' => 0,
+                                            'percent' => $taxInfo['percent'] ?? 0,
+                                            'amount' => ($taxInfo['amount'] ?? 0) * $qty
                                         ];
+                                    } else {
+                                        $taxTotals[$taxName]['amount'] += ($taxInfo['amount'] ?? 0) * $qty;
                                     }
-                                    $taxTotals[$taxName]['amount'] += $taxInfo['amount'] * $qty;
                                 }
+                                $totalTax += ($itemTaxAmount[$key] ?? 0) * $qty;
                             }
-                        }
-                    @endphp
-                    @if (!empty($taxTotals))
-                        @foreach ($taxTotals as $taxName => $taxInfo)
-                            <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
-                                <div>
-                                    {{ $taxName }} ({{ $taxInfo['percent'] }}%)
+                        @endphp
+                        @if($totalTax > 0)
+                            @foreach ($taxTotals as $taxName => $taxInfo)
+                                <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
+                                    <div>
+                                        {{ $taxName }} ({{ $taxInfo['percent'] }}%)
+                                    </div>
+                                    <div>
+                                        {!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}
+                                    </div>
                                 </div>
-                                <div>
-                                    {{ currency_format($taxInfo['amount'], $restaurant->currency_id) }}
-                                </div>
-                            </div>
-                        @endforeach
-                        <div class="flex justify-between text-gray-500 text-sm dark:text-neutral-400">
-                            <div>
-                                @lang('modules.order.totalTax')
-                                @if ($isInclusive)
-                                    <span class="text-xs text-gray-400">(@lang('modules.settings.taxInclusive'))</span>
-                                @else
-                                    <span class="text-xs text-gray-400">(@lang('modules.settings.taxExclusive'))</span>
-                                @endif
-                            </div>
-                            <div>
-                                {{ currency_format($totalTaxAmount, $restaurant->currency_id) }}
-                            </div>
-                        </div>
+                            @endforeach
+                        @endif
                     @endif
                 @endif
-                --}}
 
                 <div class="flex justify-between font-medium dark:text-neutral-300">
                     <div>
                         @lang('modules.order.total')
                     </div>
                     <div>
-                        {{ currency_format($total, $restaurant->currency_id) }}
+                        {!! currency_format($total, $restaurant->currency_id) !!}
                     </div>
                 </div>
             </div>

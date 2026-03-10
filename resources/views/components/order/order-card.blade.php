@@ -137,7 +137,7 @@
         <div class="flex w-full justify-between items-center border-t dark:border-gray-500 pt-3">
             <div class="inline-flex gap-1 items-center">
                 <div class="text-lg font-medium text-gray-800 dark:text-gray-300">
-                    {{ currency_format($order->total, restaurant()->currency_id) }}
+                    {!! currency_format($order->total, restaurant()->currency_id) !!}
                 </div>
 
             </div>

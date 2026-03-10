@@ -28,7 +28,7 @@
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Today's Tax Collection</p>
                     <p class="text-2xl font-bold" style="color: #011646;">
-                        {{ currency_format($todayTaxTotal, restaurant()->currency_id) }}
+                        {!! currency_format($todayTaxTotal, restaurant()->currency_id) !!}
                     </p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
@@ -38,7 +38,7 @@
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Today's Revenue</p>
                     <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                        {{ currency_format($todayRevenue, restaurant()->currency_id) }}
+                        {!! currency_format($todayRevenue, restaurant()->currency_id) !!}
                     </p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold" style="color: #011646;">
-                    {{ currency_format($totalTax, restaurant()->currency_id) }}
+                    {!! currency_format($totalTax, restaurant()->currency_id) !!}
                 </p>
             </div>
 
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold text-gray-800 dark:text-gray-100">
-                    {{ currency_format($totalAmount, restaurant()->currency_id) }}
+                    {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                 </p>
             </div>
 
@@ -235,7 +235,7 @@
                                 {{ number_format($tax['percent'], 2) }}%
                             </td>
                             <td class="px-6 py-4 font-semibold">
-                                {{ currency_format($tax['total_amount'], restaurant()->currency_id) }}
+                                {!! currency_format($tax['total_amount'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4">-</td>
                             <td class="px-6 py-4">-</td>
@@ -243,7 +243,7 @@
                     @endforeach
                     <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
                         <td class="px-6 py-4" colspan="2">Total</td>
-                        <td class="px-6 py-4">{{ currency_format($totalTax, restaurant()->currency_id) }}</td>
+                        <td class="px-6 py-4">{!! currency_format($totalTax, restaurant()->currency_id) !!}</td>
                         <td class="px-6 py-4">{{ $totalItems }}</td>
                         <td class="px-6 py-4">{{ $totalOrders }}</td>
                     </tr>
@@ -295,10 +295,10 @@
                                 </svg>
                             </td>
                             <td class="px-6 py-4 font-semibold" style="color: #011646;">
-                                {{ currency_format($dateData['total_tax'], restaurant()->currency_id) }}
+                                {!! currency_format($dateData['total_tax'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4 font-semibold text-emerald-600 dark:text-emerald-400">
-                                {{ currency_format($dateData['total_revenue'], restaurant()->currency_id) }}
+                                {!! currency_format($dateData['total_revenue'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $dateData['total_orders'] }}
@@ -313,7 +313,7 @@
                                             <div class="text-xs">
                                                 <span class="font-medium">{{ $taxName }}</span>
                                                 <span class="text-green-600 dark:text-green-400">({{ number_format($taxInfo['percent'], 2) }}%)</span>:
-                                                <span class="font-semibold">{{ currency_format($taxInfo['amount'], restaurant()->currency_id) }}</span>
+                                                <span class="font-semibold">{!! currency_format($taxInfo['amount'], restaurant()->currency_id) !!}</span>
                                             </div>
                                         @endforeach
                                     </div>
@@ -326,10 +326,10 @@
                     <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
                         <td class="px-6 py-4">Total</td>
                         <td class="px-6 py-4" style="color: #011646;">
-                            {{ currency_format($totalTax, restaurant()->currency_id) }}
+                            {!! currency_format($totalTax, restaurant()->currency_id) !!}
                         </td>
                         <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400">
-                            {{ currency_format($totalAmount, restaurant()->currency_id) }}
+                            {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                         </td>
                         <td class="px-6 py-4">{{ $totalOrders }}</td>
                         <td class="px-6 py-4">{{ $totalItems }}</td>
@@ -381,7 +381,7 @@
                                 {{ \Carbon\Carbon::parse($orderDetail['order']->date_time)->format('M d, Y h:i A') }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ currency_format($orderDetail['subtotal'], restaurant()->currency_id) }}
+                                {!! currency_format($orderDetail['subtotal'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4">
                                 @if(count($orderDetail['tax_breakdown']) > 0)
@@ -390,7 +390,7 @@
                                             <div class="text-xs">
                                                 <span class="font-medium">{{ $taxName }}</span>
                                                 <span class="text-green-600 dark:text-green-400">({{ number_format($taxInfo['percent'], 2) }}%)</span>:
-                                                <span class="font-semibold">{{ currency_format($taxInfo['amount'], restaurant()->currency_id) }}</span>
+                                                <span class="font-semibold">{!! currency_format($taxInfo['amount'], restaurant()->currency_id) !!}</span>
                                             </div>
                                         @endforeach
                                     </div>
@@ -399,10 +399,10 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 font-semibold">
-                                {{ currency_format($orderDetail['tax_amount'], restaurant()->currency_id) }}
+                                {!! currency_format($orderDetail['tax_amount'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4 font-bold">
-                                {{ currency_format($orderDetail['total'], restaurant()->currency_id) }}
+                                {!! currency_format($orderDetail['total'], restaurant()->currency_id) !!}
                             </td>
                         </tr>
                     @empty
@@ -453,7 +453,7 @@
                                     {{ \Carbon\Carbon::parse($orderDetail['order']->date_time)->format('M d, Y h:i A') }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ currency_format($orderDetail['subtotal'], restaurant()->currency_id) }}
+                                    {!! currency_format($orderDetail['subtotal'], restaurant()->currency_id) !!}
                                 </td>
                                 <td class="px-6 py-4">
                                     @if(count($orderDetail['tax_breakdown']) > 0)
@@ -462,7 +462,7 @@
                                                 <div class="text-xs">
                                                     <span class="font-medium">{{ $taxName }}</span>
                                                     <span class="text-green-600 dark:text-green-400">({{ number_format($taxInfo['percent'], 2) }}%)</span>:
-                                                    <span class="font-semibold">{{ currency_format($taxInfo['amount'], restaurant()->currency_id) }}</span>
+                                                    <span class="font-semibold">{!! currency_format($taxInfo['amount'], restaurant()->currency_id) !!}</span>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -471,24 +471,24 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 font-semibold" style="color: #011646;">
-                                    {{ currency_format($orderDetail['tax_amount'], restaurant()->currency_id) }}
+                                    {!! currency_format($orderDetail['tax_amount'], restaurant()->currency_id) !!}
                                 </td>
                                 <td class="px-6 py-4 font-bold text-emerald-600 dark:text-emerald-400">
-                                    {{ currency_format($orderDetail['total'], restaurant()->currency_id) }}
+                                    {!! currency_format($orderDetail['total'], restaurant()->currency_id) !!}
                                 </td>
                             </tr>
                         @endforeach
                         <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
                             <td class="px-6 py-4" colspan="2">Total</td>
                             <td class="px-6 py-4">
-                                {{ currency_format($selectedDateTotals['subtotal'], restaurant()->currency_id) }}
+                                {!! currency_format($selectedDateTotals['subtotal'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4">-</td>
                             <td class="px-6 py-4" style="color: #011646;">
-                                {{ currency_format($selectedDateTotals['tax'], restaurant()->currency_id) }}
+                                {!! currency_format($selectedDateTotals['tax'], restaurant()->currency_id) !!}
                             </td>
                             <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400">
-                                {{ currency_format($selectedDateTotals['total'], restaurant()->currency_id) }}
+                                {!! currency_format($selectedDateTotals['total'], restaurant()->currency_id) !!}
                             </td>
                         </tr>
                     </tbody>

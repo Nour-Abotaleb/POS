@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TableTrack - MultiPOS Module Documentation</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+        <style>
+            .sidebar {
+                background: #1a1a1a;
+                min-height: 100vh;
+            }
+            .content {
+                background: #f8f9fa;
+            }
+            .nav-link {
+                color: #e2e2e2;
+                padding: 0.75rem 1.5rem;
+                display: block;
+                transition: all 0.3s;
+            }
+            .nav-link:hover,
+            .nav-link.active {
+                background: #2d2d2d;
+                color: #00dffc;
+            }
+            .section {
+                scroll-margin-top: 2rem;
+            }
+            code {
+                background: #2d2d2d;
+                color: #e2e2e2;
+                padding: 0.2rem 0.4rem;
+                border-radius: 0.25rem;
+            }
+        </style>
+    </head>
+    <body class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 fixed h-full">
+            <div class="p-6">
+                <img src="assets/images/logo.png" alt="TableTrack Logo" class="mx-auto mb-8" />
+            </div>
+            <nav>
+                <a href="#overview" class="nav-link active">Overview</a>
+                <a href="#description" class="nav-link">Description</a>
+                <a href="#requirements" class="nav-link">Requirements</a>
+                <a href="#installation" class="nav-link">Installation</a>
+                <a href="#setup" class="nav-link">Setup Guide</a>
+                <a href="#integration" class="nav-link">Integration Guide</a>
+                <a href="#usage" class="nav-link">Usage Instructions</a>
+            </nav>
+            <div class="absolute bottom-0 p-4 text-gray-400 text-sm">
+                <p>© 2025 TableTrack</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content ml-64 flex-1 p-8">
+            <section id="overview" class="section mb-12">
+                <h1 class="text-4xl font-bold mb-6">TableTrack MultiPOS Module</h1>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+                    <p class="text-blue-700">Compatible with TableTrack v1.2.2 and above</p>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-8">
+                    <p class="text-yellow-700">
+                        This is an add-on module that works exclusively with the TableTrack application. To purchase TableTrack, please
+                        visit
+                        <a href="https://1.envato.market/tabletrack" class="text-yellow-600 underline" target="_blank"
+                            >TableTrack on CodeCanyon</a
+                        >
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-semibold mb-2">Latest Version</h3>
+                        <p>Released: November 24, 2025</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-semibold mb-2">Support</h3>
+                        <a href="https://froiden.freshdesk.com/support/home" class="text-blue-600 hover:underline" target="_blank"
+                            >Get Help</a
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <section id="description" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Description</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                            <p class="text-green-800 font-medium">
+                                The MultiPOS Module lets restaurants register and manage multiple POS devices from one centralized
+                                dashboard. Track sales and performance for each device, approve or reject new device registrations, and
+                                access detailed machine-wise reports. Ideal for restaurants using multiple terminals across branches or
+                                service areas.
+                            </p>
+                        </div>
+                        <p class="mb-4">
+                            The MultiPOS module enables TableTrack to support multiple Point of Sale (POS) terminals simultaneously,
+                            allowing restaurants to manage orders from different locations, devices, or stations. This module is perfect for
+                            restaurants with multiple service points, food courts, and establishments looking to scale their operations
+                            efficiently.
+                        </p>
+                        <p class="mb-4">
+                            Staff can process orders, manage tables, and handle payments from multiple POS terminals. All orders are
+                            synchronized in real-time across all devices, ensuring seamless coordination between different service points
+                            and streamlining the entire restaurant operations.
+                        </p>
+
+                        <div class="bg-blue-50 p-4 rounded-lg mt-6">
+                            <h3 class="text-lg font-semibold mb-2 text-blue-800">Key Features</h3>
+                            <ul class="space-y-2 text-blue-700">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Multiple POS terminal support
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Real-time synchronization across devices
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Centralized order management
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Device registration with approval workflow
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Machine-wise sales and performance tracking
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Detailed machine-wise reports
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Branch-wise machine management
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Package-based device limits
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="requirements" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">System Requirements</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="font-semibold text-blue-800">Base Requirements</h3>
+                            <ul class="space-y-2 mt-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    TableTrack >= 1.2.56
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    PHP >= 8.2.5
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h3 class="font-semibold text-green-800">PHP Extensions</h3>
+                            <ul class="space-y-2 mt-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    OpenSSL PHP Extension
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    PDO PHP Extension
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Mbstring PHP Extension
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Tokenizer PHP Extension
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    XML & GD PHP Extensions
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="border-l-4 border-yellow-500 pl-4">
+                            <h3 class="font-semibold text-yellow-800">Hardware Requirements</h3>
+                            <ul class="space-y-2 mt-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Multiple devices/computers for POS terminals
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Network connectivity for device synchronization
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Payment terminal integration (per terminal)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="installation" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Installation Guide</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="mb-4">For detailed installation instructions, please visit our comprehensive guide:</p>
+                    <a
+                        href="https://youtu.be/4mLyhf43_wI"
+                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+                        target="_blank"
+                    >
+                        View Installation Guide
+                    </a>
+                </div>
+            </section>
+
+            <section id="setup" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Setup Guide</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">Step 1: Initial Configuration</h3>
+                        <p class="mb-4">Follow our detailed setup documentation to configure your MultiPOS module:</p>
+                        <a
+                            href="https://froiden.freshdesk.com/support/solutions/folders/43000597419"
+                            target="_blank"
+                            class="text-blue-600 hover:underline"
+                        >
+                            View Setup Documentation
+                        </a>
+
+                        <div class="bg-gray-50 p-4 rounded-lg mt-6">
+                            <h4 class="font-semibold mb-2">Quick Setup Checklist</h4>
+                            <ul class="space-y-1 text-sm text-gray-600">
+                                <li>• Configure POS terminals</li>
+                                <li>• Set up device synchronization</li>
+                                <li>• Test multi-device ordering flow</li>
+                            </ul>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-8">Enable Module</h3>
+                        <p class="mb-4">Run the migration to enable the module:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                            <code class="text-sm">php artisan module:migrate MultiPOS</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="integration" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Integration Guide</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">Update Order Model</h3>
+                        <p class="mb-4">Add relationship to <code>app/Models/Order.php</code>:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6">
+                            <pre class="text-sm"><code>use Modules\MultiPOS\Entities\PosMachine;
+
+public function posMachine()
+{
+    return $this->belongsTo(PosMachine::class, 'pos_machine_id');
+}</code></pre>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4">Add Middleware to POS Routes</h3>
+                        <p class="mb-4">In your route files, add the middleware:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6">
+                            <pre class="text-sm"><code>Route::middleware(['auth', 'verified', 'pos.machine'])->group(function () {
+    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    // ... other POS routes
+});</code></pre>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4">Update POS Livewire Component</h3>
+                        <p class="mb-4">In your POS component, update the order creation:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6">
+                            <pre class="text-sm"><code>// After creating order
+$order->pos_machine_id = pos_machine_id();
+$order->save();</code></pre>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4">Helper Functions</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                            <ul class="space-y-2 text-sm">
+                                <li><code>pos_machine()</code> - Get current PosMachine instance</li>
+                                <li><code>pos_machine_id()</code> - Get current machine ID</li>
+                                <li><code>is_pos_registered()</code> - Check if device is registered</li>
+                                <li><code>pos_machine_alias()</code> - Get machine alias</li>
+                            </ul>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4">API Endpoints</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <ul class="space-y-2 text-sm">
+                                <li><code>GET /pos/claim</code> - Show registration form</li>
+                                <li><code>POST /pos/claim</code> - Register device</li>
+                                <li><code>GET /pos/claim/check</code> - Check registration status</li>
+                                <li><code>GET /admin/multi-pos/machines</code> - List machines</li>
+                                <li><code>POST /admin/multi-pos/machines/{id}/approve</code> - Approve machine</li>
+                                <li><code>POST /admin/multi-pos/machines/{id}/decline</code> - Decline machine</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="usage" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Usage Instructions</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">For Users</h3>
+                        <ol class="list-decimal list-inside space-y-2 mb-6">
+                            <li>Log into POS page</li>
+                            <li>If device not registered, you'll see registration prompt</li>
+                            <li>Click "Register Device" → Select branch → Enter alias</li>
+                            <li>Wait for admin approval (or auto-approved based on config)</li>
+                            <li>Device is now tracked for all orders</li>
+                        </ol>
+
+                        <h3 class="text-xl font-semibold mb-4">For Admins</h3>
+                        <ol class="list-decimal list-inside space-y-2 mb-6">
+                            <li>Go to MultiPOS → Machines or Settings</li>
+                            <li>View pending machines in "Pending Approvals"</li>
+                            <li>Approve or decline registrations</li>
+                            <li>Manage active machines (edit alias, delete, view stats)</li>
+                            <li>Monitor machine activity and last-seen status</li>
+                            <li>Access detailed machine-wise reports</li>
+                        </ol>
+
+                        <h3 class="text-xl font-semibold mb-4">For Developers</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <ul class="space-y-2 text-sm">
+                                <li>• Use <code>pos_machine()</code> helper to get current machine</li>
+                                <li>• Use middleware <code>pos.machine</code> on POS routes</li>
+                                <li>• Track orders with <code>pos_machine_id</code></li>
+                                <li>• Use <code>is_pos_registered()</code> to check status</li>
+                                <li>• Access machine statistics and reports via API</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script>
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                    });
+
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach((link) => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+            // Update active nav link on scroll
+            window.addEventListener('scroll', () => {
+                const sections = document.querySelectorAll('.section');
+                const navLinks = document.querySelectorAll('.nav-link');
+
+                let current = '';
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach((link) => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

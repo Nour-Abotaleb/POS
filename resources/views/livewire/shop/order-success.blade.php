@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="inline-flex flex-col text-right text-base font-semibold text-gray-900 dark:text-white">
-                <div>{{ currency_format($order->total, $restaurant->currency_id) }}</div>
+                <div>{!! currency_format($order->total, $restaurant->currency_id) !!}</div>
                 <div class="text-xs text-gray-500 font-light">@lang('modules.order.includeTax')</div>
             </div>
         </div>
@@ -74,7 +74,7 @@
                                 @foreach ($item->modifierOptions as $modifier)
                                 <div class="flex items-center justify-between text-xs mb-1 py-0.5 px-1 border-l-2 border-blue-500 bg-gray-200 dark:bg-gray-800 rounded-md">
                                     <span class="text-gray-900 dark:text-white">{{ $modifier->name }}</span>
-                                    <span class="text-gray-600 dark:text-gray-300">{{ currency_format($modifier->price, $restaurant->currency_id) }}</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{!! currency_format($modifier->price, $restaurant->currency_id) !!}</span>
                                 </div>
                                 @endforeach
                             </div>
@@ -94,11 +94,11 @@
                         <div class="flex flex-col items-end gap-1">
                             @if($taxMode === 'item' && $restaurant?->tax_inclusive && $item->tax_amount > 0)
                                 <div class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ currency_format(($item->price + $item->modifierOptions->sum('price')) - ($item->tax_amount / $item->quantity), $restaurant->currency_id) }} + tax
+                                    {!! currency_format(($item->price + $item->modifierOptions->sum('price')) - ($item->tax_amount / $item->quantity), $restaurant->currency_id) !!} + tax
                                 </div>
                             @endif
                             <p class="text-lg font-medium leading-tight text-gray-900 dark:text-white">
-                                {{ currency_format($item->price + $item->modifierOptions->sum('price'), $restaurant->currency_id) }}
+                                {!! currency_format($item->price + $item->modifierOptions->sum('price'), $restaurant->currency_id) !!}
                             </p>
                         </div>
                     </div>
@@ -111,13 +111,13 @@
                 <div class="space-y-2">
                     <dl class="flex items-center justify-between gap-4">
                         <dt class="font-normal text-gray-500 dark:text-gray-400"> @lang('modules.order.subTotal')</dt>
-                        <dd class="font-medium text-gray-900 dark:text-white">{{ currency_format($order->sub_total, $restaurant->currency_id) }}</dd>
+                        <dd class="font-medium text-gray-900 dark:text-white">{!! currency_format($order->sub_total, $restaurant->currency_id) !!}</dd>
                     </dl>
 
                     @if ($order->discount_amount)
                         <dl class="flex items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
                             <dt class="font-normal">@lang('modules.order.discount')</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white">-{{ currency_format($order->discount_amount, $restaurant->currency_id) }}</dd>
+                            <dd class="font-medium text-gray-900 dark:text-white">-{!! currency_format($order->discount_amount, $restaurant->currency_id) !!}</dd>
                         </dl>
                     @endif
                     @foreach ($order->charges as $item)
@@ -129,7 +129,7 @@
                             @endif
                         </div>
                         <div>
-                            {{ currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), $restaurant->currency_id) }}
+                            {!! currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), $restaurant->currency_id) !!}
                         </div>
                     </div>
                     @endforeach
@@ -137,21 +137,21 @@
                     @foreach ($order->taxes as $item)
                     <dl class="flex items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
                         <dt class="font-normal">{{ $item->tax->tax_name }} ({{ $item->tax->tax_percent }}%)</dt>
-                        <dd class="text-sm font-medium ">{{ currency_format(($item->tax->tax_percent / 100) * $order->sub_total, $restaurant->currency_id) }}</dd>
+                        <dd class="text-sm font-medium ">{!! currency_format(($item->tax->tax_percent / 100) * $order->sub_total, $restaurant->currency_id) !!}</dd>
                     </dl>
                     @endforeach
 
                     @if($order->tip_amount > 0)
                         <dl class="flex items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
                             <dt class="font-normal">@lang('modules.order.tip')</dt>
-                            <dd class="font-medium text-gray-900 dark:text-white">{{ currency_format($order->tip_amount, $restaurant->currency_id) }}</dd>
+                            <dd class="font-medium text-gray-900 dark:text-white">{!! currency_format($order->tip_amount, $restaurant->currency_id) !!}</dd>
                         </dl>
                     @endif
                 </div>
 
                 <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                     <dt class="text-lg font-bold text-gray-900 dark:text-white">@lang('modules.order.total')</dt>
-                    <dd class="text-lg font-bold text-gray-900 dark:text-white">{{ currency_format($order->total, $restaurant->currency_id) }}</dd>
+                    <dd class="text-lg font-bold text-gray-900 dark:text-white">{!! currency_format($order->total, $restaurant->currency_id) !!}</dd>
                 </dl>
             </div>
 

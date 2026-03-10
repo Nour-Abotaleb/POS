@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold" style="color: #011646;">
-                    {{ currency_format($totalRevenue, restaurant()->currency_id) }}
+                    {!! currency_format($totalRevenue, restaurant()->currency_id) !!}
                 </p>
             </div>
 
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold text-gray-800 dark:text-gray-100">
-                    {{ currency_format($totalCommission, restaurant()->currency_id) }}
+                    {!! currency_format($totalCommission, restaurant()->currency_id) !!}
                 </p>
             </div>
 
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold text-gray-800 dark:text-gray-100">
-                    {{ currency_format($totalDeliveryFees, restaurant()->currency_id) }}
+                    {!! currency_format($totalDeliveryFees, restaurant()->currency_id) !!}
                 </p>
             </div>
 
@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <p class="text-3xl break-words font-bold text-gray-800 dark:text-gray-100">
-                    {{ currency_format($netRevenue, restaurant()->currency_id) }}
+                    {!! currency_format($netRevenue, restaurant()->currency_id) !!}
                 </p>
             </div>
         </div>
@@ -219,17 +219,17 @@
                         </td>
                         <td class="px-4 py-3">
                             <div class="text-sm font-medium text-gray-900 dark:text-white text-center">
-                                {{ currency_format($data['total_revenue'], restaurant()->currency_id) }}
+                                {!! currency_format($data['total_revenue'], restaurant()->currency_id) !!}
                             </div>
                         </td>
                         <td class="px-4 py-3">
                             <div class="text-sm font-medium text-gray-900 dark:text-white text-center">
-                                {{ currency_format($data['total_delivery_fees'], restaurant()->currency_id) }}
+                                {!! currency_format($data['total_delivery_fees'], restaurant()->currency_id) !!}
                             </div>
                         </td>
                         <td class="px-4 py-3">
                             <div class="text-sm font-medium text-gray-900 dark:text-white text-center">
-                                {{ currency_format($data['avg_order_value'], restaurant()->currency_id) }}
+                                {!! currency_format($data['avg_order_value'], restaurant()->currency_id) !!}
                             </div>
                         </td>
                         <td class="px-4 py-3">
@@ -237,18 +237,18 @@
                                 @if($data['delivery_app']->commission_type === 'percent')
                                     {{ $data['delivery_app']->commission_value }}%
                                 @else
-                                    {{ currency_format($data['delivery_app']->commission_value, restaurant()->currency_id) }} @lang('modules.report.perOrder')
+                                    {!! currency_format($data['delivery_app']->commission_value, restaurant()->currency_id) !!} @lang('modules.report.perOrder')
                                 @endif
                             </div>
                         </td>
                         <td class="px-4 py-3">
                             <div class="text-sm font-medium text-orange-600 dark:text-orange-400 text-center">
-                                {{ currency_format($data['commission'], restaurant()->currency_id) }}
+                                {!! currency_format($data['commission'], restaurant()->currency_id) !!}
                             </div>
                         </td>
                         <td class="px-4 py-3">
                             <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400 text-right">
-                                {{ currency_format($data['net_revenue'], restaurant()->currency_id) }}
+                                {!! currency_format($data['net_revenue'], restaurant()->currency_id) !!}
                             </div>
                         </td>
                     </tr>
@@ -270,10 +270,10 @@
                             {{ $totalOrders }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
-                            {{ currency_format($totalRevenue, restaurant()->currency_id) }}
+                            {!! currency_format($totalRevenue, restaurant()->currency_id) !!}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
-                            {{ currency_format($totalDeliveryFees, restaurant()->currency_id) }}
+                            {!! currency_format($totalDeliveryFees, restaurant()->currency_id) !!}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
                             -
@@ -282,10 +282,10 @@
                             -
                         </td>
                         <td class="px-4 py-3 text-sm text-orange-600 dark:text-orange-400 text-center">
-                            {{ currency_format($totalCommission, restaurant()->currency_id) }}
+                            {!! currency_format($totalCommission, restaurant()->currency_id) !!}
                         </td>
                         <td class="px-4 py-3 text-sm text-emerald-600 dark:text-emerald-400 text-right">
-                            {{ currency_format($netRevenue, restaurant()->currency_id) }}
+                            {!! currency_format($netRevenue, restaurant()->currency_id) !!}
                         </td>
                     </tr>
                 </tfoot>

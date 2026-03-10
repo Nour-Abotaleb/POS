@@ -208,7 +208,7 @@
             <!-- Order Amount -->
             <div class="flex items-center gap-1 md:flex-col md:items-end">
                 <div class="text-lg font-bold text-gray-900 md:text-xl dark:text-white">
-                    {{ currency_format($order->total, $restaurant->currency_id) }}
+                    {!! currency_format($order->total, $restaurant->currency_id) !!}
                 </div>
                 <div class="text-xs text-gray-500 dark:text-gray-400 sm:ms-2">
                     @lang('modules.order.includeTax')
@@ -317,13 +317,13 @@
                                             @endphp
                                             @if($taxMode === 'item' && $restaurant?->tax_inclusive && $item->tax_amount > 0)
                                                 <span class="font-medium">
-                                                    {{ currency_format(($item->price + $modifierTotal) - ($item->tax_amount / $item->quantity), $restaurant->currency_id) }}
+                                                    {!! currency_format(($item->price + $modifierTotal) - ($item->tax_amount / $item->quantity), $restaurant->currency_id) !!}
                                                 </span>
                                                 <span class="text-gray-400 dark:text-gray-500">+ tax</span>
                                                 <span class="text-gray-400 dark:text-gray-500">=</span>
                                             @endif
                                             <span class="font-medium">
-                                                {{ currency_format($item->price + $modifierTotal, $restaurant->currency_id) }}
+                                                {!! currency_format($item->price + $modifierTotal, $restaurant->currency_id) !!}
                                             </span>
                                             <span class="text-gray-400 dark:text-gray-500">×</span>
                                             <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-xs font-medium">
@@ -353,7 +353,7 @@
                                         @endif
                                     </div>
                                     <span class="text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
-                                        {{ currency_format(($item->price + $modifierTotal) * $item->quantity, $restaurant->currency_id) }}
+                                        {!! currency_format(($item->price + $modifierTotal) * $item->quantity, $restaurant->currency_id) !!}
                                     </span>
                                 </div>
 
@@ -363,7 +363,7 @@
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#011646]/10 text-[#011646]">
                                                 {{ $modifier->name ?? $modifier->pivot->modifier_option_name }}
                                                 <span class="ml-1 text-[#011646]">
-                                                    (+{{ currency_format($modifier->pivot->modifier_option_price ?? $modifier->price, $restaurant->currency_id) }})
+                                                    (+{!! currency_format($modifier->pivot->modifier_option_price ?? $modifier->price, $restaurant->currency_id) !!})
                                                 </span>
                                             </span>
                                         @endforeach
@@ -387,7 +387,7 @@
                     <div class="flex items-center justify-between">
                         <span class="text-gray-600 dark:text-gray-400">@lang('modules.order.subTotal')</span>
                         <span class="font-medium text-gray-900 dark:text-white">
-                            {{ currency_format($order->sub_total, $restaurant->currency_id) }}
+                            {!! currency_format($order->sub_total, $restaurant->currency_id) !!}
                         </span>
                     </div>
 
@@ -400,7 +400,7 @@
                                 @endif
                             </div>
                             <div>
-                                -{{ currency_format($order->discount_amount, $restaurant->currency_id) }}
+                                -{!! currency_format($order->discount_amount, $restaurant->currency_id) !!}
                             </div>
                         </div>
                     @endif
@@ -415,7 +415,7 @@
                                 @endif
                             </div>
                             <div class="text-gray-900 dark:text-white">
-                                {{ currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))) , $restaurant->currency_id) }}
+                                {!! currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))) , $restaurant->currency_id) !!}
                             </div>
                         </div>
                     @endforeach
@@ -427,7 +427,7 @@
                                     {{ $item->tax->tax_name }} ({{ $item->tax->tax_percent }}%)
                                 </span>
                                 <span class="text-gray-900 dark:text-white">
-                                    {{ currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), $restaurant->currency_id) }}
+                                    {!! currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), $restaurant->currency_id) !!}
                                 </span>
                             </div>
                         @endforeach
@@ -457,7 +457,7 @@
                                 @foreach ($taxTotals as $taxName => $taxInfo)
                                 <div class="flex justify-between text-xs text-gray-400 dark:text-gray-500">
                                     <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
-                                    <span>{{ currency_format($taxInfo['amount'], $restaurant->currency_id) }}</span>
+                                    <span>{!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}</span>
                                 </div>
                                 @endforeach
                             </div>
@@ -470,7 +470,7 @@
                                     </span>
                                 </div>
                                 <div>
-                                    <span class="text-gray-900 dark:text-white">{{ currency_format($totalTax, $restaurant->currency_id) }}</span>
+                                    <span class="text-gray-900 dark:text-white">{!! currency_format($totalTax, $restaurant->currency_id) !!}</span>
                                 </div>
                             </div>
                         </div>
@@ -485,7 +485,7 @@
                             <div>
                                 @if($order->delivery_fee > 0)
                                     <span class="text-gray-900 dark:text-white">
-                                        {{ currency_format($order->delivery_fee, $restaurant->currency_id) }}
+                                        {!! currency_format($order->delivery_fee, $restaurant->currency_id) !!}
                                     </span>
                                 @else
                                     <span class="font-medium text-green-500 dark:text-green-400">@lang('modules.delivery.freeDelivery')</span>
@@ -521,13 +521,13 @@
                                 <!-- Right Section: Amount and/or Action Button -->
                                 <div class="flex items-center gap-2">
                                     @if($order->tip_amount > 0 && !$canAddTip)
-                                        <span class="text-xs font-medium dark:text-white">{{ currency_format($order->tip_amount, $restaurant->currency_id) }}</span>
+                                        <span class="text-xs font-medium dark:text-white">{!! currency_format($order->tip_amount, $restaurant->currency_id) !!}</span>
                                     @endif
 
                                     @if($canAddTip)
                                         <x-button wire:click="addTipModal" class="flex items-center text-xs">
                                             @if($order->tip_amount > 0)
-                                                <span class="font-medium">{{ currency_format($order->tip_amount, $restaurant->currency_id) }}</span>
+                                                <span class="font-medium">{!! currency_format($order->tip_amount, $restaurant->currency_id) !!}</span>
                                                 <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
@@ -550,7 +550,7 @@
                                 @lang('modules.order.total')
                             </span>
                             <span class="text-lg font-bold text-gray-900 dark:text-white">
-                                {{ currency_format($order->total, $restaurant->currency_id) }}
+                                {!! currency_format($order->total, $restaurant->currency_id) !!}
                             </span>
                         </div>
                     </div>
@@ -639,13 +639,13 @@
                                 <!-- Payment Amount -->
                                 <div class="text-right">
                                     <span class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{ currency_format($payment->amount, $restaurant->currency_id) }}
+                                        {!! currency_format($payment->amount, $restaurant->currency_id) !!}
                                     </span>
                                     @if($payment->balance > 0)
                                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                             @lang('modules.order.balanceReturn'):
                                             <span class="font-medium">
-                                                {{ currency_format($payment->balance, $restaurant->currency_id) }}
+                                                {!! currency_format($payment->balance, $restaurant->currency_id) !!}
                                             </span>
                                         </p>
                                     @endif
@@ -727,7 +727,7 @@
                         </div>
                     </div>
                     <div class="inline-flex flex-col text-base font-semibold text-right text-gray-900 dark:text-white">
-                        <div>{{ currency_format($total, $restaurant->currency_id) }}</div>
+                        <div>{!! currency_format($total, $restaurant->currency_id) !!}</div>
                     </div>
                 </div>
 
@@ -920,17 +920,17 @@
                 <div class="p-4 mb-6 rounded-lg bg-gray-50 dark:bg-gray-700">
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-600 dark:text-gray-400">@lang('modules.order.currentTotal')</span>
-                        <span class="font-medium">{{ currency_format($order->total - $order->tip_amount, $restaurant->currency_id) }}</span>
+                        <span class="font-medium">{!! currency_format($order->total - $order->tip_amount, $restaurant->currency_id) !!}</span>
                     </div>
                     <div class="flex justify-between text-[#011646]">
                         <span>@lang('modules.order.tipAmount')</span>
-                        <span class="font-medium">+ {{ currency_format($tipAmount ?? 0, $restaurant->currency_id) }}</span>
+                        <span class="font-medium">+ {!! currency_format($tipAmount ?? 0, $restaurant->currency_id) !!}</span>
                     </div>
                     <div class="pt-2 mt-2 border-t border-gray-200 dark:border-gray-800">
                         <div class="flex justify-between">
                             <span class="font-medium">@lang('modules.order.newTotal')</span>
                             <span class="text-lg font-bold">
-                                {{ currency_format(($order->total - $order->tip_amount + ($tipAmount ?: 0)), $restaurant->currency_id) }}
+                                {!! currency_format(($order->total - $order->tip_amount + ($tipAmount ?: 0)), $restaurant->currency_id) !!}
                             </span>
                         </div>
                     </div>
@@ -954,7 +954,7 @@
                             >
                                 <div class="font-bold">{{ $percentage }}%</div>
                                 <div class="text-xs text-gray-500 break-words dark:text-gray-400">
-                                    {{ currency_format($calculatedTip, $restaurant->currency_id) }}
+                                    {!! currency_format($calculatedTip, $restaurant->currency_id) !!}
                                 </div>
                             </button>
                         @endforeach

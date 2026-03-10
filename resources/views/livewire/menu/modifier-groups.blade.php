@@ -44,7 +44,7 @@
                                             'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' => !$option->is_available,
                                             ])>
                                             {{ $option->name }}:
-                                            <span class="text-xs font-semibold">{{ currency_format($option->price, restaurant()->currency_id) }}</span>
+                                            <span class="text-xs font-semibold">{!! currency_format($option->price, restaurant()->currency_id) !!}</span>
                                         </span>
                                     @empty
                                         --

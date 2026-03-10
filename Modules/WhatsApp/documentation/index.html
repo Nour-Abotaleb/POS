@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TableTrack - WhatsApp Module Documentation</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            .sidebar {
+                background: #1a1a1a;
+                min-height: 100vh;
+            }
+            .content {
+                background: #f8f9fa;
+            }
+            .nav-link {
+                color: #e2e2e2;
+                padding: 0.75rem 1.5rem;
+                display: block;
+                transition: all 0.3s;
+            }
+            .nav-link:hover,
+            .nav-link.active {
+                background: #2d2d2d;
+                color: #00dffc;
+            }
+            .section {
+                scroll-margin-top: 2rem;
+            }
+            code {
+                background: #2d2d2d;
+                color: #e2e2e2;
+                padding: 0.2rem 0.4rem;
+                border-radius: 0.25rem;
+            }
+        </style>
+    </head>
+    <body class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 fixed h-full">
+            <div class="p-6">
+                <img
+                    src="assets/images/logo.png"
+                    alt="TableTrack Logo"
+                    class="x-auto mb-8"
+                />
+            </div>
+            <nav>
+                <a href="#overview" class="nav-link active">Overview</a>
+                <a href="#description" class="nav-link">Description</a>
+                <a href="#requirements" class="nav-link">Requirements</a>
+                <a href="#installation" class="nav-link">Installation</a>
+                <a href="#setup" class="nav-link">Setup Guide</a>
+                <a href="#templates" class="nav-link">Notification Templates</a>
+                <a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+                <a href="#summary" class="nav-link">Feature Summary</a>
+            </nav>
+            <div class="absolute bottom-0 p-4 text-gray-400 text-sm">
+                <p>© 2025 TableTrack</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content ml-64 flex-1 p-8">
+            <section id="overview" class="section mb-12">
+                <h1 class="text-4xl font-bold mb-6">
+                    TableTrack WhatsApp Module
+                </h1>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+                    <p class="text-blue-700">
+                        Compatible with TableTrack v1.2.1 and above
+                    </p>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-8">
+                    <p class="text-yellow-700">
+                        This is an add-on module that works exclusively with the
+                        TableTrack application. To purchase TableTrack, please
+                        visit
+                        <a
+                            href="https://1.envato.market/tabletrack"
+                            class="text-yellow-600 underline"
+                            target="_blank"
+                            >TableTrack on CodeCanyon</a
+                        >
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-semibold mb-2">Latest Version</h3>
+                        <p>Released: January 2026</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-semibold mb-2">Support</h3>
+                        <a
+                            href="https://froiden.freshdesk.com/support/home"
+                            class="text-blue-600 hover:underline"
+                            target="_blank"
+                            >Get Help</a
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <section id="description" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Description</h2>
+                <div class="prose max-w-none">
+                    <p>
+                        <strong>WhatsApp Business API Integration Module</strong> enables restaurants to send automated WhatsApp notifications to customers, restaurant admins, staff, and delivery executives. This module integrates seamlessly with TableTrack's existing event system to send 29 different types of notifications via WhatsApp Business API.
+                    </p>
+                    <p class="mt-4">
+                        The module provides a complete notification system that includes:
+                    </p>
+                    <ul class="list-disc ml-6 mt-4 mb-4">
+                        <li><strong>29 Predefined Notification Templates</strong> organized by recipient type (Customer: 11, Admin: 5, Staff: 9, Delivery: 3, Automated: 1)</li>
+                        <li><strong>Event-Driven Notifications</strong> that automatically trigger when orders, reservations, payments, and other events occur</li>
+                        <li><strong>Template Management System</strong> for easy template creation and mapping to WhatsApp Business Portal templates</li>
+                        <li><strong>Admin Panel</strong> for configuration, template management, and notification preferences</li>
+                        <li><strong>Notification Logging</strong> to track all sent notifications with delivery status</li>
+                        <li><strong>Multi-language Support</strong> for templates</li>
+                        <li><strong>Automated Scheduling</strong> for reports, reminders, and follow-ups</li>
+                    </ul>
+                    <p class="mt-4">
+                        The module ensures compliance with WhatsApp Business API policies and handles template approval workflows, webhook configuration, and delivery status tracking.
+                    </p>
+                </div>
+            </section>
+
+            <section id="requirements" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">System Requirements</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            PHP >= 8.2.0
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            OpenSSL PHP Extension
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            PDO PHP Extension
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            Mbstring PHP Extension
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            Tokenizer PHP Extension
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 13l4 4L19 7"
+                                ></path>
+                            </svg>
+                            XML & GD PHP Extensions
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="installation" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Installation Guide</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">Step 1: Enable Module</h3>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">php artisan module:enable Whatsapp</code>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-6">Step 2: Run Migrations</h3>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">php artisan module:migrate Whatsapp</code>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-6">Step 3: Seed Template Definitions</h3>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">php artisan db:seed --class="Modules\Whatsapp\Database\Seeders\WhatsAppTemplateDefinitionsSeeder"</code>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-6">Step 4: Configure WhatsApp Business API</h3>
+                        <ol class="list-decimal ml-6 space-y-2">
+                            <li>Go to <strong>Superadmin Panel</strong> → <strong>Settings</strong> → <strong>WhatsApp Settings</strong></li>
+                            <li>Enter your WhatsApp Business API credentials:
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>WABA ID (WhatsApp Business Account ID)</li>
+                                    <li>Access Token (encrypted storage)</li>
+                                    <li>Phone Number ID</li>
+                                    <li>Business Phone Number</li>
+                                </ul>
+                            </li>
+                            <li>Test connection and enable WhatsApp</li>
+                        </ol>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-6">Step 5: Create Templates on Meta Business Manager</h3>
+                        <ol class="list-decimal ml-6 space-y-2">
+                            <li>Go to <a href="https://business.facebook.com/latest/whatsapp_manager/message_templates" target="_blank" class="text-blue-600 underline">Meta Business Manager → Message Templates</a></li>
+                            <li>Create the required templates (see Template Library in admin panel for JSON structures)</li>
+                            <li>Wait for WhatsApp approval (24-48 hours)</li>
+                        </ol>
+
+                        <h3 class="text-xl font-semibold mb-4 mt-6">Step 6: Map Templates and Enable Notifications</h3>
+                        <ol class="list-decimal ml-6 space-y-2">
+                            <li>Go to <strong>Admin Panel</strong> → <strong>Settings</strong> → <strong>WhatsApp Notifications</strong></li>
+                            <li>Map notification types to your WhatsApp template names</li>
+                            <li>Enable notifications you want to use</li>
+                            <li>Configure schedules for automated notifications if needed</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section id="setup" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Setup Guide</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">
+                            WhatsApp Business API Configuration
+                        </h3>
+                        <p class="mb-4">
+                            To use WhatsApp notifications, you need to configure your WhatsApp Business API credentials and set up webhooks for delivery status tracking.
+                        </p>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">1. Get WhatsApp Business API Credentials</h4>
+                        <ol class="list-decimal ml-6 space-y-2 mb-4">
+                            <li>Create a WhatsApp Business Account on <a href="https://business.facebook.com" target="_blank" class="text-blue-600 underline">Meta Business Manager</a></li>
+                            <li>Get your WABA ID (WhatsApp Business Account ID)</li>
+                            <li>Generate an Access Token with appropriate permissions</li>
+                            <li>Get your Phone Number ID</li>
+                            <li>Note your Business Phone Number</li>
+                        </ol>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">2. Configure Webhook</h4>
+                        <p class="mb-3">Webhook is required to receive delivery status updates from Meta:</p>
+                        <ol class="list-decimal ml-6 space-y-2 mb-4">
+                            <li>Get your public webhook URL (must be HTTPS):
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>Production: <code>https://yourdomain.com/api/whatsapp/webhook</code></li>
+                                    <li>Development: Use ngrok or similar: <code>https://your-ngrok-url.ngrok.io/api/whatsapp/webhook</code></li>
+                                </ul>
+                            </li>
+                            <li>Go to <strong>Meta Business Manager</strong> → <strong>WhatsApp</strong> → <strong>Configuration</strong> → <strong>Webhooks</strong></li>
+                            <li>Click <strong>"Edit"</strong> or <strong>"Add webhook"</strong></li>
+                            <li>Enter your webhook URL</li>
+                            <li>Enter verify token (check database: <code>whatsapp_settings.verify_token</code>)</li>
+                            <li>Subscribe to events:
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>✅ <code>messages</code> (incoming messages)</li>
+                                    <li>✅ <code>message_status</code> (delivery status updates)</li>
+                                </ul>
+                            </li>
+                            <li>Click <strong>"Verify and save"</strong></li>
+                        </ol>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">3. Test Account Setup (For Development)</h4>
+                        <p class="mb-3">If using a test account, add phone numbers to allowed recipient list:</p>
+                        <ol class="list-decimal ml-6 space-y-2 mb-4">
+                            <li>Go to <strong>Meta Business Manager</strong> → <strong>WhatsApp</strong> → <strong>Phone Numbers</strong></li>
+                            <li>Click on your phone number</li>
+                            <li>Go to <strong>"Phone number settings"</strong> → <strong>"Manage phone number"</strong></li>
+                            <li>Scroll to <strong>"Test phone numbers"</strong> or <strong>"Allowed recipient list"</strong></li>
+                            <li>Add recipient phone numbers (format: <code>919784921431</code> - no + sign, no spaces)</li>
+                            <li>Save changes</li>
+                        </ol>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">4. Template Creation Workflow</h4>
+                        <ol class="list-decimal ml-6 space-y-2 mb-4">
+                            <li>Go to <strong>Admin Panel</strong> → <strong>Settings</strong> → <strong>WhatsApp Notifications</strong> → <strong>Template Library</strong></li>
+                            <li>View template JSON for each notification type</li>
+                            <li>Copy template JSON</li>
+                            <li>Go to <strong>Meta Business Manager</strong> → <strong>Message Templates</strong></li>
+                            <li>Create template with same name (e.g., <code>order_confirmation</code>)</li>
+                            <li>Paste JSON and submit for approval</li>
+                            <li>Wait for approval (24-48 hours)</li>
+                            <li>Return to <strong>Template Mapping</strong> page</li>
+                            <li>Map notification type to WhatsApp template name</li>
+                            <li>Activate notification type</li>
+                        </ol>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">5. Queue Configuration</h4>
+                        <p class="mb-3">If using database queue driver, ensure queue worker is running:</p>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">php artisan queue:work</code>
+                        </div>
+                        <p class="mb-3">Or add to cron for production:</p>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded mt-8"
+                >
+                    <div class="flex flex-col gap-5">
+                        <!-- Success Header -->
+                        <div class="flex items-center gap-3">
+                            <div class="flex-shrink-0">
+                                <svg
+                                    class="h-6 w-6 text-blue-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-blue-600 mt-1">
+                                    WhatsApp module is ready to use. Configure your WhatsApp Business API credentials and templates to start sending notifications.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Features -->
+                        <div
+                            class="bg-white rounded-lg p-4 border border-blue-100"
+                        >
+                            <h4 class="font-medium text-gray-900 mb-3">
+                                Key Features:
+                            </h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <svg
+                                        class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                    </svg>
+                                    <span
+                                        >29 predefined notification templates covering all restaurant operations</span
+                                    >
+                                </li>
+                                <li class="flex items-start">
+                                    <svg
+                                        class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                    </svg>
+                                    <span
+                                        >Event-driven notifications automatically sent when orders, reservations, and payments occur</span
+                                    >
+                                </li>
+                                <li class="flex items-start">
+                                    <svg
+                                        class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                    </svg>
+                                    <span
+                                        >Complete notification logging with delivery status tracking</span
+                                    >
+                                </li>
+                                <li class="flex items-start">
+                                    <svg
+                                        class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                    </svg>
+                                    <span
+                                        >Automated scheduling for reports, reminders, and follow-ups</span
+                                    >
+                                </li>
+                                <li class="flex items-start">
+                                    <svg
+                                        class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        ></path>
+                                    </svg>
+                                    <span
+                                        >Compliance with WhatsApp Business API policies and template requirements</span
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow mt-8">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">
+                            Automated Commands
+                        </h3>
+                        <p class="mb-4">
+                            The module includes several scheduled commands for automated notifications:
+                        </p>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <p class="font-semibold mb-2">Process Automated Schedules:</p>
+                            <code class="block">php artisan whatsapp:process-automated-schedules</code>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <p class="font-semibold mb-2">Process Report Schedules:</p>
+                            <code class="block">php artisan whatsapp:process-report-schedules</code>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <p class="font-semibold mb-2">Process Payment Reminders:</p>
+                            <code class="block">php artisan whatsapp:process-payment-reminders</code>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <p class="font-semibold mb-2">Process Reservation Reminders:</p>
+                            <code class="block">php artisan whatsapp:process-reservation-reminders</code>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <p class="font-semibold mb-2">Process Reservation Followups:</p>
+                            <code class="block">php artisan whatsapp:process-reservation-followups</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="templates" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Notification Templates</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <p class="mb-4">
+                            The WhatsApp module includes <strong>29 predefined notification templates</strong> organized by recipient type. Each template can be customized and mapped to your WhatsApp Business Portal templates.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold mb-4 mt-6">Customer Notifications (11 Templates)</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Template Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Purpose</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Key Variables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_confirmation</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">New order confirmation</td>
+                                        <td class="border border-gray-300 px-4 py-2">Customer name, Order number, Order type, Total amount, Estimated time</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_status_update</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order status changes (confirmed/preparing/ready/delivered)</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Status, Status message, Estimated time</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_cancelled</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order cancellation notification</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Cancellation reason, Refund status</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_bill_invoice</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Bill/invoice after order completion</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Bill amount, Payment method, Bill link</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>payment_confirmation</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Payment success confirmation</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Payment amount, Transaction ID, Payment date</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>payment_reminder</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Payment due reminder</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Due amount, Due date, Payment link</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>reservation_confirmation</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Table booking confirmation</td>
+                                        <td class="border border-gray-300 px-4 py-2">Reservation date, Time, Number of guests, Table number</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>reservation_reminder</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Pre-reservation reminder</td>
+                                        <td class="border border-gray-300 px-4 py-2">Reservation date, Time, Time until reservation</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>reservation_status_update</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Reservation status changes</td>
+                                        <td class="border border-gray-300 px-4 py-2">Reservation ID, Status, Status message, New date/time</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>waiter_request_acknowledgment</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Waiter request acknowledgment</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Request time, Estimated wait time</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>table_ready_notification</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Table ready notification</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Reservation time, Arrival instructions</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 mt-6">Admin Notifications (5 Templates)</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Template Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Purpose</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Key Variables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>new_order_alert</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">New order alert</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Order type, Customer name, Total amount</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>sales_report</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Daily/weekly/monthly sales reports</td>
+                                        <td class="border border-gray-300 px-4 py-2">Report period, Total sales, Total orders, Average order value</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>low_inventory_alert</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Low stock alert</td>
+                                        <td class="border border-gray-300 px-4 py-2">Item name(s), Current stock, Minimum threshold</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>subscription_expiry_reminder</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Subscription expiry reminder</td>
+                                        <td class="border border-gray-300 px-4 py-2">Current plan, Expiry date, Days remaining, Renewal link</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>new_restaurant_signup</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">New restaurant signup (superadmin)</td>
+                                        <td class="border border-gray-300 px-4 py-2">Restaurant name, Owner name, Email, Phone, Plan selected</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 mt-6">Staff Notifications (9 Templates)</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Template Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Purpose</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Key Variables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>new_kot_notification</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">New KOT for kitchen</td>
+                                        <td class="border border-gray-300 px-4 py-2">KOT number, Order number, Items list, Special instructions</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_modification_alert</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order modification alert</td>
+                                        <td class="border border-gray-300 px-4 py-2">KOT number, Modification type, Changes details</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_cancellation_alert</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order cancellation (kitchen)</td>
+                                        <td class="border border-gray-300 px-4 py-2">KOT number, Cancellation reason, Cancelled items</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>waiter_request</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Waiter request notification</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Request type, Request time</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>table_assignment</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Table assignment to waiter</td>
+                                        <td class="border border-gray-300 px-4 py-2">Waiter name, Table number, Customer name, Number of guests</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_ready_to_serve</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order ready to serve</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Order number, Items ready</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>payment_request_alert</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Payment request alert</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Order number, Customer name</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>table_status_change</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Table status change</td>
+                                        <td class="border border-gray-300 px-4 py-2">Table number, Previous status, New status</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>daily_operations_summary</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Daily summary for managers</td>
+                                        <td class="border border-gray-300 px-4 py-2">Total orders, Total revenue, Staff on duty, Peak hours</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 mt-6">Delivery Notifications (3 Templates)</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Template Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Purpose</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Key Variables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>delivery_assignment</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Delivery assignment</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Customer details, Pickup/Delivery address, Order items</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>order_ready_for_pickup</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Order ready for pickup</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Pickup address, Ready time, Customer details</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>delivery_completion_confirmation</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Delivery completion</td>
+                                        <td class="border border-gray-300 px-4 py-2">Order number, Delivery time, Delivery address, Payment status</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 mt-6">Automated Reminders (1 Template)</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Template Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Purpose</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Key Variables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>reservation_followup</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Post-reservation follow-up</td>
+                                        <td class="border border-gray-300 px-4 py-2">Reservation date, Feedback link, Discount offer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="troubleshooting" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">Troubleshooting</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <h3 class="text-xl font-semibold mb-4">Common Issues and Solutions</h3>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Issue 1: Messages "Accepted" But Not Delivered</h4>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                            <p class="mb-2"><strong>Symptoms:</strong></p>
+                            <ul class="list-disc ml-6 mb-2">
+                                <li>Messages show status "accepted" or "sent"</li>
+                                <li>No "delivered" status updates received</li>
+                                <li>Recipients not receiving messages</li>
+                            </ul>
+                        </div>
+                        <p class="mb-3"><strong>Possible Causes:</strong></p>
+                        <ol class="list-decimal ml-6 space-y-2 mb-4">
+                            <li><strong>Test Account Restriction:</strong> Phone numbers not in allowed recipient list
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>Go to Meta Business Manager → WhatsApp → Phone Numbers</li>
+                                    <li>Add recipient numbers to "Test phone numbers" list</li>
+                                    <li>Format: <code>919784921431</code> (no + sign, no spaces)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Webhook Not Configured:</strong> Not receiving delivery status updates
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>Configure webhook in Meta Business Manager</li>
+                                    <li>Subscribe to <code>message_status</code> events</li>
+                                    <li>Verify webhook URL is publicly accessible (HTTPS)</li>
+                                </ul>
+                            </li>
+                            <li><strong>User Opt-In Issues:</strong> Users haven't explicitly consented
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>Ensure users explicitly opted-in to receive messages</li>
+                                    <li>Users should send you a message first (opens 24-hour window)</li>
+                                    <li>Document consent records</li>
+                                </ul>
+                            </li>
+                            <li><strong>Account Quality Rating:</strong> Low quality rating causes delivery blocks
+                                <ul class="list-disc ml-6 mt-2">
+                                    <li>Check quality rating in Meta Business Manager</li>
+                                    <li>Improve messaging practices to raise rating</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Issue 2: Error Code 131030 - Recipient Not in Allowed List</h4>
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                            <p><strong>Solution:</strong> Add phone number to test recipient list in Meta Business Manager</p>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Issue 3: Error Code 10 - Application Does Not Have Permission</h4>
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                            <p class="mb-2"><strong>Solution:</strong> Template format mismatch (e.g., <code>sales_report</code> needs DOCUMENT format in header)</p>
+                            <p>Update template in Meta Business Manager to match expected format</p>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Issue 4: Notifications Not Sending</h4>
+                        <p class="mb-3"><strong>Checklist:</strong></p>
+                        <ul class="list-disc ml-6 space-y-2 mb-4">
+                            <li>✅ WhatsApp is enabled in superadmin panel</li>
+                            <li>✅ Credentials are correct and valid</li>
+                            <li>✅ Templates are approved on Meta (24-48 hours)</li>
+                            <li>✅ Notification is enabled in admin panel</li>
+                            <li>✅ Queue worker running (if using database queue)</li>
+                            <li>✅ Users have valid phone numbers</li>
+                        </ul>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Issue 5: Scheduled Commands Not Running</h4>
+                        <p class="mb-3"><strong>Checklist:</strong></p>
+                        <ul class="list-disc ml-6 space-y-2 mb-4">
+                            <li>✅ Verify cron is running: <code>php artisan schedule:list</code></li>
+                            <li>✅ Check schedule is enabled in admin panel</li>
+                            <li>✅ Verify scheduled time/day is correct</li>
+                            <li>✅ Check Laravel logs for errors</li>
+                        </ul>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Message Status Flow</h4>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                            <ol class="list-decimal ml-6 space-y-1">
+                                <li><strong>"accepted"</strong> → Message accepted by API (queued)</li>
+                                <li><strong>"sent"</strong> → Message sent to WhatsApp servers</li>
+                                <li><strong>"delivered"</strong> → Message delivered to device ✅</li>
+                                <li><strong>"read"</strong> → Message read by recipient</li>
+                                <li><strong>"failed"</strong> → Message failed to deliver ❌</li>
+                            </ol>
+                            <p class="mt-3"><strong>Important:</strong> "accepted" does NOT mean "delivered". It only means WhatsApp accepted your request.</p>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Testing Webhook</h4>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">tail -f storage/logs/laravel-$(date +%Y-%m-%d).log | grep "WhatsApp Webhook"</code>
+                        </div>
+                        <p class="mb-3">Expected logs when webhook works:</p>
+                        <div class="bg-gray-100 p-4 rounded mb-4">
+                            <code class="block">WhatsApp Webhook received<br>WhatsApp Message Status Update: status=delivered<br>WhatsApp Notification Log updated: status=delivered</code>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mb-3 mt-6">Common Error Codes</h4>
+                        <div class="overflow-x-auto mb-4">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Error Code</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Meaning</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left">Solution</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>131030</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Recipient not in allowed list</td>
+                                        <td class="border border-gray-300 px-4 py-2">Add to test phone numbers list</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>131026</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Template not found</td>
+                                        <td class="border border-gray-300 px-4 py-2">Verify template name and approval status</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>131047</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Rate limit exceeded</td>
+                                        <td class="border border-gray-300 px-4 py-2">Wait and retry, or upgrade account tier</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>131051</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Outside 24-hour window</td>
+                                        <td class="border border-gray-300 px-4 py-2">Use approved template</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>131048</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Quality rating too low</td>
+                                        <td class="border border-gray-300 px-4 py-2">Improve messaging practices</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-300 px-4 py-2"><code>10</code></td>
+                                        <td class="border border-gray-300 px-4 py-2">Application does not have permission</td>
+                                        <td class="border border-gray-300 px-4 py-2">Update template format (e.g., DOCUMENT header)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="summary" class="section mb-12">
+                <h2 class="text-3xl font-bold mb-6">
+                    Summary of WhatsApp Module Features
+                </h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <div class="prose max-w-none">
+                        <p class="mb-4">
+                            The WhatsApp module includes the following comprehensive features:
+                        </p>
+                        <ul class="space-y-3 list-disc ml-6">
+                            <li>
+                                <strong>29 Predefined Notification Templates:</strong>
+                                Complete set of templates organized by recipient type (Customer: 11, Admin: 5, Staff: 9, Delivery: 3, Automated: 1) covering all restaurant operations.
+                            </li>
+                            <li>
+                                <strong>Event-Driven Notification System:</strong>
+                                Automatically sends notifications when orders, reservations, payments, and other events occur in TableTrack. No manual intervention required.
+                            </li>
+                            <li>
+                                <strong>Template Management System:</strong>
+                                Easy-to-use admin panel for viewing template JSONs, mapping notification types to WhatsApp templates, and enabling/disabling individual notifications.
+                            </li>
+                            <li>
+                                <strong>WhatsApp Business API Integration:</strong>
+                                Full integration with Meta's WhatsApp Business API including credential management, webhook configuration, and delivery status tracking.
+                            </li>
+                            <li>
+                                <strong>Multi-language Support:</strong>
+                                Templates support multiple languages (en, hi, etc.) with language-specific template mappings.
+                            </li>
+                            <li>
+                                <strong>Notification Logging and Tracking:</strong>
+                                Complete logging system tracks all sent notifications with delivery status (sent, delivered, read, failed) and error messages for troubleshooting.
+                            </li>
+                            <li>
+                                <strong>Automated Scheduling:</strong>
+                                Scheduled commands for automated notifications including sales reports, payment reminders, reservation reminders, and follow-ups.
+                            </li>
+                            <li>
+                                <strong>Queue System Integration:</strong>
+                                Uses Laravel's queue system for reliable message delivery and handling of bulk notifications with rate limit compliance.
+                            </li>
+                            <li>
+                                <strong>Error Handling and Fallbacks:</strong>
+                                Graceful error handling with detailed logging. Failed notifications are logged and can be resent manually.
+                            </li>
+                            <li>
+                                <strong>Compliance with WhatsApp Policies:</strong>
+                                Ensures compliance with WhatsApp Business API policies including template approval workflows, opt-in requirements, and 24-hour messaging windows.
+                            </li>
+                            <li>
+                                <strong>Template Library:</strong>
+                                Pre-built template JSONs ready for copy-paste to WhatsApp Business Portal, with clear instructions and sample variables.
+                            </li>
+                            <li>
+                                <strong>Per-Restaurant Configuration:</strong>
+                                Each restaurant can have its own WhatsApp Business API credentials and template mappings, allowing complete customization.
+                            </li>
+                            <li>
+                                <strong>Notification Preferences:</strong>
+                                Fine-grained control over which notifications are sent to which recipient types (customer, admin, staff, delivery) per restaurant.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg shadow mt-8">
+                    <h3 class="text-xl font-semibold mb-4">Notification Flow by Order Type</h3>
+                    <div class="prose max-w-none">
+                        <h4 class="text-lg font-semibold mb-3">Dine-in Orders</h4>
+                        <ul class="list-disc ml-6 space-y-1 mb-4">
+                            <li>Customer: Order confirmation notification</li>
+                            <li>Admin: New order alert</li>
+                            <li>Waiter: New order alert (if assigned)</li>
+                            <li>Kitchen: KOT notification (via separate event)</li>
+                        </ul>
+
+                        <h4 class="text-lg font-semibold mb-3">Delivery Orders</h4>
+                        <ul class="list-disc ml-6 space-y-1 mb-4">
+                            <li>Customer: Order confirmation notification</li>
+                            <li>Admin: New order alert</li>
+                            <li>Delivery Executive: New order alert (if assigned)</li>
+                            <li>Kitchen: KOT notification (via separate event)</li>
+                        </ul>
+
+                        <h4 class="text-lg font-semibold mb-3">Pickup Orders</h4>
+                        <ul class="list-disc ml-6 space-y-1 mb-4">
+                            <li>Customer: Order confirmation notification</li>
+                            <li>Admin: New order alert</li>
+                            <li>Kitchen: KOT notification (via separate event)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg shadow mt-8">
+                    <h3 class="text-xl font-semibold mb-4">Important Notes</h3>
+                    <div class="prose max-w-none">
+                        <ul class="space-y-2 list-disc ml-6">
+                            <li><strong>Template Approval:</strong> Templates must be approved by WhatsApp (24-48 hours) before they can be used. System handles pending templates gracefully.</li>
+                            <li><strong>Test Account Restrictions:</strong> Test accounts can only send to numbers in the allowed recipient list. Production accounts don't have this restriction.</li>
+                            <li><strong>Webhook Configuration:</strong> Webhook is required to receive delivery status updates. Must be publicly accessible via HTTPS.</li>
+                            <li><strong>Opt-in Compliance:</strong> Users must explicitly opt-in to receive WhatsApp messages. Ensure compliance with WhatsApp policies.</li>
+                            <li><strong>Queue Processing:</strong> If using database queue driver, ensure queue worker is running: <code>php artisan queue:work</code></li>
+                            <li><strong>Rate Limits:</strong> WhatsApp has rate limits based on account tier. The module uses queuing to handle bulk notifications.</li>
+                            <li><strong>Phone Number Format:</strong> All phone numbers are formatted as <code>phone_code + phone_number</code> (no + sign, e.g., <code>919784921431</code>)</li>
+                            <li><strong>Idempotency:</strong> Each order/reservation is processed only once (15-minute cache window) to prevent duplicate notifications.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script>
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(
+                        this.getAttribute("href")
+                    );
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                    });
+
+                    // Update active state
+                    document.querySelectorAll(".nav-link").forEach((link) => {
+                        link.classList.remove("active");
+                    });
+                    this.classList.add("active");
+                });
+            });
+
+            // Update active nav link on scroll
+            window.addEventListener("scroll", () => {
+                const sections = document.querySelectorAll(".section");
+                const navLinks = document.querySelectorAll(".nav-link");
+
+                let current = "";
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach((link) => {
+                    link.classList.remove("active");
+                    if (link.getAttribute("href").substring(1) === current) {
+                        link.classList.add("active");
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="inline-flex flex-col text-right text-base font-semibold text-gray-900 dark:text-white">
-                            <div>{{ currency_format($order->total, $restaurant->currency_id) }}</div>
+                            <div>{!! currency_format($order->total, $restaurant->currency_id) !!}</div>
                             <div class="text-xs text-gray-500 font-light">@lang('modules.order.includeTax')</div>
                         </div>
                     </div>

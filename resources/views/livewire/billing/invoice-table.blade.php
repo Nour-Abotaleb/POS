@@ -97,7 +97,7 @@
                                 {{ $invoice->gateway_name }}
                             </td>
                             <td class="py-2.5 px-4 text-sm text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $invoice->total ? global_currency_format($invoice->total, global_setting()->default_currency_id) : '-' }}
+                                {!! $invoice->total ? global_currency_format($invoice->total, global_setting()->default_currency_id) : '-' !!}
                             </td>
                             <td class="py-2.5 px-4 space-x-2 whitespace-nowrap text-right dark:text-white">
                                 <x-secondary-button-table wire:click="downloadReceipt({{$invoice->id}})">

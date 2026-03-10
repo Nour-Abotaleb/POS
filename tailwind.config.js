@@ -36,7 +36,8 @@ export default {
                 },
             },
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Figtree", "Cairo", "sans-serif"],
+                cairo: ["Cairo", "sans-serif"],
             },
             animation: {
                 blink: "blink 1s infinite", // Define the blink animation

@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ currency_format($totalRemovedAmount, $currencyId) }}
+                    {!! currency_format($totalRemovedAmount, $currencyId) !!}
                 </p>
             </div>
 
@@ -311,7 +311,7 @@
                                 }
                                 $totalPrice = $unitPrice * $item->quantity;
                             @endphp
-                            {{ currency_format($totalPrice, $currencyId) }}
+                            {!! currency_format($totalPrice, $currencyId) !!}
                         </td>
                     </tr>
                 @empty
@@ -335,7 +335,7 @@
                         </td>
                         <td class="p-4 text-lg font-bold text-right text-gray-900 dark:text-white bg-orange-50 dark:bg-orange-900/20 border-l-2 border-orange-200 dark:border-orange-800">
                             <span class="inline-flex items-center px-3 py-1 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200">
-                                {{ currency_format($totalRemovedAmount, $currencyId) }}
+                                {!! currency_format($totalRemovedAmount, $currencyId) !!}
                             </span>
                         </td>
                     </tr>

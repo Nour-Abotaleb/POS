@@ -405,7 +405,7 @@
                                                         class="flex justify-between items-center px-1 py-0.5 mb-1 text-xs bg-gray-200 rounded-md border-l-2 border-blue-500 dark:bg-gray-900">
                                                         <span class="text-gray-900 dark:text-white">{{ $modifier->name ?? $modifier->pivot->modifier_option_name }}</span>
                                                         <span
-                                                            class="text-gray-600 dark:text-gray-300">{{ currency_format($modifier->pivot->modifier_option_price ?? $modifier->price , $currencyId) }}</span>
+                                                            class="text-gray-600 dark:text-gray-300">{!! currency_format($modifier->pivot->modifier_option_price ?? $modifier->price , $currencyId) !!}</span>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -419,11 +419,11 @@
 
                                     <td
                                         class="hidden p-2 text-xs font-medium text-right text-gray-700 whitespace-nowrap dark:text-white lg:table-cell">
-                                        {{ currency_format($displayPrice, $currencyId) }}
+                                        {!! currency_format($displayPrice, $currencyId) !!}
                                     </td>
                                     <td
                                         class="p-2 text-xs font-medium text-right text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ currency_format($item->amount, $currencyId) }}
+                                        {!! currency_format($item->amount, $currencyId) !!}
                                     </td>
 
                                     @if (!in_array($order->status, ['paid', 'payment_due', 'canceled']) && user_can('Delete Order'))
@@ -469,7 +469,7 @@
                                 @lang('modules.order.subTotal')
                             </div>
                             <div>
-                                {{ currency_format($order->sub_total, $currencyId) }}
+                                {!! currency_format($order->sub_total, $currencyId) !!}
                             </div>
                         </div>
 
@@ -482,7 +482,7 @@
                                     @endif
                                 </div>
                                 <div>
-                                    -{{ currency_format($order->discount_amount, $currencyId) }}
+                                    -{!! currency_format($order->discount_amount, $currencyId) !!}
                                 </div>
                             </div>
                         @endif
@@ -508,7 +508,7 @@
                                     @endif
                                 </div>
                                 <div>
-                                    {{ currency_format($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0)), $currencyId) }}
+                                    {!! currency_format($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0)), $currencyId) !!}
                                 </div>
                             </div>
                         @endforeach
@@ -519,7 +519,7 @@
                                     @lang('modules.order.tip')
                                 </div>
                                 <div>
-                                    {{ currency_format($order->tip_amount, $currencyId) }}
+                                    {!! currency_format($order->tip_amount, $currencyId) !!}
                                 </div>
                             </div>
                         @endif
@@ -531,7 +531,7 @@
                             </div>
                             <div>
                                 @if($order->delivery_fee > 0)
-                                    {{ currency_format($order->delivery_fee, $currencyId) }}
+                                    {!! currency_format($order->delivery_fee, $currencyId) !!}
                                 @else
                                     <span class="font-medium text-green-500">@lang('modules.delivery.freeDelivery')</span>
                                 @endif
@@ -546,7 +546,7 @@
                                         {{ $item->tax->tax_name }} ({{ $item->tax->tax_percent }}%)
                                     </div>
                                     <div>
-                                        {{ currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id) }}
+                                        {!! currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id) !!}
                                     </div>
                                 </div>
                             @endforeach
@@ -575,7 +575,7 @@
                                 @foreach ($taxTotals as $taxName => $taxInfo)
                                     <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
                                         <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
-                                        <span>{{ currency_format($taxInfo['amount'], $currencyId) }}</span>
+                                        <span>{!! currency_format($taxInfo['amount'], $currencyId) !!}</span>
                                     </div>
                                 @endforeach
                                 <div class="flex justify-between mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -583,7 +583,7 @@
                                         @lang('modules.order.totalTax')
                                     </div>
                                     <div>
-                                        {{ currency_format($totalTax, $currencyId) }}
+                                        {!! currency_format($totalTax, $currencyId) !!}
                                     </div>
                                 </div>
                             @endif
@@ -594,7 +594,7 @@
                                 @lang('modules.order.total')
                             </div>
                             <div>
-                                {{ currency_format($order->total, $currencyId) }}
+                                {!! currency_format($order->total, $currencyId) !!}
                             </div>
                         </div>
 
@@ -608,7 +608,7 @@
                                     $totalBalance = $order->payments->sum('balance');
                                 @endphp
 
-                                {{ currency_format($totalBalance > 0 ? $totalBalance : 0, $currencyId) }}
+                                {!! currency_format($totalBalance > 0 ? $totalBalance : 0, $currencyId) !!}
                             </div>
                         </div>
 
@@ -732,7 +732,7 @@
                                 @foreach ($order->payments as $key => $item)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td class="p-2 text-base text-gray-900 whitespace-nowrap dark:text-gray-400">
-                                            {{ currency_format($item->amount, $currencyId) }}
+                                            {!! currency_format($item->amount, $currencyId) !!}
                                         </td>
 
 

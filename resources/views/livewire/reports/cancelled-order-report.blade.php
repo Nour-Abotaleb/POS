@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ currency_format($totalCancelledAmount, $currencyId) }}
+                    {!! currency_format($totalCancelledAmount, $currencyId) !!}
                 </p>
             </div>
 
@@ -221,7 +221,7 @@
                             @endif
                         </td>
                         <td class="p-4 text-sm font-bold text-right text-gray-900 dark:text-white">
-                            {{ currency_format($order->total, $currencyId) }}
+                            {!! currency_format($order->total, $currencyId) !!}
                         </td>
                     </tr>
                 @empty
@@ -239,7 +239,7 @@
                             @lang('modules.report.total'):
                         </td>
                         <td class="p-4 text-sm font-bold text-right text-gray-900 dark:text-white">
-                            {{ currency_format($totalCancelledAmount, $currencyId) }}
+                            {!! currency_format($totalCancelledAmount, $currencyId) !!}
                         </td>
                     </tr>
                 </tfoot>

@@ -33,7 +33,7 @@
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400">@lang('modules.dashboard.totalRevenue')</p>
                                 <p class="text-2xl font-semibold text-gray-900 dark:text-white">
-                                    {{ global_currency_format($earningsStats['total_amount'], global_setting()->default_currency_id) }}
+                                    {!! global_currency_format($earningsStats['total_amount'], global_setting()->default_currency_id) !!}
                                 </p>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400">@lang('modules.dashboard.salesThisMonth')</p>
                                 <p class="text-2xl font-semibold text-gray-900 dark:text-white">
-                                    {{ global_currency_format($earningsStats['current_month_earnings'], global_setting()->default_currency_id) }}
+                                    {!! global_currency_format($earningsStats['current_month_earnings'], global_setting()->default_currency_id) !!}
                                 </p>
                                 @if($earningsStats['last_month_earnings'] > 0)
                                     @php

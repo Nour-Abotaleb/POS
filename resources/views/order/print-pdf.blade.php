@@ -218,12 +218,34 @@
 <body>
     <div class="receipt">
         <div class="header">
+            <!-- ZATCA Compliant Invoice Title -->
+            <div style="text-align: center; margin-bottom: 15px; direction: rtl;">
+                <h2 style="font-size: 18pt; font-weight: bold; margin: 0; color: #333;">
+                    فاتورة ضريبية مبسطة<br>
+                    <span style="font-size: 14pt; direction: ltr; color: #666;">Simplified Tax Invoice</span>
+                </h2>
+            </div>
+            
             @if ($receiptSettings->show_restaurant_logo)
                 <img src="{{ restaurant()->logo_url }}" alt="{{ restaurant()->name }}" class="restaurant-logo">
             @endif
             <div class="restaurant-name">{{ restaurant()->name }}</div>
             <div class="restaurant-info">{{ branch()->address }}</div>
             <div class="restaurant-info">@lang('modules.customer.phone'): {{ restaurant()->phone_number }}</div>
+            
+            <!-- ZATCA Required Fields -->
+            @if(restaurant()->vat_number)
+                <div class="restaurant-info" style="direction: rtl; font-weight: bold;">
+                    <strong>الرقم الضريبي / VAT Number:</strong> {{ restaurant()->vat_number }}
+                </div>
+            @endif
+            
+            @if(restaurant()->commercial_registration)
+                <div class="restaurant-info" style="direction: rtl; font-weight: bold;">
+                    <strong>السجل التجاري / C.R.:</strong> {{ restaurant()->commercial_registration }}
+                </div>
+            @endif
+            
             @if ($receiptSettings->show_tax)
                 @foreach ($taxDetails as $taxDetail)
                     <div class="restaurant-info">{{ $taxDetail->tax_name }}: {{ $taxDetail->tax_id }}</div>
@@ -318,7 +340,7 @@
                             @foreach ($item->modifierOptions as $modifier)
                                 <div class="modifiers">• {{ $modifier->name }}
                                     @if($modifier->price > 0)
-                                        (+{{ currency_format($modifier->price, restaurant()->currency_id, false, true) }})
+                                        (+{!! currency_format($modifier->price, restaurant()->currency_id, false, true) !!})
                                     @endif
                                 </div>
                             @endforeach
@@ -326,8 +348,8 @@
                                 <div class="modifiers"><em>@lang('modules.order.note'): {{ $item->note }}</em></div>
                             @endif
                         </td>
-                        <td class="price">{{ currency_format($item->price, restaurant()->currency_id, false, false) }}</td>
-                        <td class="amount">{{ currency_format($item->amount, restaurant()->currency_id, false, false) }}</td>
+                        <td class="price">{!! currency_format($item->price, restaurant()->currency_id, false, false) !!}</td>
+                        <td class="amount">{!! currency_format($item->amount, restaurant()->currency_id, false, false) !!}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -338,7 +360,7 @@
                 <table>
                     <tr>
                         <td>@lang('modules.order.subTotal'):</td>
-                        <td>{{ currency_format($order->sub_total, restaurant()->currency_id, false, true) }}</td>
+                        <td>{!! currency_format($order->sub_total, restaurant()->currency_id, false, true) !!}</td>
                     </tr>
                 </table>
             </div>
@@ -352,7 +374,7 @@
                                     ({{ rtrim(rtrim($order->discount_value, '0'), '.') }}%)
                                 @endif:
                             </td>
-                            <td>-{{ currency_format($order->discount_amount, restaurant()->currency_id, false, true) }}</td>
+                            <td>-{!! currency_format($order->discount_amount, restaurant()->currency_id, false, true) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -367,7 +389,7 @@
                                     ({{ $item->charge->charge_value }}%)
                                 @endif:
                             </td>
-                            <td>{{ currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), restaurant()->currency_id, true, true) }}</td>
+                            <td>{!! currency_format(($item->charge->getAmount($order->sub_total - ($order->discount_amount ?? 0))), restaurant()->currency_id, true, true) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -378,7 +400,7 @@
                     <table>
                         <tr>
                             <td>@lang('modules.order.tip'):</td>
-                            <td>{{ currency_format($order->tip_amount, restaurant()->currency_id, false, true) }}</td>
+                            <td>{!! currency_format($order->tip_amount, restaurant()->currency_id, false, true) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -391,7 +413,7 @@
                             <td>@lang('modules.delivery.deliveryFee'):</td>
                             <td>
                                 @if($order->delivery_fee > 0)
-                                    {{ currency_format($order->delivery_fee, restaurant()->currency_id, false, true) }}
+                                    {!! currency_format($order->delivery_fee, restaurant()->currency_id, false, true) !!}
                                 @else
                                     @lang('modules.delivery.freeDelivery')
                                 @endif
@@ -407,7 +429,7 @@
                         <table>
                             <tr>
                                 <td>{{ $item->tax->tax_name }} ({{ $item->tax->tax_percent }}%):</td>
-                                <td>{{ currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id, false, true) }}</td>
+                                <td>{!! currency_format(($item->tax->tax_percent / 100) * ($order->sub_total - ($order->discount_amount ?? 0)), restaurant()->currency_id, false, true) !!}</td>
                             </tr>
                         </table>
                     </div>
@@ -438,7 +460,7 @@
                             <table>
                                 <tr>
                                     <td>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</td>
-                                    <td>{{ currency_format($taxInfo['amount'], restaurant()->currency_id, false, true) }}</td>
+                                    <td>{!! currency_format($taxInfo['amount'], restaurant()->currency_id, false, true) !!}</td>
                                 </tr>
                             </table>
                         </div>
@@ -447,7 +469,7 @@
                         <table>
                             <tr>
                                 <td>@lang('modules.order.totalTax'):</td>
-                                <td>{{ currency_format($totalTax, restaurant()->currency_id, false, true) }}</td>
+                                <td>{!! currency_format($totalTax, restaurant()->currency_id, false, true) !!}</td>
                             </tr>
                         </table>
                     </div>
@@ -459,7 +481,7 @@
                     <table>
                         <tr>
                             <td>@lang('modules.order.balanceReturn'):</td>
-                            <td>{{ currency_format($payment->balance, restaurant()->currency_id, false, true) }}</td>
+                            <td>{!! currency_format($payment->balance, restaurant()->currency_id, false, true) !!}</td>
                         </tr>
                     </table>
                 </div>
@@ -469,7 +491,7 @@
                 <table>
                     <tr>
                         <td>@lang('modules.order.total'):</td>
-                        <td>{{ currency_format($order->total, restaurant()->currency_id, false, true) }}</td>
+                        <td>{!! currency_format($order->total, restaurant()->currency_id, false, true) !!}</td>
                     </tr>
                 </table>
             </div>
@@ -506,7 +528,7 @@
                     <tbody>
                         @foreach ($order->payments as $payment)
                             <tr>
-                                <td class="qty">{{ currency_format($payment->amount, restaurant()->currency_id, false, true) }}</td>
+                                <td class="qty">{!! currency_format($payment->amount, restaurant()->currency_id, false, true) !!}</td>
                                 <td class="description">@lang('modules.order.' . $payment->payment_method)</td>
                                 <td class="price">
                                     @if($payment->payment_method != 'due')
@@ -521,6 +543,50 @@
         @endif
 
         <div class="footer">
+            <!-- ZATCA QR Code -->
+            @if(isset($zatcaQrCode) && !empty($zatcaQrCode))
+                <div style="text-align: center; margin: 20px 0; page-break-inside: avoid;">
+                    <h4 style="margin-bottom: 10px; color: #333;">ZATCA Compliance</h4>
+                    @php
+                        // Use Google Charts API for QR Code generation (simple and reliable)
+                        $qrCodeUrl = 'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' . urlencode($zatcaQrCode) . '&choe=UTF-8';
+                    @endphp
+                    
+                    <img src="{{ $qrCodeUrl }}" 
+                         alt="ZATCA QR Code" 
+                         style="width: 200px; height: 200px; display: block; margin: 0 auto; border: 1px solid #ddd;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    
+                    <!-- Fallback if QR code fails to load -->
+                    <div style="display: none; width: 200px; height: 200px; border: 2px dashed #ccc; align-items: center; justify-content: center; margin: 0 auto; background-color: #f9f9f9;">
+                        <p style="font-size: 12pt; color: #666; text-align: center; padding: 80px 20px;">
+                            QR Code<br>
+                            <small>ZATCA Compliant</small>
+                        </p>
+                    </div>
+                    
+                    <p style="font-size: 11pt; margin-top: 10px; text-align: center; direction: rtl;">
+                        امسح الرمز للتحقق من الفاتورة<br>
+                        <span style="direction: ltr; font-size: 10pt;">Scan to verify invoice</span>
+                    </p>
+                </div>
+            @else
+                <!-- Fallback if QR code is not available -->
+                <div style="text-align: center; margin: 20px 0; page-break-inside: avoid;">
+                    <h4 style="margin-bottom: 10px; color: #333;">ZATCA Compliance</h4>
+                    <div style="width: 200px; height: 200px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; margin: 0 auto; background-color: #f9f9f9;">
+                        <p style="font-size: 12pt; color: #666; text-align: center;">
+                            QR Code<br>
+                            <small>ZATCA Compliant</small>
+                        </p>
+                    </div>
+                    <p style="font-size: 11pt; margin-top: 10px; text-align: center; direction: rtl;">
+                        امسح الرمز للتحقق من الفاتورة<br>
+                        <span style="direction: ltr; font-size: 10pt;">Scan to verify invoice</span>
+                    </p>
+                </div>
+            @endif
+            
             <p>@lang('messages.thankYouVisit')</p>
 
             @if ($order->status != 'paid' && $receiptSettings->show_payment_qr_code)

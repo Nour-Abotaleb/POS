@@ -314,7 +314,7 @@
                                         <div class="mt-1 flex items-center justify-between gap-2">
                                             @if ($item->variations_count == 0)
                                                 <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                                                    {{ currency_format($item->price, $restaurant->currency_id) }}
+                                                    {!! currency_format($item->price, $restaurant->currency_id) !!}
                                                 </span>
                                             @else
                                                 <span class="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1">

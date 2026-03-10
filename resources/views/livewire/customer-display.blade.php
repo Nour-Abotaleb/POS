@@ -6,7 +6,7 @@
                 <div class="text-4xl font-bold text-skin-base mb-4">@lang('modules.order.thankYouMessage', ['restaurant' => restaurant()->name])</div>
                 <div class="text-xl text-gray-700 mb-4">@lang('modules.order.pleaseProceedToPayment')</div>
                 @if($cashDue)
-                    <div class="text-2xl font-semibold text-gray-800 mb-2">@lang('modules.order.amountDue'): {{ currency_format($cashDue, restaurant()->currency_id) }}</div>
+                    <div class="text-2xl font-semibold text-gray-800 mb-2">@lang('modules.order.amountDue'): {!! currency_format($cashDue, restaurant()->currency_id) !!}</div>
                 @endif
                 @if($qrCodeImageUrl)
                     <div class="flex flex-col items-center mt-6">
@@ -68,7 +68,7 @@
                                 @if(!empty($item['modifiers']))
                                     <div class="flex flex-wrap gap-1 mt-1">
                                         @foreach($item['modifiers'] as $mod)
-                                            <span class="inline-block bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded-full">{{ $mod['name'] }}@if(isset($mod['price'])) ({{ currency_format($mod['price'], restaurant()->currency_id) }})@endif</span>
+                                            <span class="inline-block bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded-full">{{ $mod['name'] }}@if(isset($mod['price'])) ({!! currency_format($mod['price'], restaurant()->currency_id) !!})@endif</span>
                                         @endforeach
                                     </div>
                                 @endif
@@ -77,8 +77,8 @@
                                 @endif
                             </div>
                             <div class="w-32 flex flex-col items-end min-w-[100px]">
-                                <span class="text-lg font-bold text-gray-800">{{ currency_format($item['qty'] * ($item['total_unit_price'] ?? $item['price']), restaurant()->currency_id) }}</span>
-                                <span class="text-xs text-gray-400 mt-1">@lang('modules.order.price'): {{ currency_format($item['total_unit_price'] ?? $item['price'], restaurant()->currency_id) }}</span>
+                                <span class="text-lg font-bold text-gray-800">{!! currency_format($item['qty'] * ($item['total_unit_price'] ?? $item['price']), restaurant()->currency_id) !!}</span>
+                                <span class="text-xs text-gray-400 mt-1">@lang('modules.order.price'): {!! currency_format($item['total_unit_price'] ?? $item['price'], restaurant()->currency_id) !!}</span>
                             </div>
                         </div>
                     @endforeach
@@ -98,12 +98,12 @@
             <div class="bg-white rounded-lg px-6 py-6 flex flex-col gap-2 text-lg shadow-sm">
                 <div class="flex justify-between">
                     <span class="text-gray-500">@lang('modules.order.subTotal')</span>
-                    <span class="font-semibold text-gray-700">{{ currency_format($subTotal, restaurant()->currency_id) }}</span>
+                    <span class="font-semibold text-gray-700">{!! currency_format($subTotal, restaurant()->currency_id) !!}</span>
                 </div>
                 @if($discount > 0)
                 <div class="flex justify-between">
                     <span class="text-gray-500">@lang('modules.order.discount')</span>
-                    <span class="text-green-600">-{{ currency_format($discount, restaurant()->currency_id) }}</span>
+                    <span class="text-green-600">-{!! currency_format($discount, restaurant()->currency_id) !!}</span>
                 </div>
                 @endif
                 @if(!empty($taxes))
@@ -118,26 +118,26 @@
                     @foreach($extraCharges as $charge)
                         <div class="flex justify-between text-base">
                             <span class="text-gray-500">@lang('modules.order.charge'): {{ $charge['name'] }}</span>
-                            <span class="text-orange-600">+{{ currency_format($charge['amount'], restaurant()->currency_id) }}</span>
+                            <span class="text-orange-600">+{!! currency_format($charge['amount'], restaurant()->currency_id) !!}</span>
                         </div>
                     @endforeach
                 @endif
                 @if($tip > 0)
                 <div class="flex justify-between text-base">
                     <span class="text-gray-500">@lang('modules.order.tip')</span>
-                    <span class="text-blue-600">+{{ currency_format($tip, restaurant()->currency_id) }}</span>
+                    <span class="text-blue-600">+{!! currency_format($tip, restaurant()->currency_id) !!}</span>
                 </div>
                 @endif
                 @if($deliveryFee > 0)
                 <div class="flex justify-between text-base">
                     <span class="text-gray-500">@lang('modules.order.deliveryFee')</span>
-                    <span class="text-blue-600">+{{ currency_format($deliveryFee, restaurant()->currency_id) }}</span>
+                    <span class="text-blue-600">+{!! currency_format($deliveryFee, restaurant()->currency_id) !!}</span>
                 </div>
                 @endif
                 <div class="border-t border-dashed border-gray-200 my-2"></div>
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-2xl text-gray-900">@lang('modules.order.total')</span>
-                    <span class="font-bold text-3xl text-skin-base">{{ currency_format($total, restaurant()->currency_id) }}</span>
+                    <span class="font-bold text-3xl text-skin-base">{!! currency_format($total, restaurant()->currency_id) !!}</span>
                 </div>
             </div>
         </div>

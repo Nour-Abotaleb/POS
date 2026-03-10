@@ -100,7 +100,7 @@
 
                                         <td
                                             class="py-2 px-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            {{ currency_format($expense->amount, restaurant()->currency_id) }}</td>
+                                            {!! currency_format($expense->amount, restaurant()->currency_id) !!}</td>
                                         <td
                                             class="py-2 px-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             {{ $expense->payment_due_date->translatedFormat('d M, Y') }}</td>
@@ -118,7 +118,7 @@
                                         <td class="py-2 px-4 text-xs text-left border-gray-700"></td>
                                         <td class="py-2 px-4 text-xs text-left border-gray-700">@lang('modules.order.total')</td>
                                         <td class="py-2 px-4 text-xs text-left border-gray-700">
-                                            {{ currency_format($totalAmount, restaurant()->currency_id) }}
+                                            {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                                         </td>
                                     </tr>
                                 @else

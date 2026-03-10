@@ -40,7 +40,7 @@
                                     {{ $loop->remaining+1 }}
                                 </td>
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ currency_format($item->amount, restaurant()->currency_id) }}
+                                    {!! currency_format($item->amount, restaurant()->currency_id) !!}
                                 </td>
                                 <td class="py-2.5 px-4 text-base text-gray-900 whitespace-nowrap dark:text-white flex items-center gap-1">
 

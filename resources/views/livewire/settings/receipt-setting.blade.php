@@ -379,14 +379,14 @@
                                                         <tr>
                                                             <td class="qty">2</td>
                                                             <td class="description">Sample Item 1</td>
-                                                            <td class="price">{{ currency_format(10, restaurant()->currency_id) }}</td>
-                                                            <td class="amount">{{ currency_format(20, restaurant()->currency_id) }}</td>
+                                                            <td class="price">{!! currency_format(10, restaurant()->currency_id) !!}</td>
+                                                            <td class="amount">{!! currency_format(20, restaurant()->currency_id) !!}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="qty">1</td>
                                                             <td class="description">Sample Item 2</td>
-                                                            <td class="price">{{ currency_format(15, restaurant()->currency_id) }}</td>
-                                                            <td class="amount">{{ currency_format(15, restaurant()->currency_id) }}</td>
+                                                            <td class="price">{!! currency_format(15, restaurant()->currency_id) !!}</td>
+                                                            <td class="amount">{!! currency_format(15, restaurant()->currency_id) !!}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -394,19 +394,19 @@
                                                 <div class="summary">
                                                     <div class="summary-row">
                                                         <span>@lang('modules.order.subTotal'):</span>
-                                                        <span>{{ currency_format(35, restaurant()->currency_id) }}</span>
+                                                        <span>{!! currency_format(35, restaurant()->currency_id) !!}</span>
                                                     </div>
 
                                                     @if ($restaurantTax)
                                                         <div class="summary-row">
                                                             <span>Tax (10%):</span>
-                                                            <span>{{ currency_format(3.5, restaurant()->currency_id) }}</span>
+                                                            <span>{!! currency_format(3.5, restaurant()->currency_id) !!}</span>
                                                         </div>
                                                     @endif
 
                                                     <div class="summary-row total">
                                                         <span>@lang('modules.order.total'):</span>
-                                                        <span>{{ currency_format(38.5, restaurant()->currency_id) }}</span>
+                                                        <span>{!! currency_format(38.5, restaurant()->currency_id) !!}</span>
                                                     </div>
 
                                                     @if ($showPaymentStatus)
@@ -440,12 +440,12 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td class="qty">{{ currency_format(20, restaurant()->currency_id) }}</td>
+                                                                            <td class="qty">{!! currency_format(20, restaurant()->currency_id) !!}</td>
                                                                             <td class="payment-method">cash</td>
                                                                             <td class="price">{{ now()->subMinutes(10)->format('d M, Y h:i A') }}</td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td class="qty">{{ currency_format(18.5, restaurant()->currency_id) }}</td>
+                                                                            <td class="qty">{!! currency_format(18.5, restaurant()->currency_id) !!}</td>
                                                                             <td class="payment-method">upi</td>
                                                                             <td class="price">{{ now()->subMinutes(5)->format('d M, Y h:i A') }}</td>
                                                                         </tr>

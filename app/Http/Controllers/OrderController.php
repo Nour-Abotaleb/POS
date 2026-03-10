@@ -10,10 +10,52 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\OrderNumberSetting;
 use App\Helper\Files;
+use App\Helper\ZatcaHelper;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 
 class OrderController extends Controller
 {
+    /**
+     * Generate ZATCA QR Code for an order
+     */
+    private function generateZatcaQrCode($order, $restaurant, $totalTaxAmount = 0)
+    {
+        $sellerName = $restaurant->restaurant_name ?? $restaurant->name ?? 'Demo Restaurant';
+        $vatNumber = $restaurant->vat_number ?? '300000000000003';
+        $timestamp = Carbon::parse($order->created_at)->toIso8601String();
+
+        // Calculate VAT (15%)
+        $vatAmount = 0;
+        if ($order->orderTaxes && $order->orderTaxes->count() > 0) {
+            foreach ($order->orderTaxes as $tax) {
+                $vatAmount += $tax->tax_amount;
+            }
+        } else {
+            // Calculate from total tax amount if available
+            $vatAmount = $totalTaxAmount;
+        }
+
+        $totalWithVat = number_format($order->total, 2, '.', '');
+        $vatAmountFormatted = number_format($vatAmount, 2, '.', '');
+
+        // Ensure we have valid data for QR code
+        if (empty($sellerName)) $sellerName = 'Demo Restaurant';
+        if (empty($vatNumber)) $vatNumber = '300000000000003';
+
+        try {
+            return ZatcaHelper::generateQRCode(
+                $sellerName,
+                $vatNumber,
+                $timestamp,
+                $totalWithVat,
+                $vatAmountFormatted
+            );
+        } catch (\Exception $e) {
+            // Fallback QR code if generation fails
+            return base64_encode("ZATCA:$sellerName:$vatNumber:$timestamp:$totalWithVat:$vatAmountFormatted");
+        }
+    }
 
     public function index()
     {
@@ -43,9 +85,10 @@ class OrderController extends Controller
             $totalTaxAmount = $order->total_tax_amount ?? 0;
         }
 
-        $content = view('order.print', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount', 'width', 'thermal'));
+        // Generate ZATCA QR Code
+        $zatcaQrCode = $this->generateZatcaQrCode($order, $restaurant, $totalTaxAmount);
 
-
+        $content = view('order.print', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount', 'width', 'thermal', 'zatcaQrCode'));
 
         return $content;
     }
@@ -67,8 +110,11 @@ class OrderController extends Controller
             $totalTaxAmount = $order->total_tax_amount ?? 0;
         }
 
+        // Generate ZATCA QR Code
+        $zatcaQrCode = $this->generateZatcaQrCode($order, $restaurant, $totalTaxAmount);
+
         // Generate PDF
-        $pdf = Pdf::loadView('order.print-pdf', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount'));
+        $pdf = Pdf::loadView('order.print-pdf', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount', 'zatcaQrCode'));
 
         // Set paper size to A4
         $pdf->setPaper('A4', 'portrait');
@@ -93,8 +139,11 @@ class OrderController extends Controller
             $totalTaxAmount = $order->total_tax_amount ?? 0;
         }
 
+        // Generate ZATCA QR Code
+        $zatcaQrCode = $this->generateZatcaQrCode($order, $restaurant, $totalTaxAmount);
+
         // Generate PDF
-        $pdf = Pdf::loadView('order.print-pdf', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount'));
+        $pdf = Pdf::loadView('order.print-pdf', compact('order', 'receiptSettings', 'taxDetails', 'payment', 'taxMode', 'totalTaxAmount', 'zatcaQrCode'));
 
         // Set paper size to A4
         $pdf->setPaper('A4', 'portrait');

@@ -790,15 +790,15 @@
                         <div class="flex flex-col gap-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.basePrice'):</span>
-                                <span class="font-medium">{{ currency_format($taxInclusivePriceDetails['base_raw'] ?? 0,
-                                    restaurant()->currency_id) }}</span>
+                                <span class="font-medium">{!! currency_format($taxInclusivePriceDetails['base_raw'] ?? 0,
+                                    restaurant()->currency_id) !!}</span>
                             </div>
                             @if(!empty($taxInclusivePriceDetails['tax_breakdown']))
                             <div class="ml-2 my-1">
                                 @foreach($taxInclusivePriceDetails['tax_breakdown'] as $tax)
                                 <div class="flex justify-between text-gray-500 dark:text-gray-400">
                                     <span>{{ $tax['name'] }} ({{ $tax['rate'] }}%)</span>
-                                    <span>{{ currency_format($tax['amount'], restaurant()->currency_id) }}</span>
+                                    <span>{!! currency_format($tax['amount'], restaurant()->currency_id) !!}</span>
                                 </div>
                                 @endforeach
                             </div>
@@ -806,15 +806,14 @@
                             <div class="flex justify-between">
                                 <span class="text-gray-600 dark:text-gray-400">@lang('modules.menu.tax') ({{
                                     $taxInclusivePriceDetails['tax_percent'] }}%):</span>
-                                <span class="font-medium">{{ currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0,
-                                    restaurant()->currency_id) }}</span>
+                                <span class="font-medium">{!! currency_format($taxInclusivePriceDetails['tax_raw'] ?? 0,
+                                    restaurant()->currency_id) !!}</span>
                             </div>
                             <div class="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-600 mt-2">
                                 <span
                                      class="text-gray-700 dark:text-gray-300 font-semibold">@lang('modules.menu.total'):</span>
-                                <span class="font-semibold text-lg">{{
-                                    currency_format($taxInclusivePriceDetails['total_raw'] ?? 0,
-                                    restaurant()->currency_id) }}</span>
+                                <span class="font-semibold text-lg">{!! currency_format($taxInclusivePriceDetails['total_raw'] ?? 0,
+                                    restaurant()->currency_id) !!}</span>
                             </div>
                         </div>
                         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
