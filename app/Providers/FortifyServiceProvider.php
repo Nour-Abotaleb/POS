@@ -95,7 +95,14 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (Request $request) {
 
-            \Illuminate\Support\Facades\App::setLocale(session('locale') ?? global_setting()->locale ?? 'en');
+            // Ensure the login / validation language matches the same
+            // "English by default, session override if present" behavior.
+            $locale = session('force_locale') ?? config('app.locale', 'en');
+
+            $supported = config('app.supported_locales', []);
+            $appLocale = $supported[$locale] ?? $locale;
+
+            \Illuminate\Support\Facades\App::setLocale($appLocale);
 
             $rules = [
                 'email' => 'required|email:rfc|regex:/(.+)@(.+)\.(.+)/i'

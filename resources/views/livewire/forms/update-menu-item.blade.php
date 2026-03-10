@@ -6,7 +6,7 @@
             <div class="space-y-4">
                 <div class="bg-white space-y-4 dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 me-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         @lang('modules.menu.productInformation')
@@ -412,7 +412,7 @@
                 <div
                     class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M9.5 10.5H12a1 1 0 0 0 0-2h-1V8a1 1 0 0 0-2 0v.55a2.5 2.5 0 0 0 .5 4.95h1a.5.5 0 0 1 0 1H8a1 1 0 0 0 0 2h1v.5a1 1 0 0 0 2 0v-.55a2.5 2.5 0 0 0-.5-4.95h-1a.5.5 0 0 1 0-1M21 12h-3V3a1 1 0 0 0-.5-.87 1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0A1 1 0 0 0 2 3v16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1M5 20a1 1 0 0 1-1-1V4.73l2 1.14a1.08 1.08 0 0 0 1 0l3-1.72 3 1.72a1.08 1.08 0 0 0 1 0l2-1.14V19a3 3 0 0 0 .18 1Zm15-1a1 1 0 0 1-2 0v-5h2Z"/></svg>
+                        <svg class="w-5 h-5 me-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M9.5 10.5H12a1 1 0 0 0 0-2h-1V8a1 1 0 0 0-2 0v.55a2.5 2.5 0 0 0 .5 4.95h1a.5.5 0 0 1 0 1H8a1 1 0 0 0 0 2h1v.5a1 1 0 0 0 2 0v-.55a2.5 2.5 0 0 0-.5-4.95h-1a.5.5 0 0 1 0-1M21 12h-3V3a1 1 0 0 0-.5-.87 1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0A1 1 0 0 0 2 3v16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1M5 20a1 1 0 0 1-1-1V4.73l2 1.14a1.08 1.08 0 0 0 1 0l3-1.72 3 1.72a1.08 1.08 0 0 0 1 0l2-1.14V19a3 3 0 0 0 .18 1Zm15-1a1 1 0 0 1-2 0v-5h2Z"/></svg>
                         </svg>
                         @lang('modules.menu.pricingDetails')
                     </h3>
@@ -441,7 +441,7 @@
                             <div class="cursor-pointer" @click="openVariation = openVariation === {{ $key }} ? null : {{ $key }}">
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1 flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-gray-400 transition-transform duration-200"
+                                        <svg class="w-4 h-4 me-2 text-gray-400 transition-transform duration-200"
                                              :class="openVariation === {{ $key }} ? 'rotate-90' : ''"
                                              fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -563,7 +563,7 @@
                                         <!-- Delivery Apps -->
                                         @foreach($deliveryApps as $app)
                                         <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600" wire:key="delivery-app-{{ $key }}-{{ $app->id }}">
-                                            <div class="flex items-center space-x-3">
+                                            <div class="flex items-center gap-3">
                                                 <div class="w-8 h-8">
                                                     @if($app->logo)
                                                     <img class="w-8 h-8 rounded-lg object-cover border border-gray-200"
@@ -584,7 +584,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center space-x-3">
+                                            <div class="flex items-center gap-3">
                                                 <label class="relative inline-flex items-center cursor-pointer">
                                                     <input type="checkbox"
                                                         wire:model.defer="variationPlatformAvailability.{{ $key }}.{{ $app->id }}"
@@ -636,7 +636,7 @@
                         <!-- Add Variation Button -->
                         @if ($hasVariations)
                         <x-secondary-button wire:click="addMoreField({{ $i }})" wire:key='add-variation-{{ $i }}' class="w-full">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
                             @lang('modules.menu.addVariations')
@@ -667,13 +667,13 @@
                             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-3">
                                 @foreach($orderTypes->reject(fn($type) => strtolower($type->slug ?? $type->name) === 'delivery') as $orderType)
                                 <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600" wire:key="order-type-{{ $orderType->id }}">
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <div @class(['w-3 h-3 rounded-full flex-shrink-0', $this->orderTypeColor($orderType->id)])></div>
                                         <span class="font-medium text-gray-900 dark:text-white">
                                             {{ $orderType->order_type_name }}
                                         </span>
                                     </div>
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <div class="relative">
                                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                                 <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
@@ -698,7 +698,7 @@
                             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-3">
 
                                 <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <svg class="w-6 h-6 text-gray-600 dark:text-gray-200" fill="currentColor" height="24" viewBox="0 0 64 64" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 16h14.001a3 3 0 0 1 3 3v11.001a3 3 0 0 1-3 3h-14a3 3 0 0 1-3.001-3v-11a3 3 0 0 1 3-3"/><circle cx="33.002" cy="7" r="5"/><path d="M12.003 35.852a5.92 5.92 0 0 0 1.7 4.15H29.96v-4.155a.996.996 0 0 0-.996-.996H12.998a1 1 0 0 0-.995 1.001"/><path d="M61.737 51.359a8.13 8.13 0 0 0-8.322-5.994 7 7 0 0 0 .24-1.791A5.93 5.93 0 0 0 51 38.75c-2.147-1.425-3.753-5.048-3.996-8.858h1.916a2.99 2.99 0 0 0 2.991-2.982v-1.986a2.99 2.99 0 0 0-2.991-2.982h-6.84c-5.782-1.665-7.522-3.583-8.561-4.732l-.063-.07a3.71 3.71 0 0 0-2.018-3.813 3.64 3.64 0 0 0-5.122 2.497l-2.869 13.71a2.983 2.983 0 0 0 2.598 3.571l4.917.544a.994.994 0 0 1 .887 1.043l-.774 13.106a5.27 5.27 0 0 1-1.477-5.796H14.313c-1.612 2.671-4.193 7.679-3.149 10.936a4.04 4.04 0 0 0 2.609 2.622 3.7 3.7 0 0 0 1.39.15 6.406 6.406 0 0 0 12.78 0h17.14a1.26 1.26 0 0 0 .875-.423 7 7 0 0 0 .587 1.703.996.996 0 0 0 1.716.14q.176-.25.376-.491a6.4 6.4 0 1 0 12.484-2.718.986.986 0 0 0 .875-1.075 8 8 0 0 0-.26-1.487m-40.184 8.318a4.407 4.407 0 0 1-4.385-3.967h8.77a4.407 4.407 0 0 1-4.385 3.967M40.94 48.754h-3.885l1.718-16.24a2.98 2.98 0 0 0-1.926-3.104l-4.9-1.829a.99.99 0 0 1-.622-1.149l.745-3.215a17.1 17.1 0 0 0 8.87 3.633zm14.586 11.218a4.413 4.413 0 0 1-4.961-4.86l.304-.38a11.08 11.08 0 0 1 7.676-1.51l.236.183a4.4 4.4 0 0 1-3.255 6.567"/></svg>
                                         <div>
                                             <span class="font-medium text-gray-900 dark:text-white">
@@ -709,7 +709,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <div class="relative">
                                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                                 <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
@@ -724,7 +724,7 @@
                                 @forelse($deliveryApps as $app)
                                 <div
                                     class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600" wire:key="delivery-apps-{{$loop->index}}">
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <!-- Logo -->
                                         <div class="flex-shrink-0 w-8 h-8">
                                         @if($app->logo)
@@ -753,7 +753,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <!-- Availability Toggle -->
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox"

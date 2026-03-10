@@ -87,7 +87,7 @@
         <div class="space-y-3">
             @foreach($topRestaurants as $restaurant)
                 <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                             <span class="text-blue-600 dark:text-blue-400 font-semibold text-sm">
                                 {{ $loop->iteration }}

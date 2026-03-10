@@ -30,7 +30,7 @@
                         </g>
                     </svg>
                 @endif
-                <span>{{ Str::title($orderDetail->orderType?->order_type_name ?? $orderDetail->custom_order_type_name ?? $orderDetail->order_type) }}</span>
+                <span>{{ $orderDetail->orderType?->translated_name ?? Str::title($orderDetail->custom_order_type_name ?? $orderDetail->order_type) }}</span>
             </div>
         </div>
 

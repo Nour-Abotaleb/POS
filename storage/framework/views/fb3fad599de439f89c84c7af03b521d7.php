@@ -125,7 +125,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'showEditCurrency('.e($item->id).')','wire:key' => 'editmenu-item-button-'.e($item->id).'']); ?>
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
+                                        <svg class="w-4 h-4 me-1" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z">

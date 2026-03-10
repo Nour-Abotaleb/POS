@@ -31,7 +31,7 @@
 
                     @if(user_can('Create Menu Item') && ($menuItemStats['unlimited'] || $menuItemStats['current_count'] < $menuItemStats['menu_items_limit']))
                         <x-secondary-link href="{{ route('menu-items.bulk-import') }}" wire:navigate>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload mr-1" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload me-1" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                             </svg>
@@ -98,7 +98,7 @@
                                             alt="{{ $item->item_name }}">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400 w-40 lg:w-auto">
                                             <div class="text-sm lg:text-base font-semibold text-gray-900 dark:text-white inline-flex items-center">
-                                                <img src="{{ asset('img/'.$item->type.'.svg')}}" class="h-4 mr-2" title="@lang('modules.menu.' . $item->type)" alt="" />
+                                                <img src="{{ asset('img/'.$item->type.'.svg')}}" class="h-4 me-2" title="@lang('modules.menu.' . $item->type)" alt="" />
                                                 {{ $item->item_name }}
 
                                                 @if (!$item->is_available)
@@ -128,14 +128,14 @@
                                     <td class="py-2.5 px-4 space-x-2 whitespace-nowrap text-right rtl:space-x-reverse">
                                         @if ($item->variations_count > 0)
                                             <x-secondary-button-table wire:click='showItemVariations({{ $item->id }})'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 mr-1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 me-1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>
                                                 @lang('modules.menu.showVariations')
                                             </x-secondary-button-table>
                                         @endif
 
                                         @if(user_can('Update Menu Item'))
                                             <x-secondary-link href="{{ route('menu-items.edit', $item->id) }}" wire:navigate >
-                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
+                                                <svg class="w-4 h-4 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 0 0-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 0 0 0-2.828"/><path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h4a1 1 0 0 1 0 2H4v10h10v-4a1 1 0 1 1 2 0v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" clip-rule="evenodd"/></svg>
                                                 @lang('app.update')
                                             </x-secondary-link>
                                         @endif

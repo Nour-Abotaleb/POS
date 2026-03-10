@@ -46,7 +46,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.allowCustomerOrdersDescription')</p>
                             </div>
                             <x-checkbox name="allowCustomerOrders" id="allowCustomerOrders"
-                                wire:model.live='allowCustomerOrders' class="ml-4" />
+                                wire:model.live='allowCustomerOrders' class="ms-4" />
                         </div>
 
                         <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -55,7 +55,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.customerLoginRequiredDescription')</p>
                             </div>
                             <x-checkbox name="customerLoginRequired" id="customerLoginRequired"
-                                wire:model='customerLoginRequired' class="ml-4" />
+                                wire:model='customerLoginRequired' class="ms-4" />
                         </div>
 
                         <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -64,7 +64,7 @@
                                     <x-label for="restrictQrOrderByLocation" :value="__('modules.settings.allowQrOrderWithinRadius')" class="!mb-1" />
                                     <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.allowQrOrderWithinRadiusDescription')</p>
                                 </div>
-                                <x-checkbox name="restrictQrOrderByLocation" id="restrictQrOrderByLocation" wire:model.live='restrictQrOrderByLocation' class="ml-4" />
+                                <x-checkbox name="restrictQrOrderByLocation" id="restrictQrOrderByLocation" wire:model.live='restrictQrOrderByLocation' class="ms-4" />
                             </div>
 
                             @if ($restrictQrOrderByLocation)
@@ -99,7 +99,7 @@
                                 <x-label for="enableTipShop" :value="__('modules.settings.enableTipShop')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.enableTipShopDescription')</p>
                             </div>
-                            <x-checkbox name="enableTipShop" id="enableTipShop" wire:model='enableTipShop' class="ml-4" />
+                            <x-checkbox name="enableTipShop" id="enableTipShop" wire:model='enableTipShop' class="ms-4" />
                         </div>
 
                         <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -107,7 +107,7 @@
                                 <x-label for="enableTipPos" :value="__('modules.settings.enableTipPos')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.enableTipPosDescription')</p>
                             </div>
-                            <x-checkbox name="enableTipPos" id="enableTipPos" wire:model='enableTipPos' class="ml-4" />
+                            <x-checkbox name="enableTipPos" id="enableTipPos" wire:model='enableTipPos' class="ms-4" />
                         </div>
 
                         <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -115,7 +115,7 @@
                                 <x-label for="autoConfirmOrders" :value="__('modules.settings.autoConfirmOrders')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.autoConfirmOrdersDescription')</p>
                             </div>
-                            <x-checkbox name="autoConfirmOrders" id="autoConfirmOrders" wire:model='autoConfirmOrders' class="ml-4" />
+                            <x-checkbox name="autoConfirmOrders" id="autoConfirmOrders" wire:model='autoConfirmOrders' class="ms-4" />
                         </div>
 
                         <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -123,7 +123,7 @@
                                 <x-label for="showVeg" :value="__('modules.settings.showVeg')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.showVegDescription')</p>
                             </div>
-                            <x-checkbox name="showVeg" id="showVeg" wire:model='showVeg' class="ml-4" />
+                            <x-checkbox name="showVeg" id="showVeg" wire:model='showVeg' class="ms-4" />
                         </div>
 
                         <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -131,7 +131,7 @@
                                 <x-label for="showHalal" :value="__('modules.settings.showHalal')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.showHalalDescription')</p>
                             </div>
-                            <x-checkbox name="showHalal" id="showHalal" wire:model='showHalal' class="ml-4" />
+                            <x-checkbox name="showHalal" id="showHalal" wire:model='showHalal' class="ms-4" />
                         </div>
 
                     </div>
@@ -149,7 +149,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.isWaiterRequestEnabledDescription')</p>
                             </div>
                             <x-checkbox name="isWaiterRequestEnabled" id="isWaiterRequestEnabled"
-                                wire:model.live='isWaiterRequestEnabled' class="ml-4" />
+                                wire:model.live='isWaiterRequestEnabled' class="ms-4" />
                         </div>
 
                         @if ($isWaiterRequestEnabled)
@@ -159,7 +159,7 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.onDesktopDescription')</p>
                                 </div>
                                 <x-checkbox name="isWaiterRequestEnabledOnDesktop" id="isWaiterRequestEnabledOnDesktop"
-                                    wire:model.live='isWaiterRequestEnabledOnDesktop' class="ml-4" />
+                                    wire:model.live='isWaiterRequestEnabledOnDesktop' class="ms-4" />
                             </div>
 
                             <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -168,7 +168,7 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.onMobileDescription')</p>
                                 </div>
                                 <x-checkbox name="isWaiterRequestEnabledOnMobile" id="isWaiterRequestEnabledOnMobile"
-                                    wire:model='isWaiterRequestEnabledOnMobile' class="ml-4" />
+                                    wire:model='isWaiterRequestEnabledOnMobile' class="ms-4" />
                             </div>
 
                             <div class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -177,7 +177,7 @@
                                     <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.openViaQrCodeDescription')</p>
                                 </div>
                                 <x-checkbox name="isWaiterRequestEnabledOpenByQr" id="isWaiterRequestEnabledOpenByQr"
-                                    wire:model='isWaiterRequestEnabledOpenByQr' class="ml-4" />
+                                    wire:model='isWaiterRequestEnabledOpenByQr' class="ms-4" />
                             </div>
                         @endif
 
@@ -195,7 +195,7 @@
                                 <x-label for="tableRequired" :value="__('modules.settings.tableRequiredDineIn')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.tableRequiredDineInDescription')</p>
                             </div>
-                            <x-checkbox name="tableRequired" id="tableRequired" wire:model='tableRequired' class="ml-4" />
+                            <x-checkbox name="tableRequired" id="tableRequired" wire:model='tableRequired' class="ms-4" />
                         </div>
 
                         <div class="sm:col-span-2 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -227,7 +227,7 @@
                                 <x-label for="pwaAlertShow" :value="__('modules.settings.enbalePwaApp')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.enablePwadescription')</p>
                             </div>
-                            <x-checkbox name="pwaAlertShow" id="pwaAlertShow" wire:model='pwaAlertShow' class="ml-4" />
+                            <x-checkbox name="pwaAlertShow" id="pwaAlertShow" wire:model='pwaAlertShow' class="ms-4" />
                         </div>
                     </div>
 
@@ -320,7 +320,7 @@
                                 <x-label for="showWifiIcon" :value="__('modules.settings.showWifiIcon')" class="!mb-1" />
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.showWifiIconDescription')</p>
                             </div>
-                            <x-checkbox name="showWifiIcon" id="showWifiIcon" wire:model='showWifiIcon' class="ml-4" />
+                            <x-checkbox name="showWifiIcon" id="showWifiIcon" wire:model='showWifiIcon' class="ms-4" />
                         </div>
 
                         <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
@@ -369,7 +369,7 @@
                                 <p class="text-sm text-gray-500 dark:text-gray-400">@lang('modules.settings.disableHeaderSectionDescription')</p>
                             </div>
                             <x-checkbox name="isHeaderDisabled" id="isHeaderDisabled"
-                                wire:model='isHeaderDisabled' class="ml-4" />
+                                wire:model='isHeaderDisabled' class="ms-4" />
                         </div>
 
                         <!-- Header Type Selection -->
@@ -430,7 +430,7 @@
                                 <!-- New Images Preview -->
                                 @if($newImages && count($newImages) > 0)
                                     <div class="mt-4">
-                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white mb-2">New images preview</h5>
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white mb-2">@lang('modules.settings.newImagesPreview')</h5>
                                         <div class="flex flex-wrap gap-4">
                                             @foreach($newImages as $index => $image)
                                                 <div class="relative">

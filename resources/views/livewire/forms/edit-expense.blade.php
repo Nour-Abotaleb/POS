@@ -182,7 +182,7 @@
 
             <div class="mt-1">
             <input type="file" wire:model="expense_receipt" id="expense_receipt"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md
+            class="block w-full text-sm text-gray-500 file:me-4 file:py-2 file:px-4 file:rounded-md
             file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700
             hover:file:bg-primary-100 dark:file:bg-gray-700 dark:file:text-gray-200"
             x-ref="fileInput"

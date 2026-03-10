@@ -340,7 +340,7 @@
                 <!-- Pricing Configuration -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M9.5 10.5H12a1 1 0 0 0 0-2h-1V8a1 1 0 0 0-2 0v.55a2.5 2.5 0 0 0 .5 4.95h1a.5.5 0 0 1 0 1H8a1 1 0 0 0 0 2h1v.5a1 1 0 0 0 2 0v-.55a2.5 2.5 0 0 0-.5-4.95h-1a.5.5 0 0 1 0-1M21 12h-3V3a1 1 0 0 0-.5-.87 1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0A1 1 0 0 0 2 3v16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1M5 20a1 1 0 0 1-1-1V4.73l2 1.14a1.08 1.08 0 0 0 1 0l3-1.72 3 1.72a1.08 1.08 0 0 0 1 0l2-1.14V19a3 3 0 0 0 .18 1Zm15-1a1 1 0 0 1-2 0v-5h2Z"/></svg>
+                        <svg class="w-5 h-5 me-2 text-yellow-500" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M9.5 10.5H12a1 1 0 0 0 0-2h-1V8a1 1 0 0 0-2 0v.55a2.5 2.5 0 0 0 .5 4.95h1a.5.5 0 0 1 0 1H8a1 1 0 0 0 0 2h1v.5a1 1 0 0 0 2 0v-.55a2.5 2.5 0 0 0-.5-4.95h-1a.5.5 0 0 1 0-1M21 12h-3V3a1 1 0 0 0-.5-.87 1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0A1 1 0 0 0 2 3v16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1M5 20a1 1 0 0 1-1-1V4.73l2 1.14a1.08 1.08 0 0 0 1 0l3-1.72 3 1.72a1.08 1.08 0 0 0 1 0l2-1.14V19a3 3 0 0 0 .18 1Zm15-1a1 1 0 0 1-2 0v-5h2Z"/></svg>
                         @lang('modules.modifier.modifierOptions')
                     </h3>
                     <!-- Modifier Options Section -->
@@ -355,7 +355,7 @@
                                 <div class="cursor-pointer" @click="openOption = openOption === {{ $index }} ? null : {{ $index }}">
                                     <div class="flex items-center justify-between">
                                         <div class="flex-1 flex items-center">
-                                            <svg class="w-4 h-4 mr-2 text-gray-400 transition-transform duration-200"
+                                            <svg class="w-4 h-4 me-2 text-gray-400 transition-transform duration-200"
                                                 :class="openOption === {{ $index }} ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                             </svg>
@@ -487,7 +487,7 @@
                         <!-- Delivery Apps -->
                         @foreach($deliveryApps as $app)
                         <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-3">
                                 <div class="w-8 h-8">
                                     @if($app->logo)
                                     <img class="w-8 h-8 rounded-lg object-cover border border-gray-200"
@@ -508,7 +508,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-center gap-3">
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox"
                                         wire:model.live="optionPlatformAvailability.{{ $index }}.{{ $app->id }}"

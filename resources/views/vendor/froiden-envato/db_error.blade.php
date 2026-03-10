@@ -10,7 +10,7 @@
                     <div class="flex-shrink-0">
                         <i class="fas fa-database text-white text-3xl"></i>
                     </div>
-                    <div class="ml-4">
+                    <div class="ms-4">
                         <h2 class="text-xl font-bold text-white">Database Connection Failed</h2>
                     </div>
                 </div>

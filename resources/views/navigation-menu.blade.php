@@ -66,13 +66,13 @@
               try { if (window.Livewire && typeof window.Livewire.dispatch === 'function') window.Livewire.dispatch('showAddCustomerModal'); } catch (e) {}
             "
             class="inline-flex items-center px-1 py-2 gap-1 text-xs ltr:mr-2 rtl:ml-2"
-            title="Add Customer Details"
+            title="@lang('app.addCustomerDetails')"
           >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M11 16.5V5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-            <span class="hidden lg:block">Customer</span>
+            <span class="hidden lg:block">@lang('app.customer')</span>
           </x-primary-link>
 
           <div class="hidden lg:flex items-center gap-2 ltr:mr-2 rtl:ml-2">
@@ -126,11 +126,6 @@
         </button>
 
 
-        @if (languages()->count() > 1)
-         @livewire('settings.languageSwitcher')
-        @endif
-
-
         @livewire('restaurant.stop-impersonate-restaurant')
 
         @if (restaurant()->package->package_type == \App\Enums\PackageType::DEFAULT)
@@ -160,7 +155,7 @@
 
         <div id="fullscreen-tooltip-toggle" role="tooltip"
           class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          View in Fullscreen
+          @lang('app.viewInFullscreen')
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
 
@@ -185,6 +180,7 @@
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
 
+        @livewire('settings.languageSwitcher')
 
         <!-- Profile -->
         <div class="flex items-center w-8">

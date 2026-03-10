@@ -4,7 +4,7 @@
         <ol class="flex items-center space-x-2 text-sm font-medium">
             <li>
                 <a href="{{ route('dashboard') }}" class="flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                     </svg>
                     @lang('menu.dashboard')
@@ -56,7 +56,7 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div class="ml-4">
+                                                <div class="ms-4">
                                                     <p class="text-base font-semibold {{ !$isFree ? 'text-skin-base dark:text-blue-300' : 'text-gray-900 dark:text-gray-100' }}">@lang('modules.package.paidPlan')</p>
                                                     <p class="text-sm {{ !$isFree ? 'text-skin-base dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Full access to all features</p>
                                                 </div>
@@ -85,7 +85,7 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div class="ml-4">
+                                                <div class="ms-4">
                                                     <p class="text-base font-semibold {{ $isFree ? 'text-skin-base dark:text-blue-300' : 'text-gray-900 dark:text-gray-100' }}">@lang('modules.package.freePlan')</p>
                                                     <p class="text-sm {{ $isFree ? 'text-skin-base dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Limited access to basic features</p>
                                                 </div>

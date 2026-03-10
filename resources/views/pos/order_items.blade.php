@@ -531,7 +531,7 @@
                     </button>
 
                     <a href="{{ route('pos.kot', ['id' => $orderDetail->id]) }}"
-                        class="w-full p-2 text-center bg-white border rounded text-skin-base border-skin-base">
+                        class="w-full p-2 text-center bg-white border rounded text-nowrap text-skin-base border-skin-base">
                         @lang('modules.order.newKot')
                     </a>
 

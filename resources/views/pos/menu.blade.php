@@ -21,7 +21,7 @@
         <button
             @click="toggleMenu()"
             style="background-color: #011646; border-color: #011646;"
-            class="fixed bottom-6 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
+            class="fixed bottom-10 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
             aria-label="Toggle Menu"
             type="button"
         >
@@ -123,37 +123,48 @@
 
                             @if($this->menuItemsLoaded > 0)
                             <template x-if="filterView === 'grid'">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Category:</span>
-                                    <button type="button"
-                                        wire:click="$set('menuId', null)"
-                                        style="{{ $menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
-                                        @class([
-                                            'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                            'text-white shadow-sm' => $menuId === null,
-                                            'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
-                                        ])>
-                                        <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
-                                        </div>
-                                    </button>
-                                    @foreach ($menuList as $menu)
-                                        @php
-                                            $isActiveMenu = (string) $menuId === (string) $menu->id;
-                                        @endphp
+                                <div class="overflow-x-auto overflow-y-hidden pb-3 -mx-0.5
+                                    [&::-webkit-scrollbar]:h-1.5
+                                    [&::-webkit-scrollbar-track]:rounded
+                                    [&::-webkit-scrollbar-track]:bg-gray-200
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+                                    <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                                        <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;">@lang('app.posCategory'):</span>
                                         <button type="button"
-                                            wire:click="$set('menuId', {{ $menu->id }})"
-                                            style="{{ $isActiveMenu ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                            wire:click="$set('menuId', null)"
+                                            style="{{ $menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
                                             @class([
-                                                'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                                'text-white shadow-sm' => $isActiveMenu,
-                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveMenu,
+                                                'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                'text-white shadow-sm' => $menuId === null,
+                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
                                             ])>
                                             <div class="flex items-center justify-between gap-2">
-                                                <span class="font-medium">{{ $menu->getTranslation('menu_name', session('locale', app()->getLocale())) }}</span>
+                                                <span class="font-medium">@lang('app.showAll')</span>
                                             </div>
                                         </button>
-                                    @endforeach
+                                        @foreach ($menuList as $menu)
+                                            @php
+                                                $isActiveMenu = (string) $menuId === (string) $menu->id;
+                                            @endphp
+                                            <button type="button"
+                                                wire:click="$set('menuId', {{ $menu->id }})"
+                                                style="{{ $isActiveMenu ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                @class([
+                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'text-white shadow-sm' => $isActiveMenu,
+                                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveMenu,
+                                                ])>
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <span class="font-medium">{{ $menu->getTranslation('menu_name', session('locale', app()->getLocale())) }}</span>
+                                                </div>
+                                            </button>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </template>
                             @endif
@@ -180,38 +191,49 @@
                             </template>
 
                             <template x-if="filterView === 'grid'">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;">Products:</span>
-                                    <button type="button"
-                                        wire:click="$set('filterCategories', null)"
-                                        style="{{ $filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
-                                        @class([
-                                            'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                            'text-white shadow-sm' => $filterCategories === null,
-                                            'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
-                                        ])>
-                                        <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium">Show All</span>
-                                        </div>
-                                    </button>
-                                    @foreach ($this->categoryList as $category)
-                                        @php
-                                            $isActiveCategory = (string) $filterCategories === (string) $category->id;
-                                        @endphp
+                                <div class="overflow-x-auto overflow-y-hidden pb-3 -mx-0.5
+                                    [&::-webkit-scrollbar]:h-1.5
+                                    [&::-webkit-scrollbar-track]:rounded
+                                    [&::-webkit-scrollbar-track]:bg-gray-200
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+                                    <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                                        <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;">@lang('app.posProducts'):</span>
                                         <button type="button"
-                                            wire:click="$set('filterCategories', {{ $category->id }})"
-                                            style="{{ $isActiveCategory ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                            wire:click="$set('filterCategories', null)"
+                                            style="{{ $filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
                                             @class([
-                                                'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                                'text-white shadow-sm' => $isActiveCategory,
-                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveCategory,
+                                                'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                'text-white shadow-sm' => $filterCategories === null,
+                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
                                             ])>
                                             <div class="flex items-center justify-between gap-2">
-                                                <span class="font-medium">{{ $category->category_name }}</span>
-                                                <span class="text-[11px] text-gray-500 dark:text-gray-300">({{ $category->items_count }})</span>
+                                                <span class="font-medium">@lang('app.showAll')</span>
                                             </div>
                                         </button>
-                                    @endforeach
+                                        @foreach ($this->categoryList as $category)
+                                            @php
+                                                $isActiveCategory = (string) $filterCategories === (string) $category->id;
+                                            @endphp
+                                            <button type="button"
+                                                wire:click="$set('filterCategories', {{ $category->id }})"
+                                                style="{{ $isActiveCategory ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                @class([
+                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'text-white shadow-sm' => $isActiveCategory,
+                                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveCategory,
+                                                ])>
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <span class="font-medium">{{ $category->category_name }}</span>
+                                                    <span class="text-[11px] text-gray-500 dark:text-gray-300">({{ $category->items_count }})</span>
+                                                </div>
+                                            </button>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </template>
                             </div>
@@ -222,14 +244,7 @@
             {{-- Menu Items Grid: wire:init loads first batch after page load to keep initial response small --}}
             <div
                 wire:init="loadInitialMenuItems"
-                class="mt-4 overflow-y-auto ]
-                    [&::-webkit-scrollbar]:w-2
-                    [&::-webkit-scrollbar-track]:bg-gray-300
-                    [&::-webkit-scrollbar-thumb]:bg-gray-400
-                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
-                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
-                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
-                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400"
+                class="mt-4 overflow-y-auto pb-8"
                 x-data="{
                     loadedCount: @entangle('menuItemsLoaded'),
                     totalCount: {{ $this->totalMenuItemsCount }},
@@ -252,7 +267,16 @@
                     }
                 }"
                 >
-                <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[calc(100vh-12rem)] overflow-y-auto"
+                <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[calc(100vh-12rem)] overflow-y-auto pb-8
+                    [&::-webkit-scrollbar]:w-2
+                    [&::-webkit-scrollbar-track]:rounded
+                    [&::-webkit-scrollbar-track]:bg-gray-200
+                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                    [&::-webkit-scrollbar-thumb]:rounded-full
+                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400"
                     @scroll.throttle.100ms="scrollHandler($event.target)">
                     @forelse ($this->menuItems as $item)
                         <li class="group relative flex items-center justify-center">

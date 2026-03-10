@@ -3,7 +3,7 @@
     wire:loading.attr="disabled" wire:target="<?php echo e($target ?? 'submitForm'); ?>">
 
     <svg aria-hidden="true" wire:target="<?php echo e($target ?? 'submitForm'); ?>" wire:loading.class.remove="hidden"
-        class="inline w-4 h-4 mr-2 text-gray-300 animate-spin hidden"
+        class="inline w-4 h-4 me-2 text-gray-300 animate-spin hidden"
         style="fill: #011646"
         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

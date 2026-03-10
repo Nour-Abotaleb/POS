@@ -7,7 +7,7 @@
             @endif
             <div class="text-sm font-normal text-gray-500 dark:text-gray-400 space-y-1">
                 <div class="text-base font-semibold text-gray-900 dark:text-white inline-flex items-center">
-                    <img src="{{ asset('img/'.$selectedModifierItem->type.'.svg') }}" class="h-4 mr-2"
+                    <img src="{{ asset('img/'.$selectedModifierItem->type.'.svg') }}" class="h-4 me-2"
                         title="@lang('modules.menu.' . $selectedModifierItem->type)" alt="" />
                     {{ $selectedModifierItem->item_name }}
                     @if ($selectedVariationName) <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ms-1">({{ $selectedVariationName }})</span> @endif

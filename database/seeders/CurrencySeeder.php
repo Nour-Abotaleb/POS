@@ -64,11 +64,23 @@ class CurrencySeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'currency_name' => 'Saudi Riyal',
+                'currency_symbol' => 'ر.س',
+                'currency_code' => 'SAR',
+                'restaurant_id' => $restaurant->id,
+                'currency_position' => 'left',
+                'no_of_decimal' => 2,
+                'thousand_separator' => ',',
+                'decimal_separator' => '.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         Currency::insert($currencies);
 
-        // Set the restaurant's currency_id to the USD currency
+        // Set the restaurant's currency_id to the USD currency (change to SAR id for Riyal default)
         $usdCurrency = Currency::where('restaurant_id', $restaurant->id)
             ->where('currency_code', 'USD')
             ->first();

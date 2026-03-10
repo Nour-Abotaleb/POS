@@ -16,6 +16,11 @@
                 @class(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'app'), 'active' => ($activeSetting == 'app')])>@lang('modules.settings.appSettings')</a>
             </li>
             <li class="me-2">
+                <a href="{{ route('settings.index').'?tab=language' }}" wire:navigate
+                style="{{ $activeSetting == 'language' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                @class(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'language'), 'active' => ($activeSetting == 'language')])>@lang('modules.settings.languageSettings')</a>
+            </li>
+            <li class="me-2">
                 <a href="{{ route('settings.index').'?tab=branch' }}" wire:navigate
                 style="{{ $activeSetting == 'branch' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
                 @class(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'branch'), 'active' => ($activeSetting == 'branch')])>@lang('modules.settings.branchSettings')</a>
@@ -129,6 +134,10 @@
 
                 @case('app')
                 @livewire('settings.timezoneSettings', ['settings' => $settings])
+                @break
+
+                @case('language')
+                @livewire('settings.languageSettings')
                 @break
 
                 @case('email')

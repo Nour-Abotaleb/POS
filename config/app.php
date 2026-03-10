@@ -86,6 +86,11 @@ return [
 
     'fallback_locale' => 'eng',
 
+    /*
+    | Supported locales for i18n (AR / En). User locale 'en' maps to lang folder 'eng'.
+    */
+    'supported_locales' => ['en' => 'eng', 'ar' => 'ar'],
+
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*
