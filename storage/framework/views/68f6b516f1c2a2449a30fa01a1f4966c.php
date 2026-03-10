@@ -21,7 +21,7 @@
         <button
             @click="toggleMenu()"
             style="background-color: #011646; border-color: #011646;"
-            class="fixed bottom-6 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
+            class="fixed bottom-10 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
             aria-label="Toggle Menu"
             type="button"
         >
@@ -64,37 +64,48 @@
 
                             <!--[if BLOCK]><![endif]--><?php if($this->menuItemsLoaded > 0): ?>
                             <template x-if="filterView === 'grid'">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posCategory'); ?>:</span>
-                                    <button type="button"
-                                        wire:click="$set('menuId', null)"
-                                        style="<?php echo e($menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
-                                        class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                            'text-white shadow-sm' => $menuId === null,
-                                            'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
-                                        ]); ?>">
-                                        <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
-                                        </div>
-                                    </button>
-                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $menuList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <?php
-                                            $isActiveMenu = (string) $menuId === (string) $menu->id;
-                                        ?>
+                                <div class="overflow-x-auto overflow-y-hidden pb-3 -mx-0.5
+                                    [&::-webkit-scrollbar]:h-1.5
+                                    [&::-webkit-scrollbar-track]:rounded
+                                    [&::-webkit-scrollbar-track]:bg-gray-200
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+                                    <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                                        <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posCategory'); ?>:</span>
                                         <button type="button"
-                                            wire:click="$set('menuId', <?php echo e($menu->id); ?>)"
-                                            style="<?php echo e($isActiveMenu ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
+                                            wire:click="$set('menuId', null)"
+                                            style="<?php echo e($menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
                                             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                                'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                                'text-white shadow-sm' => $isActiveMenu,
-                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveMenu,
+                                                'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                'text-white shadow-sm' => $menuId === null,
+                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
                                             ]); ?>">
                                             <div class="flex items-center justify-between gap-2">
-                                                <span class="font-medium"><?php echo e($menu->getTranslation('menu_name', session('locale', app()->getLocale()))); ?></span>
+                                                <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
                                             </div>
                                         </button>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $menuList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php
+                                                $isActiveMenu = (string) $menuId === (string) $menu->id;
+                                            ?>
+                                            <button type="button"
+                                                wire:click="$set('menuId', <?php echo e($menu->id); ?>)"
+                                                style="<?php echo e($isActiveMenu ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
+                                                class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'text-white shadow-sm' => $isActiveMenu,
+                                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveMenu,
+                                                ]); ?>">
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <span class="font-medium"><?php echo e($menu->getTranslation('menu_name', session('locale', app()->getLocale()))); ?></span>
+                                                </div>
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
                                 </div>
                             </template>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
@@ -121,38 +132,49 @@
                             </template>
 
                             <template x-if="filterView === 'grid'">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posProducts'); ?>:</span>
-                                    <button type="button"
-                                        wire:click="$set('filterCategories', null)"
-                                        style="<?php echo e($filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
-                                        class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                            'text-white shadow-sm' => $filterCategories === null,
-                                            'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
-                                        ]); ?>">
-                                        <div class="flex items-center justify-between gap-2">
-                                            <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
-                                        </div>
-                                    </button>
-                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <?php
-                                            $isActiveCategory = (string) $filterCategories === (string) $category->id;
-                                        ?>
+                                <div class="overflow-x-auto overflow-y-hidden pb-3 -mx-0.5
+                                    [&::-webkit-scrollbar]:h-1.5
+                                    [&::-webkit-scrollbar-track]:rounded
+                                    [&::-webkit-scrollbar-track]:bg-gray-200
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+                                    <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                                        <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;"><?php echo app('translator')->get('app.posProducts'); ?>:</span>
                                         <button type="button"
-                                            wire:click="$set('filterCategories', <?php echo e($category->id); ?>)"
-                                            style="<?php echo e($isActiveCategory ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
+                                            wire:click="$set('filterCategories', null)"
+                                            style="<?php echo e($filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
                                             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                                'px-3 py-3 text-xs rounded-lg border transition text-left',
-                                                'text-white shadow-sm' => $isActiveCategory,
-                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveCategory,
+                                                'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                'text-white shadow-sm' => $filterCategories === null,
+                                                'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
                                             ]); ?>">
                                             <div class="flex items-center justify-between gap-2">
-                                                <span class="font-medium"><?php echo e($category->category_name); ?></span>
-                                                <span class="text-[11px] text-gray-500 dark:text-gray-300">(<?php echo e($category->items_count); ?>)</span>
+                                                <span class="font-medium"><?php echo app('translator')->get('app.showAll'); ?></span>
                                             </div>
                                         </button>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php
+                                                $isActiveCategory = (string) $filterCategories === (string) $category->id;
+                                            ?>
+                                            <button type="button"
+                                                wire:click="$set('filterCategories', <?php echo e($category->id); ?>)"
+                                                style="<?php echo e($isActiveCategory ? 'background-color: #011646; border-color: #011646; color: white;' : ''); ?>"
+                                                class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'text-white shadow-sm' => $isActiveCategory,
+                                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveCategory,
+                                                ]); ?>">
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <span class="font-medium"><?php echo e($category->category_name); ?></span>
+                                                    <span class="text-[11px] text-gray-500 dark:text-gray-300">(<?php echo e($category->items_count); ?>)</span>
+                                                </div>
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                    </div>
                                 </div>
                             </template>
                             </div>
@@ -163,14 +185,7 @@
             
             <div
                 wire:init="loadInitialMenuItems"
-                class="mt-4 overflow-y-auto ]
-                    [&::-webkit-scrollbar]:w-2
-                    [&::-webkit-scrollbar-track]:bg-gray-300
-                    [&::-webkit-scrollbar-thumb]:bg-gray-400
-                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
-                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
-                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
-                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400"
+                class="mt-4 overflow-y-auto pb-8"
                 x-data="{
                     loadedCount: <?php if ((object) ('menuItemsLoaded') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'->value()); ?>')<?php echo e('menuItemsLoaded'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'); ?>')<?php endif; ?>,
                     totalCount: <?php echo e($this->totalMenuItemsCount); ?>,
@@ -193,7 +208,16 @@
                     }
                 }"
                 >
-                <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[calc(100vh-12rem)] overflow-y-auto"
+                <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[calc(100vh-12rem)] overflow-y-auto pb-8
+                    [&::-webkit-scrollbar]:w-2
+                    [&::-webkit-scrollbar-track]:rounded
+                    [&::-webkit-scrollbar-track]:bg-gray-200
+                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                    [&::-webkit-scrollbar-thumb]:rounded-full
+                    [&::-webkit-scrollbar-thumb]:bg-gray-400
+                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                    hover:[&::-webkit-scrollbar-thumb]:bg-gray-500
+                    dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-400"
                     @scroll.throttle.100ms="scrollHandler($event.target)">
                     <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $this->menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <li class="group relative flex items-center justify-center">

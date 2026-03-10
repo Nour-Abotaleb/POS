@@ -21,7 +21,7 @@
         <button
             @click="toggleMenu()"
             style="background-color: #011646; border-color: #011646;"
-            class="fixed bottom-6 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
+            class="fixed bottom-10 right-6 z-50 md:hidden text-white rounded-full shadow-lg p-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 transition"
             aria-label="Toggle Menu"
             type="button"
         >

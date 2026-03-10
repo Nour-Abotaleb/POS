@@ -30,9 +30,18 @@ class LanguageSwitcher extends Component
      */
     public function toggleLanguage()
     {
-        $current = auth()->user()->locale ?? 'en';
+        $current = $this->getEffectiveLocale();
         $other = collect(static::$headerLocales)->first(fn ($code) => $code !== $current) ?? 'ar';
         $this->applyLanguage($other);
+    }
+
+    /**
+     * Effective locale: session override (from switcher), else app default (en).
+     * Matches SetLocaleMiddleware so the label always reflects the active language.
+     */
+    protected function getEffectiveLocale(): string
+    {
+        return session('force_locale') ?? config('app.locale', 'en');
     }
 
     protected function applyLanguage(string $locale): void
@@ -46,6 +55,9 @@ class LanguageSwitcher extends Component
         auth()->user()->refresh();
         session()->forget('user');
         session(['user' => auth()->user()]);
+        // Remember the chosen locale in the session so middleware & helpers
+        // can treat it as the active language for this browser session.
+        session(['force_locale' => $locale]);
         session(['isRtl' => in_array($locale, static::$rtlLocales, true)]);
 
         $this->js('window.location.reload()');
@@ -53,7 +65,7 @@ class LanguageSwitcher extends Component
 
     public function getCurrentLanguageName(): string
     {
-        $locale = auth()->user()->locale ?? 'en';
+        $locale = $this->getEffectiveLocale();
 
         return static::$localeNames[$locale] ?? 'English';
     }

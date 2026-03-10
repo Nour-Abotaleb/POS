@@ -74,31 +74,28 @@
         <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2 pr-1">
             <div class="mt-2">
 
-            <div class="flex w-full items-center gap-2 justify-end">
+            <div class="flex w-full items-center gap-2">
 
                 <!--[if BLOCK]><![endif]--><?php if($orderType == 'dine_in'): ?>
-                    <div class="flex flex-wrap items-center gap-2 justify-end">
+                    <div class="flex w-full flex-wrap items-center gap-2">
                         
-                        <div class="inline-flex items-center gap-2">
-                            <!-- <svg width="16" height="16" fill="currentColor" viewBox="0 -2.89 122.88 122.88" class="shrink-0 text-gray-600 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M36.82,107.86L35.65,78.4l13.25-0.53c5.66,0.78,11.39,3.61,17.15,6.92l10.29-0.41c4.67,0.1,7.3,4.72,2.89,8 c-3.5,2.79-8.27,2.83-13.17,2.58c-3.37-0.03-3.34,4.5,0.17,4.37c1.22,0.05,2.54-0.29,3.69-0.34c6.09-0.25,11.06-1.61,13.94-6.55 l1.4-3.66l15.01-8.2c7.56-2.83,12.65,4.3,7.23,10.1c-10.77,8.51-21.2,16.27-32.62,22.09c-8.24,5.47-16.7,5.64-25.34,1.01 L36.82,107.86z M29.74,62.97h91.9c0.68,0,1.24,0.57,1.24,1.24v5.41c0,0.67-0.56,1.24-1.24,1.24h-91.9 c-0.68,0-1.24-0.56-1.24-1.24v-5.41C28.5,63.53,29.06,62.97,29.74,62.97z M79.26,11.23 c25.16,2.01,46.35,23.16,43.22,48.06l-93.57,0C25.82,34.23,47.09,13.05,72.43,11.2V7.14l-4,0c-0.7,0-1.28-0.58-1.28-1.28V1.28 c0-0.7,0.57-1.28,1.28-1.28h14.72c0.7,0,1.28,0.58,1.28,1.28v4.58c0,0.7-0.58,1.28-1.28,1.28h-3.89L79.26,11.23z M0,77.39l31.55-1.66l1.4,35.25L1.4,112.63L0,77.39z"/>
-                            </svg> -->
+                        <div class="inline-flex min-w-0 flex-1 items-center gap-2">
                             <!--[if BLOCK]><![endif]--><?php if(auth()->user()->roles->pluck('display_name')->contains('Waiter')): ?>
-                                <span class="text-xs w-36 px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600 truncate" style="border-color: #011646;" title="<?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>">
+                                <span class="text-xs min-w-0 flex-1 truncate px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600" style="border-color: #011646;" title="<?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>">
                                     <?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>
 
                                 </span>
                             <?php else: ?>
                                 <?php if (isset($component)) { $__componentOriginaled2cde6083938c436304f332ba96bb7c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginaled2cde6083938c436304f332ba96bb7c = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.select','data' => ['class' => 'text-xs w-36 border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.select','data' => ['class' => 'text-xs min-w-0 w-full border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('select'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['class' => 'text-xs w-36 border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']); ?>
+<?php $component->withAttributes(['class' => 'text-xs min-w-0 w-full border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']); ?>
                                     <option value=""><?php echo app('translator')->get('modules.order.selectWaiter'); ?></option>
                                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
@@ -117,7 +114,7 @@
                         </div>
 
                         
-                        <div class="inline-flex items-center text-xs dark:text-gray-300">
+                        <div class="inline-flex shrink-0 items-center text-xs dark:text-gray-300">
                             <div class="inline-flex items-center gap-1.5 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 focus-within:ring-1 focus-within:ring-gray-500 dark:focus-within:ring-gray-400 focus-within:border-gray-500 dark:focus-within:border-gray-400 [&_input]:h-5 [&_input]:min-h-0">
                                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0" style="color: #011646;">
                                     <path d="M6.48831 7.69958C6.41748 7.6925 6.33248 7.6925 6.25456 7.69958C4.56873 7.64291 3.22998 6.26166 3.22998 4.56166C3.22998 2.82625 4.63248 1.41666 6.37498 1.41666C8.1104 1.41666 9.51998 2.82625 9.51998 4.56166C9.5129 6.26166 8.17415 7.64291 6.48831 7.69958Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -151,14 +148,14 @@
                         
                         <?php if (isset($component)) { $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['class' => 'relative text-xs p-2','wire:click' => '$toggle(\'showKotNote\')','title' => __('modules.order.addNote'),'dataTooltipTarget' => 'tooltip-note']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['class' => 'relative shrink-0 text-xs p-2','wire:click' => '$toggle(\'showKotNote\')','title' => __('modules.order.addNote'),'dataTooltipTarget' => 'tooltip-note']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('secondary-button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['class' => 'relative text-xs p-2','wire:click' => '$toggle(\'showKotNote\')','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.addNote')),'data-tooltip-target' => 'tooltip-note']); ?>
+<?php $component->withAttributes(['class' => 'relative shrink-0 text-xs p-2','wire:click' => '$toggle(\'showKotNote\')','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.addNote')),'data-tooltip-target' => 'tooltip-note']); ?>
                             <!--[if BLOCK]><![endif]--><?php if($this->orderNote): ?>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1" style="color: #011646;" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8" />
@@ -187,14 +184,14 @@
                         
                         <?php if (isset($component)) { $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['wire:click' => 'openMergeTableModal','class' => 'p-2','title' => __('modules.order.mergeTables')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['wire:click' => 'openMergeTableModal','class' => 'shrink-0 p-2','title' => __('modules.order.mergeTables')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('secondary-button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:click' => 'openMergeTableModal','class' => 'p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.mergeTables'))]); ?>
+<?php $component->withAttributes(['wire:click' => 'openMergeTableModal','class' => 'shrink-0 p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.mergeTables'))]); ?>
                             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
                                 <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -215,14 +212,14 @@
                         
                         <?php if (isset($component)) { $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['wire:click' => 'openTableChangeConfirmation','class' => 'p-2','title' => __('modules.order.setTable')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['wire:click' => 'openTableChangeConfirmation','class' => 'shrink-0 p-2','title' => __('modules.order.setTable')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('secondary-button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:click' => 'openTableChangeConfirmation','class' => 'p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.setTable'))]); ?>
+<?php $component->withAttributes(['wire:click' => 'openTableChangeConfirmation','class' => 'shrink-0 p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.setTable'))]); ?>
                             <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
                                 <g clip-path="url(#clip0_kot_row_table)">
                                     <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>

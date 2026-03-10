@@ -186,11 +186,13 @@ if (isset($__slots)) unset($__slots);
         <div id="main-content"
             <?php if(request()->routeIs('pos.*')): ?> data-pos-page="true" <?php endif; ?>
             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                'relative w-full h-full overflow-y-auto bg-gray-50 dark:bg-gray-900',
+                'relative w-full h-full bg-gray-50 dark:bg-gray-900',
+                'overflow-hidden flex flex-col' => request()->routeIs('pos.*'),
+                'overflow-y-auto' => !request()->routeIs('pos.*'),
                 'ltr:lg:ml-0 rtl:lg:mr-0' => request()->routeIs('pos.*'),
                 'ltr:lg:ml-64 rtl:lg:mr-64' => !request()->routeIs('pos.*'),
             ]); ?>">
-            <main>
+            <main class="<?php echo \Illuminate\Support\Arr::toCssClasses(['h-full min-h-0 flex flex-col' => request()->routeIs('pos.*')]); ?>">
                 <?php echo $__env->yieldContent('content'); ?>
                 <?php echo e($slot ?? ''); ?>
 

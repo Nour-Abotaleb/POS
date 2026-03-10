@@ -1,6 +1,6 @@
 <template>
     <div
-        class="lg:w-6/12 flex flex-col h-screen max-h-[90vh] min-h-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800"
+        class="lg:w-6/12 flex flex-col h-full min-h-0 max-h-full bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800"
     >
         <div class="flex-1 min-h-0 overflow-y-auto flex flex-col">
             <!-- Order Type -->
@@ -279,10 +279,47 @@
                     </div>
                 </div>
 
-                <!-- Pax and Waiter -->
-                <div class="flex justify-between items-center gap-2">
+                <!-- Pax and Waiter: full-width row, Select Waiter extends to fill -->
+                <div class="flex w-full items-center gap-2">
+                    <!-- Select Waiter (extends to fill width) -->
+                    <div class="relative min-w-0 flex-1">
+                        <select
+                            v-model="localWaiterId"
+                            @change="
+                                $emit('update:waiterId', localWaiterId)
+                            "
+                            class="w-full min-w-0 pl-2 pr-8 py-1 border rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:border-[#011646] appearance-none cursor-pointer border-[#011646] focus:ring-[#011646] dark:border-[#011646]"
+                        >
+                            <option value="">Select Waiter</option>
+                            <option
+                                v-for="waiter in waiters"
+                                :key="waiter.id"
+                                :value="waiter.id"
+                            >
+                                {{ waiter.name }}
+                            </option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none"
+                        >
+                            <svg
+                                class="w-4 h-4 text-[#011646]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M19 9l-7 7-7-7"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Pax -->
                     <div
-                        class="py-2 inline-flex items-center gap-1 text-sm dark:text-gray-300"
+                        class="shrink-0 py-2 inline-flex items-center gap-1 text-sm dark:text-gray-300"
                     >
                         Pax
                         <input
@@ -294,78 +331,30 @@
                             min="1"
                         />
                     </div>
-                    <div class="gap-2 inline-flex items-center">
-                        <button
-                            type="button"
-                            class="inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative text-[#011646]"
-                            @click="$emit('add-note')"
-                            title="Add Note"
+                    <!-- Add Note -->
+                    <button
+                        type="button"
+                        class="shrink-0 inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative text-[#011646]"
+                        @click="$emit('add-note')"
+                        title="Add Note"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-pencil-square text-[#011646]"
+                            viewBox="0 0 16 16"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square text-[#011646]"
-                                viewBox="0 0 16 16"
-                            >
-                                <path
-                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                ></path>
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                ></path>
-                            </svg>
-                        </button>
-                        <div class="inline-flex items-center gap-2">
-                            <svg
-                                class="w-5 h-5 hidden lg:block text-[#011646]"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                                ></path>
-                            </svg>
-                            <span class="text-sm text-[#011646]">Waiter:</span>
-                            <div class="relative">
-                                <select
-                                    v-model="localWaiterId"
-                                    @change="
-                                        $emit('update:waiterId', localWaiterId)
-                                    "
-                                    class="w-36 pl-2 pr-6 py-1 border rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:border-[#011646] appearance-none cursor-pointer border-[#011646] focus:ring-[#011646] dark:border-[#011646]"
-                                >
-                                    <option value="">Select Waiter</option>
-                                    <option
-                                        v-for="waiter in waiters"
-                                        :key="waiter.id"
-                                        :value="waiter.id"
-                                    >
-                                        {{ waiter.name }}
-                                    </option>
-                                </select>
-                                <div
-                                    class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none"
-                                >
-                                    <svg
-                                        class="w-4 h-4 text-[#011646]"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M19 9l-7 7-7-7"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                            ></path>
+                            <path
+                                fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                            ></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
 

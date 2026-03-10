@@ -316,18 +316,16 @@ if (!function_exists('isRtl')) {
 
     function isRtl()
     {
+        // Always derive direction from the effective locale so dir matches language.
+        // Do not use cached session('isRtl') — it can be stale (e.g. Arabic was selected before, now default is English).
+        $locale = session('force_locale') ?? config('app.locale', 'en');
 
-        if (session()->has('isRtl')) {
-            return session('isRtl');
-        }
+        $language = LanguageSetting::where('language_code', $locale)->first();
+        $isRtl = $language?->is_rtl == 1;
 
-        if (user()) {
-            $language = LanguageSetting::where('language_code', auth()->user()->locale)->first();
-            $isRtl = ($language->is_rtl == 1);
-            session(['isRtl' => $isRtl]);
-        }
+        session(['isRtl' => $isRtl]);
 
-        return false;
+        return $isRtl;
     }
 }
 

@@ -43,22 +43,17 @@ abstract class Controller
     {
         $this->checkMigrateStatus();
 
-        if (session('locale')) {
-            App::setLocale(session('locale'));
-        } else {
-            $user = auth()->user();
+        // Keep the locale logic consistent with SetLocaleMiddleware:
+        // use a session override if present, otherwise fall back to the app default (English).
+        $locale = session('force_locale') ?? config('app.locale', 'en');
 
-            if (isset($user)) {
+        $supported = config('app.supported_locales', []);
+        $appLocale = $supported[$locale] ?? $locale;
 
-                App::setLocale($user?->locale ?? 'en');
-            } else {
-                try {
-
-                    App::setLocale(session('locale') ?? global_setting()?->locale);
-                } catch (\Exception $e) {
-                    App::setLocale('en');
-                }
-            }
+        try {
+            App::setLocale($appLocale);
+        } catch (\Exception $e) {
+            App::setLocale('en');
         }
     }
 

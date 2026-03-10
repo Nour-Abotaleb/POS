@@ -20,15 +20,19 @@ class SetLocaleMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->locale) {
-            $locale = auth()->user()->locale;
-            $appLocale = self::$localeMap[$locale] ?? $locale;
-            if (is_dir(lang_path($appLocale))) {
-                App::setLocale($appLocale);
-            }
-        } else {
-            App::setLocale(config('app.fallback_locale', 'eng'));
+        // Prefer an explicit per-session locale (set from the header switcher),
+        // otherwise fall back to the app default (English).
+        $locale = session('force_locale') ?? config('app.locale', 'en');
+
+        // Map user-facing locale code to actual lang folder (e.g. 'en' -> 'eng').
+        $supported = config('app.supported_locales', []);
+        $appLocale = $supported[$locale] ?? (self::$localeMap[$locale] ?? $locale);
+
+        if (! is_dir(lang_path($appLocale))) {
+            $appLocale = config('app.fallback_locale', 'eng');
         }
+
+        App::setLocale($appLocale);
 
         return $next($request);
     }

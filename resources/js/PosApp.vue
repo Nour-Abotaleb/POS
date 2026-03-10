@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="h-full min-h-0 flex flex-col overflow-hidden">
         <!-- Offline Indicator -->
         <OfflineIndicator
             :is-online="isOnline"
@@ -7,7 +7,7 @@
             @clear-cache="handleShowClearCacheModal"
         />
 
-        <div class="flex-grow lg:flex h-auto pt-6">
+        <div class="flex-grow lg:flex min-h-0 flex-1 pt-6 overflow-hidden">
             <!-- Menu Panel -->
             <MenuPanel
                 :search="search"

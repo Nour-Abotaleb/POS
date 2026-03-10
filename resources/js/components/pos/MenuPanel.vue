@@ -45,72 +45,82 @@
                 class="md:flex flex-col bg-gray-50 lg:h-full w-full py-4 px-3 dark:bg-gray-900 transition-transform duration-300 md:static md:inset-auto md:z-auto md:translate-x-0 overflow-y-auto md:overflow-visible md:max-h-none hidden"
                 style="backdrop-filter: blur(2px)"
             >
-                <!-- Menu Filters -->
-                <div
-                    class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex-wrap"
-                >
-                    <button
-                        @click="handleMenuFilter(null)"
-                        :class="[
-                            'px-3 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap',
-                            localMenuId === null
-                                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-                        ]"
+                <!-- Menu Filters (Categories): one row, horizontal slider when more -->
+                <div class="mt-4">
+                    <div class="pos-menu-scroll overflow-x-auto overflow-y-hidden pb-3 -mx-0.5"
                     >
-                        Categories
-                    </button>
-
-                    <button
-                        v-for="menu in menus"
-                        :key="menu.id"
-                        @click="handleMenuFilter(menu.id)"
-                        :class="[
-                            'px-3 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap',
-                            localMenuId === menu.id
-                                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-                        ]"
-                    >
-                        {{ menu.menu_name }}
-                    </button>
+                        <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                            <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap shrink-0 text-gray-500 dark:text-gray-400">
+                                Category:
+                            </span>
+                            <button
+                                @click="handleMenuFilter(null)"
+                                :class="[
+                                    'px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0',
+                                    localMenuId === null
+                                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600',
+                                ]"
+                            >
+                                Show All
+                            </button>
+                            <button
+                                v-for="menu in menus"
+                                :key="menu.id"
+                                @click="handleMenuFilter(menu.id)"
+                                :class="[
+                                    'px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0',
+                                    localMenuId === menu.id
+                                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600',
+                                ]"
+                            >
+                                {{ menu.menu_name }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Category Filters -->
-                <div
-                    class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex-wrap"
-                >
-                    <button
-                        @click="handleCategoryFilter(null)"
-                        :class="[
-                            'px-3 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap',
-                            localCategoryId === null
-                                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-                        ]"
+                <!-- Category Filters (Products): one row, horizontal slider when more -->
+                <div class="mt-4">
+                    <div class="pos-menu-scroll overflow-x-auto overflow-y-hidden pb-3 -mx-0.5"
                     >
-                        Products
-                    </button>
-
-                    <button
-                        v-for="category in categories"
-                        :key="category.id"
-                        @click="handleCategoryFilter(category.id)"
-                        :class="[
-                            'px-3 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap',
-                            localCategoryId === category.id
-                                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
-                                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
-                        ]"
-                    >
-                        {{ category.category_name }}
-                        <span
-                            v-if="category.count !== undefined"
-                            class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-1 py-0.5 ml-1"
-                        >
-                            {{ category.count }}
-                        </span>
-                    </button>
+                        <div class="flex flex-nowrap items-center gap-2 min-w-0">
+                            <span class="text-sm font-light dark:text-gray-300 whitespace-nowrap shrink-0 text-gray-500 dark:text-gray-400">
+                                Products:
+                            </span>
+                            <button
+                                @click="handleCategoryFilter(null)"
+                                :class="[
+                                    'px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0',
+                                    localCategoryId === null
+                                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600',
+                                ]"
+                            >
+                                Show All
+                            </button>
+                            <button
+                                v-for="category in categories"
+                                :key="category.id"
+                                @click="handleCategoryFilter(category.id)"
+                                :class="[
+                                    'px-3 py-2 text-xs font-medium rounded-lg whitespace-nowrap shrink-0',
+                                    localCategoryId === category.id
+                                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600',
+                                ]"
+                            >
+                                {{ category.category_name }}
+                                <span
+                                    v-if="category.count !== undefined"
+                                    class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-1 py-0.5 ml-1"
+                                >
+                                    {{ category.count }}
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Menu Items Grid -->
@@ -275,4 +285,29 @@ const handleReset = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Rounded horizontal scrollbar (WebKit) – Tailwind arbitrary variants often don't apply to pseudo-elements */
+.pos-menu-scroll::-webkit-scrollbar {
+    height: 0.375rem;
+}
+.pos-menu-scroll::-webkit-scrollbar-track {
+    background-color: rgb(229 231 235);
+    border-radius: 9999px;
+}
+.dark .pos-menu-scroll::-webkit-scrollbar-track {
+    background-color: rgb(55 65 81);
+}
+.pos-menu-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(156 163 175);
+    border-radius: 9999px;
+}
+.dark .pos-menu-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(107 114 128);
+}
+.pos-menu-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(107 114 128);
+}
+.dark .pos-menu-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(156 163 175);
+}
+</style>
