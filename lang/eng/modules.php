@@ -994,7 +994,7 @@ return [
         'noNotes' => 'No Notes',
         'addCustomer' => 'Add Customer',
         'editCustomer' => 'Edit Customer',
-        'selectCustomer' => 'Select Customer',
+        'selectCustomer' => 'اختر عميل',
         'newCustomer' => 'New Customer',
         'existingCustomer' => 'Existing Customer',
         'guestCustomer' => 'Guest Customer',

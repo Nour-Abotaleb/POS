@@ -60,7 +60,7 @@ return [
     'cancelledOrderReport' => 'Cancelled Orders Report',
     
     // POS System
-    'pos' => 'Point of Sale',
+    'pos' => 'POS',
     'new_order' => 'New Order',
     'order_number' => 'Order Number',
     'table_number' => 'Table Number',

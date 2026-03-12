@@ -269,4 +269,5 @@ return array(
     'hello' => 'Hello',
     'regards' => 'Regards',
     'name' => 'Name',
+    'customer' => 'Customer',
 );

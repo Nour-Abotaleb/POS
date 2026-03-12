@@ -223,9 +223,9 @@
                                 $totalAmount = $orderItemAmount[$key];
                             @endphp
                             <div class="flex items-center gap-2">
-                                <div class="text-gray-500 dark:text-gray-400 text-xs">
+                                {{-- <div class="text-gray-500 dark:text-gray-400 text-xs">
                                     {!! currency_format($displayPrice, restaurant()->currency_id) !!}
-                                </div>
+                                </div> --}}
                                 <div class="text-gray-500 dark:text-gray-400 text-xs font-bold">
                                     {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                                 </div>
@@ -361,24 +361,24 @@
                 @endif
 
                 {{-- Items --}}
-                <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
+                {{-- <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                     <div>
                         @lang('modules.order.totalItem')
                     </div>
                     <div>
                         {{ count($orderItemList) }}
                     </div>
-                </div>
+                </div> --}}
                 
                 {{-- Subtotal --}}
-                <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
+                {{-- <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                     <div>
                         @lang('modules.order.subTotal')
                     </div>
                     <div>
                         {!! currency_format($subTotal, $restaurant->currency_id) !!}
                     </div>
-                </div>
+                </div> --}}
 
                 @if ($discountAmount)
                     <div wire:key="discountAmount"
@@ -447,7 +447,7 @@
                 @endif
 
                 {{-- Tax breakdown --}}
-                @if ($taxMode == 'order')
+                {{-- @if ($taxMode == 'order')
                     @foreach ($taxes as $item)
                         <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                             <div>
@@ -460,7 +460,7 @@
                     @endforeach
                 @else
                     {{-- Item-level tax breakdown --}}
-                    @if(count($orderItemList) > 0)
+                    {{-- @if(count($orderItemList) > 0)
                         @php
                             $taxTotals = [];
                             $totalTax = 0;
@@ -493,7 +493,7 @@
                             @endforeach
                         @endif
                     @endif
-                @endif
+                @endif --}}
 
                 <div class="flex justify-between font-medium dark:text-neutral-300">
                     <div>

@@ -254,9 +254,9 @@
                                 </div>
 
                                 <div class="flex items-center gap-2">
-                                    <div class="text-gray-500 dark:text-gray-400 text-[11px]">
+                                    {{-- <div class="text-gray-500 dark:text-gray-400 text-[11px]">
                                         {!! currency_format($displayPrice, restaurant()->currency_id) !!}
-                                    </div>
+                                    </div> --}}
                                     <div class="text-gray-700 dark:text-gray-200 text-xs font-bold">
                                         {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                                     </div>
@@ -366,7 +366,7 @@
                 </div>
             @endif
 
-            <div class="flex justify-between text-xs text-gray-500 dark:text-neutral-400">
+            {{-- <div class="flex justify-between text-xs text-gray-500 dark:text-neutral-400">
                 <div>
                     @lang('modules.order.totalItem')
                 </div>
@@ -381,7 +381,7 @@
                 <div>
                     {!! currency_format($subTotal, restaurant()->currency_id) !!}
                 </div>
-            </div>
+            </div> --}}
 
             @if ($discountAmount)
                 <div wire:key="discountAmount"
@@ -456,7 +456,7 @@
                 </div>
             @endif
 
-            @if ($taxMode == 'order')
+            {{-- @if ($taxMode == 'order')
                 @foreach ($taxes as $item)
                     <div class="flex justify-between text-xs text-gray-500 dark:text-neutral-400">
                         <div>
@@ -503,7 +503,7 @@
                         {!! currency_format($totalTaxAmount, restaurant()->currency_id) !!}
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             <div class="flex justify-between font-medium text-sm text-gray-900 dark:text-gray-100">
                 <div>

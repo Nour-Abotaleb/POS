@@ -42,3 +42,16 @@ public/css/theme-custom.css
 
 lang/*
 !lang/eng/
+
+# Deployment files
+/backups/
+*.sql
+*.sql.gz
+*.tar.gz
+
+# Temporary files
+update_currency.php
+verify_currency.php
+clear_sessions.php
+force_update_currency.php
+set_default_currency.php
