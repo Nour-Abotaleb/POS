@@ -452,7 +452,7 @@
                                                     {{ !empty($variationName[$key]) ? $variationName[$key] : 'Variation ' . ($key + 1) }}
                                                 </h4>
                                                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                    <span class="font-medium">@lang('modules.menu.setPrice'):</span> {{ restaurant()->currency->currency_symbol }}{{ !empty($variationPrice[$key]) ? $variationPrice[$key] : '0.00' }}
+                                                    <span class="font-medium">@lang('modules.menu.setPrice'):</span> <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ !empty($variationPrice[$key]) ? $variationPrice[$key] : '0.00' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -495,7 +495,7 @@
                                         <x-label for="variationPrice.{{ $key }}" :value="__('modules.menu.setPrice')" />
                                         <div class="relative rounded-md mt-1">
                                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
+                                                <span class="text-gray-500" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                             </div>
                                             <x-input id="variationPrice.{{ $key }}" type="number" step="0.001" min="0"
                                                 wire:model.live='variationPrice.{{ $key }}'
@@ -519,7 +519,7 @@
                                                 </div>
                                                 <div class="relative">
                                                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                        <span class="text-gray-500 text-sm">{{ restaurant()->currency->currency_symbol }}</span>
+                                                        <span class="text-gray-500 text-sm" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                                     </div>
                                                     <x-input type="number" step="0.001" min="0"
                                                             wire:model.blur="variationOrderTypePrices.{{ $key }}.{{ $orderType->id }}"
@@ -548,7 +548,7 @@
                                                 </div>
                                                 <div class="relative">
                                                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                        <span class="text-gray-500 text-sm">{{ restaurant()->currency->currency_symbol }}</span>
+                                                        <span class="text-gray-500 text-sm" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                                     </div>
                                                     <x-input type="number" step="0.001"
                                                             wire:model.live="variationBaseDeliveryPrice.{{ $key }}"
@@ -593,7 +593,7 @@
                                                 </label>
                                                 <div class="text-right">
                                                     <div class="font-semibold text-sm text-gray-900 dark:text-white">
-                                                        {{ restaurant()->currency->currency_symbol }}{{ $variationDeliveryPrices[$key][$app->id] ?? '0.00' }}
+                                                        <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $variationDeliveryPrices[$key][$app->id] ?? '0.00' }}
                                                     </div>
                                                     <div class="text-xs text-gray-500">Final</div>
                                                 </div>
@@ -611,19 +611,19 @@
                                     <div class="text-xs space-y-1">
                                         <div class="flex justify-between">
                                             <span>@lang('modules.menu.basePrice'):</span>
-                                            <span>{{ restaurant()->currency->currency_symbol }}{{ $variationBreakdowns[$key]['breakdown']['base_price'] ?? '0.00' }}</span>
+                                            <span><span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $variationBreakdowns[$key]['breakdown']['base_price'] ?? '0.00' }}</span>
                                         </div>
                                         @if(!empty($variationBreakdowns[$key]['breakdown']['tax_breakdown']))
                                         @foreach($variationBreakdowns[$key]['breakdown']['tax_breakdown'] as $tax)
                                         <div class="flex justify-between text-gray-600 dark:text-gray-400" wire:key="tax-{{ $key }}-{{ $tax['id'] }}">
                                             <span>{{ $tax['name'] }} ({{ $tax['rate'] }}%):</span>
-                                            <span>{{ restaurant()->currency->currency_symbol }}{{ $tax['amount'] }}</span>
+                                            <span><span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $tax['amount'] }}</span>
                                         </div>
                                         @endforeach
                                         @endif
                                         <div class="flex justify-between font-medium pt-1 border-t border-gray-300 dark:border-gray-500">
                                             <span>@lang('modules.menu.total'):</span>
-                                            <span>{{ restaurant()->currency->currency_symbol }}{{ $variationBreakdowns[$key]['breakdown']['final_price'] ?? '0.00' }}</span>
+                                            <span><span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $variationBreakdowns[$key]['breakdown']['final_price'] ?? '0.00' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -653,7 +653,7 @@
                             <x-label for="itemPrice" value="Base Price" />
                             <div class="relative mt-1">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
+                                    <span class="text-gray-500" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                 </div>
                                 <x-input id="itemPrice" type="number" step="0.001" min="0" wire:model="itemPrice" class="block w-full pl-10 pr-4" placeholder="0.00" />
                             </div>
@@ -676,7 +676,7 @@
                                     <div class="flex items-center gap-3">
                                         <div class="relative">
                                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
+                                                <span class="text-gray-500" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                             </div>
                                             <x-input type="number" step="0.001" min="0"
                                                 wire:model="orderTypePrices.{{ $orderType->id }}"
@@ -712,7 +712,7 @@
                                     <div class="flex items-center gap-3">
                                         <div class="relative">
                                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                <span class="text-gray-500">{{ restaurant()->currency->currency_symbol }}</span>
+                                                <span class="text-gray-500" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>
                                             </div>
                                             <x-input type="number" step="0.001" min="0"
                                                 wire:model.live="baseDeliveryPrice"
@@ -748,7 +748,7 @@
                                                 @if($app->commission_type === 'percent')
                                                     {{ $app->commission_value ?? 0 }}%
                                                 @else
-                                                    {{ restaurant()->currency->currency_symbol }}{{ $app->commission_value ?? 0 }}
+                                                    <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $app->commission_value ?? 0 }}
                                                 @endif
                                             </div>
                                         </div>
@@ -765,7 +765,7 @@
                                         <!-- Calculated Price Display -->
                                         <div class="text-right">
                                             <div class="font-semibold text-gray-900 dark:text-white">
-                                                {{ restaurant()->currency->currency_symbol }}{{ $deliveryPrices[$app->id] ?? '0.00' }}
+                                                <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{!! restaurant()->currency->currency_symbol !!}</span>{{ $deliveryPrices[$app->id] ?? '0.00' }}
                                             </div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">Final Price</div>
                                         </div>

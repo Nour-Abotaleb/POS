@@ -31,9 +31,9 @@ unset($__defined_vars, $__key, $__value); ?>
 <label <?php echo e($attributes->merge(['class' => 'block font-medium text-sm text-gray-700 dark:text-gray-300 ltr:text-left rtl:text-right'])); ?>>
     <?php echo e($value ?? $slot); ?>
 
-    <!--[if BLOCK]><![endif]--><?php if($required): ?>
+    <?php if($required): ?>
         <span class="text-red-500">*</span>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
 </label>
 
 <?php /**PATH E:\nomu\testfood\POS\resources\views/components/label.blade.php ENDPATH**/ ?>

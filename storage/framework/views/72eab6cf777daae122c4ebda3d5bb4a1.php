@@ -622,12 +622,40 @@
 
                             </div>
                         </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
 
                 
                 
                     
+
+                
+                <?php if(count($orderItemList) > 0): ?>
+                    <?php
+                        $totalTaxAmount = 0;
+                        if ($taxMode == 'order') {
+                            foreach ($taxes as $item) {
+                                $totalTaxAmount += ($item->tax_percent / 100) * $discountedTotal;
+                            }
+                        } else {
+                            foreach ($orderItemList as $key => $item) {
+                                $qty = $orderItemQty[$key] ?? 1;
+                                $totalTaxAmount += ($itemTaxAmount[$key] ?? 0) * $qty;
+                            }
+                        }
+                    ?>
+                    <!--[if BLOCK]><![endif]--><?php if($totalTaxAmount > 0): ?>
+                        <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
+                            <div>
+                                <?php echo app('translator')->get('modules.order.totalTax'); ?>
+                            </div>
+                            <div>
+                                <?php echo currency_format($totalTaxAmount, $restaurant->currency_id); ?>
+
+                            </div>
+                        </div>
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                 <div class="flex justify-between font-medium dark:text-neutral-300">
                     <div>

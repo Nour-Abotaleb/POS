@@ -494,7 +494,7 @@
                             {!! currency_format($taxInfo['amount'], restaurant()->currency_id) !!}
                         </div>
                     </div>
-                @endforeach
+                @endforeach --}}
                 <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                     <div>
                         @lang('modules.order.totalTax')
@@ -503,7 +503,7 @@
                         {!! currency_format($totalTaxAmount, restaurant()->currency_id) !!}
                     </div>
                 </div>
-            @endif --}}
+            {{-- @endif --}}
 
             <div class="flex justify-between font-medium text-sm text-gray-900 dark:text-gray-100">
                 <div>
