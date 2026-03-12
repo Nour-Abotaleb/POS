@@ -18,7 +18,7 @@
               clip-rule="evenodd"></path>
           </svg>
         </button>
-        <a href="<?php echo e(route('dashboard')); ?>" class="flex ltr:ml-2 rtl:mr-2 items-center app-logo">
+        <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center app-logo">
           <img src="<?php echo e(restaurant()->logoUrl); ?>" class="h-8 ltr:mr-3 rtl:ml-3" alt="" />
 
           <!--[if BLOCK]><![endif]--><?php if(restaurant()->show_logo_text): ?>

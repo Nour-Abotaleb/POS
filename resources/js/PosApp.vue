@@ -7,9 +7,10 @@
             @clear-cache="handleShowClearCacheModal"
         />
 
-        <div class="flex-grow lg:flex min-h-0 flex-1 pt-6 overflow-hidden">
-            <!-- Menu Panel -->
-            <MenuPanel
+        <div class="flex-grow lg:flex min-h-0 flex-1 pt-6 overflow-hidden gap-3">
+            <!-- Menu Panel (flex-1 so OrderPanel can get min-width) -->
+            <div class="min-w-0 flex-1 lg:flex-[2] flex flex-col overflow-hidden">
+                <MenuPanel
                 :search="search"
                 :menu-id="menuId"
                 :filter-categories="filterCategories"
@@ -22,7 +23,8 @@
                 @update:filterCategories="filterCategories = $event"
                 @add-to-cart="handleAddToCart"
                 @reset="handleReset"
-            />
+                />
+            </div>
 
             <!-- Order Panel -->
             <OrderPanel

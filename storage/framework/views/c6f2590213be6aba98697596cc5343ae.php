@@ -32,7 +32,7 @@ if (isset($__slots)) unset($__slots);
 ?>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <div class="flex-grow lg:flex h-auto">
+        <div class="flex-grow lg:flex h-auto gap-2">
             <?php echo $__env->make('pos.menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             <!--[if BLOCK]><![endif]--><?php if(!$orderDetail): ?>
             <?php echo $__env->make('pos.kot_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>

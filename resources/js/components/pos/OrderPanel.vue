@@ -1,6 +1,7 @@
 <template>
     <div
-        class="lg:w-6/12 flex flex-col h-full min-h-0 max-h-full bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800"
+        class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden self-stretch"
+        style="min-width: 480px; width: 480px;"
     >
         <div class="flex-1 min-h-0 overflow-y-auto flex flex-col">
             <!-- Order Type -->
