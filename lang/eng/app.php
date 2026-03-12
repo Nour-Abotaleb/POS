@@ -69,6 +69,8 @@ return array(
     'filterByMenu' => 'Filter by Menu',
     'filterByCategory' => 'Filter by Category',
     'categories' => 'Categories',
+    'posCategory' => 'Category',
+    'posProducts' => 'Products',
 
     // Restaurant and Modules
     'modules' => [

@@ -1,6 +1,6 @@
 <div class="relative">
 <a href="{{ route('orders.index') }}" wire:navigate wire:key="today-orders-link"
-    class="hidden lg:inline-flex items-center px-2 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
+    class="hidden lg:inline-flex items-center px-1 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
     data-tooltip-target="today-orders-tooltip-toggle"
     >
     <img src="{{ asset('img/checkout.svg') }}" alt="Today Orders" class="w-5 h-5">

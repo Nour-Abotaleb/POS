@@ -100,6 +100,27 @@
         }
     </script>
 
+    {{-- When on POS route (including after wire:navigate), hide sidebar on desktop --}}
+    @if (user()->restaurant_id ?? false)
+    <style>
+        @media (min-width: 1024px) {
+            body.pos-route-active #sidebar { display: none !important; }
+            body.pos-route-active #main-content { margin-left: 0 !important; margin-right: 0 !important; }
+            body.pos-route-active #toggle-sidebar { display: none !important; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function posRouteSync() {
+            var onPos = window.location.pathname.indexOf('/pos') !== -1;
+            document.body.classList.toggle('pos-route-active', onPos);
+        });
+        document.addEventListener('livewire:navigated', function posRouteSync() {
+            var onPos = window.location.pathname.indexOf('/pos') !== -1;
+            document.body.classList.toggle('pos-route-active', onPos);
+        });
+    </script>
+    @endif
+
     {{-- Include file for widgets if exist --}}
     @includeIf('sections.custom_script_admin')
 </head>
@@ -113,7 +134,7 @@
         @livewire('superadmin-navigation-menu')
     @endif
 
-    <div class="flex rtl:flex-row-reverse pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen">
+    <div class="flex rtl:flex-row-reverse overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen {{ request()->routeIs('pos.*') ? '' : 'pt-16' }}">
 
         @if (user()->restaurant_id)
             @livewire('sidebar')

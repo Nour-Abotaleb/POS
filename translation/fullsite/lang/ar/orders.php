@@ -17,7 +17,7 @@ return [
     'standardDeliveryPricing' => 'تسعير التوصيل القياسي',
 
     // Order Details
-    'orderNumber' => 'رقم الطلب',
+    'orderNumber' => 'طلب',
     'amount' => 'المبلغ',
     'paymentMethod' => 'طريقة الدفع',
     'transactionId' => 'معرف المعاملة',
@@ -77,7 +77,7 @@ return [
     'refunded' => 'مسترد',
 
     // Order Details
-    'order_number' => 'رقم الطلب',
+    'order_number' => 'طلب',
     'customer_name' => 'اسم العميل',
     'customer_phone' => 'هاتف العميل',
     'customer_email' => 'بريد العميل الإلكتروني',

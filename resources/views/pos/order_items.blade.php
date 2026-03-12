@@ -1,5 +1,6 @@
 <div
-    class="lg:w-6/12 flex flex-col bg-white dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 lg:sticky overflow-hidden rounded-md">
+    class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch"
+    style="min-width: 480px; width: 480px;">
 
     <div class="flex-1 overflow-y-auto overflow-x-hidden space-y-4 pr-1 pb-36">
         <div class="flex items-center justify-between mt-1 mb-1">

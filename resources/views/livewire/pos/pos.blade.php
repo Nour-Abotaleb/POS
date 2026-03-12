@@ -17,8 +17,10 @@
         @livewire('forms.OrderTypeSelection')
         @endif
 
-        <div class="flex-grow lg:flex h-auto">
-            @include('pos.menu')
+        <div class="flex flex-1 min-h-0 h-full gap-3">
+            <div class="min-w-0 flex-1 lg:flex-[2] flex flex-col pt-16 overflow-hidden">
+                @include('pos.menu')
+            </div>
             @if (!$orderDetail)
             @include('pos.kot_items')
             @elseif($orderDetail->status == 'kot')

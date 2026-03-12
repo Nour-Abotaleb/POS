@@ -93,8 +93,8 @@
         </div>
         {{-- Hide all POS content for pending --}}
         <div style="display: none;">
-    {{-- Active --}}
-    @elseif($hasPosMachine && $machineStatus === 'active')
+    {{-- Active: shown in navigation header (navigation-menu.blade.php) --}}
+    {{-- @elseif($hasPosMachine && $machineStatus === 'active')
         <div class="bg-gray-300 border-l-4 border-gray-500 p-2 my-2 mx-4 text-sm rounded">
             <span class="font-medium">@lang('multipos::messages.registration.active.label')</span>
             <span class="ml-1">{{ $posMachine->alias ?? __('multipos::messages.registration.device') }}</span>
@@ -103,6 +103,7 @@
                 <span>{{ $posMachine->last_seen_at->diffForHumans() }}</span>
             @endif
         </div>
+    @endif --}}
     @endif
 @endif
 

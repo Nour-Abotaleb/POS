@@ -32,13 +32,13 @@ return [
     'refunded' => 'Refunded',
     
     // Order Details
-    'orderNumber' => 'Order Number',
+    'orderNumber' => 'Order',
     'amount' => 'Amount',
     'paymentMethod' => 'Payment Method',
     'transactionId' => 'Transaction ID',
     'dateTime' => 'Date & Time',
     'totalOrder' => 'Total Order',
-    'order_number' => 'Order Number',
+    'order_number' => 'Order',
     'customer_name' => 'Customer Name',
     'customer_phone' => 'Customer Phone',
     'customer_email' => 'Customer Email',

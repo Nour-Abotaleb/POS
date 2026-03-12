@@ -1,5 +1,6 @@
 <div
-    class="lg:w-6/12 flex flex-col h-screen max-h-[90vh] min-h-0 bg-white dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 lg:sticky overflow-hidden rounded-md">
+    class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch"
+    style="min-width: 480px; width: 480px;">
     <div class="flex items-center justify-between w-full mb-2">
 
         {{-- LEFT SIDE : ORDER TYPES --}}
@@ -226,7 +227,7 @@
                                 {{-- <div class="text-gray-500 dark:text-gray-400 text-xs">
                                     {!! currency_format($displayPrice, restaurant()->currency_id) !!}
                                 </div> --}}
-                                <div class="text-gray-500 dark:text-gray-400 text-xs font-bold">
+                                <div class="text-gray-500 dark:text-gray-400 text-xs font-bold flex items-center gap-1">
                                     {!! currency_format($totalAmount, restaurant()->currency_id) !!}
                                 </div>
                             </div>
@@ -344,7 +345,7 @@
         </div>
 
         {{-- Total + 7 buttons fixed at bottom of panel --}}
-        <div class="flex-shrink-0 left-0 right-0 pb-8 pt-2 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <div class="flex-shrink-0 left-0 right-0 pt-2 px-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div class="h-auto p-4 select-none text-center bg-gray-50 rounded space-y-2 dark:bg-gray-700">
                 @if (count($orderItemList) > 0 && user_can('Add Discount on POS'))
                     <div class="text-left">
@@ -515,18 +516,18 @@
                             <div>
                                 @lang('modules.order.totalTax')
                             </div>
-                            <div>
+                            <div class="flex items-center gap-1">
                                 {!! currency_format($totalTaxAmount, $restaurant->currency_id) !!}
                             </div>
                         </div>
                     @endif
                 @endif
 
-                <div class="flex justify-between font-medium dark:text-neutral-300">
+                <div class="flex justify-between items-center gap-1 font-medium dark:text-neutral-300">
                     <div>
                         @lang('modules.order.total')
                     </div>
-                    <div>
+                    <div class="flex items-center gap-1">
                         {!! currency_format($total, $restaurant->currency_id) !!}
                     </div>
                 </div>
