@@ -35,6 +35,11 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- ApexCharts (Load early for dashboard charts) -->
+    @unless(request()->routeIs('pos.*'))
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
+    @endunless
 
     <!-- Styles -->
     @livewireStyles
@@ -358,6 +363,24 @@
     @include('layouts.service-worker-js')
     @stack('scripts')
     @unless(request()->routeIs('pos.*'))
+    <!-- ApexCharts for Dashboard Charts (Backup load) -->
+    <script>
+        // Ensure ApexCharts is loaded
+        if (typeof ApexCharts === 'undefined') {
+            console.log('Loading ApexCharts backup...');
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js';
+            script.onload = function() {
+                console.log('ApexCharts loaded successfully');
+                // Trigger a custom event when ApexCharts is ready
+                document.dispatchEvent(new Event('apexcharts-ready'));
+            };
+            document.head.appendChild(script);
+        } else {
+            // ApexCharts already loaded
+            document.dispatchEvent(new Event('apexcharts-ready'));
+        }
+    </script>
     <script src="{{ asset('vendor/trix/trix.umd.min.js') }}"></script>
     <!-- Print Image Handler (not needed on POS) -->
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js" data-navigate-track></script>

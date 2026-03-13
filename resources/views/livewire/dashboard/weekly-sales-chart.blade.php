@@ -33,36 +33,46 @@
 
     @script
     <script>
-
-        (function initMainChart() {
-            const el = document.getElementById('main-chart');
-            if (!el) return;
-
-            // Destroy existing instance to avoid duplicate charts and NaN on re-render
-            if (el._apexChart) {
-                try { el._apexChart.destroy(); } catch (e) {}
-                el._apexChart = null;
+        // Wait for ApexCharts to be available
+        function waitForApexCharts(callback) {
+            if (typeof ApexCharts !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForApexCharts(callback), 100);
             }
+        }
 
-            function renderWhenReady() {
-                if (!el.isConnected) return;
-                const w = el.offsetWidth || el.clientWidth;
-                if (w <= 0) {
-                    requestAnimationFrame(renderWhenReady);
-                    return;
+        waitForApexCharts(function() {
+            (function initMainChart() {
+                const el = document.getElementById('main-chart');
+                if (!el) return;
+
+                // Destroy existing instance to avoid duplicate charts and NaN on re-render
+                if (el._apexChart) {
+                    try { el._apexChart.destroy(); } catch (e) {}
+                    el._apexChart = null;
                 }
-                const options = getMainChartOptions();
-                const chart = new ApexCharts(el, options);
-                el._apexChart = chart;
-                chart.render();
 
-                document.addEventListener('dark-mode', function onDarkMode() {
-                    if (el._apexChart) el._apexChart.updateOptions(getMainChartOptions());
-                });
-            }
+                function renderWhenReady() {
+                    if (!el.isConnected) return;
+                    const w = el.offsetWidth || el.clientWidth;
+                    if (w <= 0) {
+                        requestAnimationFrame(renderWhenReady);
+                        return;
+                    }
+                    const options = getMainChartOptions();
+                    const chart = new ApexCharts(el, options);
+                    el._apexChart = chart;
+                    chart.render();
 
-            requestAnimationFrame(renderWhenReady);
-        })();
+                    document.addEventListener('dark-mode', function onDarkMode() {
+                        if (el._apexChart) el._apexChart.updateOptions(getMainChartOptions());
+                    });
+                }
+
+                requestAnimationFrame(renderWhenReady);
+            })();
+        });
 
         function getMainChartOptions()
         {
