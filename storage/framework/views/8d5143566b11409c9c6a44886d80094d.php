@@ -32,7 +32,7 @@ if (isset($__slots)) unset($__slots);
 ?>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <div class="flex flex-col lg:flex-row flex-1 min-h-0 h-full gap-3" x-data="{
+        <div class="pos-container flex flex-col lg:flex-row flex-1 min-h-0 h-full gap-3" x-data="{
             init() {
                 if (typeof Alpine === 'undefined') return;
                 if (!Alpine.store('pos')) Alpine.store('pos', { showProductsPanel: false });

@@ -1,5 +1,5 @@
 <div
-    class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
+    class="relative z-40 flex flex-col h-full lg:h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
     <div class="flex items-center justify-between w-full mb-2">
 
         {{-- LEFT SIDE : ORDER TYPES --}}

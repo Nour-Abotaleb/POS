@@ -804,7 +804,7 @@ if (isset($__slots)) unset($__slots);
         </div>
     </aside>
 
-    <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
+    <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop" role="button" tabindex="-1" aria-label="Close menu" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"></div>
 
 </div>
 <?php /**PATH C:\xampp\htdocs\script\resources\views/livewire/sidebar.blade.php ENDPATH**/ ?>

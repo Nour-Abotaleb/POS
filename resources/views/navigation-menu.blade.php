@@ -16,7 +16,7 @@
     <div class="flex items-center justify-between">
 
       <div class="flex items-center justify-start">
-        <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar"
+        <button type="button" id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"
           class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           <svg id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +32,7 @@
           </svg>
         </button>
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
-          <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" />
+          <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
           @if (restaurant()->show_logo_text)
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden lg:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>

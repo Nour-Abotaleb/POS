@@ -32,7 +32,7 @@
           </svg>
         </button>
         <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center app-logo">
-          <img src="<?php echo e(restaurant()->logoUrl); ?>" class="h-8 ltr:mr-3 rtl:ml-3" alt="" />
+          <img src="<?php echo e(restaurant()->logoUrl); ?>" class="h-8 ltr:mr-3 rtl:ml-3" alt="" onerror="try{var i=this;i&amp;&amp;i.style&amp;&amp;(i.style.display='none');}catch(e){}" />
 
           <!--[if BLOCK]><![endif]--><?php if(restaurant()->show_logo_text): ?>
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden lg:block ltr:mr-2 rtl:ml-2"><?php echo e(Str::limit(restaurant()->name, 10)); ?></span>

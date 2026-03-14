@@ -110,7 +110,24 @@
             body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 500px !important; min-width: 500px !important; }
         }
         @media (max-width: 1023px) {
+            body.pos-route-active #sidebar:not(.hidden) { display: flex !important; z-index: 50 !important; }
+            body.pos-route-active #sidebarBackdrop { z-index: 45 !important; }
+            body.pos-route-active .pos-layout { padding-top: 4rem !important; min-height: 100vh !important; }
+            body.pos-route-active #main-content {
+                flex: 1 1 0% !important;
+                min-height: 0 !important;
+                height: calc(100vh - 4rem) !important;
+            }
+            body.pos-route-active main > div {
+                flex: 1 1 0% !important;
+                min-height: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                height: 100% !important;
+            }
+            body.pos-route-active .pos-container { flex: 1 1 0% !important; min-height: 0 !important; }
             body.pos-route-active .pos-order-panel-wrapper { flex: 1 1 0% !important; min-height: 0 !important; }
+            body.pos-route-active nav.fixed { z-index: 50 !important; }
         }
     </style>
     <script>
@@ -138,7 +155,7 @@
         @livewire('superadmin-navigation-menu')
     @endif
 
-    <div class="flex rtl:flex-row-reverse overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen {{ request()->routeIs('pos.*') ? '' : 'pt-16' }}">
+    <div class="flex rtl:flex-row-reverse overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen {{ request()->routeIs('pos.*') ? 'pos-layout' : 'pt-16' }}">
 
         @if (user()->restaurant_id)
             @livewire('sidebar')

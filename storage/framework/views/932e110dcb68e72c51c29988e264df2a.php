@@ -48,20 +48,23 @@
             }
 
             function renderWhenReady() {
-                if (!el.isConnected) return;
-                const w = el.offsetWidth || el.clientWidth;
-                if (w <= 0) {
+                if (!el || !el.isConnected) return;
+                const w = Math.max(1, el.offsetWidth || el.clientWidth || 400);
+                if ((el.offsetWidth || el.clientWidth) <= 0) {
                     requestAnimationFrame(renderWhenReady);
                     return;
                 }
-                const options = getMainChartOptions();
-                const chart = new ApexCharts(el, options);
-                el._apexChart = chart;
-                chart.render();
-
-                document.addEventListener('dark-mode', function onDarkMode() {
-                    if (el._apexChart) el._apexChart.updateOptions(getMainChartOptions());
-                });
+                try {
+                    const options = getMainChartOptions(w);
+                    const chart = new ApexCharts(el, options);
+                    el._apexChart = chart;
+                    chart.render();
+                    document.addEventListener('dark-mode', function onDarkMode() {
+                        if (el._apexChart) el._apexChart.updateOptions(getMainChartOptions(el.offsetWidth || el.clientWidth || 400));
+                    });
+                } catch (err) {
+                    console.warn('Dashboard chart render failed:', err);
+                }
             }
 
             requestAnimationFrame(renderWhenReady);
@@ -89,6 +92,7 @@
 
             return {
                 chart: {
+                    width: chartWidth || undefined,
                     height: 420,
                     type: 'area',
                     fontFamily: 'Inter, sans-serif',
@@ -128,7 +132,7 @@
                         name: "<?php echo e(__('modules.dashboard.earnings')); ?>",
                         data: [
                             <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $salesData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php echo e($label->total_sales); ?>,
+                                <?php echo e((float)($label->total_sales ?? 0)); ?>,
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         ],
                         color: '<?php echo e(restaurant()->theme_hex); ?>'
