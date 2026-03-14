@@ -93,7 +93,7 @@
             "
             class="inline-flex items-center py-2 gap-1 text-xs"
             style="padding-left: 0.7rem; padding-right: 0.7rem;"
-            title="@lang('app.addCustomerDetails')"
+            title="{{ __('app.addCustomerDetails') }}"
           >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

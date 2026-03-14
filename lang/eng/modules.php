@@ -405,6 +405,7 @@ return [
         'Lunch' => 'Lunch',
         'Dinner' => 'Dinner',
         'newReservation' => 'New Reservation',
+        'newReservations' => 'New Reservations',
         'selectOrderType' => 'Select Order Type',
         'selectOrderTypeDescription' => 'Select order type from available list',
         'setAsDefault' => 'Set as Default',
@@ -647,6 +648,8 @@ return [
     // Waiter Request Module
     'waiterRequest' => [
         'noWaiterRequest' => 'No waiter requests',
+        'newWaiterRequest' => 'New Waiter Request',
+        'newWaiterRequests' => 'New Waiter Request',
         'markCompleted' => 'Mark Completed',
         'doItLater' => 'Do it Later',
         'newWaiterRequestForTable' => 'New Waiter Request for Table - :name',
@@ -1339,6 +1342,8 @@ return [
     // Waiter Request
     'waiterRequest' => [
         'noWaiterRequest' => 'No Waiter Request',
+        'newWaiterRequest' => 'New Waiter Request',
+        'newWaiterRequests' => 'New Waiter Request',
         'title' => 'Waiter Request',
         'description' => 'Manage waiter requests',
     ],

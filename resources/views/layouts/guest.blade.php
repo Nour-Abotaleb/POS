@@ -49,7 +49,7 @@
 
 <body class="font-sans antialiased dark:bg-gray-900">
 
-    <div class="mx-auto max-w-lg lg:max-w-screen-xl min-h-svh shadow-md lg:shadow-none">
+    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
         @livewire('shopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
         @livewire('shopDesktopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
 

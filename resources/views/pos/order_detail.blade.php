@@ -1,4 +1,4 @@
-<div class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 px-2 py-4 pr-4 bg-white border-l dark:border-gray-700 dark:bg-gray-800 overflow-hidden self-stretch" style="min-width: 480px; width: 480px;">
+<div class="relative z-40 flex flex-col h-full min-h-0 flex-shrink-0 px-2 py-4 pr-4 bg-white border-l dark:border-gray-700 dark:bg-gray-800 overflow-hidden self-stretch w-full lg:w-[480px] lg:min-w-[480px] max-w-full">
     <div>
 
         <div class="flex justify-between items-center dark:text-neutral-200">

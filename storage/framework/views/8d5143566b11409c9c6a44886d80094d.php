@@ -32,19 +32,51 @@ if (isset($__slots)) unset($__slots);
 ?>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <div class="flex flex-1 min-h-0 h-full gap-3">
-            <div class="min-w-0 flex-1 lg:flex-[2] flex flex-col pt-16 overflow-hidden">
+        <div class="flex flex-col lg:flex-row flex-1 min-h-0 h-full gap-3" x-data="{
+            init() {
+                if (typeof Alpine === 'undefined') return;
+                if (!Alpine.store('pos')) Alpine.store('pos', { showProductsPanel: false });
+                else if (typeof Alpine.store('pos').showProductsPanel === 'undefined') Alpine.store('pos').showProductsPanel = false;
+            },
+            get menuOpen() { return this.$store.pos?.showProductsPanel ?? false; },
+            toggleMenu() {
+                if (!this.$store.pos) Alpine.store('pos', { showProductsPanel: false });
+                this.$store.pos.showProductsPanel = !this.$store.pos.showProductsPanel;
+            }
+        }">
+            
+            <div class="fixed bottom-6 right-6 z-50 lg:hidden">
+                <button type="button"
+                    @click="toggleMenu()"
+                    style="background-color: #011646; border-color: #011646;"
+                    class="text-white rounded-full shadow-lg p-4 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition hover:opacity-90"
+                    aria-label="Toggle menu">
+                    <svg x-show="!menuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <svg x-show="menuOpen" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span class="ml-1" x-show="!menuOpen"><?php echo app('translator')->get('menu.menu'); ?></span>
+                    <span class="ml-1" x-show="menuOpen" x-cloak><?php echo app('translator')->get('app.close'); ?></span>
+                </button>
+            </div>
+            
+            <div class="order-2 lg:order-1 min-w-0 flex-none lg:flex-[2] flex flex-col pt-0 lg:pt-16 overflow-hidden" data-pos-products-panel>
                 <?php echo $__env->make('pos.menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             </div>
-            <!--[if BLOCK]><![endif]--><?php if(!$orderDetail): ?>
-            <?php echo $__env->make('pos.kot_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-            <?php elseif($orderDetail->status == 'kot'): ?>
-                <?php echo $__env->make('pos.order_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-            <?php elseif($orderDetail->status == 'billed' || $orderDetail->status == 'paid'): ?>
-                <?php echo $__env->make('pos.order_detail', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-            <?php elseif($orderDetail->status == 'draft'): ?>
+            
+            <div class="pos-order-panel-wrapper order-1 lg:order-2 w-full min-w-0 flex flex-col">
+                <!--[if BLOCK]><![endif]--><?php if(!$orderDetail): ?>
                 <?php echo $__env->make('pos.kot_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                <?php elseif($orderDetail->status == 'kot'): ?>
+                    <?php echo $__env->make('pos.order_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <?php elseif($orderDetail->status == 'billed' || $orderDetail->status == 'paid'): ?>
+                    <?php echo $__env->make('pos.order_detail', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <?php elseif($orderDetail->status == 'draft'): ?>
+                    <?php echo $__env->make('pos.kot_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            </div>
         </div>
 
         <?php if (isset($component)) { $__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f = $component; } ?>

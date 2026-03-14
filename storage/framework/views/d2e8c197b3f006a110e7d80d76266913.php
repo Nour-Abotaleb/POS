@@ -108,6 +108,10 @@
             body.pos-route-active #sidebar { display: none !important; }
             body.pos-route-active #main-content { margin-left: 0 !important; margin-right: 0 !important; }
             body.pos-route-active #toggle-sidebar { display: none !important; }
+            body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 500px !important; min-width: 500px !important; }
+        }
+        @media (max-width: 1023px) {
+            body.pos-route-active .pos-order-panel-wrapper { flex: 1 1 0% !important; min-height: 0 !important; }
         }
     </style>
     <script>

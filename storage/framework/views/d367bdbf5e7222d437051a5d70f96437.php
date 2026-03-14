@@ -90,7 +90,7 @@
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-link','data' => ['href' => 'javascript:;','onclick' => '
               try { window.dispatchEvent(new CustomEvent(\'pos:show-add-customer\')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === \'function\') window.Livewire.dispatch(\'showAddCustomerModal\'); } catch (e) {}
-            ','class' => 'inline-flex items-center py-2 gap-1 text-xs','style' => 'padding-left: 0.7rem; padding-right: 0.7rem;','title' => '@lang(\'app.addCustomerDetails\')']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+            ','class' => 'inline-flex items-center py-2 gap-1 text-xs','style' => 'padding-left: 0.7rem; padding-right: 0.7rem;','title' => ''.e(__('app.addCustomerDetails')).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('primary-link'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
@@ -100,7 +100,7 @@
 <?php $component->withAttributes(['href' => 'javascript:;','onclick' => '
               try { window.dispatchEvent(new CustomEvent(\'pos:show-add-customer\')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === \'function\') window.Livewire.dispatch(\'showAddCustomerModal\'); } catch (e) {}
-            ','class' => 'inline-flex items-center py-2 gap-1 text-xs','style' => 'padding-left: 0.7rem; padding-right: 0.7rem;','title' => '@lang(\'app.addCustomerDetails\')']); ?>
+            ','class' => 'inline-flex items-center py-2 gap-1 text-xs','style' => 'padding-left: 0.7rem; padding-right: 0.7rem;','title' => ''.e(__('app.addCustomerDetails')).'']); ?>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M11 16.5V5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
