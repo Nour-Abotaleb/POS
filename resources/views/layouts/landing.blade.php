@@ -46,7 +46,7 @@
 </head>
 
 <body class="font-sans antialiased dark:bg-gray-900">
-    <div class="mx-auto max-w-lg lg:max-w-screen-xl min-h-svh shadow-md lg:shadow-none">
+    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
         <header class="lg:hidden">
             <nav class="bg-white border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:text-gray">
                 <div class="flex flex-wrap justify-between items-center mx-auto">

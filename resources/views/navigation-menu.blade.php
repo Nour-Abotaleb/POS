@@ -16,15 +16,15 @@
     <div class="flex items-center justify-between">
 
       <div class="flex items-center justify-start">
-        <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar"
+        <button type="button" id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"
           class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          <svg id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+          <svg id="toggleSidebarMobileHamburger" class="pos-mobile-nav-hamburger w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
               d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
               clip-rule="evenodd"></path>
           </svg>
-          <svg id="toggleSidebarMobileClose" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+          <svg id="toggleSidebarMobileClose" class="pos-mobile-nav-close hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -32,10 +32,10 @@
           </svg>
         </button>
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
-          <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" />
+          <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
           @if (restaurant()->show_logo_text)
-          <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden lg:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>
+          <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden md:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>
           @endif
         </a>
 
@@ -54,7 +54,7 @@
           @if (request()->routeIs('pos.*'))
           {{-- POS screen order: 1) Search, 2) MultiPOS last update, 3) Customer, 4) Reset, 5) rest (orders/reservations/waiter below) --}}
 
-          <div class="hidden lg:flex items-center gap-2 ms-4">
+          <div class="flex items-center gap-2 ms-1 sm:ms-4">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +65,7 @@
               <input
                 id="pos-header-search"
                 type="text"
-                class="w-50 border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2.5 border-gray-200 rounded-lg text-sm"
+                class="w-28 sm:w-40 md:w-50 lg:w-52 border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2.5 border-gray-200 rounded-lg text-sm"
                 placeholder="@lang('placeholders.searchMenuItems')"
                 oninput="var v = this.value; window.dispatchEvent(new CustomEvent('pos:set-search', { detail: { value: v } })); if (window.Livewire && window.Livewire.dispatch) window.Livewire.dispatch('pos-set-search', { value: v }); var inPage = document.getElementById('pos-products-search'); if (inPage && inPage.value !== v) { inPage.value = v; inPage.dispatchEvent(new Event('input', { bubbles: true })); }"
               />
@@ -73,7 +73,7 @@
           </div>
 
           @if(module_enabled('MultiPOS') && ($posMachine = pos_machine()) && $posMachine->status === 'active')
-          <div class="hidden lg:flex items-center shrink-0 bg-white dark:bg-gray-600 border border-[#E0E5F2] dark:border-gray-400 py-2.5 px-2 rounded-lg text-sm">
+          <div class="hidden md:flex items-center shrink-0 bg-white dark:bg-gray-600 border border-[#E0E5F2] dark:border-gray-400 py-2.5 px-2 rounded-lg text-sm">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 2C6.49 2 2 6.49 2 12C2 17.51 6.49 22 12 22C17.51 22 22 17.51 22 12C22 6.49 17.51 2 12 2ZM16.78 9.7L11.11 15.37C10.97 15.51 10.78 15.59 10.58 15.59C10.38 15.59 10.19 15.51 10.05 15.37L7.22 12.54C6.93 12.25 6.93 11.77 7.22 11.48C7.51 11.19 7.99 11.19 8.28 11.48L10.58 13.78L15.72 8.64C16.01 8.35 16.49 8.35 16.78 8.64C17.07 8.93 17.07 9.4 16.78 9.7Z" fill="#34C759"/>
             </svg>
@@ -93,16 +93,16 @@
             "
             class="inline-flex items-center py-2 gap-1 text-xs"
             style="padding-left: 0.7rem; padding-right: 0.7rem;"
-            title="@lang('app.addCustomerDetails')"
+            title="{{ __('app.addCustomerDetails') }}"
           >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M11 16.5V5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-            <span class="hidden lg:block">@lang('app.customer')</span>
+            <span class="hidden md:block">@lang('app.customer')</span>
           </x-primary-link>
 
-          <div class="hidden lg:flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <button
                 type="button"
                 onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; var inPage = document.getElementById('pos-products-search'); if (inPage) { inPage.value = ''; inPage.dispatchEvent(new Event('input', { bubbles: true })); } window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"

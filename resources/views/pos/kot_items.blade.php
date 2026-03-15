@@ -1,6 +1,5 @@
 <div
-    class="relative z-40 flex flex-col h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch"
-    style="min-width: 480px; width: 480px;">
+    class="relative z-40 flex flex-col h-full lg:h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
     <div class="flex items-center justify-between w-full mb-2">
 
         {{-- LEFT SIDE : ORDER TYPES --}}
@@ -345,7 +344,7 @@
         </div>
 
         {{-- Total + 7 buttons fixed at bottom of panel --}}
-        <div class="flex-shrink-0 left-0 right-0 pt-2 px-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex-shrink-0 left-0 right-0 pt-2 lg:pb-0 px-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div class="h-auto p-4 select-none text-center bg-gray-50 rounded space-y-2 dark:bg-gray-700">
                 @if (count($orderItemList) > 0 && user_can('Add Discount on POS'))
                     <div class="text-left">
@@ -656,6 +655,7 @@
                     </div>
                 @endif
             </div>
+
         </div>
 
         <!-- Merge Table Modal is outside this panel wrapper -->

@@ -71,6 +71,10 @@ return array(
     'categories' => 'Categories',
     'posCategory' => 'Category',
     'posProducts' => 'Products',
+    'addCustomerDetails' => 'Add Customer Details',
+    'newReservations' => 'New Reservations',
+    'newWaiterRequest' => 'New Waiter Request',
+    'language' => 'Language',
 
     // Restaurant and Modules
     'modules' => [
