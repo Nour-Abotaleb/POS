@@ -202,15 +202,7 @@
         
         <div style="display: none;">
     
-    <?php elseif($hasPosMachine && $machineStatus === 'active'): ?>
-        <div class="bg-gray-300 border-l-4 border-gray-500 p-2 my-2 mx-4 text-sm rounded">
-            <span class="font-medium"><?php echo app('translator')->get('multipos::messages.registration.active.label'); ?></span>
-            <span class="ml-1"><?php echo e($posMachine->alias ?? __('multipos::messages.registration.device')); ?></span>
-            <!--[if BLOCK]><![endif]--><?php if($posMachine && $posMachine->last_seen_at): ?>
-                <span class="mx-2">•</span>
-                <span><?php echo e($posMachine->last_seen_at->diffForHumans()); ?></span>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        </div>
+    
     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 

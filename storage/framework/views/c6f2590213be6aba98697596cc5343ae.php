@@ -32,8 +32,10 @@ if (isset($__slots)) unset($__slots);
 ?>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <div class="flex-grow lg:flex h-auto gap-2">
-            <?php echo $__env->make('pos.menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <div class="flex flex-1 min-h-0 h-full gap-3">
+            <div class="min-w-0 flex-1 lg:flex-[2] flex flex-col pt-16 overflow-hidden">
+                <?php echo $__env->make('pos.menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            </div>
             <!--[if BLOCK]><![endif]--><?php if(!$orderDetail): ?>
             <?php echo $__env->make('pos.kot_items', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             <?php elseif($orderDetail->status == 'kot'): ?>

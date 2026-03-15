@@ -35,6 +35,11 @@
 
     <!-- Scripts -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+    
+    <!-- ApexCharts (Load early for dashboard charts) -->
+    <?php if (! (request()->routeIs('pos.*'))): ?>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
+    <?php endif; ?>
 
     <!-- Styles -->
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
@@ -102,6 +107,27 @@
     </script>
 
     
+    <?php if(user()->restaurant_id ?? false): ?>
+    <style>
+        @media (min-width: 1024px) {
+            body.pos-route-active #sidebar { display: none !important; }
+            body.pos-route-active #main-content { margin-left: 0 !important; margin-right: 0 !important; }
+            body.pos-route-active #toggle-sidebar { display: none !important; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function posRouteSync() {
+            var onPos = window.location.pathname.indexOf('/pos') !== -1;
+            document.body.classList.toggle('pos-route-active', onPos);
+        });
+        document.addEventListener('livewire:navigated', function posRouteSync() {
+            var onPos = window.location.pathname.indexOf('/pos') !== -1;
+            document.body.classList.toggle('pos-route-active', onPos);
+        });
+    </script>
+    <?php endif; ?>
+
+    
     <?php if ($__env->exists('sections.custom_script_admin')) echo $__env->make('sections.custom_script_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </head>
 
@@ -144,7 +170,7 @@ if (isset($__slots)) unset($__slots);
 ?>
     <?php endif; ?>
 
-    <div class="flex rtl:flex-row-reverse pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen">
+    <div class="flex rtl:flex-row-reverse overflow-hidden bg-gray-50 dark:bg-gray-900 h-screen <?php echo e(request()->routeIs('pos.*') ? '' : 'pt-16'); ?>">
 
         <?php if(user()->restaurant_id): ?>
             <?php
@@ -494,6 +520,24 @@ if (isset($__slots)) unset($__slots);
     <?php echo $__env->make('layouts.service-worker-js', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php echo $__env->yieldPushContent('scripts'); ?>
     <?php if (! (request()->routeIs('pos.*'))): ?>
+    <!-- ApexCharts for Dashboard Charts (Backup load) -->
+    <script>
+        // Ensure ApexCharts is loaded
+        if (typeof ApexCharts === 'undefined') {
+            console.log('Loading ApexCharts backup...');
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js';
+            script.onload = function() {
+                console.log('ApexCharts loaded successfully');
+                // Trigger a custom event when ApexCharts is ready
+                document.dispatchEvent(new Event('apexcharts-ready'));
+            };
+            document.head.appendChild(script);
+        } else {
+            // ApexCharts already loaded
+            document.dispatchEvent(new Event('apexcharts-ready'));
+        }
+    </script>
     <script src="<?php echo e(asset('vendor/trix/trix.umd.min.js')); ?>"></script>
     <!-- Print Image Handler (not needed on POS) -->
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js" data-navigate-track></script>

@@ -311,6 +311,21 @@ class Orders extends Component
         $this->perPage += 20;
     }
 
+    public function reportToZatca($orderId)
+    {
+        $order = Order::find($orderId);
+        if ($order) {
+            $zatcaService = new \App\Services\ZatcaPhase2Service();
+            $success = $zatcaService->reportB2CInvoice($order);
+
+            if ($success) {
+                $this->alert('success', __('settings.zatca_reported'));
+            } else {
+                $this->alert('error', __('settings.zatca_failed') . ': ' . $order->zatca_errors);
+            }
+        }
+    }
+
     public function render()
     {
         $data = $this->fetchOrders();

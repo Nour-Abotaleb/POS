@@ -35,6 +35,15 @@ class Order extends BaseModel
         static::creating(function ($model) {
             $model->uuid ??= (string) \Illuminate\Support\Str::uuid();
         });
+
+        static::updated(function ($model) {
+            if ($model->isDirty('status') && in_array($model->status, ['paid', 'billed'])) {
+                // Dispatch ZATCA Job for Phase 2 processing
+                if ($model->id) {
+                    \App\Jobs\ReportZatcaInvoiceJob::dispatch($model->id)->delay(now()->addSeconds(30));
+                }
+            }
+        });
     }
 
     public function getRouteKeyName(): string

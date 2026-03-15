@@ -107,6 +107,61 @@
                             <x-textarea class="block mt-2 w-full" wire:model='restaurantAddress' rows='3' />
                             <x-input-error for="restaurantAddress" class="mt-2" />
                         </div>
+
+                        <!-- ZATCA Phase 2 Integration Fields -->
+                        <div class="mt-8 border-t border-gray-100 pt-4">
+                            <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-4">
+                                @lang('settings.zatca_phase_2_integration')
+                            </h4>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <x-label for="zatcaApiEnvironment" value="{{ __('settings.zatca_environment') }}" />
+                                    <select id="zatcaApiEnvironment" wire:model="zatcaApiEnvironment" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                        <option value="simulation">Simulation (Sandbox)</option>
+                                        <option value="developer">Developer Portal</option>
+                                        <option value="production">Production</option>
+                                    </select>
+                                    <x-input-error for="zatcaApiEnvironment" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-label for="zatcaOtp" value="{{ __('settings.zatca_otp') }}" />
+                                    <div class="flex gap-2">
+                                        <x-input id="zatcaOtp" type="text" class="mt-1 block w-full" wire:model="zatcaOtp" placeholder="123456" />
+                                        <x-button type="button" wire:click="onboardZatca" class="mt-1">
+                                            @lang('settings.onboard')
+                                        </x-button>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-1">@lang('settings.zatca_otp_help')</p>
+                                    <x-input-error for="zatcaOtp" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-label for="zatcaCsid" value="{{ __('settings.zatca_csid') }}" />
+                                    <x-input id="zatcaCsid" type="text" class="mt-1 block w-full" wire:model="zatcaCsid" readonly />
+                                    <x-input-error for="zatcaCsid" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-label for="zatcaSecret" value="{{ __('settings.zatca_secret') }}" />
+                                    <x-input id="zatcaSecret" type="password" class="mt-1 block w-full" wire:model="zatcaSecret" />
+                                    <x-input-error for="zatcaSecret" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-label for="zatcaPrivateKey" value="{{ __('settings.zatca_private_key') }}" />
+                                    <x-textarea id="zatcaPrivateKey" wire:model="zatcaPrivateKey" rows="4" class="mt-1 block w-full text-xs font-mono" placeholder="-----BEGIN EC PRIVATE KEY-----" />
+                                    <x-input-error for="zatcaPrivateKey" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-label for="zatcaCertificate" value="{{ __('settings.zatca_certificate') }}" />
+                                    <x-textarea id="zatcaCertificate" wire:model="zatcaCertificate" rows="4" class="mt-1 block w-full text-xs font-mono" placeholder="-----BEGIN CERTIFICATE-----" />
+                                    <x-input-error for="zatcaCertificate" class="mt-2" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-span-2 mt-3">
                         <x-button>@lang('app.save')</x-button>
