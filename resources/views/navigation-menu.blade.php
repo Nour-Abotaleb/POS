@@ -40,12 +40,7 @@
         </a>
 
         <button id="toggle-sidebar" type="button" class="items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mx-2 hidden {{ request()->routeIs('pos.*') ? '' : 'lg:inline-flex' }}">
-          <!-- Menu expand icon (shows when sidebar is collapsed) -->
-          <svg id="toggle-sidebar-open" class="hidden w-6 h-6 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
-          </svg>
-          <!-- Menu collapse icon (shows when sidebar is expanded) -->
-          <svg id="toggle-sidebar-close" class="hidden w-6 h-6 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg id="toggle-sidebar-icon" class="w-6 h-6 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7M19 19l-7-7 7-7"/>
           </svg>
         </button>
@@ -122,6 +117,7 @@
 
           {{-- POS-only: show live order/reservation/waiter counters on the left --}}
           @if (request()->routeIs('pos.*'))
+          <div class="pos-nav-counters flex items-center gap-2">
             @if (in_array('Order', restaurant_modules()) && user_can('Show Order') && restaurant()->hide_new_orders == 0)
               @livewire('dashboard.todayOrders')
             @endif
@@ -133,6 +129,7 @@
             @if (in_array('Waiter Request', restaurant_modules()) && user_can('Manage Waiter Request') && restaurant()->hide_new_waiter_request == 0)
               @livewire('dashboard.activeWaiterRequests')
             @endif
+          </div>
           @endif
 
           {{-- Non-POS: dark mode, language, profile, display, etc. on the LEFT beside logo --}}

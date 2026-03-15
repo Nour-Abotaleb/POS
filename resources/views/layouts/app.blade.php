@@ -74,33 +74,22 @@
             document.documentElement.style.visibility = 'hidden';
             window.addEventListener('DOMContentLoaded', () => {
                 const sidebar = document.getElementById('sidebar');
-                const openIcon = document.getElementById('toggle-sidebar-open');
-                const closeIcon = document.getElementById('toggle-sidebar-close');
+                const icon = document.getElementById('toggle-sidebar-icon');
 
                 if (sidebar) {
                     sidebar.classList.add('hidden');
                     sidebar.classList.remove('flex', 'lg:flex');
                 }
-
-                if (openIcon && closeIcon) {
-                    openIcon.classList.remove('hidden');
-                    closeIcon.classList.add('hidden');
-                }
+                if (icon) icon.classList.add('rotate-180');
 
                 setTimeout(() => {
                     document.documentElement.style.visibility = 'visible';
                 }, 50);
             });
         } else {
-            // Handle expanded state icons without hiding the page
             window.addEventListener('DOMContentLoaded', () => {
-                const openIcon = document.getElementById('toggle-sidebar-open');
-                const closeIcon = document.getElementById('toggle-sidebar-close');
-
-                if (openIcon && closeIcon) {
-                    openIcon.classList.add('hidden');
-                    closeIcon.classList.remove('hidden');
-                }
+                const icon = document.getElementById('toggle-sidebar-icon');
+                if (icon) icon.classList.remove('rotate-180');
             });
         }
     </script>
@@ -110,6 +99,11 @@
         @media (max-width: 639px) {
             .jetstream-modal {
                 padding-top: 5rem !important;
+            }
+        }
+        @media (min-width: 1024px) and (max-width: 1485px) {
+            body.pos-route-active .pos-nav-counters {
+                display: none !important;
             }
         }
     </style>
@@ -139,7 +133,10 @@
             body.pos-route-active .pos-container { flex: 1 1 0% !important; min-height: 0 !important; }
             body.pos-route-active .pos-order-panel-wrapper { flex: 1 1 0% !important; min-height: 0 !important; }
             body.pos-route-active nav.fixed { z-index: 65 !important; }
-            /* Mobile sidebar overlay: visibility driven by body.mobile-sidebar-open only (no .hidden dependency) */
+            /* Mobile sidebar overlay: visibility driven by body.mobile-sidebar-open only (no .hidden dependency) */  
+            /* Show hamburger between 1024–1243px (overrides Tailwind lg:hidden) */
+            /* body.pos-route-active #toggleSidebarMobile { display: block !important; } */
+            /* Mobile/tablet sidebar overlay */
             body.pos-route-active #sidebar {
                 position: fixed !important;
                 top: 0;

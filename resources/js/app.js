@@ -10,6 +10,32 @@ window.ApexCharts = ApexCharts;
 
 // import './dark-mode';
 
+// Desktop sidebar toggle: collapses/expands sidebar, updates localStorage, adjusts content margin, rotates icon
+window.toggleDesktopSidebar = function () {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+    const icon = document.getElementById('toggle-sidebar-icon');
+    if (!sidebar) return;
+    const isCollapsed = sidebar.classList.contains('hidden');
+    if (isCollapsed) {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('flex', 'lg:flex');
+        if (mainContent) {
+            mainContent.classList.add('ltr:lg:ml-64', 'rtl:lg:mr-64');
+        }
+        localStorage.setItem('menu-collapsed', 'false');
+        if (icon) icon.classList.remove('rotate-180');
+    } else {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
+        if (mainContent) {
+            mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
+        }
+        localStorage.setItem('menu-collapsed', 'true');
+        if (icon) icon.classList.add('rotate-180');
+    }
+};
+
 // Mobile sidebar toggle: on POS use body class (CSS-only); elsewhere toggle .hidden on sidebar/backdrop/icons
 window.toggleMobileSidebar = function () {
     if (document.body.classList.contains("pos-route-active")) {
@@ -169,26 +195,16 @@ document.addEventListener("livewire:navigated", () => {
             }
         }
 
-        const openIcon = document.getElementById('toggle-sidebar-open');
-        const closeIcon = document.getElementById('toggle-sidebar-close');
-
-        // Initial state (on POS desktop sidebar starts collapsed, so show expand icon)
-        if (openIcon && closeIcon) {
-            if (isPosPage) {
-                openIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            } else if (localStorage.getItem("menu-collapsed") === "true") {
-                openIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            } else {
-                openIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-            }
+        // Initial rotation state for the single toggle icon
+        const toggleIcon = document.getElementById('toggle-sidebar-icon');
+        if (toggleIcon) {
+            const collapsed = isPosPage || localStorage.getItem("menu-collapsed") === "true";
+            toggleIcon.classList.toggle('rotate-180', collapsed);
         }
 
         const toggleSidebar = document.getElementById('toggle-sidebar');
-        if (toggleSidebar && typeof window.toggleMobileSidebar === 'function') {
-            toggleSidebar.onclick = window.toggleMobileSidebar;
+        if (toggleSidebar) {
+            toggleSidebar.onclick = window.toggleDesktopSidebar;
         }
 
         // (Re)initialize theme toggle on every Livewire navigation (already attempted at top)
