@@ -200,6 +200,6 @@
         </div>
     </aside>
 
-    <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop" role="button" tabindex="-1" aria-label="Close menu" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"></div>
+    <div id="sidebarBackdrop" class="fixed inset-0 z-[15] hidden bg-black/50 dark:bg-gray-900/90" onclick="if(document.body.classList.contains('pos-route-active')){document.body.classList.remove('mobile-sidebar-open');}else{if(window.toggleMobileSidebar)window.toggleMobileSidebar();}" role="button" tabindex="0" aria-label="Close menu"></div>
 
 </div>

@@ -24,7 +24,7 @@
             flex: 1 1 0% !important;
             min-height: 0 !important;
             height: 100% !important;
-            margin-top: 4rem !important;
+            margin-top: 0 !important;
         }
     }
     /* Mobile/tablet: when menu is open as overlay, stack above order panel (z-40) so it’s visible and closable */

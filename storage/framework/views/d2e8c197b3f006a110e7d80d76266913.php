@@ -102,6 +102,14 @@
     </script>
 
     
+    <style>
+        @media (max-width: 639px) {
+            .jetstream-modal {
+                padding-top: 5rem !important;
+            }
+        }
+    </style>
+
     <?php if(user()->restaurant_id ?? false): ?>
     <style>
         @media (min-width: 1024px) {
@@ -111,8 +119,6 @@
             body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 500px !important; min-width: 500px !important; }
         }
         @media (max-width: 1023px) {
-            body.pos-route-active #sidebar:not(.hidden) { display: flex !important; z-index: 50 !important; }
-            body.pos-route-active #sidebarBackdrop { z-index: 45 !important; }
             body.pos-route-active .pos-layout { padding-top: 4rem !important; min-height: 100vh !important; }
             body.pos-route-active #main-content {
                 flex: 1 1 0% !important;
@@ -128,7 +134,43 @@
             }
             body.pos-route-active .pos-container { flex: 1 1 0% !important; min-height: 0 !important; }
             body.pos-route-active .pos-order-panel-wrapper { flex: 1 1 0% !important; min-height: 0 !important; }
-            body.pos-route-active nav.fixed { z-index: 50 !important; }
+            body.pos-route-active nav.fixed { z-index: 65 !important; }
+            /* Mobile sidebar overlay: visibility driven by body.mobile-sidebar-open only (no .hidden dependency) */
+            body.pos-route-active #sidebar {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                right: auto;
+                height: 100vh !important;
+                width: 16rem;
+                z-index: 60 !important;
+                transform: translateX(-100%);
+                transition: transform .3s ease;
+                display: flex !important;
+                flex-direction: column !important;
+                visibility: visible !important;
+            }
+            html[dir="rtl"] body.pos-route-active #sidebar {
+                left: auto;
+                right: 0;
+                transform: translateX(100%);
+            }
+            body.pos-route-active.mobile-sidebar-open #sidebar {
+                transform: translateX(0) !important;
+            }
+            html[dir="rtl"] body.pos-route-active.mobile-sidebar-open #sidebar {
+                transform: translateX(0) !important;
+            }
+            body.pos-route-active #sidebarBackdrop {
+                display: none !important;
+                z-index: 55 !important;
+            }
+            body.pos-route-active.mobile-sidebar-open #sidebarBackdrop {
+                display: block !important;
+            }
+            /* Hamburger/close icon swap when sidebar open */
+            body.pos-route-active.mobile-sidebar-open .pos-mobile-nav-hamburger { display: none !important; }
+            body.pos-route-active.mobile-sidebar-open .pos-mobile-nav-close { display: block !important; }
         }
     </style>
     <script>

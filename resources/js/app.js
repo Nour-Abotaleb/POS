@@ -8,22 +8,25 @@ import swal from "sweetalert2";
 window.Swal = swal;
 window.ApexCharts = ApexCharts;
 
-// Mobile sidebar toggle: global so inline onclick works on all screens (POS + others). Called from nav button and backdrop.
+// import './dark-mode';
+
+// Mobile sidebar toggle: on POS use body class (CSS-only); elsewhere toggle .hidden on sidebar/backdrop/icons
 window.toggleMobileSidebar = function () {
+    if (document.body.classList.contains("pos-route-active")) {
+        document.body.classList.toggle("mobile-sidebar-open");
+        return;
+    }
     const sidebar = document.getElementById("sidebar");
-    const backdrop = document.getElementById("sidebarBackdrop");
+    const sidebarBackdrop = document.getElementById("sidebarBackdrop");
     const hamburger = document.getElementById("toggleSidebarMobileHamburger");
     const closeIcon = document.getElementById("toggleSidebarMobileClose");
-    if (sidebar && backdrop && hamburger && closeIcon) {
+    if (sidebar && sidebarBackdrop && hamburger && closeIcon) {
         sidebar.classList.toggle("hidden");
-        sidebar.classList.add("flex");
-        backdrop.classList.toggle("hidden");
+        sidebarBackdrop.classList.toggle("hidden");
         hamburger.classList.toggle("hidden");
         closeIcon.classList.toggle("hidden");
     }
 };
-
-// import './dark-mode';
 
 // Check localStorage immediately to set initial state
 if (localStorage.getItem("menu-collapsed") === "true") {
@@ -122,99 +125,97 @@ function initializeThemeToggle() {
 
 // Observe for the theme toggle button being (re)inserted by Livewire and init once
 function observeThemeToggleMount() {
-    // Initialize now if present
-    initializeThemeToggle();
-
-    const observer = new MutationObserver(() => {
-        const btn = document.getElementById('theme-toggle');
-        if (btn && btn.dataset.initialized !== 'true') {
-            initializeThemeToggle();
-        }
-    });
-    if (document.body) {
-        observer.observe(document.body, { childList: true, subtree: true });
-    } else {
-        document.addEventListener('DOMContentLoaded', () => {
-            observer.observe(document.body, { childList: true, subtree: true });
+    try {
+        initializeThemeToggle();
+        const body = document.body;
+        if (!body) return;
+        const observer = new MutationObserver(() => {
+            const btn = document.getElementById('theme-toggle');
+            if (btn && btn.dataset.initialized !== 'true') {
+                initializeThemeToggle();
+            }
         });
+        observer.observe(body, { childList: true, subtree: true });
+    } catch (e) {
+        console.warn('observeThemeToggleMount:', e);
     }
 }
 
 document.addEventListener("livewire:navigated", () => {
     try {
+        // Ensure theme toggle initializes even if later blocks fail
         observeThemeToggleMount();
-    } catch (e) { /* theme toggle may fail if elements missing */ }
 
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-    const isPosPage = mainContent && mainContent.getAttribute('data-pos-page') === 'true';
+        // Check initial state on page load
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const isPosPage = mainContent && mainContent.getAttribute('data-pos-page') === 'true';
 
-    if (isPosPage && sidebar && window.innerWidth >= 1024) {
-        localStorage.setItem('menu-collapsed', 'true');
-    }
-
-    if (window.innerWidth >= 1024 && sidebar && mainContent && !isPosPage) {
-        if (localStorage.getItem("menu-collapsed") === "true") {
-            sidebar.classList.add('hidden');
-            sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
-            mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
-        } else {
-            sidebar.classList.remove('hidden', '-translate-x-full');
-            sidebar.classList.add('flex', 'lg:flex', 'translate-x-0');
-            mainContent.classList.add('ltr:lg:ml-64', 'rtl:lg:mr-64');
+        // On POS desktop, sidebar starts collapsed so the expand arrow works
+        if (isPosPage && sidebar && window.innerWidth >= 1024) {
+            localStorage.setItem('menu-collapsed', 'true');
         }
-    }
 
-    const openIcon = document.getElementById('toggle-sidebar-open');
-    const closeIcon = document.getElementById('toggle-sidebar-close');
-    if (openIcon && closeIcon) {
-        if (isPosPage) {
-            openIcon.classList.remove('hidden');
-            closeIcon.classList.add('hidden');
-        } else if (localStorage.getItem("menu-collapsed") === "true") {
-            openIcon.classList.remove('hidden');
-            closeIcon.classList.add('hidden');
-        } else {
-            openIcon.classList.add('hidden');
-            closeIcon.classList.remove('hidden');
-        }
-    }
-
-    const toggleSidebar = document.getElementById('toggle-sidebar');
-    if (toggleSidebar && openIcon && closeIcon && sidebar && mainContent) {
-        toggleSidebar.addEventListener('click', function () {
-            openIcon.classList.toggle('hidden');
-            closeIcon.classList.toggle('hidden');
-            sidebar.classList.add('transition-transform', 'duration-300', 'ease-in-out');
-            mainContent.classList.add('transition-all', 'duration-300', 'ease-in-out');
+        // Initial state without transitions (skip on POS so sidebar stays hidden on desktop)
+        if (window.innerWidth >= 1024 && sidebar != null && mainContent != null && !isPosPage) {
             if (localStorage.getItem("menu-collapsed") === "true") {
-                localStorage.setItem("menu-collapsed", "false");
-                sidebar.classList.remove('hidden');
+                sidebar.classList.add('hidden');
+                sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
+                mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
+            } else {
+                sidebar.classList.remove('hidden', '-translate-x-full');
                 sidebar.classList.add('flex', 'lg:flex', 'translate-x-0');
                 mainContent.classList.add('ltr:lg:ml-64', 'rtl:lg:mr-64');
-            } else {
-                localStorage.setItem("menu-collapsed", "true");
-                sidebar.classList.add('-translate-x-full');
-                sidebar.classList.remove('translate-x-0');
-                mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
-                const handler = function () {
-                    if (localStorage.getItem("menu-collapsed") === "true" && sidebar && mainContent) {
-                        sidebar.classList.add('hidden');
-                        sidebar.classList.remove('flex', 'lg:flex');
-                        sidebar.classList.remove('transition-transform', 'duration-300', 'ease-in-out');
-                        mainContent.classList.remove('transition-all', 'duration-300', 'ease-in-out');
-                    }
-                    sidebar.removeEventListener('transitionend', handler);
-                };
-                sidebar.addEventListener('transitionend', handler);
             }
-        });
-    }
+        }
 
-    try {
+        const openIcon = document.getElementById('toggle-sidebar-open');
+        const closeIcon = document.getElementById('toggle-sidebar-close');
+
+        // Initial state (on POS desktop sidebar starts collapsed, so show expand icon)
+        if (openIcon && closeIcon) {
+            if (isPosPage) {
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            } else if (localStorage.getItem("menu-collapsed") === "true") {
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            } else {
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+        }
+
+        const toggleSidebar = document.getElementById('toggle-sidebar');
+        if (toggleSidebar && typeof window.toggleMobileSidebar === 'function') {
+            toggleSidebar.onclick = window.toggleMobileSidebar;
+        }
+
+        // (Re)initialize theme toggle on every Livewire navigation (already attempted at top)
         observeThemeToggleMount();
-        if (typeof initFlowbite === 'function') initFlowbite();
-    } catch (e) { /* avoid one failure breaking the app */ }
+
+        if (sidebar) {
+            const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+            const toggleSidebarMobileSearch = document.getElementById("toggleSidebarMobileSearch");
+
+            if (toggleSidebarMobileSearch && typeof toggleSidebarMobileSearch.addEventListener === 'function') {
+                toggleSidebarMobileSearch.addEventListener("click", () => {
+                    if (window.toggleMobileSidebar) window.toggleMobileSidebar();
+                });
+            }
+        }
+
+        // Reinitialize Flowbite components (may fail on pages with different DOM, e.g. POS)
+        if (typeof initFlowbite === 'function') {
+            try {
+                initFlowbite();
+            } catch (e) {
+                console.warn('Flowbite init:', e);
+            }
+        }
+    } catch (err) {
+        console.warn('livewire:navigated handler:', err);
+    }
 });
 
 let attrs = [
@@ -250,22 +251,29 @@ function initPasswordToggles() {
 function handlePasswordToggle(event) {
     const toggleButton = event.target && event.target.closest('.toggle-password');
     if (!toggleButton) return;
+
     const wrapper = toggleButton.closest('.relative');
     if (!wrapper) return;
+
     const passwordInput = wrapper.querySelector('.password');
     const eyeIcon = wrapper.querySelector('.eye-icon');
     const eyeSlashIcon = wrapper.querySelector('.eye-slash-icon');
-    if (!passwordInput) return;
+    if (!passwordInput || !eyeIcon || !eyeSlashIcon) return;
+
     const isPassword = passwordInput.type === "password";
     passwordInput.type = isPassword ? "text" : "password";
-    if (eyeIcon) eyeIcon.classList.toggle("hidden", isPassword);
-    if (eyeSlashIcon) eyeSlashIcon.classList.toggle("hidden", !isPassword);
+    eyeIcon.classList.toggle("hidden", isPassword);
+    eyeSlashIcon.classList.toggle("hidden", !isPassword);
 }
 
 initPasswordToggles();
 
 // Re-initialize when Livewire updates the DOM
 document.addEventListener('livewire:navigated', () => {
-    initPasswordToggles();
+    try {
+        initPasswordToggles();
+    } catch (e) {
+        console.warn('initPasswordToggles:', e);
+    }
 });
 
