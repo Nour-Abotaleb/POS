@@ -193,7 +193,7 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 {{ __('modules.settings.themeColorDescription') }}</p>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <span class="text-sm text-gray-500 dark:text-gray-400">{{ $themeColor }}</span>
                             <input type="color"
                                 class="p-1 h-8 w-12 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"

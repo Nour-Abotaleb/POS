@@ -97,7 +97,7 @@
                                     ? 'opacity-100'
                                     : 'opacity-40 pointer-events-none',
                             ]"
-                            style="color: #011646"
+                            style="color: var(--brand-primary)"
                             aria-label="Next"
                         >
                             <svg
@@ -177,7 +177,7 @@
                                     ? 'opacity-100'
                                     : 'opacity-40 pointer-events-none',
                             ]"
-                            style="color: #011646"
+                            style="color: var(--brand-primary)"
                             aria-label="Next"
                         >
                             <svg

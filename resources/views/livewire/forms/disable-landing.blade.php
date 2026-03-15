@@ -8,7 +8,7 @@
                 'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
                 'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
@@ -27,7 +27,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -42,7 +42,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
            <svg class="w-5 h-5 text-current" viewBox="0 -5.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>header [#1539]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -165.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M46.15,5 C47.88985,5 49.3,6.343 49.3,8 C49.3,9.657 47.88985,11 46.15,11 C44.41015,11 43,9.657 43,8 C43,6.343 44.41015,5 46.15,5 L46.15,5 Z M46.15,7 C45.57145,7 45.1,7.449 45.1,8 C45.1,8.551 45.57145,9 46.15,9 C46.72855,9 47.2,8.551 47.2,8 C47.2,7.449 46.72855,7 46.15,7 L46.15,7 Z M43,15 L64,15 L64,13 L43,13 L43,15 Z M51.4,7 L64,7 L64,5 L51.4,5 L51.4,7 Z M51.4,11 L64,11 L64,9 L51.4,9 L51.4,11 Z" id="header-[#1539]"> </path> </g> </g> </g> </g></svg>
             <span>@lang('modules.settings.headerPage')</span>
             </div>
@@ -55,7 +55,7 @@
             'border-b-2 border-blue-600 text-blue-600 dark:text-blue-500 dark:border-blue-500 font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -72,7 +72,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -89,7 +89,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-current" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M4,23H20a1,1,0,0,0,1-1V6a1,1,0,0,0-.293-.707l-4-4A1,1,0,0,0,16,1H4A1,1,0,0,0,3,2V22A1,1,0,0,0,4,23ZM5,3H15.586L19,6.414V21H5Zm8,13v1a1,1,0,0,1-2,0V16a1,1,0,0,1,2,0Zm1.954-7.429a3.142,3.142,0,0,1-1.789,3.421.4.4,0,0,0-.165.359V13a1,1,0,0,1-2,0v-.649a2.359,2.359,0,0,1,1.363-2.191A1.145,1.145,0,0,0,12.981,8.9a1.069,1.069,0,0,0-.8-.88.917.917,0,0,0-.775.2,1.155,1.155,0,0,0-.4.9,1,1,0,1,1-2,0,3.151,3.151,0,0,1,1.127-2.436,2.946,2.946,0,0,1,2.418-.632A3.085,3.085,0,0,1,14.954,8.571Z"></path></g></svg>
             <span>@lang('modules.settings.reviewSetting')</span>
             </div>
@@ -102,7 +102,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M8,0 C8.55228,0 9,0.447715 9,1 L11,1 L11,2 L13,2 C13.5523,2 14,2.44772 14,3 L14,15 C14,15.5523 13.5523,16 13,16 L3,16 C2.44772,16 2,15.5523 2,15 L2,3 C2,2.44772 2.44772,2 3,2 L5,2 L5,1 L7,1 C7,0.447715 7.44772,0 8,0 Z M5,4 L4,4 L4,14 L12,14 L12,4 L11,4 L11,5 L5,5 L5,4 Z M6,10 L10,10 C10.5523,10 11,10.4477 11,11 C11,11.51285 10.613973,11.9355092 10.1166239,11.9932725 L10,12 L6,12 C5.44772,12 5,11.5523 5,11 C5,10.48715 5.38604429,10.0644908 5.88337975,10.0067275 L6,10 Z M10,7 C10.5523,7 11,7.44772 11,8 C11,8.55228 10.5523,9 10,9 L6,9 C5.44772,9 5,8.55228 5,8 C5,7.44772 5.44772,7 6,7 L10,7 Z M8,2 C7.44772,2 7,2.44772 7,3 C7,3.55228 7.44772,4 8,4 C8.55228,4 9,3.55228 9,3 C9,2.44772 8.55228,2 8,2 Z"></path> </g></svg>
             <span>@lang('modules.settings.faqSetting')</span>
             </div>
@@ -116,7 +116,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M20,1H4A1,1,0,0,0,3,2V22a1,1,0,0,0,1,1H20a1,1,0,0,0,1-1V2A1,1,0,0,0,20,1ZM19,21H5V3H19ZM9,8.5a3,3,0,1,1,3,3A3,3,0,0,1,9,8.5Zm-2,9a5,5,0,0,1,10,0,1,1,0,0,1-2,0,3,3,0,0,0-6,0,1,1,0,0,1-2,0Z"></path></g></svg>
             <span>@lang('modules.settings.contactSetting')</span>
             </div>
@@ -130,7 +130,7 @@
             'border-b-2 border-skin-base text-skin-base dark:text-skin-base dark:border-skin-base font-semibold' :
             'text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
             class="py-4 px-6 focus:outline-none transition-colors duration-200 text-sm">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M17 18h-4v-1h4zm-9 0h3v-1H8zm12-4h-7v1h7zm-9 0H4v1h7zM23 3v18H1V3zm-1 9H2v8h20zm0-8H2v7h20z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
             <span>@lang('modules.settings.priceSetting')</span>
             </div>

@@ -20,7 +20,7 @@
                 @foreach ($reservationSettings as $key => $item)
                 <!-- Card -->
                 <a
-                @class(['group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition', 'bg-[#011646] dark:bg-[#011646] dark:border-skin-base' => ($weekDay == $item->day_of_week), 'bg-white dark:bg-gray-700 dark:border-gray-600' => ($weekDay != $item->day_of_week)])
+                @class(['group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition', 'bg-[var(--brand-primary)] dark:bg-[var(--brand-primary)] dark:border-skin-base' => ($weekDay == $item->day_of_week), 'bg-white dark:bg-gray-700 dark:border-gray-600' => ($weekDay != $item->day_of_week)])
                 wire:key='menu-{{ $key . microtime() }}' wire:click="showItems('{{ $item->day_of_week }}')"
                     href="javascript:;">
                     <div class="p-3">

@@ -109,7 +109,8 @@
 
 {{-- No machine - show registration modal or limit reached message --}}
 @if(module_enabled('MultiPOS') && !$hasPosMachine && !session('justRegistered'))
-    <div class="fixed inset-0 z-40 overflow-y-auto">
+@teleport('body')
+    <div class="fixed inset-0 overflow-y-auto" style="z-index: 9999 !important;">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="window.location.href='{{ route('dashboard') }}'"></div>
 
@@ -234,6 +235,7 @@
             </div>
         </div>
     </div>
+@endteleport
 @endif
 
 {{-- $shouldBlockPos is passed from parent view --}}

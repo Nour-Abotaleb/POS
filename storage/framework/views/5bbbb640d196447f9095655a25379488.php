@@ -18,14 +18,14 @@
                     </h3>
                     <p class="text-sm text-gray-500 dark:text-neutral-500 mt-1">
                         <?php if($package->package_type == \App\Enums\PackageType::LIFETIME): ?>
-                            <span class="font-bold text-lg" style="color: #011646;">
+                            <span class="font-bold text-lg" style="color: var(--brand-primary);">
                                 <?php echo e(global_currency_format($package->price, $package->currency_id)); ?>
 
                             </span>
                             <?php echo e(__('modules.package.payOnce')); ?>
 
                         <?php elseif($monthlyPackages->count() > 0): ?>
-                            <span class="font-bold text-lg" style="color: #011646;">
+                            <span class="font-bold text-lg" style="color: var(--brand-primary);">
                                 <?php echo e(global_currency_format($package->monthly_price, $package->currency_id)); ?>
 
                             </span>
@@ -36,7 +36,7 @@
 
                     <?php if($package->package_type == \App\Enums\PackageType::STANDARD && !is_null($package->annual_price) && $annualPackages->count() > 0): ?>
                     <p class="text-sm text-gray-500 dark:text-neutral-500 mt-1">
-                        <span class="font-bold text-lg" style="color: #011646;">
+                        <span class="font-bold text-lg" style="color: var(--brand-primary);">
                             <?php echo e(global_currency_format($package->annual_price, $package->currency_id)); ?>
 
                         </span>
@@ -76,7 +76,7 @@
                         <div class="flex-1">
                             <span class="text-sm text-gray-800 dark:text-neutral-200"><?php echo e(__('permissions.modules.'.$moduleName)); ?></span>
                             <?php if($showLimit && $limitValue !== null): ?>
-                                <span class="ml-2 text-xs font-semibold" style="color: #011646;">
+                                <span class="ml-2 text-xs font-semibold" style="color: var(--brand-primary);">
                                     <?php if($limitValue == -1): ?>
                                         (Unlimited)
                                     <?php else: ?>
@@ -91,7 +91,7 @@
                         </div>
                         <?php if(!$showLimit): ?>
                             <?php if($isEnabled): ?>
-                            <svg class="shrink-0 size-5" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <svg class="shrink-0 size-5" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             <?php else: ?>
                             <svg class="shrink-0 size-5 text-gray-400 dark:text-neutral-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                             <?php endif; ?>
@@ -108,15 +108,15 @@
             <!-- Pricing Switch -->
             <?php if($monthlyPackages->count() > 0 && $annualPackages->count() > 0): ?>
             <div class="flex justify-center items-center gap-3 mb-8">
-                <span class="text-sm font-medium text-gray-800 dark:text-neutral-200" :class="{ 'text-[#011646]': !isAnnual }">
+                <span class="text-sm font-medium text-gray-800 dark:text-neutral-200" :class="{ 'text-[var(--brand-primary)]': !isAnnual }">
                     <?php echo app('translator')->get('modules.package.payMonthly'); ?>
                 </span>
 
                 <button
                     type="button"
                     @click="isAnnual = !isAnnual"
-                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors bg-[#011646]/20"
-                    :class="{ '!bg-[#011646]': isAnnual }">
+                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors bg-[var(--brand-primary)]/20"
+                    :class="{ '!bg-[var(--brand-primary)]': isAnnual }">
                     <span class="sr-only">Toggle annual billing</span>
                     <span
                         class="inline-block h-4 w-4 transform rounded-full bg-white transition"
@@ -124,7 +124,7 @@
                     </span>
                 </button>
 
-                <span class="text-sm font-medium text-gray-800 dark:text-neutral-200" :class="{ 'text-[#011646]': isAnnual }">
+                <span class="text-sm font-medium text-gray-800 dark:text-neutral-200" :class="{ 'text-[var(--brand-primary)]': isAnnual }">
                     <?php echo app('translator')->get('modules.package.payAnnually'); ?>
                 </span>
             </div>
@@ -150,7 +150,7 @@
                             <div class="gap-2">
                                 <?php if($package->package_type == \App\Enums\PackageType::LIFETIME): ?>
                                 <p class="text-sm text-gray-500 dark:text-neutral-500">
-                                    <span class="font-bold text-2xl" style="color: #011646;">
+                                    <span class="font-bold text-2xl" style="color: var(--brand-primary);">
                                         <?php echo e(global_currency_format($package->price, $package->currency_id)); ?>
 
                                     </span>
@@ -160,7 +160,7 @@
                                 <?php if($package->package_type == \App\Enums\PackageType::STANDARD && !is_null($package->monthly_price) && $package->monthly_status): ?>
                                 <p class="text-sm text-gray-500 dark:text-neutral-500 monthly-price"
                                    x-show="!isAnnual">
-                                    <span class="font-bold text-2xl" style="color: #011646;">
+                                    <span class="font-bold text-2xl" style="color: var(--brand-primary);">
                                         <?php echo e(global_currency_format($package->monthly_price, $package->currency_id)); ?>
 
                                     </span>
@@ -170,7 +170,7 @@
                                 <?php if($package->package_type == \App\Enums\PackageType::STANDARD && !is_null($package->annual_price) && $package->annual_status): ?>
                                 <p class="text-sm text-gray-500 dark:text-neutral-500 annual-price"
                                    x-show="isAnnual">
-                                    <span class="font-bold text-2xl" style="color: #011646;">
+                                    <span class="font-bold text-2xl" style="color: var(--brand-primary);">
                                         <?php echo e(global_currency_format($package->annual_price, $package->currency_id)); ?>
 
                                     </span>
@@ -180,8 +180,8 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg text-white hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-[#011646] focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-colors"
-                    style="background-color: #011646;" href="<?php echo e(route('restaurant_signup')); ?>">
+                            <a class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg text-white hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-colors"
+                    style="background-color: var(--brand-primary);" href="<?php echo e(route('restaurant_signup')); ?>">
                                 <?php echo app('translator')->get('landing.getStarted'); ?>
                             </a>
                         </div>
@@ -230,7 +230,7 @@
                             <?php if($isEnabled): ?>
                                 <?php if($showLimit && $limitValue !== null): ?>
                                     <div class="flex flex-col items-center gap-1">
-                                        <span class="text-xs font-semibold" style="color: #011646;">
+                                        <span class="text-xs font-semibold" style="color: var(--brand-primary);">
                                             <?php if($limitValue == -1): ?>
                                                 <?php echo e(__('modules.billing.unlimited')); ?>
 
@@ -246,7 +246,7 @@
                                         </span>
                                     </div>
                                 <?php else: ?>
-                                    <svg class="shrink-0 lg:mx-auto size-5" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <svg class="shrink-0 lg:mx-auto size-5" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                 <?php endif; ?>
                             <?php else: ?>
                             <svg class="shrink-0 lg:mx-auto size-5 text-gray-400 dark:text-neutral-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>

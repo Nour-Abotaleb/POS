@@ -40,7 +40,7 @@
             wire:click="showMenuItems({{ $item->id }})"
             wire:loading.class.delay="opacity-60"
             wire:target="showMenuItems"
-            style="{{ $menuId == $item->id ? 'background-color: #011646; border-color: #011646;' : '' }}"
+            style="{{ $menuId == $item->id ? 'background-color: var(--brand-primary); border-color: var(--brand-primary);' : '' }}"
             @class([
                 'group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600',
                 'bg-white dark:bg-gray-700' => $menuId != $item->id,
@@ -64,7 +64,7 @@
                                 {{ $item->menu_name }}
                             </h3>
                             <p @class([
-                                'text-sm dark:text-neutral-500',
+                                'text-sm dark:text-gray-300',
                                 'text-gray-100' => $menuId == $item->id,
                                 'text-gray-500' => $menuId != $item->id,
                             ])>

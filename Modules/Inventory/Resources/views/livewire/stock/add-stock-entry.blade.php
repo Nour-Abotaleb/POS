@@ -13,7 +13,7 @@
         <!-- Transaction Type -->
         <div class=" p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center gap-2">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
                     </svg>
@@ -74,7 +74,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <label for="entry_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
@@ -91,7 +91,7 @@
 
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <label for="entry_time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -111,7 +111,7 @@
             <!-- Item Selection -->
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
@@ -137,7 +137,7 @@
             <!-- Quantity -->
             <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                 <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                         </svg>
@@ -170,7 +170,7 @@
                     <!-- Supplier Selection -->
                     <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                         <label for="supplier-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 {{ __('inventory::modules.stock.unitPurchasePrice') }}
                             </div>
                         </label>
@@ -196,7 +196,7 @@
 
                     <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                         <label for="expiration_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 {{ __('inventory::modules.stock.expirationDate') }}
                             </div>
                         </label>
@@ -216,7 +216,7 @@
                 <!-- Supplier Selection -->
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                     <label for="supplier-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
@@ -244,7 +244,7 @@
             @if ($transactionType == 'WASTE')
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                     <label for="waste_reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
@@ -270,7 +270,7 @@
             @if ($transactionType == 'TRANSFER')
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                     <label for="branch_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                             </svg>
@@ -292,7 +292,7 @@
 
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                     <label for="destination_inventory_item_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                             </svg>

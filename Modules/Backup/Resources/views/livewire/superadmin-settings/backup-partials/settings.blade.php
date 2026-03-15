@@ -111,7 +111,7 @@
                     <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100">@lang('backup::app.nextScheduledBackup')</h4>
                     <div class="mt-1 text-sm text-blue-700 dark:text-blue-300">
                         @if($nextBackupTime)
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 <span class="font-medium">{{ $nextBackupTime->timezone(global_setting()->timezone)->format('M j, Y g:i A') }}</span>
                                 <span class="text-xs">({{ $nextBackupTime->timezone(global_setting()->timezone)->diffForHumans() }})</span>
                             </div>
@@ -277,7 +277,7 @@
 
                 <!-- Real-time Updates Info -->
                 <div class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-3">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
                         </svg>

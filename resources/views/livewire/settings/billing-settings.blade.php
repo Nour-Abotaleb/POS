@@ -4,21 +4,21 @@
         <ul class="flex flex-wrap -mb-px settings-tab-bar">
             <li class="me-2">
                 <span wire:click="showTab('planDetails')"
-                    style="{{ $activeSetting == 'planDetails' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                    style="{{ $activeSetting == 'planDetails' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                     @class(["inline-block p-4 border-b-2 select-none cursor-pointer rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'planDetails'), 'active' => ($activeSetting == 'planDetails')])>
                     @lang('modules.billing.planDetails')
                 </span>
             </li>
             <li class="me-2">
                 <span wire:click="showTab('purchaseHistory')"
-                    style="{{ $activeSetting == 'purchaseHistory' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                    style="{{ $activeSetting == 'purchaseHistory' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                     @class(["inline-block p-4 border-b-2 select-none cursor-pointer rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'purchaseHistory'), 'active' => ($activeSetting == 'purchaseHistory')])>
                     @lang('modules.billing.purchaseHistory')
                 </span>
             </li>
             <li class="me-2">
                 <span wire:click="showTab('offlineRequest')"
-                    style="{{ $activeSetting == 'offlineRequest' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                    style="{{ $activeSetting == 'offlineRequest' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                     @class(["inline-block p-4 border-b-2 select-none cursor-pointer rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300", 'border-transparent' => ($activeSetting != 'offlineRequest'), 'active' => ($activeSetting == 'offlineRequest')])>
                     @lang('modules.billing.offlineRequest')
                 </span>

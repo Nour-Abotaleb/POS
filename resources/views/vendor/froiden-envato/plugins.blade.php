@@ -8,7 +8,7 @@
         <div class="flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300"></div>
             <div class="mx-4 bg-white px-6 py-3 rounded-full shadow-sm border border-gray-200">
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center gap-2">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h4M9 7h6m-6 4h6m-6 4h6"/>
                     </svg>

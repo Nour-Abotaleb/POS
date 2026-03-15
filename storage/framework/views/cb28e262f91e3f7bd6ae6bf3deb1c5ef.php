@@ -6,7 +6,7 @@
     >
     <img src="<?php echo e(asset('img/reservation.svg')); ?>" alt="Today Reservations" class="w-5 h-5">
     <span
-        class="inline-flex items-center justify-center px-2 py-0.5 ms-2 text-xs font-semibold text-white bg-[#011646] rounded-md" style="background-color: #011646; border-color: #011646;">
+        class="inline-flex items-center justify-center px-2 py-0.5 ms-2 text-xs font-semibold text-white bg-[var(--brand-primary)] rounded-md" style="background-color: var(--brand-primary); border-color: var(--brand-primary);">
         <?php echo e($count); ?>
 
     </span>

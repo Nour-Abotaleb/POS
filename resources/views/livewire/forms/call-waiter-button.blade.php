@@ -18,7 +18,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     @foreach ($tables as $table)
                     <button wire:click="selectTable({{ $table->id }})"
-                        class="flex items-center justify-center p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-[#011646] hover:text-white hover:border-skin-base transition-colors duration-200 dark:bg-gray-800 dark:text-gray-300">
+                        class="flex items-center justify-center p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-[var(--brand-primary)] hover:text-white hover:border-skin-base transition-colors duration-200 dark:bg-gray-800 dark:text-gray-300">
                         <span class="text-lg font-semibold">{{ $table->table_code }}</span>
                     </button>
                     @endforeach

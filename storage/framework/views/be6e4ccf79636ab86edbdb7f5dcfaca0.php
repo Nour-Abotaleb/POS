@@ -15,7 +15,7 @@
 
                                             <span class="text-gray-400 text-sm">#<?php echo e($loop->index+1); ?></span>
 
-                                            <div class="<?php echo \Illuminate\Support\Arr::toCssClasses(['p-2 rounded-md tracking-wide bg-[#011646]/[0.2] text-skin-base']); ?>">
+                                            <div class="<?php echo \Illuminate\Support\Arr::toCssClasses(['p-2 rounded-md tracking-wide bg-[var(--brand-primary)]/[0.2] text-skin-base']); ?>">
                                                 <h3 wire:loading.class.delay='opacity-50'
                                                     class="<?php echo \Illuminate\Support\Arr::toCssClasses(['font-semibold']); ?>">
                                                     <?php echo e($item?->table?->table_code); ?>

@@ -12,7 +12,7 @@
             <ul class="inline-flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 mb-4">
                 <li class="me-2" wire:key='area-fltr-{{ microtime() }}'>
                     <a href="javascript:;" wire:click="$set('areaID', null)"
-                        style="{{ is_null($areaID) ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                        style="{{ is_null($areaID) ? 'color: var(--brand-primary); background-color: rgba(1, 22, 70, 0.2);' : '' }}"
                         @class([
                             'inline-block px-4 py-3 rounded-lg',
                             'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => !is_null($areaID),
@@ -22,7 +22,7 @@
                 @foreach ($areas as $item)
                     <li class="me-2" wire:key='area-fltr-{{ $item->id . microtime() }}'>
                         <a href="javascript:;" wire:click="$set('areaID', '{{ $item->id }}')"
-                            style="{{ $areaID == $item->id ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                            style="{{ $areaID == $item->id ? 'color: var(--brand-primary); background-color: rgba(1, 22, 70, 0.2);' : '' }}"
                             @class([
                                 'inline-block px-4 py-3 rounded-lg',
                                 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => $areaID != $item->id,

@@ -9,7 +9,7 @@
                     <!-- View Toggle -->
                     <div class="inline-flex flex-row rtl:flex-row-reverse rounded-lg shadow-sm">
                         <button type="button" wire:click="$set('viewType', 'list')"
-                            style="{{ $viewType === 'list' ? 'background-color: #011646; color: white;' : '' }}"
+                            style="{{ $viewType === 'list' ? 'background-color: var(--brand-primary); color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg rtl:rounded-l-none rtl:rounded-r-lg focus:z-10',
                             'text-white' => $viewType === 'list',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'list'])>
@@ -19,7 +19,7 @@
                             @lang('app.list')
                         </button>
                         <button type="button" wire:click="$set('viewType', 'grid')"
-                            style="{{ $viewType === 'grid' ? 'background-color: #011646; color: white;' : '' }}"
+                            style="{{ $viewType === 'grid' ? 'background-color: var(--brand-primary); color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium focus:z-10',
                             'text-white' => $viewType === 'grid',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'grid'])>
@@ -29,7 +29,7 @@
                             @lang('app.grid')
                         </button>
                         <button type="button" wire:click="$set('viewType', 'layout')"
-                            style="{{ $viewType === 'layout' ? 'background-color: #011646; color: white;' : '' }}"
+                            style="{{ $viewType === 'layout' ? 'background-color: var(--brand-primary); color: white;' : '' }}"
                             @class(['relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-r-lg rtl:rounded-r-none rtl:rounded-l-lg focus:z-10',
                             'text-white' => $viewType === 'layout',
                             'bg-white text-gray-700 hover:text-gray-900 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700' => $viewType !== 'layout'])>
@@ -100,14 +100,14 @@
             <ul class="inline-flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 mb-4 rtl:flex-row-reverse">
                 <li class="me-2 rtl:ms-2 rtl:me-0" wire:key='area-fltr-{{ microtime() }}'>
                     <a href="javascript:;" wire:click="$set('areaID', null)"
-                    style="{{ is_null($areaID) ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                    style="{{ is_null($areaID) ? 'color: var(--brand-primary); background-color: rgba(1, 22, 70, 0.2);' : '' }}"
                     @class(['inline-block px-4 py-3 rounded-lg', 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => (!is_null($areaID))]) >@lang('modules.table.allAreas')</a>
                 </li>
 
                 @foreach ($areas as $item)
                     <li class="me-2 rtl:ms-2 rtl:me-0" wire:key='area-fltr-{{ $item->id.microtime() }}'>
                         <a href="javascript:;" wire:click="$set('areaID', '{{ $item->id }}')"
-                            style="{{ $areaID == $item->id ? 'color: #011646; background-color: rgba(1, 22, 70, 0.2);' : '' }}"
+                            style="{{ $areaID == $item->id ? 'color: var(--brand-primary); background-color: rgba(1, 22, 70, 0.2);' : '' }}"
                             @class(['inline-block px-4 py-3 rounded-lg', 'hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white' => ($areaID != $item->id)]) >
                             {{ $item->area_name }}
                         </a>

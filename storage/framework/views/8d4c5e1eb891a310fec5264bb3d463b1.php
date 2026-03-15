@@ -34,7 +34,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         
                         <a wire:click="$set('showImportCustomer', true)"
                             class="inline-flex items-center justify-center cursor-pointer px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
@@ -210,7 +210,7 @@ unset($__defined_vars, $__key, $__value); ?>
 </a>
 
 
-        <form wire:submit.prevent="importCustomerList" class="flex items-center space-x-2">
+        <form wire:submit.prevent="importCustomerList" class="flex items-center gap-2">
             <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
                 <input type="file" wire:model="file" accept=".xlsx,.xls,.csv" id="file"
                     class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"

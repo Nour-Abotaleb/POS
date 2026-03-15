@@ -8,7 +8,7 @@
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
             <ul class="flex flex-wrap items-center -mb-px settings-tab-bar">
                 <li class="me-2">
-                    <span wire:click="$set('activeTab', 'settings')" style="{{ $activeTab == 'settings' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                    <span wire:click="$set('activeTab', 'settings')" style="{{ $activeTab == 'settings' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                         'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activeTab != 'settings',
                         'active' => $activeTab == 'settings',
@@ -19,7 +19,7 @@
                 </li>
 
                 <li class="me-2">
-                    <span wire:click="$set('activeTab', 'taxes')" style="{{ $activeTab == 'taxes' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                    <span wire:click="$set('activeTab', 'taxes')" style="{{ $activeTab == 'taxes' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                         'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activeTab != 'taxes',
                         'active' => $activeTab == 'taxes',
@@ -48,7 +48,7 @@
                                 ] as $option)
                                     <label @class([
                                         'relative flex flex-col p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md',
-                                        'border-skin-base bg-[#011646]/10 dark:bg-[#011646]/10' => $taxMode === $option['value'],
+                                        'border-skin-base bg-[var(--brand-primary)]/10 dark:bg-[var(--brand-primary)]/10' => $taxMode === $option['value'],
                                         'border-gray-200 dark:border-gray-700' => $taxMode !== $option['value']
                                     ])>
                                         <div class="flex items-center justify-between mb-2">
@@ -76,7 +76,7 @@
                                         ] as $option)
                                             <label @class([
                                                 'relative flex items-center p-2 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md',
-                                                'border-skin-base bg-[#011646]/10 dark:bg-[#011646]/10' => $itemTaxInclusive == $option['value'],
+                                                'border-skin-base bg-[var(--brand-primary)]/10 dark:bg-[var(--brand-primary)]/10' => $itemTaxInclusive == $option['value'],
                                                 'border-gray-200 dark:border-gray-700' => $itemTaxInclusive != $option['value']
                                             ])>
                                                 <input type="radio" wire:model.live="itemTaxInclusive" value="{{ $option['value'] }}" class="w-4 h-4 text-skin-base mr-3">

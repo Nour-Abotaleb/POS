@@ -25,7 +25,7 @@
                                 @if($currentLanguage === $code) aria-current="true" @endif
                                 @class([
                                     'px-3 py-1.5 text-xs rounded-md border transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none flex items-center gap-2',
-                                    'bg-[#011646] text-white border-skin-base shadow-sm font-medium focus:ring-skin-base' => $currentLanguage === $code,
+                                    'bg-[var(--brand-primary)] text-white border-skin-base shadow-sm font-medium focus:ring-skin-base' => $currentLanguage === $code,
                                     'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:text-skin-base hover:border-skin-base/20 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-skin-base/50 dark:hover:text-skin-base focus:ring-skin-base/30' => $currentLanguage !== $code
                                 ])
                             >
@@ -201,7 +201,7 @@
                                                 @endphp
 
                                                 @if(!empty($selectedVarNames))
-                                                    <span class="ml-2 px-2 py-0.5 rounded bg-[#011646] text-white text-xs">
+                                                    <span class="ml-2 px-2 py-0.5 rounded bg-[var(--brand-primary)] text-white text-xs">
                                                         @if(isset($selectedVariations[$item->id]['item']) && $selectedVariations[$item->id]['item'])
                                                             {{ __('All Variations') }}
                                                         @elseif($selectedCount <= 2)

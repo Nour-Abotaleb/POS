@@ -137,14 +137,14 @@
             <!-- Customer Search Section -->
             <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600 mb-4">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                         <h3 class="text-base font-medium text-gray-900 dark:text-white">@lang('modules.customer.searchCustomer')</h3>
                     </div>
                     @if($selectedCustomerId)
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                 <svg class="w-3 h-3 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>

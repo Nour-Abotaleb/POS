@@ -14,7 +14,7 @@
                 @if ($isGlobalRazorpayEnabled)
 
                     <li class="me-2">
-                        <span wire:click="activeSetting('razorpay')" style="{{ $activePaymentSetting == 'razorpay' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span wire:click="activeSetting('razorpay')" style="{{ $activePaymentSetting == 'razorpay' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'razorpay',
                             'active' =>
@@ -33,7 +33,7 @@
 
                 @if ($isGlobalStripeEnabled)
                     <li wire:click="activeSetting('stripe')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'stripe' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'stripe' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'stripe',
                             'active' =>
@@ -53,7 +53,7 @@
                 @if ($isGlobalFlutterwaveEnabled)
 
                     <li wire:click="activeSetting('flutterwave')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'flutterwave' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'flutterwave' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'flutterwave',
                             'active' =>
@@ -73,7 +73,7 @@
                 @if ($isGlobalPaypalEnabled)
 
                     <li wire:click="activeSetting('paypal')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'paypal' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'paypal' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'paypal',
                             'active' =>
@@ -93,7 +93,7 @@
 
                 @if ($isGlobalPayfastEnabled)
                     <li wire:click="activeSetting('payfast')" class="me-2">
-                    <span style="{{ $activePaymentSetting == 'payfast' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                    <span style="{{ $activePaymentSetting == 'payfast' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                         'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activePaymentSetting != 'payfast',
                         'active' =>
@@ -113,7 +113,7 @@
 
                  @if ($isGlobalPaystackEnabled)
                     <li wire:click="activeSetting('paystack')" class="me-2">
-                    <span style="{{ $activePaymentSetting == 'paystack' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                    <span style="{{ $activePaymentSetting == 'paystack' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                         'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                         'border-transparent' => $activePaymentSetting != 'paystack',
                         'active' =>
@@ -136,7 +136,7 @@
 
                 @if ($isGlobalXenditEnabled)
                     <li wire:click="activeSetting('xendit')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'xendit' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'xendit' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'xendit',
                             'active' =>
@@ -161,7 +161,7 @@
 
                 @if ($isGlobalEpayEnabled)
                     <li wire:click="activeSetting('epay')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'epay' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'epay' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'epay',
                             'active' =>
@@ -190,7 +190,7 @@
                 @endif
 
                     <li class="me-2">
-                        <span wire:click="activeSetting('offline')" style="{{ $activePaymentSetting == 'offline' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span wire:click="activeSetting('offline')" style="{{ $activePaymentSetting == 'offline' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'offline',
                             'active' =>
@@ -207,7 +207,7 @@
                     </li>
 
                     <li class="me-2">
-                        <span wire:click="activeSetting('qr_code')" style="{{ $activePaymentSetting == 'qr_code' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span wire:click="activeSetting('qr_code')" style="{{ $activePaymentSetting == 'qr_code' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'qr_code',
                             'active' =>
@@ -228,7 +228,7 @@
 
 
                     <li wire:click="activeSetting('serviceSpecific')" class="me-2">
-                        <span style="{{ $activePaymentSetting == 'serviceSpecific' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                        <span style="{{ $activePaymentSetting == 'serviceSpecific' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent' => $activePaymentSetting != 'serviceSpecific',
                             'active' =>
@@ -842,7 +842,7 @@
                     <div class="space-y-6">
                         {{-- Offline Payment Method Toggle --}}
                         <div class="flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <label for="enableOfflinePayment" class="flex items-center space-x-2">
+                            <label for="enableOfflinePayment" class="flex items-center gap-2">
                                 <x-checkbox name="enableOfflinePayment" id="enableOfflinePayment" value="offline" wire:model.live="enableOfflinePayment" />
                                 <span>
                                     <span class="font-medium text-gray-900 dark:text-white">@lang('modules.settings.enableOfflinePayment')</span>
@@ -876,7 +876,7 @@
 
                         {{-- Cash Payment Toggle --}}
                         <div class="flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <label for="enablePayViaCash" class="flex items-center space-x-2">
+                            <label for="enablePayViaCash" class="flex items-center gap-2">
                                 <x-checkbox name="enablePayViaCash" id="enablePayViaCash" value="cash" wire:model.live="enablePayViaCash" />
                                 <span>
                                     <span class="font-medium text-gray-900 dark:text-white">@lang('modules.settings.enablePayViaCash')</span>
@@ -900,7 +900,7 @@
                     <div class="space-y-6">
                         {{-- Enable QR Payment Toggle --}}
                         <div class="flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <label for="offlinePaymentMethodQr" class="flex items-center space-x-2">
+                            <label for="offlinePaymentMethodQr" class="flex items-center gap-2">
                                 <x-checkbox name="offlinePaymentMethodQr" id="offlinePaymentMethodQr" value="qrcode" wire:model.live="enableQrPayment" />
                                 <span>
                                     <span class="font-medium text-gray-900 dark:text-white">@lang('modules.settings.enableQrPayment')</span>
@@ -968,7 +968,7 @@
 
                         <div>
                             <x-button :disabled="$errors->has('qrCodeImage')" wire:loading.attr="disabled" wire:target="qrCodeImage">
-                                <span class="flex items-center space-x-2">
+                                <span class="flex items-center gap-2">
                                     <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                     </svg>
@@ -1021,7 +1021,7 @@
 
                             <div class="mt-6">
                                 <x-button>
-                                    <span class="flex items-center space-x-2">
+                                    <span class="flex items-center gap-2">
                                         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                         </svg>

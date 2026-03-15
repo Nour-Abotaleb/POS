@@ -275,7 +275,7 @@
                         <!-- Customer Details Form -->
                         <div class="space-y-3">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center space-x-2">
+                                <div class="flex items-center gap-2">
                                     <svg
                                         class="w-4 h-4 text-gray-600 dark:text-gray-400"
                                         fill="none"
@@ -297,7 +297,7 @@
                                 </div>
                                 <div
                                     v-if="selectedCustomerId"
-                                    class="flex items-center space-x-2"
+                                    class="flex items-center gap-2"
                                 >
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"

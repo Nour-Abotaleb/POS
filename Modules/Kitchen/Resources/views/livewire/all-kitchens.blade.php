@@ -65,7 +65,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">{{ Str::title($kitchen->type) }}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <!-- Status Toggle -->
                             <div class="flex items-center">
                                 <input type="checkbox"
@@ -136,7 +136,7 @@
                                 @else
                                     bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600
                                 @endif">
-                                <div class="flex items-center space-x-2">
+                                <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 rounded-full
                                         @if($item->type === 'veg') bg-green-400
                                         @elseif($item->type === 'non-veg') bg-red-400
@@ -149,7 +149,7 @@
                                         {{ $item->item_name }}
                                     </span>
                                 </div>
-                                <div class="flex items-center space-x-2">
+                                <div class="flex items-center gap-2">
                                     @if($item->variations && $item->variations->count() > 0)
                                         <span class="text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
                                             {{ __('kitchen::modules.menu.hasVariations') }}
@@ -180,7 +180,7 @@
 
                 <!-- Kitchen Actions -->
                 <div class="px-4 pb-4 flex items-center pt-2 justify-between border-t border-gray-100 dark:border-gray-700">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                         @if (user_can('Update Kitchen Place'))
                         <x-secondary-button wire:click="showEditKitchen({{ $kitchen->id }})" class="text-xs bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-1.5">
                             <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
@@ -274,7 +274,7 @@
                             @else
                                 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600
                             @endif">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 <div class="w-2 h-2 rounded-full
                                     @if($item->type === 'veg') bg-green-400
                                     @elseif($item->type === 'non-veg') bg-red-400
@@ -287,7 +287,7 @@
                                     {{ $item->item_name }}
                                 </span>
                             </div>
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
                                 @if($item->variations && $item->variations->count() > 0)
                                     <span class="text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
                                         {{ __('kitchen::modules.menu.hasVariations') }}
@@ -368,7 +368,7 @@
             @if ($itemToAssign)
                 <div class="space-y-4">
                     <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-md">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <div class="w-2 h-2 rounded-full
                                 @if($itemToAssign->type === 'veg') bg-green-400
                                 @elseif($itemToAssign->type === 'non-veg') bg-red-400

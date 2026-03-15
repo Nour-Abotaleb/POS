@@ -102,7 +102,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($inlineEditingRoleId === $role->id)
-                                                <div class="flex items-center space-x-2">
+                                                <div class="flex items-center gap-2">
                                                     <x-input
                                                         class="flex-1"
                                                         type="text"
@@ -126,7 +126,7 @@
                                                     <span class="text-sm text-red-500">{{ $message }}</span>
                                                 @enderror
                                             @else
-                                                <div class="flex items-center space-x-2">
+                                                <div class="flex items-center gap-2">
                                                     <h3 class="text-sm font-medium text-gray-900 dark:text-white {{ $isProtected ? '' : 'cursor-pointer hover:text-blue-600 dark:hover:text-blue-400' }}"
                                                          @if(!$isProtected) wire:click="startInlineEdit({{ $role->id }}, '{{ $role->display_name }}')" @endif>
                                                         {{ $role->translated_name }}

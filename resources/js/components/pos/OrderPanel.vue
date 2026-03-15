@@ -18,14 +18,14 @@
                     @click="selectOrderType(type)"
                     class="px-3 py-2 text-xs rounded-full border transition-all"
                     :class="{
-                        'text-white border-[#011646]':
+                        'text-white border-[var(--brand-primary)]':
                             selectedOrderType === type.slug,
                         'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600':
                             selectedOrderType !== type.slug,
                     }"
                     :style="
                         selectedOrderType === type.slug
-                            ? { backgroundColor: '#011646' }
+                            ? { backgroundColor: 'var(--brand-primary)' }
                             : {}
                     "
                 >
@@ -126,7 +126,7 @@
 
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[var(--brand-primary)]"
                                 @click="showTableAssignmentModal = true"
                                 title="Change Table"
                             >
@@ -136,7 +136,7 @@
                                     viewBox="0 0 20 17"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="text-[#011646]"
+                                    class="text-[var(--brand-primary)]"
                                 >
                                     <g clip-path="url(#clip0_table_assign)">
                                         <path
@@ -157,7 +157,7 @@
                             </button>
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[var(--brand-primary)]"
                                 @click="$emit('merge-tables')"
                                 title="Merge Tables"
                             >
@@ -167,7 +167,7 @@
                                     viewBox="0 0 17 17"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="text-[#011646]"
+                                    class="text-[var(--brand-primary)]"
                                 >
                                     <path
                                         d="M12.24 7.40209L14.875 4.76707L12.24 2.13209"
@@ -203,7 +203,7 @@
                         <template v-else>
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[var(--brand-primary)]"
                                 @click="showTableAssignmentModal = true"
                                 title="Set Table"
                             >
@@ -213,7 +213,7 @@
                                     viewBox="0 0 20 17"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="text-[#011646]"
+                                    class="text-[var(--brand-primary)]"
                                 >
                                     <g clip-path="url(#clip0_table_set)">
                                         <path
@@ -234,7 +234,7 @@
                             </button>
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[#011646]"
+                                class="inline-flex items-center justify-center p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 text-[var(--brand-primary)]"
                                 @click="$emit('merge-tables')"
                                 title="Merge Tables"
                             >
@@ -244,7 +244,7 @@
                                     viewBox="0 0 17 17"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="text-[#011646]"
+                                    class="text-[var(--brand-primary)]"
                                 >
                                     <path
                                         d="M12.24 7.40209L14.875 4.76707L12.24 2.13209"
@@ -289,7 +289,7 @@
                             @change="
                                 $emit('update:waiterId', localWaiterId)
                             "
-                            class="w-full min-w-0 pl-2 pr-8 py-1 border rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:border-[#011646] appearance-none cursor-pointer border-[#011646] focus:ring-[#011646] dark:border-[#011646]"
+                            class="w-full min-w-0 pl-2 pr-8 py-1 border rounded-md shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 text-sm focus:outline-none focus:ring-1 focus:border-[var(--brand-primary)] appearance-none cursor-pointer border-[var(--brand-primary)] focus:ring-[var(--brand-primary)] dark:border-[var(--brand-primary)]"
                         >
                             <option value="">Select Waiter</option>
                             <option
@@ -304,7 +304,7 @@
                             class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none"
                         >
                             <svg
-                                class="w-4 h-4 text-[#011646]"
+                                class="w-4 h-4 text-[var(--brand-primary)]"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -335,7 +335,7 @@
                     <!-- Add Note -->
                     <button
                         type="button"
-                        class="shrink-0 inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative text-[#011646]"
+                        class="shrink-0 inline-flex items-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 relative text-[var(--brand-primary)]"
                         @click="$emit('add-note')"
                         title="Add Note"
                     >
@@ -344,7 +344,7 @@
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-pencil-square text-[#011646]"
+                            class="bi bi-pencil-square text-[var(--brand-primary)]"
                             viewBox="0 0 16 16"
                         >
                             <path
@@ -469,7 +469,7 @@
                                         "
                                     >
                                         <div
-                                            class="flex items-center gap-2 cursor-pointer text-xs transition-all duration-200 text-[#011646] hover:opacity-80"
+                                            class="flex items-center gap-2 cursor-pointer text-xs transition-all duration-200 text-[var(--brand-primary)] hover:opacity-80"
                                             @click="
                                                 () => {
                                                     item._showNotePreview = true;
@@ -512,7 +512,7 @@
                                                         item.note || '';
                                                 }
                                             "
-                                            class="inline-flex items-center gap-1 text-xs pt-1 text-gray-500 hover:text-[#011646] transition-colors duration-200"
+                                            class="inline-flex items-center gap-1 text-xs pt-1 text-gray-500 hover:text-[var(--brand-primary)] transition-colors duration-200"
                                             title="Add Note"
                                         >
                                             <svg
@@ -643,7 +643,7 @@
                                             <input
                                                 type="text"
                                                 v-model="item._activeNote"
-                                                class="w-64 md:w-80 p-2 border-none text-base focus:outline-none focus:ring-2 focus:ring-[#011646] dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
+                                                class="w-64 md:w-80 p-2 border-none text-base focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
                                                 placeholder="Special Instructions? (e.g., no onions, extra spicy)"
                                                 @keydown.enter="
                                                     () => {
@@ -689,9 +689,9 @@
                                                             item._showNoteInput = false;
                                                         }
                                                     "
-                                                    class="p-1.5 text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#011646] focus:ring-offset-2 hover:opacity-90"
+                                                    class="p-1.5 text-white rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 hover:opacity-90"
                                                     style="
-                                                        background-color: #011646;
+                                                        background-color: var(--brand-primary);
                                                     "
                                                     title="Save"
                                                     type="button"

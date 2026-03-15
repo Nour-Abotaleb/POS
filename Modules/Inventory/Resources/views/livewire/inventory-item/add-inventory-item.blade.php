@@ -134,7 +134,7 @@
 
                 <div>
                     <label for="supplier-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>

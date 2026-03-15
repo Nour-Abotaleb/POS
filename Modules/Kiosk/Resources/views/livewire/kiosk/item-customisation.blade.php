@@ -157,7 +157,7 @@
                     <span wire:loading.remove wire:target="addToCartFromCustomization">
                         {{ __('kiosk::modules.customisation.add_to_cart') }}
                     </span>
-                    <span wire:loading wire:target="addToCartFromCustomization" class="flex items-center space-x-2">
+                    <span wire:loading wire:target="addToCartFromCustomization" class="flex items-center gap-2">
                         <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                         <span>{{ __('kiosk::modules.customisation.adding') ?? 'Adding...' }}</span>
                     </span>

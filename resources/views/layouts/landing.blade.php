@@ -82,17 +82,17 @@
                         <ul class="flex flex-col font-medium ">
                             <li>
                                 <a href="{{ url('/') }}"
-                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('menu.home')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: var(--brand-primary);">@lang('menu.home')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#icon-features"
-                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('landing.features')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: var(--brand-primary);">@lang('landing.features')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#simple-pricing"
-                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: #011646;">@lang('landing.pricing')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white" style="color: var(--brand-primary);">@lang('landing.pricing')</a>
                             </li>
 
                             @php
@@ -125,7 +125,7 @@
 
                             <li>
                                 <a href="{{ route('restaurant_signup') }}" wire:navigate
-                                    class="block py-2 pr-4 pl-3 rounded dark:text-white font-semibold" style="color: #011646;">@lang('landing.getStarted')</a>
+                                    class="block py-2 pr-4 pl-3 rounded dark:text-white font-semibold" style="color: var(--brand-primary);">@lang('landing.getStarted')</a>
                             </li>
                         </ul>
                     </div>
@@ -169,7 +169,7 @@
                         @if (!user())
                             <a href="{{ route('restaurant_signup') }}"
                                 class="text-white justify-center hover:opacity-90 sm:w-auto font-semibold rounded-lg text-sm px-5 py-2.5 text-center ltr:ml-2 rtl:mr-2 transition-colors"
-                                style="background-color: #011646;"
+                                style="background-color: var(--brand-primary);"
                                 wire:click="$dispatch('showSignup')">@lang('landing.getStarted')</a>
                         @endif
                         <button data-collapse-toggle="mobile-menu-2" type="button"
@@ -210,32 +210,32 @@
                                 <a href="{{ url('/') }}"
                                     wire:navigate
                                     class="block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 transition-all duration-300 text-gray-700 dark:text-white lg:hover:opacity-90"
-                                    :class="{ 'lg:!text-[#011646]': activeSection === 'home' }"
-                                    :style="activeSection === 'home' ? 'color: #011646;' : ''"
+                                    :class="{ 'lg:!text-[var(--brand-primary)]': activeSection === 'home' }"
+                                    :style="activeSection === 'home' ? 'color: var(--brand-primary);' : ''"
                                     :aria-current="activeSection === 'home' ? 'page' : null">@lang('menu.home')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#icon-features"
                                     class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
-                                    :class="{ 'lg:!text-[#011646]': activeSection === 'features' }"
-                                    :style="activeSection === 'features' ? 'color: #011646;' : ''"
+                                    :class="{ 'lg:!text-[var(--brand-primary)]': activeSection === 'features' }"
+                                    :style="activeSection === 'features' ? 'color: var(--brand-primary);' : ''"
                                     :aria-current="activeSection === 'features' ? 'page' : null">@lang('landing.features')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#simple-pricing"
                                     class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
-                                    :class="{ 'lg:!text-[#011646]': activeSection === 'pricing' }"
-                                    :style="activeSection === 'pricing' ? 'color: #011646;' : ''"
+                                    :class="{ 'lg:!text-[var(--brand-primary)]': activeSection === 'pricing' }"
+                                    :style="activeSection === 'pricing' ? 'color: var(--brand-primary);' : ''"
                                     :aria-current="activeSection === 'pricing' ? 'page' : null">@lang('landing.pricing')</a>
                             </li>
 
                             <li>
                                 <a href="{{ url('/') }}#user-faqs"
                                     class="transition-all duration-300 block py-2 pr-4 pl-3 rounded lg:bg-transparent lg:p-0 text-gray-700 dark:text-white lg:hover:opacity-90"
-                                    :class="{ 'lg:!text-[#011646]': activeSection === 'faq' }"
-                                    :style="activeSection === 'faq' ? 'color: #011646;' : ''"
+                                    :class="{ 'lg:!text-[var(--brand-primary)]': activeSection === 'faq' }"
+                                    :style="activeSection === 'faq' ? 'color: var(--brand-primary);' : ''"
                                     :aria-current="activeSection === 'faq' ? 'page' : null">@lang('landing.faq')</a>
                             </li>
 

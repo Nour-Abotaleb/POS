@@ -49,7 +49,7 @@
                 <div class="p-2">
                     <div class="flex items-start">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center gap-2">
        
                                 <h3 class="text-xs text-gray-900 truncate " title="{{ $file->name }}">
                                     {{ $file->filename }}

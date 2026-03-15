@@ -10,7 +10,7 @@
     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
         <ul class="flex flex-wrap items-center -mb-px settings-tab-bar">
             <li class="me-2">
-                <span wire:click="$set('activeTab', 'settings')" style="{{ $activeTab == 'settings' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                <span wire:click="$set('activeTab', 'settings')" style="{{ $activeTab == 'settings' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                     'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                     'border-transparent' => $activeTab != 'settings',
                     'active' => $activeTab == 'settings',
@@ -20,7 +20,7 @@
             </li>
 
             <li class="me-2">
-                <span wire:click="$set('activeTab', 'customizeHeader')" style="{{ $activeTab == 'customizeHeader' ? 'color: #011646; border-bottom-color: #011646;' : '' }}" @class([
+                <span wire:click="$set('activeTab', 'customizeHeader')" style="{{ $activeTab == 'customizeHeader' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}" @class([
                     'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                     'border-transparent' => $activeTab != 'customizeHeader',
                     'active' => $activeTab == 'customizeHeader',

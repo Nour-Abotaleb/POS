@@ -48,7 +48,7 @@ if (isset($__slots)) unset($__slots);
             <div class="fixed bottom-6 right-6 z-50 lg:hidden">
                 <button type="button"
                     @click="toggleMenu()"
-                    style="background-color: #011646; border-color: #011646;"
+                    style="background-color: var(--brand-primary); border-color: var(--brand-primary);"
                     class="text-white rounded-full shadow-lg p-4 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition hover:opacity-90"
                     aria-label="Toggle menu">
                     <svg x-show="!menuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

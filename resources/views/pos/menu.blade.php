@@ -24,7 +24,7 @@
             flex: 1 1 0% !important;
             min-height: 0 !important;
             height: 100% !important;
-            margin-top: 4rem !important;
+            /* margin-top: 4rem !important; */
         }
     }
     /* Mobile/tablet: when menu is open as overlay, stack above order panel (z-40) so it’s visible and closable */
@@ -133,7 +133,7 @@
                                             <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;">@lang('app.posCategory'):</span>
                                             <button type="button"
                                                 wire:click="$set('menuId', null)"
-                                                style="{{ $menuId === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                style="{{ $menuId === null ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                 @class([
                                                     'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
                                                     'text-white shadow-sm' => $menuId === null,
@@ -149,7 +149,7 @@
                                                 @endphp
                                                 <button type="button"
                                                     wire:click="$set('menuId', {{ $menu->id }})"
-                                                    style="{{ $isActiveMenu ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                    style="{{ $isActiveMenu ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                     @class([
                                                         'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
                                                         'text-white shadow-sm' => $isActiveMenu,
@@ -171,7 +171,7 @@
                                         :disabled="!canScrollRight"
                                         :class="canScrollRight ? 'opacity-100' : 'opacity-40 pointer-events-none'"
                                         class="pos-slider-next-arrow shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border-0 bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800/50 transition"
-                                        style="color: #011646;"
+                                        style="color: var(--brand-primary);"
                                         aria-label="@lang('app.next')">
                                         <svg class="w-[13px] h-3" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.85509 9.53636C6.62366 9.71697 6.22221 10.0202 6.08773 10.1218C5.80982 10.3265 5.75043 10.7177 5.95512 10.9957C6.15982 11.2736 6.55146 11.3327 6.8294 11.128L6.83122 11.1266C6.972 11.0203 7.38785 10.7062 7.62413 10.5218C8.09811 10.1519 8.73219 9.6432 9.3681 9.09108C10.0009 8.54164 10.6498 7.93692 11.1454 7.37599C11.3926 7.09624 11.6149 6.81266 11.7787 6.54086C11.9323 6.28621 12.0833 5.9638 12.0833 5.62505C12.0833 5.28629 11.9323 4.96387 11.7787 4.70923C11.6149 4.43742 11.3926 4.15385 11.1454 3.87409C10.6498 3.31316 10.0009 2.70844 9.36809 2.159C8.73217 1.60688 8.09808 1.09818 7.62409 0.728286C7.38803 0.544061 6.97235 0.230101 6.83119 0.123481L6.82896 0.121794C6.55102 -0.0828998 6.15977 -0.0235256 5.95508 0.25441C5.75038 0.532346 5.81033 0.924017 6.08827 1.12871C6.22275 1.23028 6.62363 1.53312 6.85506 1.71372C7.31858 2.07545 7.93449 2.56971 8.54857 3.10288C9.16576 3.63875 9.76685 4.20167 10.2087 4.70177C10.4303 4.95253 10.5986 5.17281 10.7082 5.35458C10.8113 5.52553 10.8327 5.62355 10.8327 5.62355C10.8327 5.62355 10.8113 5.72454 10.7082 5.8955C10.5986 6.07727 10.4303 6.29756 10.2087 6.54832C9.76684 7.04841 9.16577 7.61134 8.54858 8.1472C7.93451 8.68037 7.3186 9.17463 6.85509 9.53636Z" fill="currentColor"/><path d="M1.02175 9.53636C0.790329 9.71697 0.388875 10.0202 0.254397 10.1218C-0.0235141 10.3265 -0.0829025 10.7177 0.121786 10.9957C0.326481 11.2736 0.718128 11.3327 0.996062 11.128L0.997882 11.1266C1.13864 11.0203 1.5545 10.7062 1.79079 10.5218C2.26477 10.1519 2.89885 9.6432 3.53477 9.09108C4.16757 8.54164 4.81648 7.93692 5.31211 7.37599C5.55929 7.09624 5.78155 6.81266 5.94541 6.54086C6.09892 6.28621 6.24999 5.9638 6.24999 5.62505C6.25 5.28629 6.09893 4.96387 5.94541 4.70923C5.78156 4.43742 5.55929 4.15385 5.31211 3.87409C4.81648 3.31316 4.16757 2.70844 3.53475 2.159C2.89883 1.60688 2.26475 1.09818 1.79076 0.728286C1.55465 0.544024 1.13885 0.229975 0.997773 0.123417L0.995623 0.121794C0.717686 -0.0828998 0.326438 -0.0235256 0.121745 0.25441C-0.0829494 0.532346 -0.0230022 0.924017 0.254933 1.12871C0.389413 1.23028 0.790298 1.53312 1.02173 1.71372C1.48524 2.07545 2.10116 2.56971 2.71524 3.10288C3.33243 3.63875 3.93351 4.20167 4.37538 4.70177C4.59695 4.95253 4.76531 5.17281 4.87489 5.35458C4.97795 5.52553 4.99938 5.62355 4.99938 5.62355C4.99938 5.62355 4.97795 5.72454 4.87489 5.8955C4.76531 6.07727 4.59695 6.29756 4.37538 6.54832C3.93351 7.04841 3.33243 7.61134 2.71525 8.1472C2.10117 8.68037 1.48526 9.17463 1.02175 9.53636Z" fill="currentColor"/></svg>
                                     </button>
@@ -237,7 +237,7 @@
                                             <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #D0D0D0;">@lang('app.posProducts'):</span>
                                             <button type="button"
                                                 wire:click="$set('filterCategories', null)"
-                                                style="{{ $filterCategories === null ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                style="{{ $filterCategories === null ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                 @class([
                                                     'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
                                                     'text-white shadow-sm' => $filterCategories === null,
@@ -253,7 +253,7 @@
                                                 @endphp
                                                 <button type="button"
                                                     wire:click="$set('filterCategories', {{ $category->id }})"
-                                                    style="{{ $isActiveCategory ? 'background-color: #011646; border-color: #011646; color: white;' : '' }}"
+                                                    style="{{ $isActiveCategory ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                     @class([
                                                         'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
                                                         'text-white shadow-sm' => $isActiveCategory,
@@ -276,7 +276,7 @@
                                         :disabled="!canScrollRight"
                                         :class="canScrollRight ? 'opacity-100' : 'opacity-40 pointer-events-none'"
                                         class="pos-slider-next-arrow shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border-0 bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition"
-                                        style="color: #011646;"
+                                        style="color: var(--brand-primary);"
                                         aria-label="@lang('app.next')">
                                         <svg class="w-[13px] h-3" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.85509 9.53636C6.62366 9.71697 6.22221 10.0202 6.08773 10.1218C5.80982 10.3265 5.75043 10.7177 5.95512 10.9957C6.15982 11.2736 6.55146 11.3327 6.8294 11.128L6.83122 11.1266C6.972 11.0203 7.38785 10.7062 7.62413 10.5218C8.09811 10.1519 8.73219 9.6432 9.3681 9.09108C10.0009 8.54164 10.6498 7.93692 11.1454 7.37599C11.3926 7.09624 11.6149 6.81266 11.7787 6.54086C11.9323 6.28621 12.0833 5.9638 12.0833 5.62505C12.0833 5.28629 11.9323 4.96387 11.7787 4.70923C11.6149 4.43742 11.3926 4.15385 11.1454 3.87409C10.6498 3.31316 10.0009 2.70844 9.36809 2.159C8.73217 1.60688 8.09808 1.09818 7.62409 0.728286C7.38803 0.544061 6.97235 0.230101 6.83119 0.123481L6.82896 0.121794C6.55102 -0.0828998 6.15977 -0.0235256 5.95508 0.25441C5.75038 0.532346 5.81033 0.924017 6.08827 1.12871C6.22275 1.23028 6.62363 1.53312 6.85506 1.71372C7.31858 2.07545 7.93449 2.56971 8.54857 3.10288C9.16576 3.63875 9.76685 4.20167 10.2087 4.70177C10.4303 4.95253 10.5986 5.17281 10.7082 5.35458C10.8113 5.52553 10.8327 5.62355 10.8327 5.62355C10.8327 5.62355 10.8113 5.72454 10.7082 5.8955C10.5986 6.07727 10.4303 6.29756 10.2087 6.54832C9.76684 7.04841 9.16577 7.61134 8.54858 8.1472C7.93451 8.68037 7.3186 9.17463 6.85509 9.53636Z" fill="currentColor"/><path d="M1.02175 9.53636C0.790329 9.71697 0.388875 10.0202 0.254397 10.1218C-0.0235141 10.3265 -0.0829025 10.7177 0.121786 10.9957C0.326481 11.2736 0.718128 11.3327 0.996062 11.128L0.997882 11.1266C1.13864 11.0203 1.5545 10.7062 1.79079 10.5218C2.26477 10.1519 2.89885 9.6432 3.53477 9.09108C4.16757 8.54164 4.81648 7.93692 5.31211 7.37599C5.55929 7.09624 5.78155 6.81266 5.94541 6.54086C6.09892 6.28621 6.24999 5.9638 6.24999 5.62505C6.25 5.28629 6.09893 4.96387 5.94541 4.70923C5.78156 4.43742 5.55929 4.15385 5.31211 3.87409C4.81648 3.31316 4.16757 2.70844 3.53475 2.159C2.89883 1.60688 2.26475 1.09818 1.79076 0.728286C1.55465 0.544024 1.13885 0.229975 0.997773 0.123417L0.995623 0.121794C0.717686 -0.0828998 0.326438 -0.0235256 0.121745 0.25441C-0.0829494 0.532346 -0.0230022 0.924017 0.254933 1.12871C0.389413 1.23028 0.790298 1.53312 1.02173 1.71372C1.48524 2.07545 2.10116 2.56971 2.71524 3.10288C3.33243 3.63875 3.93351 4.20167 4.37538 4.70177C4.59695 4.95253 4.76531 5.17281 4.87489 5.35458C4.97795 5.52553 4.99938 5.62355 4.99938 5.62355C4.99938 5.62355 4.97795 5.72454 4.87489 5.8955C4.76531 6.07727 4.59695 6.29756 4.37538 6.54832C3.93351 7.04841 3.33243 7.61134 2.71525 8.1472C2.10117 8.68037 1.48526 9.17463 1.02175 9.53636Z" fill="currentColor"/></svg>
                                     </button>
@@ -347,7 +347,7 @@
                                     {{-- Loading Overlay --}}
                                     <div wire:loading.flex wire:target="addCartItems({{ $item->id }}, {{ $item->variations_count }}, {{ $item->modifier_groups_count }})"
                                         class="absolute inset-0 bg-white/80 dark:bg-gray-800/80 rounded-lg z-10 items-center justify-center">
-                                        <svg class="animate-spin h-6 w-6" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -403,7 +403,7 @@
                         <li class="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
                             @if($this->menuItemsLoaded === 0 && $this->totalMenuItemsCount > 0)
                                 <div class="flex flex-col items-center gap-3 text-gray-600 dark:text-gray-400">
-                                    <svg class="animate-spin h-10 w-10" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
+                                    <svg class="animate-spin h-10 w-10" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
                                     <p class="text-sm font-medium">@lang('messages.loadingData')</p>
                                 </div>
                             @else
@@ -424,7 +424,7 @@
                     @if(!$this->allItemsLoaded)
                         {{-- Only show bottom loading when loading MORE (we already have items). Initial load is shown in the @empty block above. --}}
                         <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
-                            <svg class="inline animate-spin h-6 w-6" style="color: #011646;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
+                            <svg class="inline animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/></svg>
                             <span class="text-sm font-medium">@lang('messages.loadingData')</span>
                         </div>
                     @else

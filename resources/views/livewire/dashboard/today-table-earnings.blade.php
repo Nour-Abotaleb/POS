@@ -15,7 +15,7 @@
 
                                             <span class="text-gray-400 text-sm">#{{ $loop->index+1 }}</span>
 
-                                            <div @class(['p-2 rounded-md tracking-wide bg-[#011646]/[0.2] text-skin-base'])>
+                                            <div @class(['p-2 rounded-md tracking-wide bg-[var(--brand-primary)]/[0.2] text-skin-base'])>
                                                 <h3 wire:loading.class.delay='opacity-50'
                                                     @class(['font-semibold'])>
                                                     {{ $item?->table?->table_code }}

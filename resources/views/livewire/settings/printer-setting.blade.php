@@ -357,7 +357,7 @@
                                                     {{ $kot->name }}
                                                 </span>
                                             </label>
-                                            <div class="flex items-center space-x-2">
+                                            <div class="flex items-center gap-2">
                                                 @if ($isCurrentlyAssigned)
                                                     @if ($isAssignedToThisPrinter)
                                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
@@ -429,7 +429,7 @@
                                                     {{ $order->name }}
                                                 </span>
                                             </label>
-                                            <div class="flex items-center space-x-2">
+                                            <div class="flex items-center gap-2">
                                                 @if ($isCurrentlyAssigned)
                                                     @if ($isAssignedToThisPrinter)
                                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">

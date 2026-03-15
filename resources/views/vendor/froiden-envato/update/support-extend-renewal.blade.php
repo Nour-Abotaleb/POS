@@ -40,7 +40,7 @@
 
 
                         @if($expired)
-                            <a class="text-white justify-center bg-[#011646] hover:bg-[#011646]/[.8] sm:w-auto dark:bg-[#011646] dark:hover:bg-[#011646]/[.8] font-semibold rounded-lg text-sm px-5 py-2.5 text-center mr-2  -color-primary -size-m -width-full h-mt"
+                            <a class="text-white justify-center bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/[.8] sm:w-auto dark:bg-[var(--brand-primary)] dark:hover:bg-[var(--brand-primary)]/[.8] font-semibold rounded-lg text-sm px-5 py-2.5 text-center mr-2  -color-primary -size-m -width-full h-mt"
                                                   href="{{\Froiden\Envato\Helpers\FroidenApp::renewSupportUrl(config('froiden_envato.envato_item_id'))}}"
 
                                                   target="_blank">Renew support now
@@ -53,7 +53,7 @@
                                                     icon="sync-alt">Refresh
                             </x-secondary-button>
                         @elseif ((int)now()->diffInDays($support) < 90)
-                            <a class="text-white justify-center bg-[#011646] hover:bg-[#011646]/[.8] sm:w-auto dark:bg-[#011646] dark:hover:bg-[#011646]/[.8] font-semibold rounded-lg text-sm px-5 py-2.5 text-center mr-2"
+                            <a class="text-white justify-center bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/[.8] sm:w-auto dark:bg-[var(--brand-primary)] dark:hover:bg-[var(--brand-primary)]/[.8] font-semibold rounded-lg text-sm px-5 py-2.5 text-center mr-2"
                                                   href="{{ Froiden\Envato\Helpers\FroidenApp::extendSupportUrl(config('froiden_envato.envato_item_id')) }}"
                                                   target="_blank"
                                                   >Extend now and save

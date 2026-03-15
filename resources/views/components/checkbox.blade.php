@@ -1,5 +1,5 @@
 @php
-    $themeStyle = 'accent-color: #011646;';
+    $themeStyle = 'accent-color: var(--brand-primary);';
     $mergedStyle = trim($themeStyle . ' ' . ($attributes->get('style') ?? ''));
 @endphp
 <input type="checkbox"

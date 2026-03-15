@@ -95,7 +95,7 @@
                 ])>
                 @if ($kotSettings->default_status == 'pending')
                     <div wire:click="$set('filterOrders', 'pending_confirmation')"
-                        style="{{ $filterOrders == 'pending_confirmation' ? 'border: 2px solid #011646;' : '' }}"
+                        style="{{ $filterOrders == 'pending_confirmation' ? 'border: 2px solid var(--brand-primary);' : '' }}"
                         @class([
                         'whitespace-nowrap items-center font-medium
                                                             cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
@@ -107,7 +107,7 @@
                 @endif
 
                 <div wire:click="$set('filterOrders', 'in_kitchen')"
-                    style="{{ $filterOrders == 'in_kitchen' ? 'border: 2px solid #011646;' : '' }}"
+                    style="{{ $filterOrders == 'in_kitchen' ? 'border: 2px solid var(--brand-primary);' : '' }}"
                     @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
@@ -117,7 +117,7 @@
                     @lang('modules.order.in_kitchen') ({{ $inKitchenCount }})
                 </div>
                 <div wire:click="$set('filterOrders', 'food_ready')"
-                    style="{{ $filterOrders == 'food_ready' ? 'border: 2px solid #011646;' : '' }}"
+                    style="{{ $filterOrders == 'food_ready' ? 'border: 2px solid var(--brand-primary);' : '' }}"
                     @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white
@@ -127,7 +127,7 @@
                     @lang('modules.order.food_ready') ({{ $foodReadyCount }})
                 </div>
                 <div wire:click="$set('filterOrders', 'cancelled')"
-                    style="{{ $filterOrders == 'cancelled' ? 'border: 2px solid #011646;' : '' }}"
+                    style="{{ $filterOrders == 'cancelled' ? 'border: 2px solid var(--brand-primary);' : '' }}"
                     @class([
                     'whitespace-nowrap items-center font-medium
                                                     cursor-pointer p-2 text-center rounded-md text-sm border hover:text-gray-900 bg-white

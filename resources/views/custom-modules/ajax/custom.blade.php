@@ -313,7 +313,7 @@
                             @endif
 
                             <div class="flex-grow">
-                                <div class="flex items-center space-x-2">
+                                <div class="flex items-center gap-2">
                                     <div class="flex flex-col">
                                         <span class="text-gray-900 font-bold font-semibold">{{ $module }}
 

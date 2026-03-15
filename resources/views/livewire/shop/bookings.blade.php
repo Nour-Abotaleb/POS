@@ -10,7 +10,7 @@
                 <div class="flex justify-between">
                     <div class="text-base font-semibold text-gray-800 dark:text-white flex items-center gap-1">
                         @if (!is_null($reservation->table_id))
-                        <div @class(['p-2 rounded-md tracking-wide', 'bg-[#011646]/20' => (!is_null($reservation->table_id)), 'bg-yellow-200 text-yellow-800' => (is_null($reservation->table_id))]) style="{{ !is_null($reservation->table_id) ? 'color: #011646;' : '' }}">
+                        <div @class(['p-2 rounded-md tracking-wide', 'bg-[var(--brand-primary)]/20' => (!is_null($reservation->table_id)), 'bg-yellow-200 text-yellow-800' => (is_null($reservation->table_id))]) style="{{ !is_null($reservation->table_id) ? 'color: var(--brand-primary);' : '' }}">
                             <h3 wire:loading.class.delay='opacity-50'
                                 @class(['font-semibold'])>
                                 {{ $reservation->table->table_code }}
@@ -25,7 +25,7 @@
                             {{ $reservation->party_size }} @lang('modules.reservation.guests')
                         </div>
 
-                        <div class="inline-flex gap-2 items-center text-sm font-medium" style="color: #011646;">
+                        <div class="inline-flex gap-2 items-center text-sm font-medium" style="color: var(--brand-primary);">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
                                 <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
                                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>

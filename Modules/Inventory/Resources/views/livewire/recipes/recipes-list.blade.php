@@ -159,7 +159,7 @@
                                         </div>
                                         
                                         <!-- Actions -->
-                                        <div class="flex items-center space-x-2">
+                                        <div class="flex items-center gap-2">
                                             @if(user_can('Update Recipe'))
                                             <button 
                                                 wire:click="editRecipe({{ $recipe['menu_item']['id'] }}, {{ $recipe['menu_item']['variation_id'] ?? 'null' }}, {{ $recipe['menu_item']['modifier_option_id'] ?? 'null' }})"

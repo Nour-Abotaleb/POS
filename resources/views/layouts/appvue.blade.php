@@ -8,8 +8,8 @@
     <title>Tabletrack</title>
     
     <style>
-        .bg-\[\#011646\] {
-            background-color: #011646;
+        .bg-\[\var(--brand-primary)\] {
+            background-color: var(--brand-primary);
         }
         .text-skin-base {
             color: rgb(167, 139, 250);

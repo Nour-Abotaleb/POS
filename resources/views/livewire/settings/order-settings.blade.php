@@ -8,13 +8,13 @@
             <ul class="flex flex-wrap items-center -mb-px settings-tab-bar">
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'prefix')"
-                        style="{{ $activeTab == 'prefix' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                        style="{{ $activeTab == 'prefix' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-2 cursor-pointer select-none p-3 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'prefix',
                             'active' => $activeTab == 'prefix',
                         ])>
-                        <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg font-extrabold text-md shadow" style="background-color: rgba(1, 22, 70, 0.2); color: #011646;">
+                        <span class="inline-flex items-center justify-center px-2 py-1 rounded-lg font-extrabold text-md shadow" style="background-color: rgba(1, 22, 70, 0.2); color: var(--brand-primary);">
                             #
                         </span>
                         @lang('modules.order.prefixSettings')
@@ -22,7 +22,7 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'menuItemImage')"
-                        style="{{ $activeTab == 'menuItemImage' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                        style="{{ $activeTab == 'menuItemImage' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'menuItemImage',
@@ -36,7 +36,7 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'tokenSettings')"
-                        style="{{ $activeTab == 'tokenSettings' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                        style="{{ $activeTab == 'tokenSettings' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'tokenSettings',
@@ -51,7 +51,7 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'customOrderTypes')"
-                        style="{{ $activeTab == 'customOrderTypes' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                        style="{{ $activeTab == 'customOrderTypes' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'customOrderTypes',
@@ -64,7 +64,7 @@
                 </li>
                 <li class="me-2">
                     <span wire:click="$set('activeTab', 'deliveryApps')"
-                        style="{{ $activeTab == 'deliveryApps' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                        style="{{ $activeTab == 'deliveryApps' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                         @class([
                             'inline-flex items-center gap-x-1 cursor-pointer select-none p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
                             'border-transparent'=> $activeTab != 'deliveryApps',

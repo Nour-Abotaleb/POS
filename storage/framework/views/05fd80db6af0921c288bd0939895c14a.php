@@ -9,7 +9,7 @@
                 <button
                     type="button"
                     wire:click="$set('orderTypeId', <?php echo e($type->id); ?>)"
-                    style="<?php echo e($orderTypeId === $type->id ? 'background-color: #011646; border-color: #011646;' : ''); ?>"
+                    style="<?php echo e($orderTypeId === $type->id ? 'background-color: var(--brand-primary); border-color: var(--brand-primary);' : ''); ?>"
                     class="px-3 py-1.5 text-xs rounded-lg border transition-all
                     <?php echo e($orderTypeId === $type->id
                         ? 'text-white'
@@ -81,21 +81,21 @@
                         
                         <div class="inline-flex min-w-0 flex-1 items-center gap-2">
                             <!--[if BLOCK]><![endif]--><?php if(auth()->user()->roles->pluck('display_name')->contains('Waiter')): ?>
-                                <span class="text-xs min-w-0 flex-1 truncate px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600" style="border-color: #011646;" title="<?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>">
+                                <span class="text-xs min-w-0 flex-1 truncate px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600" style="border-color: var(--brand-primary);" title="<?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>">
                                     <?php echo e($users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter')); ?>
 
                                 </span>
                             <?php else: ?>
                                 <?php if (isset($component)) { $__componentOriginaled2cde6083938c436304f332ba96bb7c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginaled2cde6083938c436304f332ba96bb7c = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.select','data' => ['class' => 'text-xs min-w-0 w-full border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.select','data' => ['class' => 'text-xs min-w-0 w-full border-[var(--brand-primary)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]','wire:model.defer' => 'selectWaiter']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('select'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['class' => 'text-xs min-w-0 w-full border-[#011646] focus:border-[#011646] focus:ring-[#011646]','wire:model.defer' => 'selectWaiter']); ?>
+<?php $component->withAttributes(['class' => 'text-xs min-w-0 w-full border-[var(--brand-primary)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]','wire:model.defer' => 'selectWaiter']); ?>
                                     <option value=""><?php echo app('translator')->get('modules.order.selectWaiter'); ?></option>
                                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
@@ -116,7 +116,7 @@
                         
                         <div class="inline-flex shrink-0 items-center text-xs dark:text-gray-300">
                             <div class="inline-flex items-center gap-1.5 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 focus-within:ring-1 focus-within:ring-gray-500 dark:focus-within:ring-gray-400 focus-within:border-gray-500 dark:focus-within:border-gray-400 [&_input]:h-5 [&_input]:min-h-0">
-                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0" style="color: #011646;">
+                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0" style="color: var(--brand-primary);">
                                     <path d="M6.48831 7.69958C6.41748 7.6925 6.33248 7.6925 6.25456 7.69958C4.56873 7.64291 3.22998 6.26166 3.22998 4.56166C3.22998 2.82625 4.63248 1.41666 6.37498 1.41666C8.1104 1.41666 9.51998 2.82625 9.51998 4.56166C9.5129 6.26166 8.17415 7.64291 6.48831 7.69958Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M11.6237 2.83334C12.9979 2.83334 14.1029 3.94542 14.1029 5.3125C14.1029 6.65125 13.0404 7.74209 11.7158 7.79167C11.6591 7.78459 11.5954 7.78459 11.5316 7.79167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M2.94664 10.3133C1.23247 11.4608 1.23247 13.3308 2.94664 14.4713C4.89455 15.7746 8.08914 15.7746 10.0371 14.4713C11.7512 13.3238 11.7512 11.4538 10.0371 10.3133C8.09622 9.01709 4.90164 9.01709 2.94664 10.3133Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -157,11 +157,11 @@
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'relative shrink-0 text-xs p-2','wire:click' => '$toggle(\'showKotNote\')','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.addNote')),'data-tooltip-target' => 'tooltip-note']); ?>
                             <!--[if BLOCK]><![endif]--><?php if($this->orderNote): ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1" style="color: #011646;" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1" style="color: var(--brand-primary);" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8" />
                                 </svg>
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
+                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);">
                                 <path d="M9.39254 2.55L3.57712 8.70542C3.35754 8.93917 3.14504 9.39958 3.10254 9.71833L2.84045 12.0133C2.74837 12.8421 3.34337 13.4087 4.16504 13.2671L6.44587 12.8775C6.76462 12.8208 7.21087 12.5871 7.43045 12.3462L13.2459 6.19083C14.2517 5.12833 14.705 3.91708 13.1396 2.43667C11.5813 0.970415 10.3984 1.4875 9.39254 2.55Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M8.42212 3.57709C8.7267 5.53209 10.3134 7.02667 12.2825 7.225" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 15.5833H14.875" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -192,7 +192,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'openMergeTableModal','class' => 'shrink-0 p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.mergeTables'))]); ?>
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
+                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);">
                                 <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M4.75998 9.59791L2.125 12.2329L4.75998 14.8679" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -220,7 +220,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'openTableChangeConfirmation','class' => 'shrink-0 p-2','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('modules.order.setTable'))]); ?>
-                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;">
+                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);">
                                 <g clip-path="url(#clip0_kot_row_table)">
                                     <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>
                                 </g>
@@ -671,7 +671,7 @@
             <div class="h-auto pt-3 select-none text-center w-full">
                 <!--[if BLOCK]><![endif]--><?php if(in_array('KOT', restaurant_modules())): ?>
                     <div class="flex gap-3">
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: #011646;" wire:click="saveOrder('kot')"
+                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot')"><?php echo app('translator')->get('modules.order.kot'); ?></span>
                             <span wire:loading wire:target="saveOrder('kot')">
@@ -686,7 +686,7 @@
                                 <?php echo app('translator')->get('modules.order.kot'); ?>
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: #011646;"
+                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot', 'print')"><?php echo app('translator')->get('modules.order.kotAndPrint'); ?></span>
@@ -702,7 +702,7 @@
                                 <?php echo app('translator')->get('modules.order.kotAndPrint'); ?>
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: #011646;"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot','bill','payment', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove
@@ -720,7 +720,7 @@
                             </span>
                         </button>
                         <!--[if BLOCK]><![endif]--><?php if(!$orderID || ($orderID && $orderDetail && $orderDetail->status !== 'draft')): ?>
-                        <button class="rounded-xl hover:opacity-90 text-white w-auto py-2 px-4 relative inline-flex items-center justify-center" style="background-color: #011646;" wire:click="saveOrder('draft')"
+                        <button class="rounded-xl hover:opacity-90 text-white w-auto py-2 px-4 relative inline-flex items-center justify-center" style="background-color: var(--brand-primary);" wire:click="saveOrder('draft')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50" title="<?php echo app('translator')->get('modules.order.saveAsDraft'); ?>">
                             <span wire:loading.remove wire:target="saveOrder('draft')">
                                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">

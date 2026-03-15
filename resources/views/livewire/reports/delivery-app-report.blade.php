@@ -35,12 +35,12 @@
             <!-- Total Revenue -->
             <div class="p-4 rounded-xl shadow-sm border" style="background-color: rgba(1, 22, 70, 0.05); border-color: rgba(1, 22, 70, 0.3);">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-medium" style="color: #011646;">@lang('modules.report.totalRevenue')</h3>
+                    <h3 class="text-sm font-medium" style="color: var(--brand-primary);">@lang('modules.report.totalRevenue')</h3>
                     <div class="p-2 rounded-lg" style="background-color: rgba(1, 22, 70, 0.1);">
-                        <svg class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #011646;"><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
+                        <svg class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);"><g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 13.75c0 .97.75 1.75 1.67 1.75h1.88c.8 0 1.45-.68 1.45-1.53 0-.91-.4-1.24-.99-1.45l-3.01-1.05c-.59-.21-.99-.53-.99-1.45 0-.84.65-1.53 1.45-1.53h1.88c.92 0 1.67.78 1.67 1.75M12 7.5v9"/><path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2m10 4V2h-4m-1 5 5-5"/></g></svg>
                     </div>
                 </div>
-                <p class="text-3xl break-words font-bold" style="color: #011646;">
+                <p class="text-3xl break-words font-bold" style="color: var(--brand-primary);">
                     {!! currency_format($totalRevenue, restaurant()->currency_id) !!}
                 </p>
             </div>

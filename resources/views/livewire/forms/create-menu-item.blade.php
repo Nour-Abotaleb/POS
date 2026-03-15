@@ -832,7 +832,7 @@
                                     if (!option.element) return option.text;
 
                                     return $(`
-                                        <div class="flex items-center space-x-2">
+                                        <div class="flex items-center gap-2">
                                             <img src="${option.element.dataset.flag}" class="w-5 h-5 rounded-sm" />
                                             <span>${option.text}</span>
                                         </div>

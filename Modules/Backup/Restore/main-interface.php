@@ -282,7 +282,7 @@
                                                 </div>
                                             </div>
                                             <div class="ml-4 flex-1">
-                                                <div class="flex items-center space-x-2">
+                                                <div class="flex items-center gap-2">
                                                     <div class="text-sm font-medium text-gray-900">
                                                         <?php echo htmlspecialchars($backup['filename']); ?>
                                                     </div>

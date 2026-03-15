@@ -51,8 +51,8 @@
                 <div class="mb-4">
                     <label class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-800/60 px-4 py-3 shadow-sm">
                         <input type="checkbox" wire:model.live="setAsDefault"
-                            class="h-4 w-4 rounded border-gray-300 focus:ring-[#011646]"
-                            style="accent-color: #011646;">
+                            class="h-4 w-4 rounded border-gray-300 focus:ring-[var(--brand-primary)]"
+                            style="accent-color: var(--brand-primary);">
                         <div class="text-sm leading-tight text-gray-800 dark:text-gray-100">
                             <div class="font-semibold">{{ __('modules.order.setAsDefault') }}</div>
                             <div class="text-xs text-gray-500 dark:text-gray-400">{{ __('modules.order.skipThisSelectionNextTime') }}</div>
@@ -67,26 +67,26 @@
                         <button wire:click="selectOrderType({{ $orderType->id }}, '{{ $orderType->slug }}')"
                             class="group relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-200 cursor-pointer
                             {{ $selectedOrderTypeSlug === $orderType->slug
-                                ? 'border-[#011646] bg-[#011646]/10 dark:bg-[#011646]/10'
-                                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-[#011646] hover:shadow-lg hover:scale-[1.02]' }}"
+                                ? 'border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 dark:bg-[var(--brand-primary)]/10'
+                                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-[var(--brand-primary)] hover:shadow-lg hover:scale-[1.02]' }}"
 
                             @if($selectedOrderTypeSlug === $orderType->slug)
                                 <div class="absolute top-2 right-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-[#011646]" style="color: #011646;" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary);" viewBox="0 0 16 16">
                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                     </svg>
                                 </div>
                             @endif
 
-                            <div class="mb-3 p-3 rounded-lg {{ $selectedOrderTypeSlug === $orderType->slug ? 'bg-[#011646]/10' : 'bg-gray-50 dark:bg-gray-900 group-hover:bg-[#011646]/5' }} transition-colors duration-200">
+                            <div class="mb-3 p-3 rounded-lg {{ $selectedOrderTypeSlug === $orderType->slug ? 'bg-[var(--brand-primary)]/10' : 'bg-gray-50 dark:bg-gray-900 group-hover:bg-[var(--brand-primary)]/5' }} transition-colors duration-200">
                                 @if($orderType->slug === 'dine_in')
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;" viewBox="0 0 16 16"><path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);" viewBox="0 0 16 16"><path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/></svg>
                                 @elseif($orderType->slug === 'delivery')
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/></svg>
                                 @elseif($orderType->slug === 'pickup')
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>
                                 @else
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;"><path d="M24 46a21.9 21.9 0 0 1-6.124-.865 1 1 0 0 1-.718-.889l-.92-12.915a1 1 0 0 1 .731-1.035A5.51 5.51 0 0 0 21 25c0-3.263-1.345-10-5.5-10S10 21.737 10 25a5.51 5.51 0 0 0 4.031 5.3 1 1 0 0 1 .731 1.035L14 41.966a1 1 0 0 1-1.522.781A22 22 0 1 1 46 24a21.87 21.87 0 0 1-10.48 18.747 1 1 0 0 1-1.52-.781l-.86-12.029a1 1 0 0 1 .77-1.046A3.98 3.98 0 0 0 37 25V15a1 1 0 0 1 2 0v10a5.97 5.97 0 0 1-3.812 5.584l.681 9.518A20 20 0 1 0 4 24a19.86 19.86 0 0 0 8.131 16.1l.581-8.144A7.52 7.52 0 0 1 8 25c0-4.64 2.036-12 7.5-12S23 20.36 23 25a7.52 7.52 0 0 1-4.712 6.958L19.1 43.4a20.24 20.24 0 0 0 9.794 0l.915-12.812A5.97 5.97 0 0 1 26 25V15a1 1 0 0 1 2 0v10a3.98 3.98 0 0 0 3.092 3.891 1 1 0 0 1 .77 1.046l-1.02 14.309a1 1 0 0 1-.718.889A21.9 21.9 0 0 1 24 46"/><path d="M34.25 22a1 1 0 0 1-1-1v-6a1 1 0 0 1 2 0v6a1 1 0 0 1-1 1m-3.5 0a1 1 0 0 1-1-1v-6a1 1 0 0 1 2 0v6a1 1 0 0 1-1 1"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);"><path d="M24 46a21.9 21.9 0 0 1-6.124-.865 1 1 0 0 1-.718-.889l-.92-12.915a1 1 0 0 1 .731-1.035A5.51 5.51 0 0 0 21 25c0-3.263-1.345-10-5.5-10S10 21.737 10 25a5.51 5.51 0 0 0 4.031 5.3 1 1 0 0 1 .731 1.035L14 41.966a1 1 0 0 1-1.522.781A22 22 0 1 1 46 24a21.87 21.87 0 0 1-10.48 18.747 1 1 0 0 1-1.52-.781l-.86-12.029a1 1 0 0 1 .77-1.046A3.98 3.98 0 0 0 37 25V15a1 1 0 0 1 2 0v10a5.97 5.97 0 0 1-3.812 5.584l.681 9.518A20 20 0 1 0 4 24a19.86 19.86 0 0 0 8.131 16.1l.581-8.144A7.52 7.52 0 0 1 8 25c0-4.64 2.036-12 7.5-12S23 20.36 23 25a7.52 7.52 0 0 1-4.712 6.958L19.1 43.4a20.24 20.24 0 0 0 9.794 0l.915-12.812A5.97 5.97 0 0 1 26 25V15a1 1 0 0 1 2 0v10a3.98 3.98 0 0 0 3.092 3.891 1 1 0 0 1 .77 1.046l-1.02 14.309a1 1 0 0 1-.718.889A21.9 21.9 0 0 1 24 46"/><path d="M34.25 22a1 1 0 0 1-1-1v-6a1 1 0 0 1 2 0v6a1 1 0 0 1-1 1m-3.5 0a1 1 0 0 1-1-1v-6a1 1 0 0 1 2 0v6a1 1 0 0 1-1 1"/></svg>
                                 @endif
                             </div>
                             <span class="text-sm font-semibold text-gray-900 dark:text-white text-center">{{ $orderType->translated_name }}</span>
@@ -106,10 +106,10 @@
                         <button type="button" wire:click="selectDeliveryPlatformAndProceed('default')"
                             class="group text-left p-4 rounded-xl border-2 transition-all duration-200
                             border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800
-                            hover:border-[#011646] hover:shadow-lg hover:scale-[1.02]">
+                            hover:border-[var(--brand-primary)] hover:shadow-lg hover:scale-[1.02]">
                             <div class="flex items-center gap-3">
                                 <div class="h-12 w-12 rounded-lg bg-gray-50 dark:bg-gray-900 flex items-center justify-center flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/></svg>
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-semibold text-gray-900 dark:text-white">@lang('modules.order.defaultDeliveryPlatform')</p>
@@ -122,13 +122,13 @@
                         <button type="button" wire:click="selectDeliveryPlatformAndProceed({{ $platform->id }})"
                             class="group text-left p-4 rounded-xl border-2 transition-all duration-200
                             border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800
-                            hover:border-[#011646] hover:shadow-lg hover:scale-[1.02]">
+                            hover:border-[var(--brand-primary)] hover:shadow-lg hover:scale-[1.02]">
                             <div class="flex items-center gap-3">
                                 <div class="h-12 w-12 rounded-lg bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden flex-shrink-0">
                                     @if(!empty($platform->logo))
                                         <img src="{{ $platform->logo_url }}" alt="{{ $platform->name }}" class="h-12 w-12 object-contain"/>
                                     @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[#011646]" style="color: #011646; fill: #011646;" viewBox="0 0 16 16"><path d="M0 3a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.6.8l3 4A2 2 0 0 1 15.5 7H14v6a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm11 0H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7h2.5a1 1 0 0 0 .8-1.6l-3-4A1 1 0 0 0 11 3"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-[var(--brand-primary)]" style="color: var(--brand-primary); fill: var(--brand-primary);" viewBox="0 0 16 16"><path d="M0 3a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.6.8l3 4A2 2 0 0 1 15.5 7H14v6a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm11 0H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7h2.5a1 1 0 0 0 .8-1.6l-3-4A1 1 0 0 0 11 3"/></svg>
                                     @endif
                                 </div>
                                 <div class="min-w-0 flex-1">

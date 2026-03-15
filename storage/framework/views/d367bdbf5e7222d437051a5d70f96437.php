@@ -116,7 +116,7 @@
             <button
                 type="button"
                 onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; var inPage = document.getElementById('pos-products-search'); if (inPage) { inPage.value = ''; inPage.dispatchEvent(new Event('input', { bubbles: true })); } window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"
-                style="background-color: #011646; border-color: #011646;"
+                style="background-color: var(--brand-primary); border-color: var(--brand-primary);"
                 class="text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center gap-1"
                 title="<?php echo app('translator')->get('app.reset'); ?>"
               >

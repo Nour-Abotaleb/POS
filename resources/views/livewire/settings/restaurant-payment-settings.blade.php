@@ -3,12 +3,12 @@
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center settings-tab-bar" role="tablist">
             <li class="me-2">
                 <a href="javascript:;" wire:click="setActiveTab('superadminPaymentSetting')"
-                style="{{ $activeTab == 'superadminPaymentSetting' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                style="{{ $activeTab == 'superadminPaymentSetting' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                 @class(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300", 'border-transparent' => ($activeTab != 'superadminPaymentSetting'), 'active' => ($activeTab == 'superadminPaymentSetting')])>@lang('menu.superadminPaymentSetting')</a>
             </li>
             <li class="me-2">
                 <a href="javascript:;" wire:click="setActiveTab('adminPaymentSetting')"
-                style="{{ $activeTab == 'adminPaymentSetting' ? 'color: #011646; border-bottom-color: #011646;' : '' }}"
+                style="{{ $activeTab == 'adminPaymentSetting' ? 'color: var(--brand-primary); border-bottom-color: var(--brand-primary);' : '' }}"
                 @class(["inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300", 'border-transparent' => ($activeTab != 'adminPaymentSetting'), 'active' => ($activeTab == 'adminPaymentSetting')])>@lang('menu.adminPaymentSetting')</a>
             </li>
         </ul>
