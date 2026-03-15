@@ -35,6 +35,11 @@
 
     <!-- Scripts -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+    
+    <!-- ApexCharts (Load early for dashboard charts) -->
+    <?php if (! (request()->routeIs('pos.*'))): ?>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js"></script>
+    <?php endif; ?>
 
     <!-- Styles -->
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
@@ -515,6 +520,24 @@ if (isset($__slots)) unset($__slots);
     <?php echo $__env->make('layouts.service-worker-js', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php echo $__env->yieldPushContent('scripts'); ?>
     <?php if (! (request()->routeIs('pos.*'))): ?>
+    <!-- ApexCharts for Dashboard Charts (Backup load) -->
+    <script>
+        // Ensure ApexCharts is loaded
+        if (typeof ApexCharts === 'undefined') {
+            console.log('Loading ApexCharts backup...');
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/apexcharts@3.45.2/dist/apexcharts.min.js';
+            script.onload = function() {
+                console.log('ApexCharts loaded successfully');
+                // Trigger a custom event when ApexCharts is ready
+                document.dispatchEvent(new Event('apexcharts-ready'));
+            };
+            document.head.appendChild(script);
+        } else {
+            // ApexCharts already loaded
+            document.dispatchEvent(new Event('apexcharts-ready'));
+        }
+    </script>
     <script src="<?php echo e(asset('vendor/trix/trix.umd.min.js')); ?>"></script>
     <!-- Print Image Handler (not needed on POS) -->
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js" data-navigate-track></script>
