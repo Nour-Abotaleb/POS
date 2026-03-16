@@ -21,6 +21,10 @@ class OrderController extends Controller
      */
     private function generateZatcaQrCode($order, $restaurant, $totalTaxAmount = 0)
     {
+        if ($order->zatca_qr_code) {
+            return $order->zatca_qr_code;
+        }
+
         $sellerName = $restaurant->restaurant_name ?? $restaurant->name ?? 'Demo Restaurant';
         $vatNumber = $restaurant->vat_number ?? '300000000000003';
         $timestamp = Carbon::parse($order->created_at)->toIso8601String();

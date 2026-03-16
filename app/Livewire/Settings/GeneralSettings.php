@@ -47,6 +47,14 @@ class GeneralSettings extends Component
     public $filteredPhoneCodes;
     public $predefinedAmounts = [];
     public $showPredefinedAmountsForm = false;
+    public $zatcaPrivateKey;
+    public $zatcaCertificate;
+    public $zatcaSecret;
+    public $zatcaApiEnvironment;
+    public $zatcaCsid;
+    public $zatcaOtp;
+    public $zatcaOnboardingStatus;
+    public $zatcaOnboardingError;
 
     public function mount()
     {
@@ -57,6 +65,12 @@ class GeneralSettings extends Component
         $this->restaurantPhoneNumber = ltrim($this->settings->phone_number, '+');
         $this->vatNumber = $this->settings->vat_number;
         $this->commercialRegistration = $this->settings->commercial_registration;
+        $this->zatcaPrivateKey = $this->settings->zatca_private_key;
+        $this->zatcaCertificate = $this->settings->zatca_certificate;
+        $this->zatcaSecret = $this->settings->zatca_secret;
+        $this->zatcaApiEnvironment = $this->settings->zatca_api_environment ?? 'simulation';
+        $this->zatcaCsid = $this->settings->zatca_csid;
+        $this->zatcaOnboardingStatus = $this->settings->zatca_onboarding_status ?? 'not_started';
 
         $this->fatchData();
 
@@ -146,6 +160,11 @@ class GeneralSettings extends Component
         $this->settings->address = $this->restaurantAddress;
         $this->settings->vat_number = $this->vatNumber;
         $this->settings->commercial_registration = $this->commercialRegistration;
+        $this->settings->zatca_private_key = $this->zatcaPrivateKey;
+        $this->settings->zatca_certificate = $this->zatcaCertificate;
+        $this->settings->zatca_secret = $this->zatcaSecret;
+        $this->settings->zatca_api_environment = $this->zatcaApiEnvironment;
+        $this->settings->zatca_csid = $this->zatcaCsid;
         $this->settings->save();
 
         session()->forget(['restaurant', 'timezone', 'currency']);
@@ -351,4 +370,90 @@ class GeneralSettings extends Component
         ]);
     }
 
+    public $generatedCsr;
+
+    public function generateZatcaCsr()
+    {
+        try {
+            $this->validate([
+                'vatNumber' => 'required',
+                'restaurantName' => 'required',
+                'zatcaApiEnvironment' => 'required',
+            ]);
+
+            $csrRequest = \Salla\ZATCA\Models\CSRRequest::make()
+                ->setUID($this->vatNumber)
+                ->setCommonName($this->restaurantName)
+                ->setOrganizationName($this->restaurantName)
+                ->setOrganizationalUnitName($this->restaurantName)
+                ->setCountryName('SA')
+                ->setRegisteredAddress($this->restaurantAddress ?? 'Saudi Arabia')
+                ->setSerialNumber('NOMU', '1.0', (string) \Illuminate\Support\Str::uuid())
+                ->setInvoiceType(true, true) // Both standard and simplified
+                ->setCurrentZatcaEnv($this->zatcaApiEnvironment);
+
+            $csrGenerator = \Salla\ZATCA\GenerateCSR::fromRequest($csrRequest);
+            $csrGenerator->initialize();
+            $csrObj = $csrGenerator->generate();
+
+            $this->zatcaPrivateKey = $csrObj->getPrivateKey();
+            $this->generatedCsr = $csrObj->getCSR();
+            
+            $this->alert('success', 'CSR Generated Successfully. You can now use the OTP to onboard.');
+        } catch (\Exception $e) {
+            $this->alert('error', 'CSR Generation Failed: ' . $e->getMessage());
+        }
+    }
+
+    public function onboardZatca()
+    {
+        if (!$this->zatcaOtp) {
+            $this->alert('error', 'Please enter the OTP from ZATCA Portal.');
+            return;
+        }
+
+        if (!$this->zatcaPrivateKey || !str_contains($this->zatcaPrivateKey, 'PRIVATE KEY')) {
+            $this->generateZatcaCsr();
+        }
+
+        try {
+            $endpoint = $this->getZatcaEndpoint($this->zatcaApiEnvironment) . '/compliance';
+            
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'OTP' => $this->zatcaOtp,
+                'Accept-Version' => 'V2',
+            ])->post($endpoint, [
+                'csr' => base64_encode($this->generatedCsr),
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $this->zatcaCsid = $data['binarySecurityToken'] ?? null;
+                $this->zatcaSecret = $data['secret'] ?? null;
+                
+                // For simplicity, we also set the certificate which is the binarySecurityToken
+                $this->zatcaCertificate = "-----BEGIN CERTIFICATE-----\n" . wordwrap($this->zatcaCsid, 64, "\n", true) . "\n-----END CERTIFICATE-----";
+                
+                $this->alert('success', 'System Onboarded Successfully (Compliance Stage).');
+                $this->submitForm(); // Save changes
+            } else {
+                $this->zatcaOnboardingError = $response->body();
+                $this->alert('error', 'Onboarding Failed: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'Onboarding Exception: ' . $e->getMessage());
+        }
+    }
+
+    private function getZatcaEndpoint($env)
+    {
+        return match ($env) {
+            'developer' => 'https://gw-apic-gov.gazt.gov.sa/e-invoicing/developer-portal',
+            'simulation' => 'https://gw-apic-gov.gazt.gov.sa/e-invoicing/simulation',
+            'production' => 'https://gw-apic-gov.gazt.gov.sa/e-invoicing/core',
+            default => 'https://gw-apic-gov.gazt.gov.sa/e-invoicing/simulation',
+        };
+    }
 }
