@@ -1,7 +1,8 @@
-<button {{ $attributes->merge(['type' => 'submit', 'class' => 'justify-center bg-white sm:w-auto font-semibold rounded-md text-sm px-3 py-1.5 text-center dark:bg-gray-800 dark:hover:bg-gray-700', 'style' => 'color: var(--brand-primary); border: 1px solid var(--brand-primary);']) }}
-    wire:loading.attr="disabled" wire:target="{{ $target ?? 'submitForm' }}">
+<button <?php echo e($attributes->merge(['type' => 'submit', 'class' => 'justify-center bg-white sm:w-auto font-semibold rounded-md text-sm px-3 py-1.5 text-center dark:bg-gray-800 dark:hover:bg-gray-700', 'style' => 'color: var(--brand-primary); border: 1px solid var(--brand-primary);'])); ?>
 
-    <svg aria-hidden="true" wire:target="{{ $target ?? 'submitForm' }}" wire:loading.class.remove="hidden"
+    wire:loading.attr="disabled" wire:target="<?php echo e($target ?? 'submitForm'); ?>">
+
+    <svg aria-hidden="true" wire:target="<?php echo e($target ?? 'submitForm'); ?>" wire:loading.class.remove="hidden"
         class="inline w-4 h-4 me-2 text-gray-300 animate-spin hidden"
         style="fill: var(--brand-primary)"
         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,5 +14,7 @@
             fill="currentFill" />
     </svg>
 
-    {{ $slot }}
+    <?php echo e($slot); ?>
+
 </button>
+<?php /**PATH C:\xampp\htdocs\script\resources\views/components/cart-button.blade.php ENDPATH**/ ?>
