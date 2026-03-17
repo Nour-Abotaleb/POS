@@ -1,4 +1,4 @@
-<button <?php echo e($attributes->merge(['type' => 'submit', 'class' => 'justify-center bg-white sm:w-auto font-semibold rounded-md text-sm px-3 py-1.5 text-center dark:bg-gray-800 dark:hover:bg-gray-700', 'style' => 'color: var(--brand-primary); border: 1px solid var(--brand-primary);'])); ?>
+<a <?php echo e($attributes->merge(['class' => 'inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-lg font-semibold text-sm text-gray-700 dark:text-gray-300  shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150'])); ?>
 
     wire:loading.attr="disabled" wire:target="<?php echo e($target ?? 'submitForm'); ?>">
 
@@ -16,5 +16,5 @@
 
     <?php echo e($slot); ?>
 
-</button>
-<?php /**PATH C:\xampp\htdocs\script\resources\views/components/cart-button.blade.php ENDPATH**/ ?>
+</a>
+<?php /**PATH C:\xampp\htdocs\script\resources\views/components/secondary-link.blade.php ENDPATH**/ ?>
