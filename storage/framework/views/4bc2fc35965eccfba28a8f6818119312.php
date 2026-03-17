@@ -39,10 +39,12 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['id' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($id),'maxWidth' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxWidth),'maxHeight' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($maxHeight),'forceAboveHeader' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($forceAboveHeader),'attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes)]); ?>
     <div class="px-6 py-4">
+        <!--[if BLOCK]><![endif]--><?php if(isset($title) && $title->isNotEmpty()): ?>
         <div class="text-lg font-medium text-gray-900 dark:text-gray-100">
             <?php echo e($title); ?>
 
         </div>
+        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
         <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
             <?php echo e($content); ?>

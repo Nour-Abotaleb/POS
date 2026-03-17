@@ -1,74 +1,94 @@
 <div>
     <!-- Order Type Selection Modal -->
+    <?php $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null; ?>
     <?php if (isset($component)) { $__componentOriginal49bd1c1dd878e22e0fb84faabf295a3f = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal49bd1c1dd878e22e0fb84faabf295a3f = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dialog-modal','data' => ['wire:model.live' => 'showOrderTypeModal','maxWidth' => 'xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dialog-modal','data' => ['wire:model.live' => 'showOrderTypeModal','maxWidth' => '4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('dialog-modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'showOrderTypeModal','maxWidth' => 'xl']); ?>
-         <?php $__env->slot('title', null, []); ?> 
-            <div class="text-center">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    <?php echo app('translator')->get('modules.order.selectOrderType'); ?>
-                </h2>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    <?php echo app('translator')->get('modules.order.selectOrderTypeDescription'); ?>
-                </p>
-            </div>
-         <?php $__env->endSlot(); ?>
+<?php $component->withAttributes(['wire:model.live' => 'showOrderTypeModal','maxWidth' => '4xl']); ?>
+        <!--  <?php $__env->slot('title', null, []); ?> <?php echo app('translator')->get('modules.order.selectOrderType'); ?> <?php $__env->endSlot(); ?> -->
 
          <?php $__env->slot('content', null, []); ?> 
-            <div class="grid grid-cols-1 gap-4 py-4 sm:grid-cols-2 lg:grid-cols-3">
-                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $orderTypes ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <button
-                        type="button"
-                        wire:click="selectOrderTypeFromModal(<?php echo e($orderType->id); ?>)"
-                        class="flex flex-col items-center justify-center p-6 transition-all duration-200 border-2 border-gray-200 rounded-lg hover:border-[var(--brand-primary)] hover:shadow-lg dark:border-gray-600 dark:hover:border-[var(--brand-primary)] group"
-                        wire:key="modal-order-type-<?php echo e($orderType->id); ?>"
-                    >
-                        <!-- Icon -->
-                        <div class="flex items-center justify-center w-16 h-16 mb-4 transition-colors rounded-full bg-gray-50 group-hover:bg-[var(--brand-primary)]/10 dark:bg-gray-700 dark:group-hover:bg-[var(--brand-primary)]/10">
-                            <svg class="w-8 h-8 text-gray-600 transition-colors group-hover:text-[var(--brand-primary)] dark:text-gray-300 dark:group-hover:text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <!--[if BLOCK]><![endif]--><?php if($orderType->type === 'dine_in'): ?>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                                <?php elseif($orderType->type === 'delivery'): ?>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                                <?php elseif($orderType->type === 'pickup'): ?>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                            </svg>
-                        </div>
+            <div x-data="{ activeTab: <?php echo e($firstOrderTypeId ?? 'null'); ?> }">
 
-                        <!-- Order Type Name -->
-                        <span class="text-lg font-semibold text-gray-900 dark:text-white">
+                
+                <div class="flex gap-1 mb-5">
+                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $orderTypes ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <button
+                            type="button"
+                            wire:key="tab-<?php echo e($orderType->id); ?>"
+                            @click="activeTab = <?php echo e($orderType->id); ?>"
+                            :style="activeTab === <?php echo e($orderType->id); ?> ? 'background-color:#011646;color:#fff;' : ''"
+                            :class="activeTab !== <?php echo e($orderType->id); ?> ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' : ''"
+                            class="flex-1 flex flex-col items-center gap-1 px-2 py-3 text-xs font-medium rounded-lg transition"
+                        >
                             <?php echo e($orderType->translated_name); ?>
 
-                        </span>
+                        </button>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                </div>
 
-                        <!--[if BLOCK]><![endif]--><?php if($orderType->type === 'dine_in'): ?>
-                            <span class="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">
-                                <?php echo app('translator')->get('messages.dineInDescription'); ?>
-                            </span>
-                        <?php elseif($orderType->type === 'delivery'): ?>
-                            <span class="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">
-                                <?php echo app('translator')->get('messages.deliveryDescription'); ?>
-                            </span>
-                        <?php elseif($orderType->type === 'pickup'): ?>
-                            <span class="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">
-                                <?php echo app('translator')->get('messages.pickupDescription'); ?>
-                            </span>
+                
+                <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-5">
+                    
+                    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800">
+                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100"><?php echo e($shopBranch->name); ?></span>
+                        <span class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                            'text-xs font-medium px-2.5 py-0.5 rounded-full',
+                            'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' => $shopBranch->is_active,
+                            'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' => !$shopBranch->is_active,
+                        ]); ?>">
+                            <?php echo e($shopBranch->is_active ? __('app.open') : __('app.closed')); ?>
+
+                        </span>
+                    </div>
+
+                    
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                        <!--[if BLOCK]><![endif]--><?php if($shopBranch->phone): ?>
+                            <div class="flex items-center gap-3 px-4 py-3">
+                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300"><?php echo e($shopBranch->phone); ?></span>
+                            </div>
                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                    </button>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+
+                        <!--[if BLOCK]><![endif]--><?php if($shopBranch->address): ?>
+                            <div class="flex items-start gap-3 px-4 py-3">
+                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300"><?php echo e($shopBranch->address); ?></span>
+                            </div>
+                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                </div>
+
+                
+                <button
+                    type="button"
+                    @click="$wire.call('selectOrderTypeFromModal', activeTab)"
+                    class="w-full py-3 px-4 rounded-xl text-white text-sm font-semibold transition hover:opacity-90"
+                    style="background-color: #011646;"
+                >
+                    <?php echo app('translator')->get('app.confirm'); ?>
+                </button>
+
             </div>
          <?php $__env->endSlot(); ?>
 
          <?php $__env->slot('footer', null, []); ?> 
-            <!-- No footer buttons - force selection -->
          <?php $__env->endSlot(); ?>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -181,11 +201,10 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
     <!--[if BLOCK]><![endif]--><?php if(!$isHeaderDisabled): ?>
         <section class="px-4 bg-white dark:bg-gray-900">
             <!--[if BLOCK]><![endif]--><?php if($headerType === 'text'): ?>
-                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
-                    <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
-                        <?php echo e($headerText); ?>
-
-                    </h1>
+                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center lg:py-8 lg:px-12 bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
+                    <p class="bg-[#011646] w-44 h-28 rounded-2xl">
+                        <!-- <?php echo e($headerText); ?> -->
+                    </p>
                 </div>
                 <?php elseif($headerType === 'image' && count($headerImages) > 0): ?>
                 <!-- Image Carousel -->
@@ -259,382 +278,111 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </section>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-
-
-    <!--[if BLOCK]><![endif]--><?php if(!$showCart && !$showOrderTypeModal): ?>
-
-        <div class="flex flex-col px-4 my-4" x-data="{ showAll: false }">
-            <!-- Card Section -->
-            <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 sm:gap-4">
-
-                <!-- All Menu Card -->
-                <a class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                    'group flex items-center border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600',
-                    'bg-[var(--brand-primary)] dark:bg-[var(--brand-primary)]' => is_null($menuId),
-                    'bg-white' => !is_null($menuId),
-                ]); ?>" wire:key='menu-<?php echo e('all-' . microtime()); ?>'
-                    wire:click='filterMenuItems(null)' href="javascript:;">
-                    <div class="p-2 sm:p-3">
-                        <div class="flex items-center gap-3">
-                            <div class="hidden p-2 bg-gray-100 rounded-md sm:block">
-                                <svg class="flex-shrink-0 text-gray-800 size-5 dark:text-neutral-200"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409.221 409.221">
-                                    <path
-                                        d="M387.059 389.218H372.73v-18.114h14.327c5.523 0 10-4.477 10-10 0-55.795-42.81-101.781-97.305-106.843v-17.29c0-5.523-4.477-10-10-10s-10 4.477-10 10v17.29c-54.496 5.062-97.305 51.048-97.305 106.843 0 5.523 4.477 10 10 10h14.327v18.114h-14.327c-5.523 0-10 4.477-10 10s4.477 10 10 10h24.13q.197.004.393 0h145.564l.196.002.196-.002h24.133c5.523 0 10-4.477 10-10s-4.478-10-10-10m-34.33 0H226.772v-18.114h125.957zm-149.714-38.113c4.978-43.447 41.978-77.305 86.736-77.305s81.758 33.858 86.736 77.305zM131.63 97.306c-29.383 0-52.4 16.809-52.4 38.267 0 21.457 23.017 38.265 52.4 38.265s52.399-16.808 52.399-38.265c0-21.459-23.016-38.267-52.399-38.267m0 56.531c-19.094 0-32.4-9.625-32.4-18.265s13.306-18.267 32.4-18.267c19.093 0 32.399 9.627 32.399 18.267s-13.306 18.265-32.399 18.265m23.553 235.383H32.162V68.652h198.936v166.52c0 5.523 4.477 10 10 10s10-4.477 10-10V58.652c0-5.523-4.477-10-10-10h-4.701V10A10.002 10.002 0 0 0 225.215.07L20.979 24.397a10 10 0 0 0-8.817 9.93V399.22c0 5.523 4.477 10 10 10h133.021c5.523 0 10-4.477 10-10s-4.477-10-10-10M32.162 43.206l184.235-21.944v27.391H32.162zm82.627 317.362c-5.523 0-10-4.477-10-10s4.477-10 10-10h33.681c5.523 0 10 4.477 10 10s-4.477 10-10 10z" />
-                                </svg>
-                            </div>
-                            <div class="grow">
-                                <h3 wire:loading.class.delay='opacity-50' class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                    'font-semibold dark:group-hover:text-neutral-400 dark:text-neutral-200 text-xs lg:text-base',
-                                    'text-gray-800 group-hover:text-[var(--brand-primary)]' => !is_null($menuId),
-                                    'text-white group-hover:text-white' => is_null($menuId),
-                                ]); ?>">
-                                    <?php echo app('translator')->get('app.showAll'); ?>
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Dynamic Menu Cards -->
-                <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $this->menuList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <div x-show="showAll || <?php echo e($index); ?> < 7" x-transition>
-                        <a class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                            'group flex flex-col border shadow-sm rounded-lg hover:shadow-md transition dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600',
-                            'bg-[var(--brand-primary)] dark:bg-[var(--brand-primary)]' => $menuId == $item->id,
-                            'bg-white' => $menuId != $item->id,
-                        ]); ?>" wire:key='menu-<?php echo e($item->id . microtime()); ?>'
-                            wire:click='filterMenuItems(<?php echo e($item->id); ?>)' href="javascript:;">
-                            <div class="p-2 sm:p-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="hidden p-2 bg-gray-100 rounded-md sm:block">
-                                        <svg class="flex-shrink-0 text-gray-800 size-5 dark:text-neutral-200"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409.221 409.221">
-                                            <path
-                                                d="M387.059 389.218H372.73v-18.114h14.327c5.523 0 10-4.477 10-10 0-55.795-42.81-101.781-97.305-106.843v-17.29c0-5.523-4.477-10-10-10s-10 4.477-10 10v17.29c-54.496 5.062-97.305 51.048-97.305 106.843 0 5.523 4.477 10 10 10h14.327v18.114h-14.327c-5.523 0-10 4.477-10 10s4.477 10 10 10h24.13q.197.004.393 0h145.564l.196.002.196-.002h24.133c5.523 0 10-4.477 10-10s-4.478-10-10-10m-34.33 0H226.772v-18.114h125.957zm-149.714-38.113c4.978-43.447 41.978-77.305 86.736-77.305s81.758 33.858 86.736 77.305zM131.63 97.306c-29.383 0-52.4 16.809-52.4 38.267 0 21.457 23.017 38.265 52.4 38.265s52.399-16.808 52.399-38.265c0-21.459-23.016-38.267-52.399-38.267m0 56.531c-19.094 0-32.4-9.625-32.4-18.265s13.306-18.267 32.4-18.267c19.093 0 32.399 9.627 32.399 18.267s-13.306 18.265-32.399 18.265m23.553 235.383H32.162V68.652h198.936v166.52c0 5.523 4.477 10 10 10s10-4.477 10-10V58.652c0-5.523-4.477-10-10-10h-4.701V10A10.002 10.002 0 0 0 225.215.07L20.979 24.397a10 10 0 0 0-8.817 9.93V399.22c0 5.523 4.477 10 10 10h133.021c5.523 0 10-4.477 10-10s-4.477-10-10-10M32.162 43.206l184.235-21.944v27.391H32.162zm82.627 317.362c-5.523 0-10-4.477-10-10s4.477-10 10-10h33.681c5.523 0 10 4.477 10 10s-4.477 10-10 10z" />
-                                        </svg>
-                                    </div>
-
-                                    <div class="grow">
-                                        <h3 wire:loading.class.delay='opacity-50' class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'font-semibold group-hover:text-[var(--brand-primary)] dark:group-hover:text-gray-100 dark:text-neutral-200 text-xs lg:text-base',
-                                            'text-gray-800 dark:text-gray-200' => $menuId != $item->id,
-                                            'text-white group-hover:text-white' => $menuId == $item->id,
-                                        ]); ?>">
-                                            <?php echo e($item->getTranslation('menu_name', session('locale', app()->getLocale()))); ?>
-
-                                        </h3>
-                                        <p class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'text-sm dark:text-neutral-500 hidden sm:block',
-                                            'text-gray-500 dark:text-white' => $menuId != $item->id,
-                                            'text-gray-100 dark:text-white' => $menuId == $item->id,
-                                        ]); ?>">
-                                            <?php echo e($item->items_count); ?> <?php echo app('translator')->get('modules.menu.item'); ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <div class="inline-flex items-center dark:text-gray-400">
-                        <?php echo app('translator')->get('messages.noMenuAdded'); ?>
-                    </div>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
-            <!-- End Card Section -->
-
-            <!-- Toggle Button -->
-            <!--[if BLOCK]><![endif]--><?php if(count($this->menuList) > 8): ?>
-                <div class="flex justify-center mt-4" x-cloak wire:key="show-more-button">
-                    <button @click="showAll = !showAll"
-                        class="flex items-center gap-1 text-sm hover:underline" style="color: var(--brand-primary);">
-                        <span
-                            x-text="showAll ? '<?php echo e(__('modules.menu.showLess')); ?>' : '<?php echo e(__('modules.menu.showMore')); ?>'"></span>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': showAll }"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                </div>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        </div>
-
-        <div class="mx-4 mt-6">
-            <!-- Mobile Dropdown -->
-            <div class="relative lg:hidden" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false"
-                    class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg px-4 py-2.5 flex items-center justify-between shadow-sm hover:bg-gray-50 transition-colors duration-200">
-                    <span class="text-sm font-medium truncate">
-                        <?php echo e(is_null($filterCategories) ? __('app.showAll') : $this->categoryList->firstWhere('id', $filterCategories)?->getTranslation('category_name', session('locale', app()->getLocale()))); ?>
-
-                    </span>
-                    <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <!-- Dropdown menu -->
-                <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 translate-y-1"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 translate-y-0"
-                    x-transition:leave-end="opacity-0 translate-y-1"
-                    class="absolute left-0 right-0 z-50 mt-2 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-700">
-                    <div class="overflow-y-auto max-h-80">
-                        <button wire:click="filterMenu(null); $nextTick(() => { open = false })"
-                            class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors <?php echo e(is_null($filterCategories) ? 'bg-gray-50 dark:bg-gray-600' : 'text-gray-700 dark:text-gray-200'); ?>" style="<?php echo e(is_null($filterCategories) ? 'color: var(--brand-primary);' : ''); ?>">
-                            <?php echo app('translator')->get('app.showAll'); ?>
-                        </button>
-
-                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <button wire:click="filterMenu(<?php echo e($item->id); ?>); $nextTick(() => { open = false })"
-                                class="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors flex items-center justify-between <?php echo e($filterCategories == $item->id ? 'bg-gray-50 dark:bg-gray-600' : 'text-gray-700 dark:text-gray-200'); ?>" style="<?php echo e($filterCategories == $item->id ? 'color: var(--brand-primary);' : ''); ?>">
-                                <span><?php echo e($item->getTranslation('category_name', session('locale', app()->getLocale()))); ?></span>
-                                <span
-                                    class="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded-full dark:bg-gray-600 dark:text-gray-300">
-                                    <?php echo e($item->items_count); ?>
-
-                                </span>
-                            </button>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Desktop Tabs -->
-            <div class="hidden p-2 rounded-md lg:block group bg-gray-50 dark:bg-gray-800">
-                <nav class="flex gap-2 overflow-x-auto group-hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 dark:group-hover:[&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:hidden [&::-webkit-scrollbar-thumb]:rounded-full py-2"
-                    aria-label="Categories">
-                    <button wire:click="filterMenu(null)" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                        'px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap',
-                        'bg-[var(--brand-primary)] text-white shadow-sm' => is_null($filterCategories),
-                        'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' => !is_null(
-                            $filterCategories),
-                    ]); ?>">
-                        <?php echo app('translator')->get('app.showAll'); ?>
-                    </button>
-
-                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <button wire:click="filterMenu(<?php echo e($item->id); ?>)"
-                            wire:key="category-desktop-<?php echo e($item->id); ?>"
-                            class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                            'px-4 py-2 text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-2 whitespace-nowrap',
-                            'bg-[var(--brand-primary)] text-white shadow-sm' => $filterCategories == $item->id,
-                            'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' =>
-                                $filterCategories != $item->id,
-                        ]); ?>">
-                            <span><?php echo e($item->getTranslation('category_name', session('locale', app()->getLocale()))); ?></span>
-                            <span
-                                class="px-2 py-0.5 text-xs rounded-full <?php echo e($filterCategories == $item->id ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'); ?>">
-                                <?php echo e($item->items_count); ?>
-
-                            </span>
-                        </button>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                </nav>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 mx-4 my-6 sm:flex-row sm:items-center">
-            <div class="col-span-full md:col-span-2">
-                <?php if (isset($component)) { $__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc2fcfa88dc54fee60e0757a7e0572df1 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input','data' => ['id' => 'menu_name','class' => 'block w-full ','type' => 'text','placeholder' => ''.e(__('placeholders.searchMenuItems')).'','wire:model.live.debounce.500ms' => 'search']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('input'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['id' => 'menu_name','class' => 'block w-full ','type' => 'text','placeholder' => ''.e(__('placeholders.searchMenuItems')).'','wire:model.live.debounce.500ms' => 'search']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalc2fcfa88dc54fee60e0757a7e0572df1)): ?>
-<?php $attributes = $__attributesOriginalc2fcfa88dc54fee60e0757a7e0572df1; ?>
-<?php unset($__attributesOriginalc2fcfa88dc54fee60e0757a7e0572df1); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1)): ?>
-<?php $component = $__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1; ?>
-<?php unset($__componentOriginalc2fcfa88dc54fee60e0757a7e0572df1); ?>
-<?php endif; ?>
-            </div>
-            <div class="flex flex-row flex-wrap items-center justify-end w-full col-span-2 gap-4 mt-2 md:col-span-1 sm:w-auto">
-                <!--[if BLOCK]><![endif]--><?php if($restaurant?->show_veg): ?>
-                <label class="inline-flex items-center cursor-pointer" id="veg_toggle">
-                    <input type="checkbox" value="1" wire:model.live='showVeg' class="sr-only peer">
-                    <div
-                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
-                    </div>
-                    <span class="text-sm font-medium text-gray-900 ms-3 dark:text-gray-300">
-                        <?php echo app('translator')->get('modules.menu.typeVeg'); ?>
-                    </span>
-                </label>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-                <!--[if BLOCK]><![endif]--><?php if($restaurant?->show_halal): ?>
-                <label class="inline-flex items-center cursor-pointer" id="halal_toggle">
-                    <input type="checkbox" value="1" wire:model.live='showHalal' class="sr-only peer">
-                    <div
-                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
-                    </div>
-                    <span class="text-sm font-medium text-gray-900 ms-3 dark:text-gray-300">
-                        <?php echo app('translator')->get('modules.menu.typeHalal'); ?>
-                    </span>
-                </label>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
-
-
-        </div>
-
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
     <!--[if BLOCK]><![endif]--><?php if($showMenu && !$showOrderTypeModal): ?>
-        <div class="px-4 mb-32 space-y-4 lg:gap-8"
+        <div class="flex gap-6 px-4 mt-4 mb-32"
             x-data="{
                 loadedCount: <?php if ((object) ('menuItemsLoaded') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'->value()); ?>')<?php echo e('menuItemsLoaded'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'); ?>')<?php endif; ?>,
                 totalCount: <?php echo e($this->totalMenuItemsCount); ?>,
                 isLoading: false,
-
-                get allItemsLoaded() {
-                    return this.loadedCount >= this.totalCount;
-                },
-
+                get allItemsLoaded() { return this.loadedCount >= this.totalCount; },
                 scrollHandler() {
-                    if (this.allItemsLoaded || this.isLoading) {
-                        return;
-                    }
-
+                    if (this.allItemsLoaded || this.isLoading) return;
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const windowHeight = window.innerHeight;
                     const documentHeight = document.documentElement.scrollHeight;
-
                     if (documentHeight - scrollTop <= windowHeight + 250) {
                         this.isLoading = true;
-                        $wire.loadMoreMenuItems().then(() => {
-                            this.isLoading = false;
-                        });
+                        $wire.loadMoreMenuItems().then(() => { this.isLoading = false; });
                     }
                 }
             }"
-            x-init="
-                window.addEventListener('scroll', () => scrollHandler());
-                // Update totalCount when component updates
-                $watch('loadedCount', () => {
-                    totalCount = <?php echo e($this->totalMenuItemsCount); ?>;
-                });
-            "
+            x-init="window.addEventListener('scroll', () => scrollHandler()); $watch('loadedCount', () => { totalCount = <?php echo e($this->totalMenuItemsCount); ?>; });"
             @scroll.window.throttle.200ms="scrollHandler()">
 
-            <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $this->menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $itemCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <h3 class="my-4 text-base font-semibold text-gray-900 lg:text-xl dark:text-white"><?php echo e($key); ?>
-
-                </h3>
-                <div class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
-                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $itemCat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                            'flex items-center justify-between gap-6 border shadow-sm rounded-lg hover:shadow-md transition dark:border-gray-600 dark:lg:bg-gray-900 dark:shadow-sm lg:rounded-md',
-                            'bg-gray-100 dark:bg-gray-800' => !$item->in_stock,
-                            'bg-white dark:bg-gray-900' => $item->in_stock,
-                        ]); ?>" wire:key='menu-item-<?php echo e($item->id . microtime()); ?>'>
-                            <div class="flex w-full p-3 space-x-4">
-                                <!--[if BLOCK]><![endif]--><?php if($restaurant && !$restaurant->hide_menu_item_image_on_customer_site): ?>
-                                    <img class="object-cover w-16 h-16 rounded-md cursor-pointer lg:w-24 lg:h-24"
-                                        wire:click="showItemDetail(<?php echo e($item->id); ?>)"
-                                        src="<?php echo e($item->item_photo_url); ?>" alt="<?php echo e($item->item_name); ?>">
-                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                <div
-                                    class="flex flex-col w-full gap-1 text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
-                                    <div
-                                        class="inline-flex items-center text-sm font-semibold text-gray-900 lg:text-base dark:text-white">
-                                        <img src="<?php echo e(asset('img/' . $item->type . '.svg')); ?>" class="h-4 mr-1"
-                                            title="<?php echo app('translator')->get('modules.menu.' . $item->type); ?>" alt="" />
-                                        <?php echo e($item->getTranslatedValue('item_name', session('locale'))); ?>
-
-                                    </div>
-                                    <!--[if BLOCK]><![endif]--><?php if($item->description): ?>
-                                        <div class="w-full text-xs font-normal text-gray-500 cursor-pointer lg:text-sm dark:text-gray-400"
-                                            wire:click="showItemDetail(<?php echo e($item->id); ?>)">
-                                            <?php echo e(str($item->getTranslatedValue('description', session('locale')))->limit(50)); ?>
+            <!-- Products listing (right on desktop) -->
+            <div class="flex-1 min-w-0 space-y-4 lg:order-2">
+                <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $this->menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $itemCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <?php $catSection = $this->categoryList->firstWhere('category_name->'.session('locale', app()->getLocale()), $key) ?? $this->categoryList->first(fn($c) => $c->getTranslation('category_name', session('locale', app()->getLocale())) === $key); ?>
+                    <h3 id="cat-section-<?php echo e($catSection?->id ?? Str::slug($key)); ?>"
+                        data-catid="<?php echo e($catSection?->id ?? Str::slug($key)); ?>"
+                        class="mb-4 text-base font-semibold text-gray-900 lg:text-xl dark:text-white scroll-mt-4"><?php echo e($key); ?></h3>
+                    <div class="space-y-4 grid grid-cols-1 gap-10">
+                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $itemCat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                'flex items-center justify-between gap-6 cursor-pointer border shadow-sm rounded-lg hover:scale-[1.05] transition transform dark:border-gray-600 dark:lg:bg-gray-900 dark:shadow-sm',
+                                'bg-gray-100 dark:bg-gray-800' => !$item->in_stock,
+                                'bg-white dark:bg-gray-900' => $item->in_stock,
+                            ]); ?>" wire:key='menu-item-<?php echo e($item->id . microtime()); ?>'>
+                                <div class="flex w-full p-3 space-x-4">
+                                    <!--[if BLOCK]><![endif]--><?php if($restaurant && !$restaurant->hide_menu_item_image_on_customer_site): ?>
+                                        <img class="object-cover w-16 h-16 rounded-md cursor-pointer lg:w-24 lg:h-24"
+                                            wire:click="showItemDetail(<?php echo e($item->id); ?>)"
+                                            src="<?php echo e($item->item_photo_url); ?>" alt="<?php echo e($item->item_name); ?>">
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                    <div class="flex flex-col w-full gap-1 text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+                                        <div class="inline-flex items-center text-sm font-semibold text-gray-900 lg:text-base dark:text-white">
+                                            <img src="<?php echo e(asset('img/' . $item->type . '.svg')); ?>" class="h-4 mr-1"
+                                                title="<?php echo app('translator')->get('modules.menu.' . $item->type); ?>" alt="" />
+                                            <?php echo e($item->getTranslatedValue('item_name', session('locale'))); ?>
 
                                         </div>
-                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php if($item->description): ?>
+                                            <div class="w-full text-xs font-normal text-gray-500 cursor-pointer lg:text-sm dark:text-gray-400"
+                                                wire:click="showItemDetail(<?php echo e($item->id); ?>)">
+                                                <?php echo e(str($item->getTranslatedValue('description', session('locale')))->limit(50)); ?>
 
-                                    <!--[if BLOCK]><![endif]--><?php if($item->preparation_time): ?>
-                                        <div
-                                            class="inline-flex items-center my-1 text-xs font-normal text-gray-700 dark:text-gray-400 max-w-56">
-                                            <?php echo app('translator')->get('modules.menu.preparationTime'); ?> :
-                                            <?php echo e($item->preparation_time); ?> <?php echo app('translator')->get('modules.menu.minutes'); ?></div>
-                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                    <div class="flex items-center justify-between w-full">
-                                        <div>
-                                            <!--[if BLOCK]><![endif]--><?php if($item->variations_count == 0): ?>
-                                                <span
-                                                    class="font-semibold text-gray-900 dark:text-white"><?php echo currency_format($item->price, $restaurant->currency_id); ?></span>
-                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                        </div>
-
-                                        <!--[if BLOCK]><![endif]--><?php if($canCreateOrder): ?>
-                                            <!--[if BLOCK]><![endif]--><?php if(!$item->in_stock): ?>
-                                                <div class="text-red-500">Out of stock</div>
-                                            <?php elseif($restaurant->allow_customer_orders): ?>
-                                                <!--[if BLOCK]><![endif]--><?php if(isset($cartItemQty[$item->id]) && $cartItemQty[$item->id] > 0): ?>
-                                                    <div class="relative flex items-center justify-start max-w-24 me-2"
-                                                        wire:key='orderItemQty-<?php echo e($item->id); ?>-counter'>
-                                                        <button type="button"
-                                                            <?php if($item->variations_count > 0): ?> wire:click="subCartItems(<?php echo e($item->id); ?>)"
-                                                    <?php elseif($item->modifier_groups_count > 0): ?>
-                                                        wire:click="subModifiers(<?php echo e($item->id); ?>)"
+                                            </div>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php if($item->preparation_time): ?>
+                                            <div class="inline-flex items-center my-1 text-xs font-normal text-gray-700 dark:text-gray-400 max-w-56">
+                                                <?php echo app('translator')->get('modules.menu.preparationTime'); ?> : <?php echo e($item->preparation_time); ?> <?php echo app('translator')->get('modules.menu.minutes'); ?>
+                                            </div>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        <div class="flex items-center justify-between w-full">
+                                            <div>
+                                                <!--[if BLOCK]><![endif]--><?php if($item->variations_count == 0): ?>
+                                                    <span class="font-semibold text-gray-900 dark:text-white"><?php echo currency_format($item->price, $restaurant->currency_id); ?></span>
+                                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                            </div>
+                                            <!--[if BLOCK]><![endif]--><?php if($canCreateOrder): ?>
+                                                <!--[if BLOCK]><![endif]--><?php if(!$item->in_stock): ?>
+                                                    <div class="text-red-500">Out of stock</div>
+                                                <?php elseif($restaurant->allow_customer_orders): ?>
+                                                    <!--[if BLOCK]><![endif]--><?php if(isset($cartItemQty[$item->id]) && $cartItemQty[$item->id] > 0): ?>
+                                                        <div class="relative flex items-center justify-start max-w-24 me-2" wire:key='orderItemQty-<?php echo e($item->id); ?>-counter'>
+                                                            <button type="button"
+                                                                <?php if($item->variations_count > 0): ?> wire:click="subCartItems(<?php echo e($item->id); ?>)"
+                                                                <?php elseif($item->modifier_groups_count > 0): ?> wire:click="subModifiers(<?php echo e($item->id); ?>)"
+                                                                <?php else: ?> wire:click="subQty('<?php echo e($item->id); ?>')" <?php endif; ?>
+                                                                class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-s-md">
+                                                                <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                                                </svg>
+                                                            </button>
+                                                            <input type="text" wire:model='cartItemQty.<?php echo e($item->id); ?>'
+                                                                class="min-w-10 bg-white border-x-0 border-gray-300 h-8 text-center text-gray-900 text-sm block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                                value="1" readonly />
+                                                            <button type="button"
+                                                                wire:click="<?php if($item->variations_count > 0 || $item->modifier_groups_count > 0): ?> addCartItems(<?php echo e($item->id); ?>, <?php echo e($item->variations_count); ?>, <?php echo e($item->modifier_groups_count); ?>) <?php else: ?> addQty('<?php echo e($item->id); ?>') <?php endif; ?>"
+                                                                class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-e-md">
+                                                                <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                     <?php else: ?>
-                                                        wire:click="subQty('<?php echo e($item->id); ?>')" <?php endif; ?>
-                                                            class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-s-md">
-                                                            <svg class="w-2 h-2 text-gray-900 dark:text-white"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 18 2">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M1 1h16" />
-                                                            </svg>
-                                                        </button>
-
-                                                        <input type="text"
-                                                            wire:model='cartItemQty.<?php echo e($item->id); ?>'
-                                                            class="min-w-10 bg-white border-x-0 border-gray-300 h-8 text-center text-gray-900 text-sm  block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "
-                                                            value="1" readonly />
-                                                        <button type="button"
-                                                            wire:click="
-                                                        <?php if($item->variations_count > 0 || $item->modifier_groups_count > 0): ?> addCartItems(<?php echo e($item->id); ?>, <?php echo e($item->variations_count); ?>, <?php echo e($item->modifier_groups_count); ?>)
-                                                        <?php else: ?>
-                                                            addQty('<?php echo e($item->id); ?>') <?php endif; ?>
-                                                    "
-                                                            class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-e-md">
-                                                            <svg class="w-2 h-2 text-gray-900 dark:text-white"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 18 18">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M9 1v16M1 9h16" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                <?php else: ?>
-                                                    <?php
-                                                        $orderStats = getRestaurantOrderStats($shopBranch->id);
-                                                    ?>
-                                                    <!--[if BLOCK]><![endif]--><?php if(($orderStats['unlimited'] || $orderStats['current_count'] < $orderStats['order_limit'])): ?>
-                                                        <?php if (isset($component)) { $__componentOriginal7cb8ce508f0c0323a1ef462cf7f26cbc = $component; } ?>
+                                                        <?php $orderStats = getRestaurantOrderStats($shopBranch->id); ?>
+                                                        <!--[if BLOCK]><![endif]--><?php if($orderStats['unlimited'] || $orderStats['current_count'] < $orderStats['order_limit']): ?>
+                                                            <?php if (isset($component)) { $__componentOriginal7cb8ce508f0c0323a1ef462cf7f26cbc = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7cb8ce508f0c0323a1ef462cf7f26cbc = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.cart-button','data' => ['wire:click' => 'addCartItems('.e($item->id).', '.e($item->variations_count).' , '.e($item->modifier_groups_count).')','wire:key' => 'item-input-'.e($item->id . microtime()).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.cart-button','data' => ['wire:click' => 'addCartItems('.e($item->id).', '.e($item->variations_count).', '.e($item->modifier_groups_count).')','wire:key' => 'item-input-'.e($item->id . microtime()).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('cart-button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:click' => 'addCartItems('.e($item->id).', '.e($item->variations_count).' , '.e($item->modifier_groups_count).')','wire:key' => 'item-input-'.e($item->id . microtime()).'']); ?><?php echo app('translator')->get('app.add'); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['wire:click' => 'addCartItems('.e($item->id).', '.e($item->variations_count).', '.e($item->modifier_groups_count).')','wire:key' => 'item-input-'.e($item->id . microtime()).'']); ?><?php echo app('translator')->get('app.add'); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal7cb8ce508f0c0323a1ef462cf7f26cbc)): ?>
 <?php $attributes = $__attributesOriginal7cb8ce508f0c0323a1ef462cf7f26cbc; ?>
@@ -644,10 +392,10 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 <?php $component = $__componentOriginal7cb8ce508f0c0323a1ef462cf7f26cbc; ?>
 <?php unset($__componentOriginal7cb8ce508f0c0323a1ef462cf7f26cbc); ?>
 <?php endif; ?>
+                                                        <?php endif; ?>
                                                     <?php endif; ?>
-                                                <?php endif; ?>
-                                            <?php elseif($item->variations_count > 0 && $restaurant->allow_customer_orders): ?>
-                                                <?php if (isset($component)) { $__componentOriginal23a929514ef7d57034cc7b8bddc2b226 = $component; } ?>
+                                                <?php elseif($item->variations_count > 0 && $restaurant->allow_customer_orders): ?>
+                                                    <?php if (isset($component)) { $__componentOriginal23a929514ef7d57034cc7b8bddc2b226 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal23a929514ef7d57034cc7b8bddc2b226 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button-table','data' => ['wire:click' => 'showItemVariations('.e($item->id).')']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('secondary-button-table'); ?>
@@ -657,14 +405,11 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:click' => 'showItemVariations('.e($item->id).')']); ?>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                        height="16" fill="currentColor" class="w-4 h-4 me-1"
-                                                        viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd"
-                                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                                    </svg>
-                                                    <?php echo app('translator')->get('modules.menu.showVariations'); ?> (<?php echo e($item->variations_count); ?>)
-                                                 <?php echo $__env->renderComponent(); ?>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 me-1" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                                                        </svg>
+                                                        <?php echo app('translator')->get('modules.menu.showVariations'); ?> (<?php echo e($item->variations_count); ?>)
+                                                     <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal23a929514ef7d57034cc7b8bddc2b226)): ?>
 <?php $attributes = $__attributesOriginal23a929514ef7d57034cc7b8bddc2b226; ?>
@@ -674,55 +419,92 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 <?php $component = $__componentOriginal23a929514ef7d57034cc7b8bddc2b226; ?>
 <?php unset($__componentOriginal23a929514ef7d57034cc7b8bddc2b226); ?>
 <?php endif; ?>
+                                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                <div
-                    class="flex flex-col items-center justify-center p-6 text-center text-gray-500 dark:text-gray-400">
-                    <svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-                        fill="none">
-                        <path d="M4 14a8 8 0 0 1 16 0z" fill="#e5e7eb" />
-                        <rect x="3" y="14" width="18" height="2.5" rx=".5" fill="#d1d5db" />
-                        <circle cx="12" cy="4.5" r=".8" fill="#9ca3af" />
-                        <circle cx="9.5" cy="10" r=".5" fill="#4b5563" />
-                        <circle cx="14.5" cy="10" r=".5" fill="#4b5563" />
-                    </svg>
-                    <span class="text-lg">
-                        <?php echo app('translator')->get('messages.noItemAdded'); ?>
-                    </span>
-                </div>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-            
-            <div class="flex items-center justify-center py-6 px-4">
-                <!--[if BLOCK]><![endif]--><?php if(!$this->allItemsLoaded): ?>
-                    <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
-                        <svg class="inline animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/>
-                        </svg>
-                        <span class="text-sm font-medium"><?php echo app('translator')->get('messages.loadingData'); ?></span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                     </div>
-                <?php else: ?>
-                    <div class="flex items-center gap-x-1 text-gray-500 dark:text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <div class="flex flex-col items-center justify-center p-6 text-center text-gray-500 dark:text-gray-400">
+                        <svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <path d="M4 14a8 8 0 0 1 16 0z" fill="#e5e7eb"/>
+                            <rect x="3" y="14" width="18" height="2.5" rx=".5" fill="#d1d5db"/>
+                            <circle cx="12" cy="4.5" r=".8" fill="#9ca3af"/>
+                            <circle cx="9.5" cy="10" r=".5" fill="#4b5563"/>
+                            <circle cx="14.5" cy="10" r=".5" fill="#4b5563"/>
                         </svg>
-                        <span class="text-sm font-medium"><?php echo app('translator')->get('messages.allItemsLoaded'); ?></span>
+                        <span class="text-lg"><?php echo app('translator')->get('messages.noItemAdded'); ?></span>
                     </div>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+
+                <!-- Load More Indicator -->
+                <div class="flex items-center justify-center py-6 px-4">
+                    <!--[if BLOCK]><![endif]--><?php if(!$this->allItemsLoaded): ?>
+                        <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
+                            <svg class="inline animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12zm2 5.291A7.96 7.96 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938z"/>
+                            </svg>
+                            <span class="text-sm font-medium"><?php echo app('translator')->get('messages.loadingData'); ?></span>
+                        </div>
+                    <?php else: ?>
+                        <div class="flex items-center gap-x-1 text-gray-500 dark:text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/>
+                            </svg>
+                            <span class="text-sm font-medium"><?php echo app('translator')->get('messages.allItemsLoaded'); ?></span>
+                        </div>
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                </div>
             </div>
 
-            <div class="fixed flex justify-center w-full max-w-lg gap-6 -ml-4 bottom-24 lg:hidden">
-                <!--[if BLOCK]><![endif]--><?php if($this->shouldShowWaiterButtonMobile): ?>
-                    <?php
+            <!-- Category filter accordion (left on desktop) -->
+            <div class="hidden lg:block w-64 xl:w-72 flex-shrink-0 lg:order-1">
+                <div class="sticky top-4 overflow-y-auto max-h-[calc(100vh-6rem)] pb-4">
+
+                    <!-- Single bordered container — click scrolls to section, highlights on scroll -->
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
+                        x-data="{ activecat: '<?php echo e($this->categoryList->first()?->id); ?>' }"
+                        x-init="
+                            const observer = new IntersectionObserver((entries) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) activecat = entry.target.dataset.catid;
+                                });
+                            }, { rootMargin: '-20% 0px -60% 0px' });
+                            document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
+                        ">
+
+                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->categoryList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); ?>
+                            <button
+                                @click="
+                                    activecat = '<?php echo e($cat->id); ?>';
+                                    const el = document.getElementById('cat-section-<?php echo e($cat->id); ?>');
+                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                "
+                                class="w-full flex items-center gap-2 px-4 py-3 text-left text-sm font-semibold transition-colors"
+                                :class="activecat == '<?php echo e($cat->id); ?>' ? 'text-gray-800' : 'text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700'"
+                                wire:key="cat-filter-<?php echo e($cat->id); ?>">
+                                <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                                <span class="truncate"><?php echo e($catName); ?></span>
+                            </button>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+
+                    </div><!-- end single border container -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="fixed flex justify-center w-full max-w-lg gap-6 px-4 bottom-24 lg:hidden">
+            <!--[if BLOCK]><![endif]--><?php if($this->shouldShowWaiterButtonMobile): ?>
+                <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -738,9 +520,9 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                <!--[if BLOCK]><![endif]--><?php if(is_null(customer()) && $restaurant->customer_login_required): ?>
-                    <?php if (isset($component)) { $__componentOriginale67687e3e4e61f963b25a6bcf3983629 = $component; } ?>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            <!--[if BLOCK]><![endif]--><?php if(is_null(customer()) && $restaurant->customer_login_required): ?>
+                <?php if (isset($component)) { $__componentOriginale67687e3e4e61f963b25a6bcf3983629 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale67687e3e4e61f963b25a6bcf3983629 = $attributes; } ?>
 <?php $component = App\View\Components\Button::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('button'); ?>
@@ -759,16 +541,15 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginale67687e3e4e61f963b25a6bcf3983629; ?>
 <?php unset($__componentOriginale67687e3e4e61f963b25a6bcf3983629); ?>
 <?php endif; ?>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+        </div>
 
-            <!--[if BLOCK]><![endif]--><?php if($cartQty > 0): ?>
-                <div
-                    class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto -ml-4 antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1" style="background-color: var(--brand-primary);">
-                    <div><?php echo app('translator')->get('modules.order.totalItem'); ?>: <?php echo e($cartQty); ?> &nbsp;|&nbsp;
-                        <?php echo currency_format($subTotal, $restaurant->currency_id); ?> + <?php echo app('translator')->get('modules.order.taxes'); ?></div>
-
-                    <?php if (isset($component)) { $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af = $component; } ?>
+        <!--[if BLOCK]><![endif]--><?php if($cartQty > 0): ?>
+            <div class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1 left-1/2 -translate-x-1/2"
+                style="background-color: var(--brand-primary);">
+                <div><?php echo app('translator')->get('modules.order.totalItem'); ?>: <?php echo e($cartQty); ?> &nbsp;|&nbsp;
+                    <?php echo currency_format($subTotal, $restaurant->currency_id); ?> + <?php echo app('translator')->get('modules.order.taxes'); ?></div>
+                <?php if (isset($component)) { $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal3b0e04e43cf890250cc4d85cff4d94af = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.secondary-button','data' => ['wire:click' => 'showCartItems']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('secondary-button'); ?>
@@ -787,10 +568,8 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal3b0e04e43cf890250cc4d85cff4d94af; ?>
 <?php unset($__componentOriginal3b0e04e43cf890250cc4d85cff4d94af); ?>
 <?php endif; ?>
-
-                </div>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        </div>
+            </div>
+        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
     <!--[if BLOCK]><![endif]--><?php if($showCart): ?>

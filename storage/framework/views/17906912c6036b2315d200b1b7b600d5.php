@@ -50,8 +50,7 @@
 
 <body class="font-sans antialiased dark:bg-gray-900">
 
-    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
-        <?php
+    <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -67,7 +66,7 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-        <?php
+    <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -84,7 +83,8 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
 
-        <div class="flex mt-4 overflow-hidden  dark:bg-gray-900">
+    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
+        <div class="flex mt-4 overflow-hidden dark:bg-gray-900">
             <div id="main-content" class="w-full h-full overflow-y-auto dark:bg-gray-900">
                 <main>
                     <?php echo $__env->yieldContent('content'); ?>

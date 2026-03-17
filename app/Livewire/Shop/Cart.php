@@ -202,8 +202,8 @@ class Cart extends Component
                 ->where('enable_from_customer_site', true)
                 ->count();
 
-            // Show modal if more than one order type available
-            $this->showOrderTypeModal = $availableOrderTypes > 1;
+            // Modal is only opened manually via nav button, not auto-shown on load
+            $this->showOrderTypeModal = false;
 
             // If only one order type, set it automatically
             if ($availableOrderTypes == 1) {
@@ -901,6 +901,12 @@ class Cart extends Component
     {
         $customer = Customer::find($customer['id']);
         $this->customer = $customer;
+    }
+
+    #[On('open-order-type-modal')]
+    public function openOrderTypeModal()
+    {
+        $this->showOrderTypeModal = true;
     }
 
     #[On('showCartItems')]

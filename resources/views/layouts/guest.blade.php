@@ -49,11 +49,11 @@
 
 <body class="font-sans antialiased dark:bg-gray-900">
 
-    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
-        @livewire('shopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
-        @livewire('shopDesktopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
+    @livewire('shopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
+    @livewire('shopDesktopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
 
-        <div class="flex mt-4 overflow-hidden  dark:bg-gray-900">
+    <div class="mx-auto max-w-3xl lg:max-w-screen-xl min-h-svh">
+        <div class="flex mt-4 overflow-hidden dark:bg-gray-900">
             <div id="main-content" class="w-full h-full overflow-y-auto dark:bg-gray-900">
                 <main>
                     @yield('content')
