@@ -2,7 +2,7 @@
     <!-- Order Type Selection Modal -->
     @php $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null; @endphp
     <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl">
-        <!-- <x-slot name="title">@lang('modules.order.selectOrderType')</x-slot> -->
+        <x-slot name="title"></x-slot>
 
         <x-slot name="content">
             <div x-data="{ activeTab: {{ $firstOrderTypeId ?? 'null' }} }">
@@ -65,14 +65,14 @@
                 </div>
 
                 {{-- Confirm Button --}}
-                <button
+                <!-- <button
                     type="button"
                     @click="$wire.call('selectOrderTypeFromModal', activeTab)"
                     class="w-full py-3 px-4 rounded-xl text-white text-sm font-semibold transition hover:opacity-90"
                     style="background-color: #011646;"
                 >
                     @lang('app.confirm')
-                </button>
+                </button> -->
 
             </div>
         </x-slot>
@@ -127,7 +127,7 @@
     @if(!$isHeaderDisabled)
         <section class="px-4 bg-white dark:bg-gray-900">
             @if($headerType === 'text')
-                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center lg:py-8 lg:px-12 bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
+                <div class="py-2 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
                     <p class="bg-[#011646] w-44 h-28 rounded-2xl">
                         <!-- {{ $headerText }} -->
                     </p>
@@ -204,7 +204,7 @@
             </section>
         @endif
 
-    @if ($showMenu && !$showOrderTypeModal)
+    @if ($showMenu)
         <div class="flex gap-6 px-4 mt-4 mb-32"
             x-data="{
                 loadedCount: @entangle('menuItemsLoaded'),

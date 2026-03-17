@@ -11,7 +11,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['wire:model.live' => 'showOrderTypeModal','maxWidth' => '4xl']); ?>
-        <!--  <?php $__env->slot('title', null, []); ?> <?php echo app('translator')->get('modules.order.selectOrderType'); ?> <?php $__env->endSlot(); ?> -->
+         <?php $__env->slot('title', null, []); ?>  <?php $__env->endSlot(); ?>
 
          <?php $__env->slot('content', null, []); ?> 
             <div x-data="{ activeTab: <?php echo e($firstOrderTypeId ?? 'null'); ?> }">
@@ -76,14 +76,14 @@
                 </div>
 
                 
-                <button
+                <!-- <button
                     type="button"
                     @click="$wire.call('selectOrderTypeFromModal', activeTab)"
                     class="w-full py-3 px-4 rounded-xl text-white text-sm font-semibold transition hover:opacity-90"
                     style="background-color: #011646;"
                 >
                     <?php echo app('translator')->get('app.confirm'); ?>
-                </button>
+                </button> -->
 
             </div>
          <?php $__env->endSlot(); ?>
@@ -201,7 +201,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
     <!--[if BLOCK]><![endif]--><?php if(!$isHeaderDisabled): ?>
         <section class="px-4 bg-white dark:bg-gray-900">
             <!--[if BLOCK]><![endif]--><?php if($headerType === 'text'): ?>
-                <div class="py-4 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center lg:py-8 lg:px-12 bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
+                <div class="py-2 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
                     <p class="bg-[#011646] w-44 h-28 rounded-2xl">
                         <!-- <?php echo e($headerText); ?> -->
                     </p>
@@ -278,7 +278,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </section>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-    <!--[if BLOCK]><![endif]--><?php if($showMenu && !$showOrderTypeModal): ?>
+    <!--[if BLOCK]><![endif]--><?php if($showMenu): ?>
         <div class="flex gap-6 px-4 mt-4 mb-32"
             x-data="{
                 loadedCount: <?php if ((object) ('menuItemsLoaded') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'->value()); ?>')<?php echo e('menuItemsLoaded'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('menuItemsLoaded'); ?>')<?php endif; ?>,
