@@ -202,9 +202,13 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <section class="px-4 bg-white dark:bg-gray-900">
             <!--[if BLOCK]><![endif]--><?php if($headerType === 'text'): ?>
                 <div class="py-2 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
-                    <p class="bg-[#011646] w-44 h-28 rounded-2xl">
-                        <!-- <?php echo e($headerText); ?> -->
-                    </p>
+                    <div class="w-44 h-28 rounded-2xl overflow-hidden bg-transparent">
+                        <img
+                            src="<?php echo e(asset('img/test-logo.png')); ?>"
+                            alt="Test Logo"
+                            class="w-full h-full object-contain"
+                        >
+                    </div>
                 </div>
                 <?php elseif($headerType === 'image' && count($headerImages) > 0): ?>
                 <!-- Image Carousel -->
@@ -485,8 +489,8 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                     const el = document.getElementById('cat-section-<?php echo e($cat->id); ?>');
                                     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                 "
-                                class="w-full flex items-center gap-2 px-4 py-3 text-left text-sm font-semibold transition-colors"
-                                :class="activecat == '<?php echo e($cat->id); ?>' ? 'text-gray-800' : 'text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700'"
+                                class="w-full flex items-center gap-2 px-4 py-3 text-left text-sm font-semibold transition-colors text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                                :class="activecat == '<?php echo e($cat->id); ?>' ? 'text-gray-900 dark:text-white' : ''"
                                 wire:key="cat-filter-<?php echo e($cat->id); ?>">
                                 <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
