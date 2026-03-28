@@ -212,12 +212,9 @@
                             </div>
 
                             <div>
-                                <x-label for="isAvailable" :value="__('modules.menu.isAvailable')" />
-                                <x-select id="isAvailable" class="mt-1 block w-full" wire:model="isAvailable">
-                                    <option value="1">@lang('app.yes')</option>
-                                    <option value="0">@lang('app.no')</option>
-                                </x-select>
-                                <x-input-error for="isAvailable" class="mt-2" />
+                                <x-label for="calories" :value="__('modules.menu.calories')" />
+                                <x-input id="calories" type="number" step="1" min="0" wire:model="calories" class="block w-full rounded text-gray-900 placeholder:text-gray-400 mt-1" placeholder="0" />
+                                <x-input-error for="calories" class="mt-2" />
                             </div>
                         </div>
 
@@ -233,6 +230,16 @@
                             <x-input-error for="kitchenType" class="mt-2" />
                         </div>
                         @endif
+
+                        <!-- Is Available -->
+                        <div>
+                            <x-label for="isAvailable" :value="__('modules.menu.isAvailable')" />
+                            <x-select id="isAvailable" class="mt-1 block w-full" wire:model="isAvailable">
+                                <option value="1">@lang('app.yes')</option>
+                                <option value="0">@lang('app.no')</option>
+                            </x-select>
+                            <x-input-error for="isAvailable" class="mt-2" />
+                        </div>
 
                         <!-- Item Image Upload -->
                         <div>

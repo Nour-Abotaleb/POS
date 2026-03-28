@@ -122,6 +122,8 @@ class MenuItemImport implements ToModel, WithHeadingRow, WithChunkReading, WithV
                 'item_name' => $mappedRow['item_name'] ?? '',
                 'description' => $mappedRow['description'] ?? '',
                 'price' => floatval($mappedRow['price'] ?? 0),
+                'preparation_time' => isset($mappedRow['preparation_time']) ? intval($mappedRow['preparation_time']) : null,
+                'calories' => isset($mappedRow['calories']) ? intval($mappedRow['calories']) : null,
                 'item_category_id' => $category->id,
                 'menu_id' => $menu->id,
                 'type' => $this->mapItemType($mappedRow['type'] ?? 'veg'),

@@ -431,6 +431,7 @@ return [
         'filterType' => 'تصفية حسب النوع',
         'setPrice' => 'السعر',
         'preparationTime' => 'وقت التحضير',
+        'calories' => 'السعرات الحرارية',
         'minutes' => 'دقائق',
         'isAvailable' => 'متاح',
         'available' => 'متاح',

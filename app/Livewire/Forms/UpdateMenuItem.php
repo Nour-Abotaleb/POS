@@ -52,6 +52,9 @@ class UpdateMenuItem extends Component
     #[Validate('nullable|integer|min:0')]
     public ?int $preparationTime = null;
 
+    #[Validate('nullable|integer|min:0')]
+    public ?int $calories = null;
+
     #[Validate('required|boolean')]
     public bool $isAvailable = true;
 
@@ -169,6 +172,7 @@ class UpdateMenuItem extends Component
         $this->itemCategory = (string)$this->menuItem->item_category_id;
         $this->itemPrice = (string)$this->menuItem->price;
         $this->preparationTime = $this->menuItem->preparation_time;
+        $this->calories = $this->menuItem->calories;
         $this->itemType = $this->menuItem->type;
         $this->isAvailable = (bool)$this->menuItem->is_available;
         $this->inStock = (bool)$this->menuItem->in_stock;
@@ -195,6 +199,10 @@ class UpdateMenuItem extends Component
         $this->translationNames[$this->globalLocale] = $this->menuItem->item_name;
         $this->translationDescriptions[$this->globalLocale] = $this->menuItem->description;
 
+        // Set current language values
+        $this->itemName = $this->translationNames[$this->currentLanguage] ?? $this->menuItem->item_name;
+        $this->itemDescription = $this->translationDescriptions[$this->currentLanguage] ?? $this->menuItem->description;
+
         // Load variations
         $this->hasVariations = $this->menuItem->variations->count() > 0;
         $this->showItemPrice = !$this->hasVariations;
@@ -216,8 +224,9 @@ class UpdateMenuItem extends Component
             }
         }
 
-        $this->updatedCurrentLanguage();
-        $this->updateTranslation();
+        // Set current language values after loading all translations
+        $this->itemName = $this->translationNames[$this->currentLanguage] ?? $this->menuItem->item_name;
+        $this->itemDescription = $this->translationDescriptions[$this->currentLanguage] ?? $this->menuItem->description;
     }
 
     /**
@@ -663,6 +672,7 @@ class UpdateMenuItem extends Component
             'description' => $this->translationDescriptions[$this->globalLocale],
             'type' => $this->itemType,
             'preparation_time' => $this->preparationTime,
+            'calories' => $this->calories,
             'menu_id' => $this->menu,
             'is_available' => $this->isAvailable,
             'kot_place_id' => $this->kitchenType,
@@ -881,8 +891,8 @@ class UpdateMenuItem extends Component
 
     public function updatedCurrentLanguage(): void
     {
-        $this->itemName = $this->translationNames[$this->currentLanguage];
-        $this->itemDescription = $this->translationDescriptions[$this->currentLanguage];
+        $this->itemName = $this->translationNames[$this->currentLanguage] ?? '';
+        $this->itemDescription = $this->translationDescriptions[$this->currentLanguage] ?? '';
     }
 
     public function showMenuCategoryModal(): void
@@ -967,15 +977,30 @@ class UpdateMenuItem extends Component
     #[Computed]
     public function getTaxInclusivePriceDetailsProperty(): ?array
     {
-        if (empty($this->itemPrice) || !$this->isTaxModeItem) {
+        if (empty($this->itemPrice) || !$this->isTaxModeItem || empty($this->selectedTaxes)) {
             return null;
         }
 
-        return (new MenuItem)->getTaxBreakdown(
+        $breakdown = (new MenuItem)->getTaxBreakdown(
             (float)$this->itemPrice,
             $this->selectedTaxes,
             $this->taxInclusive
         );
+
+        // Convert HtmlString objects to plain strings for Livewire compatibility
+        if ($breakdown && is_array($breakdown)) {
+            if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+            }
+            if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+            }
+            if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+            }
+        }
+
+        return $breakdown;
     }
 
     private function getVariationBreakdowns(): array
@@ -986,14 +1011,29 @@ class UpdateMenuItem extends Component
 
         $breakdowns = [];
         foreach ($this->variationPrice as $key => $price) {
-            if (!empty($price)) {
+            if (!empty($price) && !empty($this->selectedTaxes)) {
+                $breakdown = (new MenuItem)->getTaxBreakdown(
+                    (float)$price,
+                    $this->selectedTaxes,
+                    $this->taxInclusive
+                );
+
+                // Convert HtmlString objects to plain strings for Livewire compatibility
+                if ($breakdown && is_array($breakdown)) {
+                    if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                        $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+                    }
+                    if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                        $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+                    }
+                    if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                        $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+                    }
+                }
+
                 $breakdowns[$key] = [
                     'name' => $this->variationName[$key] ?? '',
-                    'breakdown' => (new MenuItem)->getTaxBreakdown(
-                        (float)$price,
-                        $this->selectedTaxes,
-                        $this->taxInclusive
-                    )
+                    'breakdown' => $breakdown
                 ];
             }
         }

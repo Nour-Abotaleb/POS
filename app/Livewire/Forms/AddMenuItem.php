@@ -38,6 +38,7 @@ class AddMenuItem extends Component
     public $variationName = [];
     public $variationPrice = [];
     public $preparationTime;
+    public $calories;
     public bool $isAvailable = true;
     public $translationNames = [];
     public $translationDescriptions = [];
@@ -168,6 +169,7 @@ class AddMenuItem extends Component
             'type' => $this->itemType,
             'menu_id' => $this->menu,
             'preparation_time' => $this->preparationTime,
+            'calories' => $this->calories,
             'kot_place_id' => $this->kitchenType,
             'tax_inclusive' => ($this->isTaxModeItem) ? $this->taxInclusive : false,
         ]);
@@ -357,11 +359,30 @@ class AddMenuItem extends Component
 
     public function getTaxInclusivePriceDetailsProperty()
     {
-        return (new \App\Models\MenuItem)->getTaxBreakdown(
+        if (empty($this->itemPrice) || empty($this->selectedTaxes)) {
+            return null;
+        }
+
+        $breakdown = (new \App\Models\MenuItem)->getTaxBreakdown(
             $this->itemPrice,
             $this->selectedTaxes,
             $this->taxInclusive
         );
+
+        // Convert HtmlString objects to plain strings for Livewire compatibility
+        if ($breakdown && is_array($breakdown)) {
+            if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+            }
+            if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+            }
+            if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+            }
+        }
+
+        return $breakdown;
     }
 
     public function updatedVariationPrice($value, $key)
@@ -378,14 +399,29 @@ class AddMenuItem extends Component
     {
         $breakdowns = [];
         foreach ($this->variationPrice as $key => $price) {
-            if (!empty($price)) {
+            if (!empty($price) && !empty($this->selectedTaxes)) {
+                $breakdown = (new \App\Models\MenuItem)->getTaxBreakdown(
+                    $price,
+                    $this->selectedTaxes,
+                    $this->taxInclusive
+                );
+
+                // Convert HtmlString objects to plain strings for Livewire compatibility
+                if ($breakdown && is_array($breakdown)) {
+                    if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                        $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+                    }
+                    if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                        $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+                    }
+                    if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                        $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+                    }
+                }
+
                 $breakdowns[$key] = [
                     'name' => $this->variationName[$key] ?? '',
-                    'breakdown' => (new \App\Models\MenuItem)->getTaxBreakdown(
-                        $price,
-                        $this->selectedTaxes,
-                        $this->taxInclusive
-                    )
+                    'breakdown' => $breakdown
                 ];
             }
         }

@@ -48,6 +48,9 @@ class CreateMenuItem extends Component
     #[Validate('nullable|integer|min:0')]
     public ?int $preparationTime = null;
 
+    #[Validate('nullable|integer|min:0')]
+    public ?int $calories = null;
+
     #[Validate('required|boolean')]
     public bool $isAvailable = true;
 
@@ -467,6 +470,7 @@ class CreateMenuItem extends Component
             'type' => $this->itemType,
             'menu_id' => $this->menu,
             'preparation_time' => $this->preparationTime,
+            'calories' => $this->calories,
             'kot_place_id' => $this->kitchenType,
             'tax_inclusive' => $this->isTaxModeItem ? $this->taxInclusive : false,
         ]);

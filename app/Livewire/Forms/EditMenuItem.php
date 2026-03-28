@@ -428,12 +428,31 @@ class EditMenuItem extends Component
 
     public function getTaxInclusivePriceProperty()
     {
+        if (empty($this->itemPrice) || empty($this->selectedTaxes)) {
+            return null;
+        }
+
         // Use the MenuItem model's method for tax breakdown
-        return (new \App\Models\MenuItem)->getTaxBreakdown(
+        $breakdown = (new \App\Models\MenuItem)->getTaxBreakdown(
             $this->itemPrice,
             $this->selectedTaxes,
             $this->taxInclusive
         );
+
+        // Convert HtmlString objects to plain strings for Livewire compatibility
+        if ($breakdown && is_array($breakdown)) {
+            if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+            }
+            if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+            }
+            if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+            }
+        }
+
+        return $breakdown;
     }
 
     public function updatedItemPrice()
@@ -470,14 +489,29 @@ class EditMenuItem extends Component
     {
         $breakdowns = [];
         foreach ($this->variationPrice as $key => $price) {
-            if (!empty($price)) {
+            if (!empty($price) && !empty($this->selectedTaxes)) {
+                $breakdown = (new \App\Models\MenuItem)->getTaxBreakdown(
+                    $price,
+                    $this->selectedTaxes,
+                    $this->taxInclusive
+                );
+
+                // Convert HtmlString objects to plain strings for Livewire compatibility
+                if ($breakdown && is_array($breakdown)) {
+                    if (isset($breakdown['base']) && is_object($breakdown['base'])) {
+                        $breakdown['base'] = strip_tags($breakdown['base']->toHtml());
+                    }
+                    if (isset($breakdown['tax']) && is_object($breakdown['tax'])) {
+                        $breakdown['tax'] = strip_tags($breakdown['tax']->toHtml());
+                    }
+                    if (isset($breakdown['total']) && is_object($breakdown['total'])) {
+                        $breakdown['total'] = strip_tags($breakdown['total']->toHtml());
+                    }
+                }
+
                 $breakdowns[$key] = [
                     'name' => $this->variationName[$key] ?? '',
-                    'breakdown' => (new \App\Models\MenuItem)->getTaxBreakdown(
-                        $price,
-                        $this->selectedTaxes,
-                        $this->taxInclusive
-                    )
+                    'breakdown' => $breakdown
                 ];
             }
         }

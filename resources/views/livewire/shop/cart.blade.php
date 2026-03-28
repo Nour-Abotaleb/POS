@@ -251,6 +251,11 @@
                                                 title="@lang('modules.menu.' . $item->type)" alt="" />
                                             {{ $item->getTranslatedValue('item_name', session('locale')) }}
                                         </div>
+                                        @if ($item->calories)
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                {{ $item->calories }}
+                                            </div>
+                                        @endif
                                         @if ($item->description)
                                             <div class="w-full text-xs font-normal text-gray-500 cursor-pointer lg:text-sm dark:text-gray-400"
                                                 wire:click="showItemDetail({{ $item->id }})">
@@ -440,6 +445,11 @@
                                             title="@lang('modules.menu.' . $item->type)" alt="" />
                                         {{ $item->item_name }}
                                     </div>
+                                    @if ($item->calories)
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $item->calories }}
+                                        </span>
+                                    @endif
 
                                     @if (isset($orderItemVariation[$key]))
                                         <span
@@ -1186,6 +1196,11 @@
                         @endif
                         <div class="flex flex-col gap-1">
                             <h3 class="text-lg font-semibold dark:text-white">{{ $selectedItem->item_name }}</h3>
+                            @if ($selectedItem->calories)
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $selectedItem->calories }}
+                                </div>
+                            @endif
                             @if (strlen($selectedItem->description) > 100)
                                 <div x-data="{ expanded: false }">
                                     <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -1543,6 +1558,11 @@
                                         title="@lang('modules.menu.' . $menuItem->type)" alt="" />
                                     {{ $menuItem->item_name }}
                                 </div>
+                                @if ($menuItem->calories)
+                                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        {{ $menuItem->calories }}
+                                    </div>
+                                @endif
                                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ $menuItem->description }}</div>
                             </div>

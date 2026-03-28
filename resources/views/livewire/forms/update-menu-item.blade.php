@@ -216,6 +216,20 @@
                             </div>
 
                             <div>
+                                <x-label for="calories" :value="__('modules.menu.calories')" />
+                                <div class="relative rounded-md mt-1">
+                                    <x-input id="calories" type="number" step="1" min="0" wire:model="calories" class="block w-full rounded text-gray-900 placeholder:text-gray-400" placeholder="0" />
+
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8">
+                                        <span class="text-gray-500">CAL</span>
+                                    </div>
+                                </div>
+                                <x-input-error for="calories" class="mt-2" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
                                 <x-label for="isAvailable" :value="__('modules.menu.isAvailable')" />
                                 <x-select id="isAvailable" class="mt-1 block w-full" wire:model="isAvailable">
                                     <option value="1">@lang('app.yes')</option>

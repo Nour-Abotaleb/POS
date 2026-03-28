@@ -62,6 +62,20 @@
                 <x-input-error for="itemDescription" class="mt-2" />
             </div>
 
+            <!-- CALORIES FIELD - SIMPLE VERSION -->
+            <div>
+                <label for="calories" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    السعرات الحرارية (Calories)
+                </label>
+                <input type="number" 
+                       id="calories" 
+                       wire:model="calories" 
+                       min="0" 
+                       step="1"
+                       placeholder="0"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            </div>
+
             <!-- Translation Preview -->
             <div>
                 @if(count($languages) > 1 && (array_filter($translationNames) || array_filter($translationDescriptions)))
@@ -193,6 +207,7 @@
 
             </div>
 
+            <!-- Additional Settings -->
             <div>
                 <x-label for="preparationTime" :value="__('modules.menu.preparationTime')" />
                 <div class="relative rounded-md mt-1">
@@ -202,9 +217,21 @@
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8">
                         <span class="text-gray-500">@lang('modules.menu.minutes')</span>
                     </div>
-
                 </div>
                 <x-input-error for="preparationTime" class="mt-2" />
+            </div>
+
+            <div>
+                <x-label for="calories" :value="__('modules.menu.calories')" />
+                <div class="relative rounded-md mt-1">
+                    <x-input id="calories" type="number" step="1" min="0" wire:model="calories"
+                        class="block w-full rounded text-gray-900 placeholder:text-gray-400" placeholder="0" />
+
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8">
+                        <span class="text-gray-500">@lang('modules.menu.calories')</span>
+                    </div>
+                </div>
+                <x-input-error for="calories" class="mt-2" />
             </div>
 
             <div>

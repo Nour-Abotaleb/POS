@@ -548,6 +548,7 @@ return [
         // Pricing & Availability
         'setPrice' => 'Price',
         'preparationTime' => 'Preparation Time',
+        'calories' => 'Calories',
         'minutes' => 'minutes',
         'isAvailable' => 'Is Available',
         'available' => 'Available',

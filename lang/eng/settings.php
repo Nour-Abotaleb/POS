@@ -256,20 +256,4 @@ return [
     'passwords_do_not_match' => 'Passwords do not match',
     'invalid_number' => 'Invalid number',
     'invalid_percentage' => 'Invalid percentage',
-
-    // ZATCA Phase 2
-    'zatca_phase_2_integration' => 'ZATCA Phase 2 Integration',
-    'zatca_environment' => 'ZATCA Environment',
-    'zatca_csid' => 'ZATCA CSID',
-    'zatca_secret' => 'ZATCA Secret',
-    'zatca_private_key' => 'ZATCA Private Key',
-    'zatca_certificate' => 'ZATCA Certificate',
-    'zatca_status' => 'ZATCA Reporting Status',
-    'zatca_reported' => 'Reported',
-    'zatca_failed' => 'Failed',
-    'zatca_pending' => 'Pending',
-    'zatca_otp' => 'OTP Code',
-    'onboard' => 'Onboard System',
-    'zatca_otp_help' => 'Enter the OTP from ZATCA Fatoora portal to automatically onboard the system.',
-    'zatca_api_environment' => 'API Environment',
 ];

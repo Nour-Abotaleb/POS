@@ -75,6 +75,14 @@
                                 <span class="text-xs text-gray-600 dark:text-gray-400">{{ __('modules.menu.itemDescription') }}</span>
                             </div>
                             <div class="flex items-center space-x-2 p-1.5 bg-gray-50 dark:bg-gray-700 rounded">
+                                <code class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-xs font-mono">preparation_time</code>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">{{ __('modules.menu.preparationTime') }} ({{ __('modules.menu.minutes') }})</span>
+                            </div>
+                            <div class="flex items-center space-x-2 p-1.5 bg-gray-50 dark:bg-gray-700 rounded">
+                                <code class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-xs font-mono">calories</code>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">{{ __('modules.menu.calories') }} (CAL)</span>
+                            </div>
+                            <div class="flex items-center space-x-2 p-1.5 bg-gray-50 dark:bg-gray-700 rounded">
                                 <code class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-xs font-mono">type</code>
                                 <span class="text-xs text-gray-600 dark:text-gray-400">{{ __('modules.menu.veg') }}/{{ __('modules.menu.non-veg') }}/{{ __('modules.menu.egg') }}</span>
                             </div>
@@ -363,6 +371,8 @@
                                 <option value="price" {{ $columnMapping[$header] === 'price' ? 'selected' : '' }}>{{ __('modules.menu.setPrice') }}</option>
                                 <option value="description" {{ $columnMapping[$header] === 'description' ? 'selected' : '' }}>{{ __('modules.menu.itemDescription') }}</option>
                                 <option value="type" {{ $columnMapping[$header] === 'type' ? 'selected' : '' }}>{{ __('modules.menu.type') }}</option>
+                                <option value="preparation_time" {{ $columnMapping[$header] === 'preparation_time' ? 'selected' : '' }}>{{ __('modules.menu.preparationTime') }}</option>
+                                <option value="calories" {{ $columnMapping[$header] === 'calories' ? 'selected' : '' }}>{{ __('modules.menu.calories') }}</option>
                                 <option value="show_on_customer_site" {{ $columnMapping[$header] === 'show_on_customer_site' ? 'selected' : '' }}>{{ __('modules.menu.showOnCustomerSite') }}</option>
                             </select>
                         </div>
