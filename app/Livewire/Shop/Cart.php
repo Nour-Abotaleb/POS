@@ -17,6 +17,7 @@ use App\Models\Customer;
 use App\Models\MenuItem;
 use App\Models\OrderTax;
 use App\Models\OrderItem;
+use App\Models\Branch;
 use App\Models\OrderType;
 use App\Models\OrderCharge;
 use Illuminate\Support\Arr;
@@ -25,6 +26,7 @@ use Livewire\Attributes\On;
 use App\Models\ItemCategory;
 use App\Models\PaypalPayment;
 use App\Models\StripePayment;
+use App\Models\ModifierGroup;
 use App\Models\ModifierOption;
 use App\Events\NewOrderCreated;
 use App\Models\RazorpayPayment;
@@ -48,6 +50,8 @@ use App\Traits\PrinterSetting;
 use App\Models\KotPlace;
 use App\Models\Printer;
 use Livewire\Attributes\Computed;
+use App\Enums\DeliveryFeeType;
+use App\Notifications\CustomerEmailVerify;
 
 class Cart extends Component
 {
@@ -98,6 +102,33 @@ class Cart extends Component
     public $orderTypeId; // Add orderTypeId for pricing context
     public $orderTypeSlug; // Add orderTypeSlug
     public $showOrderTypeModal = false; // Modal for order type selection
+
+    /** Delivery (توصيل) flow inside order-type modal: map → phone → OTP */
+    public string $orderTypeDeliveryStep = 'idle';
+
+    public ?int $orderTypeDeliveryPendingTypeId = null;
+
+    public ?float $orderTypeDeliveryLat = null;
+
+    public ?float $orderTypeDeliveryLng = null;
+
+    public string $orderTypeDeliveryAddress = '';
+
+    public ?float $orderTypeDeliveryQuotedFee = null;
+
+    public ?string $orderTypeDeliveryQuoteMessage = null;
+
+    public bool $orderTypeDeliveryInRange = false;
+
+    public ?float $orderTypeDeliveryEtaMin = null;
+
+    public ?float $orderTypeDeliveryEtaMax = null;
+
+    public string $orderTypeDeliveryPhone = '';
+
+    public string $orderTypeDeliveryOtp = '';
+
+    public string $orderTypeDeliveryPhoneCode = '';
     public $cameFromQR = false; // Track if user came from QR code
     public $payNow = false;
     public $offline_payment_status;
@@ -117,6 +148,11 @@ class Cart extends Component
     public $showModifiersModal = false;
     public $itemModifiersSelected = [];
     public $selectedModifierItem;
+    public $cartSelectedModifierModel = null;
+    public $cartModifiers = [];
+    public $selectedModifiers = [];
+    public int $modifierQuantity = 1;
+    public $selectedVariationName = null;
     public $showItemDetailModal = false;
     public $selectedItem;
     public $extraCharges;
@@ -186,6 +222,7 @@ class Cart extends Component
         $this->allPhoneCodes = collect(Country::pluck('phonecode')->unique()->filter()->values());
         $this->filteredPhoneCodes = $this->allPhoneCodes;
         $this->customerPhoneCode = $this->customer?->phone_code ?? $this->restaurant->phone_code ?? $this->allPhoneCodes->first();
+        $this->orderTypeDeliveryPhoneCode = $this->customerPhoneCode;
 
         // If came from QR code, auto-set to dine_in and don't show modal
         if ($this->cameFromQR) {
@@ -505,6 +542,356 @@ class Cart extends Component
         $this->showOrderTypeModal = false;
     }
 
+    public function onOrderTypeModalTabChanged($orderTypeId): void
+    {
+        $ot = OrderType::where('branch_id', $this->shopBranch->id)->find($orderTypeId);
+        if ($ot && $this->orderTypeIsDelivery($ot)) {
+            $this->orderTypeDeliveryPendingTypeId = (int) $orderTypeId;
+            $this->orderTypeDeliveryStep = 'phone';
+            $this->orderTypeDeliveryOtp = '';
+            $this->orderTypeDeliveryLat = $this->shopBranch->lat ? (float) $this->shopBranch->lat : 24.7136;
+            $this->orderTypeDeliveryLng = $this->shopBranch->lng ? (float) $this->shopBranch->lng : 46.6753;
+            $this->orderTypeDeliveryAddress = '';
+            $this->orderTypeDeliveryQuotedFee = null;
+            $this->orderTypeDeliveryQuoteMessage = null;
+            $this->orderTypeDeliveryInRange = false;
+            if ($this->customer) {
+                $this->orderTypeDeliveryPhone = (string) ($this->customer->phone ?? '');
+                $this->orderTypeDeliveryPhoneCode = (string) ($this->customer->phone_code ?? $this->customerPhoneCode);
+            } else {
+                $this->orderTypeDeliveryPhone = '';
+                $this->orderTypeDeliveryPhoneCode = (string) $this->customerPhoneCode;
+            }
+            $this->dispatch('init-order-type-delivery-map');
+        } else {
+            $this->orderTypeDeliveryStep = 'idle';
+            $this->orderTypeDeliveryPendingTypeId = null;
+        }
+    }
+
+    protected function orderTypeIsDelivery(OrderType $ot): bool
+    {
+        $slug = strtolower((string) ($ot->slug ?? ''));
+        $type = strtolower((string) ($ot->type ?? ''));
+
+        return $slug === 'delivery' || $type === 'delivery';
+    }
+
+    public function syncOrderTypeDeliveryPin($lat, $lng, $address = null): void
+    {
+        $this->orderTypeDeliveryLat = (float) $lat;
+        $this->orderTypeDeliveryLng = (float) $lng;
+        if ($address !== null && $address !== '') {
+            $this->orderTypeDeliveryAddress = (string) $address;
+        }
+        $this->refreshOrderTypeDeliveryQuote();
+    }
+
+    public function orderTypeDeliveryContinueFromMap(): void
+    {
+        if (! $this->orderTypeDeliveryPendingTypeId) {
+            return;
+        }
+
+        $this->validate([
+            'orderTypeDeliveryLat' => 'required|numeric',
+            'orderTypeDeliveryLng' => 'required|numeric',
+            'orderTypeDeliveryAddress' => 'required|string|min:5',
+        ]);
+
+        $this->refreshOrderTypeDeliveryQuote();
+
+        if (! $this->orderTypeDeliveryInRange) {
+            $this->alert('error', $this->orderTypeDeliveryQuoteMessage ?? __('modules.delivery.locationOutOfRange'), [
+                'toast' => true,
+                'position' => 'top-end',
+            ]);
+
+            return;
+        }
+
+        if (! $this->customer) {
+            $this->orderTypeDeliveryStep = 'phone';
+            $this->alert('error', __('messages.noCustomerFound'), [
+                'toast' => true,
+                'position' => 'top-end',
+            ]);
+
+            return;
+        }
+
+        $this->finalizeOrderTypeDeliverySelection();
+    }
+
+    public function orderTypeDeliverySendOtp(): void
+    {
+        $this->validate([
+            'orderTypeDeliveryPhoneCode' => 'required',
+            'orderTypeDeliveryPhone' => 'required|string|min:6',
+        ]);
+
+        if ($this->customer
+            && (string) $this->customer->phone_code === (string) $this->orderTypeDeliveryPhoneCode
+            && (string) $this->customer->phone === (string) $this->orderTypeDeliveryPhone) {
+            $this->orderTypeDeliveryStep = 'map';
+            $this->dispatch('init-order-type-delivery-map');
+
+            return;
+        }
+
+        $customer = Customer::withoutGlobalScopes()->firstOrCreate(
+            [
+                'phone_code' => $this->orderTypeDeliveryPhoneCode,
+                'phone' => $this->orderTypeDeliveryPhone,
+                'restaurant_id' => $this->restaurant->id,
+            ],
+            ['name' => 'Guest']
+        );
+
+        $customer->email_otp = (string) random_int(1000, 9999);
+        $customer->save();
+
+        $this->alert('success', __('messages.verificationCodeSent'), [
+            'toast' => true,
+            'position' => 'top-end',
+        ]);
+
+        try {
+            if ($this->deliveryFlowSmsOtpEnabled() && class_exists(\Modules\Sms\Notifications\SendCustomerVerifyOtp::class)) {
+                $customer->notify(new \Modules\Sms\Notifications\SendCustomerVerifyOtp($customer->email_otp));
+            } elseif (filled($customer->email)) {
+                $customer->notify(new CustomerEmailVerify);
+            } else {
+                $this->alert('warning', __('messages.verificationCodeSent').' — '.__('messages.configureSmsOrEmailForOtp'), [
+                    'toast' => true,
+                    'position' => 'top-end',
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('Order type delivery OTP send failed: '.$e->getMessage());
+            $this->alert('error', __('app.error'), [
+                'toast' => true,
+                'position' => 'top-end',
+            ]);
+        }
+
+        $this->orderTypeDeliveryStep = 'otp';
+    }
+
+    public function orderTypeDeliveryVerifyAndComplete(): void
+    {
+        $this->validate([
+            'orderTypeDeliveryOtp' => 'required|string|min:4',
+        ]);
+
+        $customer = Customer::withoutGlobalScopes()
+            ->where('phone_code', $this->orderTypeDeliveryPhoneCode)
+            ->where('phone', $this->orderTypeDeliveryPhone)
+            ->where('restaurant_id', $this->restaurant->id)
+            ->first();
+
+        if (! $customer || (string) $customer->email_otp !== (string) $this->orderTypeDeliveryOtp) {
+            $this->alert('error', __('messages.invalidVerificationCode'), [
+                'toast' => true,
+                'position' => 'top-end',
+            ]);
+
+            return;
+        }
+
+        session(['customer' => $customer]);
+        $this->customer = $customer;
+        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
+        $this->orderTypeDeliveryOtp = '';
+        $this->orderTypeDeliveryStep = 'map';
+        $this->dispatch('init-order-type-delivery-map');
+    }
+
+    public function orderTypeDeliveryCloseFlow(): void
+    {
+        $this->showOrderTypeModal = false;
+        $this->orderTypeDeliveryStep = 'idle';
+        $this->orderTypeDeliveryPendingTypeId = null;
+        $this->orderTypeDeliveryPhone = '';
+        $this->orderTypeDeliveryOtp = '';
+    }
+
+    public function orderTypeDeliveryBackToMap(): void
+    {
+        $this->orderTypeDeliveryStep = 'map';
+        $this->orderTypeDeliveryOtp = '';
+        $this->dispatch('init-order-type-delivery-map');
+    }
+
+    public function orderTypeDeliveryBackToPhone(): void
+    {
+        $this->orderTypeDeliveryStep = 'phone';
+        $this->orderTypeDeliveryOtp = '';
+    }
+
+    protected function finalizeOrderTypeDeliverySelection(): void
+    {
+        $this->addressLat = $this->orderTypeDeliveryLat;
+        $this->addressLng = $this->orderTypeDeliveryLng;
+        $this->deliveryAddress = $this->orderTypeDeliveryAddress;
+        $this->deliveryFee = $this->orderTypeDeliveryQuotedFee;
+        $this->etaMin = $this->orderTypeDeliveryEtaMin;
+        $this->etaMax = $this->orderTypeDeliveryEtaMax;
+        $this->calculateMaxPreparationTime();
+        $this->calculateTotal();
+
+        if ($this->customer && $this->deliveryAddress) {
+            $this->customer->delivery_address = $this->deliveryAddress;
+            $this->customer->save();
+        }
+
+        $this->selectOrderTypeFromModal($this->orderTypeDeliveryPendingTypeId);
+        $this->resetOrderTypeDeliveryFlow();
+    }
+
+    protected function resetOrderTypeDeliveryFlow(): void
+    {
+        $this->orderTypeDeliveryStep = 'idle';
+        $this->orderTypeDeliveryPendingTypeId = null;
+        $this->orderTypeDeliveryPhone = '';
+        $this->orderTypeDeliveryOtp = '';
+    }
+
+    protected function deliveryFlowSmsOtpEnabled(): bool
+    {
+        if (! function_exists('module_enabled') || ! module_enabled('Sms')) {
+            return false;
+        }
+        if (! in_array('Sms', restaurant_modules($this->restaurant), true)) {
+            return false;
+        }
+        if (! class_exists(\Modules\Sms\Entities\SmsNotificationSetting::class)) {
+            return false;
+        }
+        $notificationSetting = \Modules\Sms\Entities\SmsNotificationSetting::where('restaurant_id', $this->restaurant->id)
+            ->where('type', 'send_otp')
+            ->where('send_sms', 'yes')
+            ->first();
+
+        return $notificationSetting && function_exists('sms_setting')
+            && (sms_setting()->vonage_status || sms_setting()->msg91_status);
+    }
+
+    protected function refreshOrderTypeDeliveryQuote(): void
+    {
+        $branch = $this->shopBranch->loadMissing(['deliverySetting', 'deliveryFeeTiers']);
+        $ds = $branch->deliverySetting;
+
+        if (! $ds || ! $ds->is_enabled) {
+            $this->orderTypeDeliveryInRange = false;
+            $this->orderTypeDeliveryQuoteMessage = __('modules.delivery.deliveryNotAvailable');
+            $this->orderTypeDeliveryQuotedFee = null;
+
+            return;
+        }
+
+        if (! $this->orderTypeDeliveryLat || ! $this->orderTypeDeliveryLng || ! $branch->lat || ! $branch->lng) {
+            $this->orderTypeDeliveryInRange = false;
+            $this->orderTypeDeliveryQuoteMessage = __('messages.invalidCoordinates');
+
+            return;
+        }
+
+        $raw = $ds->getAttributes();
+        $unit = (string) ($raw['unit'] ?? 'km');
+        $distanceKm = $this->haversineKm((float) $branch->lat, (float) $branch->lng, $this->orderTypeDeliveryLat, $this->orderTypeDeliveryLng);
+        $maxKm = $this->deliveryConvertToKm((float) ($raw['max_radius'] ?? 5), $unit);
+
+        if ($distanceKm > $maxKm) {
+            $this->orderTypeDeliveryInRange = false;
+            $this->orderTypeDeliveryQuoteMessage = __('modules.delivery.locationOutOfRange');
+            $this->orderTypeDeliveryQuotedFee = null;
+
+            return;
+        }
+
+        $fee = $this->computeDeliveryFeeForOrderTypeModal($branch, $ds, $distanceKm, $unit);
+        $prep = (int) ($ds->prep_time_minutes ?? 20);
+        $speed = max(1.0, (float) ($ds->avg_delivery_speed_kmh ?? 30));
+        $travelMin = (int) ceil(($distanceKm / $speed) * 60);
+        $buffer = (int) ($ds->additional_eta_buffer_time ?? 0);
+        $this->orderTypeDeliveryEtaMin = $prep + $travelMin + $buffer;
+        $this->orderTypeDeliveryEtaMax = $prep + (int) ceil($travelMin * 1.3) + $buffer;
+        $this->orderTypeDeliveryQuotedFee = $fee;
+        $this->orderTypeDeliveryInRange = true;
+        $this->orderTypeDeliveryQuoteMessage = null;
+    }
+
+    protected function haversineKm(float $lat1, float $lon1, float $lat2, float $lon2): float
+    {
+        $earth = 6371;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $lat1 = deg2rad($lat1);
+        $lat2 = deg2rad($lat2);
+        $a = sin($dLat / 2) * sin($dLat / 2)
+            + sin($dLon / 2) * sin($dLon / 2) * cos($lat1) * cos($lat2);
+
+        return $earth * (2 * atan2(sqrt($a), sqrt(1 - $a)));
+    }
+
+    protected function deliveryConvertToKm(float $value, string $unit): float
+    {
+        return $unit === 'miles' ? $value * 1.60934 : $value;
+    }
+
+    protected function computeDeliveryFeeForOrderTypeModal($branch, $ds, float $distanceKm, string $unit): float
+    {
+        $freeOver = $ds->free_delivery_over_amount;
+        if ($freeOver !== null && (float) $this->subTotal >= (float) $freeOver) {
+            return 0.0;
+        }
+
+        $raw = $ds->getAttributes();
+        $freeRadiusKm = ! empty($raw['free_delivery_within_radius'])
+            ? $this->deliveryConvertToKm((float) $raw['free_delivery_within_radius'], $unit)
+            : null;
+        if ($freeRadiusKm && $distanceKm <= $freeRadiusKm) {
+            return 0.0;
+        }
+
+        $feeType = $ds->fee_type instanceof DeliveryFeeType ? $ds->fee_type->value : (string) $ds->fee_type;
+
+        return match ($feeType) {
+            DeliveryFeeType::FIXED->value => (float) ($ds->fixed_fee ?? 0),
+            DeliveryFeeType::PER_DISTANCE->value => $this->perDistanceFeeOrderTypeModal($distanceKm, (float) ($ds->per_distance_rate ?? 0), $unit),
+            DeliveryFeeType::TIERED->value => $this->tieredFeeOrderTypeModal($branch, $distanceKm, $unit),
+            default => (float) ($ds->fixed_fee ?? 0),
+        };
+    }
+
+    protected function perDistanceFeeOrderTypeModal(float $distanceKm, float $rate, string $unit): float
+    {
+        $d = $unit === 'miles' ? $distanceKm / 1.60934 : $distanceKm;
+
+        return ceil($d) * $rate;
+    }
+
+    protected function tieredFeeOrderTypeModal($branch, float $distanceKm, string $unit): float
+    {
+        $distance = $unit === 'miles' ? $distanceKm / 1.60934 : $distanceKm;
+        $tiers = $branch->deliveryFeeTiers ?? collect();
+
+        $exact = $tiers->where('min_distance', '<=', $distance)->where('max_distance', '>=', $distance)->first();
+        if ($exact) {
+            return (float) $exact->fee;
+        }
+
+        $below = $tiers->where('max_distance', '<', $distance)->sortByDesc('max_distance')->first();
+        if ($below) {
+            return (float) $below->fee;
+        }
+
+        $lowest = $tiers->sortBy('min_distance')->first();
+
+        return $lowest ? (float) $lowest->fee : 0.0;
+    }
+
     public function initializeHeaderSettings()
     {
         $cartHeaderSetting = $this->restaurant->cartHeaderSetting;
@@ -604,11 +991,10 @@ class Cart extends Component
 
         if ($variationCount > 0) {
             $this->showVariationModal = true;
-        } elseif ($modifierCount > 0) {
-            $this->selectedModifierItem = $id;
-            $this->showModifiersModal = true;
         } else {
-            $this->syncCart($id);
+            $this->selectedModifierItem = $id;
+            $this->loadModifiersForItem($id);
+            $this->showModifiersModal = true;
         }
 
         // Ensure itemNotes key is initialized
@@ -887,6 +1273,7 @@ class Cart extends Component
 
         if ($modifiersAvailable) {
             $this->selectedModifierItem = $menuItemVariation->menu_item_id . '_' . $variationId;
+            $this->loadModifiersForItem($menuItemVariation->menu_item_id, $variationId);
             $this->showModifiersModal = true;
         } else {
             $this->orderItemVariation[$menuItemVariation->menu_item_id . '_' . $variationId] = $menuItemVariation;
@@ -907,6 +1294,14 @@ class Cart extends Component
     public function openOrderTypeModal()
     {
         $this->showOrderTypeModal = true;
+        $first = OrderType::where('branch_id', $this->shopBranch->id)
+            ->where('is_active', true)
+            ->where('enable_from_customer_site', true)
+            ->orderBy('id')
+            ->first();
+        if ($first) {
+            $this->onOrderTypeModalTabChanged($first->id);
+        }
     }
 
     #[On('showCartItems')]
@@ -1896,11 +2291,90 @@ class Cart extends Component
     public function closeModifiersModal()
     {
         $this->selectedModifierItem = null;
+        $this->cartSelectedModifierModel = null;
+        $this->cartModifiers = [];
+        $this->selectedModifiers = [];
+        $this->modifierQuantity = 1;
+        $this->selectedVariationName = null;
         $this->showModifiersModal = false;
     }
 
+    private function loadModifiersForItem($menuItemId, $variationId = null): void
+    {
+        $this->selectedModifiers = [];
+        $this->modifierQuantity = 1;
+        $this->cartSelectedModifierModel = MenuItem::with(['branch.restaurant'])->find($menuItemId);
+        $this->selectedVariationName = $variationId ? (MenuItemVariation::find($variationId)?->variation ?? null) : null;
+
+        $this->cartModifiers = ModifierGroup::whereHas('itemModifiers', function ($q) use ($menuItemId) {
+            $q->where('menu_item_id', $menuItemId)->whereNull('menu_item_variation_id');
+        })->with(['options', 'itemModifiers' => function ($q) use ($menuItemId) {
+            $q->where('menu_item_id', $menuItemId)->whereNull('menu_item_variation_id');
+        }])->get();
+
+        if ($this->orderTypeId) {
+            foreach ($this->cartModifiers as $group) {
+                foreach ($group->options as $option) {
+                    $option->setPriceContext($this->orderTypeId, null);
+                }
+            }
+        }
+    }
+
+    public function toggleSelection($groupId, $optionId): void
+    {
+        $modifierGroup = $this->cartSelectedModifierModel->modifierGroups()
+            ->withPivot(['is_required', 'allow_multiple_selection'])
+            ->firstWhere('modifier_groups.id', $groupId);
+
+        $allowMultiple = $modifierGroup->pivot->allow_multiple_selection;
+
+        if ($allowMultiple) {
+            if (in_array($optionId, $this->selectedModifiers)) {
+                $this->selectedModifiers = array_diff($this->selectedModifiers, [$optionId]);
+            }
+        } else {
+            if (isset($this->selectedModifiers[$optionId]) && $this->selectedModifiers[$optionId]) {
+                foreach ($modifierGroup->options as $option) {
+                    if ($option->id != $optionId) {
+                        unset($this->selectedModifiers[$option->id]);
+                    }
+                }
+            }
+        }
+    }
+
+    public function incrementQuantity(): void { $this->modifierQuantity++; }
+    public function decrementQuantity(): void { if ($this->modifierQuantity > 1) $this->modifierQuantity--; }
+
+    public function saveModifiers(): void
+    {
+        $rules = [];
+        $messages = [];
+        foreach ($this->cartModifiers as $modifierGroup) {
+            $isRequired = $modifierGroup->itemModifiers->isNotEmpty()
+                ? ($modifierGroup->itemModifiers->first()->is_required ?? false)
+                : false;
+            if ($isRequired) {
+                $selected = array_keys(array_filter($this->selectedModifiers, function ($val, $id) use ($modifierGroup) {
+                    return $val && $modifierGroup->options->contains('id', $id);
+                }, ARRAY_FILTER_USE_BOTH));
+                if (empty($selected)) {
+                    $rules["requiredModifiers.{$modifierGroup->id}"] = 'required';
+                    $messages["requiredModifiers.{$modifierGroup->id}.required"] = __('validation.requiredModifierGroup', ['name' => $modifierGroup->name]);
+                }
+            }
+        }
+        if (!empty($rules)) {
+            $this->validate($rules, $messages);
+        }
+
+        $finalModifiers = [$this->selectedModifierItem => array_keys(array_filter($this->selectedModifiers))];
+        $this->setPosModifier($finalModifiers, $this->modifierQuantity);
+    }
+
     #[On('setPosModifier')]
-    public function setPosModifier($modifierIds)
+    public function setPosModifier(array $modifierIds, int $quantity = 1)
     {
         // Check radius restriction before adding items with modifiers
         if (!$this->checkRadiusRestriction()) {
@@ -1941,7 +2415,8 @@ class Cart extends Component
             $this->orderItemAmount[$keyId] = 1 * ($this->orderItemVariation[$keyId]->price ?? $this->orderItemList[$keyId]->price);
         }
 
-        $this->cartItemQty[$keyId] = ($this->cartItemQty[$keyId] ?? 0) + 1;
+        $this->cartItemQty[$keyId] = ($this->cartItemQty[$keyId] ?? 0) + $quantity;
+        $this->orderItemQty[$keyId] = $quantity;
         $this->itemModifiersSelected[$keyId] = Arr::flatten($modifierIds);
 
         // Set price context on modifiers before calculating total
@@ -2256,10 +2731,50 @@ class Cart extends Component
             ->get();
     }
 
+    /**
+     * Dine-in and pickup (e.g. car pickup / تناول في المطعم / استلام من السيارة) list every branch
+     * that offers the same order-type slug on the customer site. Other types stay on the current branch.
+     */
+    protected function branchesForOrderTypeModal(OrderType $orderType)
+    {
+        $slug = $orderType->slug ?? '';
+        $type = $orderType->type ?? '';
+
+        $listAllBranches = in_array($slug, ['dine_in', 'pickup', 'curbside'], true)
+            || in_array($type, ['dine_in', 'pickup'], true);
+
+        if (! $listAllBranches) {
+            return collect([$this->shopBranch]);
+        }
+
+        $restaurantId = $this->restaurant->id;
+
+        $branchIds = OrderType::withoutGlobalScopes()
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->where('enable_from_customer_site', true)
+            ->pluck('branch_id')
+            ->unique()
+            ->filter();
+
+        $branches = Branch::withoutGlobalScopes()
+            ->where('restaurant_id', $restaurantId)
+            ->whereIn('id', $branchIds)
+            ->orderBy('name')
+            ->get();
+
+        return $branches->isNotEmpty() ? $branches : collect([$this->shopBranch]);
+    }
+
     public function render()
     {
+        $modalBranchesByOrderTypeId = $this->orderTypes->mapWithKeys(function ($orderType) {
+            return [$orderType->id => $this->branchesForOrderTypeModal($orderType)];
+        })->all();
+
         return view('livewire.shop.cart', [
             'orderTypes' => $this->orderTypes,
+            'modalBranchesByOrderTypeId' => $modalBranchesByOrderTypeId,
             'phonecodes' => $this->filteredPhoneCodes,
         ]);
     }

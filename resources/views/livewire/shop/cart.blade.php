@@ -1,6 +1,11 @@
 <div>
     <!-- Order Type Selection Modal -->
-    @php $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null; @endphp
+    @php
+        $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null;
+        $orderTypeMapApiKey = global_setting()->google_map_api_key ?? '';
+        $orderTypeBranchLat = $shopBranch->lat ?? 24.7136;
+        $orderTypeBranchLng = $shopBranch->lng ?? 46.6753;
+    @endphp
     <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl">
         <x-slot name="title"></x-slot>
 
@@ -13,6 +18,7 @@
                         <button
                             type="button"
                             wire:key="tab-{{ $orderType->id }}"
+                            wire:click="onOrderTypeModalTabChanged({{ $orderType->id }})"
                             @click="activeTab = {{ $orderType->id }}"
                             :style="activeTab === {{ $orderType->id }} ? 'background-color:#011646;color:#fff;' : ''"
                             :class="activeTab !== {{ $orderType->id }} ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' : ''"
@@ -23,46 +29,136 @@
                     @endforeach
                 </div>
 
-                {{-- Branch Info Card --}}
-                <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-5">
-                    {{-- Branch Header --}}
-                    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800">
-                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $shopBranch->name }}</span>
-                        <span @class([
-                            'text-xs font-medium px-2.5 py-0.5 rounded-full',
-                            'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' => $shopBranch->is_active,
-                            'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' => !$shopBranch->is_active,
-                        ])>
-                            {{ $shopBranch->is_active ? __('app.open') : __('app.closed') }}
-                        </span>
-                    </div>
+                {{-- Delivery: map + phone + OTP; other types: branch cards --}}
+                @foreach($orderTypes ?? [] as $orderType)
+                    @php
+                        $isDeliveryOrderType = strtolower((string) ($orderType->slug ?? '')) === 'delivery'
+                            || strtolower((string) ($orderType->type ?? '')) === 'delivery';
+                    @endphp
+                    <div x-show="activeTab === {{ $orderType->id }}" x-cloak class="space-y-4 mb-5">
+                        @if($isDeliveryOrderType)
+                            <div wire:key="order-type-delivery-panel-{{ $orderType->id }}"
+                                class="relative rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden min-h-[420px] bg-gray-100 dark:bg-gray-900">
+                                <div id="order-type-delivery-map" class="absolute inset-0 min-h-[420px] z-0" wire:ignore></div>
 
-                    {{-- Branch Details --}}
-                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
-                        @if($shopBranch->phone)
-                            <div class="flex items-center gap-3 px-4 py-3">
-                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $shopBranch->phone }}</span>
-                            </div>
-                        @endif
+                                @if($orderTypeDeliveryStep === 'map' && $orderTypeDeliveryPendingTypeId === $orderType->id)
+                                    <div class="absolute bottom-0 inset-x-0 z-[15] p-3 sm:p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none">
+                                        <div class="pointer-events-auto space-y-2 max-w-lg mx-auto">
+                                            <x-textarea wire:model.live="orderTypeDeliveryAddress" rows="2"
+                                                class="w-full text-sm bg-white/95 dark:bg-gray-800 border-0 shadow-md"
+                                                placeholder="{{ __('modules.delivery.fullAddressPlaceholder') }}" />
+                                            <x-input-error for="orderTypeDeliveryAddress" class="text-white text-xs" />
+                                            @if($orderTypeDeliveryInRange && $orderTypeDeliveryQuotedFee !== null)
+                                                <p class="text-xs text-white drop-shadow">
+                                                    @lang('modules.delivery.deliveryFee'):
+                                                    <span class="font-semibold">{!! currency_format($orderTypeDeliveryQuotedFee, $restaurant->currency_id) !!}</span>
+                                                </p>
+                                            @endif
+                                            <button type="button" wire:click="orderTypeDeliveryContinueFromMap" wire:loading.attr="disabled"
+                                                class="w-full py-3 rounded-xl text-white text-sm font-bold shadow-lg"
+                                                style="background-color: #F78433;">
+                                                @lang('app.next')
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
 
-                        @if($shopBranch->address)
-                            <div class="flex items-start gap-3 px-4 py-3">
-                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $shopBranch->address }}</span>
+                                @if($orderTypeDeliveryStep === 'phone' && $orderTypeDeliveryPendingTypeId === $orderType->id)
+                                    <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
+                                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.close')">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                </button>
+                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('modules.customer.phoneVerificationHeading')</h3>
+                                            </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p>
+                                            <div class="flex gap-2">
+                                                <x-input type="text" class="w-28 shrink-0" wire:model="orderTypeDeliveryPhoneCode" placeholder="+966" />
+                                                <x-input type="tel" class="flex-1" wire:model="orderTypeDeliveryPhone" placeholder="55XXXXXXX" />
+                                            </div>
+                                            <x-input-error for="orderTypeDeliveryPhoneCode" />
+                                            <x-input-error for="orderTypeDeliveryPhone" />
+                                            <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
+                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #F78433;">
+                                                @lang('app.next')
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($orderTypeDeliveryStep === 'otp' && $orderTypeDeliveryPendingTypeId === $orderType->id)
+                                    <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
+                                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-center">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <button type="button" wire:click="orderTypeDeliveryBackToPhone" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.back')">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                                </button>
+                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('app.verification')</h3>
+                                            </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">@lang('messages.verificationCodeSent')</p>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">+{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}</p>
+                                            <x-input type="text" inputmode="numeric" maxlength="6" class="block w-full text-center text-xl tracking-widest" wire:model="orderTypeDeliveryOtp" placeholder="----" autocomplete="one-time-code" />
+                                            <x-input-error for="orderTypeDeliveryOtp" />
+                                            <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
+                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #F78433;">
+                                                @lang('app.verify')
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
+                        @else
+                            @foreach(($modalBranchesByOrderTypeId[$orderType->id] ?? collect()) as $branch)
+                                <div wire:key="modal-branch-{{ $orderType->id }}-{{ $branch->id }}"
+                                    class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 gap-2">
+                                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $branch->name }}</span>
+                                        <div class="flex items-center gap-2 flex-shrink-0">
+                                            @if($branch->id !== $shopBranch->id)
+                                                <a href="{{ route('shop_restaurant', [$restaurant->hash]) }}?branch={{ $branch->unique_hash }}"
+                                                    wire:navigate
+                                                    class="text-xs font-medium px-2 py-1 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                    @lang('messages.shopAtThisBranch')
+                                                </a>
+                                            @endif
+                                            <span @class([
+                                                'text-xs font-medium px-2.5 py-0.5 rounded-full',
+                                                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' => $branch->is_active,
+                                                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' => !$branch->is_active,
+                                            ])>
+                                                {{ $branch->is_active ? __('app.open') : __('app.closed') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                        @if($branch->phone)
+                                            <div class="flex items-center gap-3 px-4 py-3">
+                                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $branch->phone }}</span>
+                                            </div>
+                                        @endif
+                                        @if($branch->address)
+                                            <div class="flex items-start gap-3 px-4 py-3">
+                                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    </svg>
+                                                </div>
+                                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $branch->address }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         @endif
                     </div>
-                </div>
+                @endforeach
 
                 {{-- Confirm Button --}}
                 <!-- <button
@@ -80,6 +176,73 @@
         <x-slot name="footer">
         </x-slot>
     </x-dialog-modal>
+
+    @script
+    <script>
+        $wire.on('init-order-type-delivery-map', () => {
+            const MAP_KEY = @js($orderTypeMapApiKey ?? '');
+            const BR_LAT = {{ (float) $orderTypeBranchLat }};
+            const BR_LNG = {{ (float) $orderTypeBranchLng }};
+            const el = document.getElementById('order-type-delivery-map');
+            if (!el) return;
+            el.innerHTML = '';
+
+            const start = () => {
+                if (!window.google?.maps?.marker?.AdvancedMarkerElement) {
+                    setTimeout(start, 80);
+                    return;
+                }
+                const geocoder = new google.maps.Geocoder();
+                const map = new google.maps.Map(el, {
+                    center: { lat: BR_LAT, lng: BR_LNG },
+                    zoom: 15,
+                    gestureHandling: 'greedy',
+                    zoomControl: true,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    mapId: 'ORDER_TYPE_DELIVERY_MAP',
+                });
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                    map,
+                    position: { lat: BR_LAT, lng: BR_LNG },
+                    gmpDraggable: true,
+                });
+                const pushPin = (lat, lng) => {
+                    marker.position = { lat, lng };
+                    map.panTo({ lat, lng });
+                    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                        const addr = (status === 'OK' && results[0]) ? results[0].formatted_address : '';
+                        $wire.call('syncOrderTypeDeliveryPin', lat, lng, addr);
+                    });
+                };
+                map.addListener('click', (e) => pushPin(e.latLng.lat(), e.latLng.lng()));
+                marker.addListener('dragend', () => {
+                    const p = marker.position;
+                    const lat = typeof p.lat === 'function' ? p.lat() : p.lat;
+                    const lng = typeof p.lng === 'function' ? p.lng() : p.lng;
+                    pushPin(lat, lng);
+                });
+                pushPin(BR_LAT, BR_LNG);
+            };
+
+            if (window.google?.maps?.marker?.AdvancedMarkerElement) {
+                setTimeout(start, 120);
+                return;
+            }
+            const cbName = 'otDelMapCb_' + Math.random().toString(36).slice(2, 11);
+            window[cbName] = () => {
+                delete window[cbName];
+                start();
+            };
+            const script = document.createElement('script');
+            script.src = MAP_KEY
+                ? 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(MAP_KEY) + '&libraries=marker&callback=' + cbName
+                : 'https://maps.googleapis.com/maps/api/js?libraries=marker&callback=' + cbName;
+            script.async = true;
+            document.head.appendChild(script);
+        });
+    </script>
+    @endscript
 
     <!-- Location Access Modal -->
     <x-dialog-modal wire:model="showLocationModal" maxWidth="sm">
@@ -128,7 +291,7 @@
         <section class="px-4 bg-white dark:bg-gray-900">
             @if($headerType === 'text')
                 <div class="py-2 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
-                    <div class="w-44 h-28 rounded-2xl overflow-hidden bg-transparent">
+                    <div class="w-44 h-28 rounded-md overflow-hidden bg-transparent">
                         <img
                             src="{{ asset('img/test-logo.png') }}"
                             alt="Test Logo"
@@ -209,7 +372,7 @@
         @endif
 
     @if ($showMenu)
-        <div class="flex gap-6 px-4 mt-4 mb-32"
+        <div class="grid grid-cols-1 gap-6 px-4 mt-4 mb-32 md:grid-cols-4 md:items-start"
             x-data="{
                 loadedCount: @entangle('menuItemsLoaded'),
                 totalCount: {{ $this->totalMenuItemsCount }},
@@ -229,83 +392,159 @@
             x-init="window.addEventListener('scroll', () => scrollHandler()); $watch('loadedCount', () => { totalCount = {{ $this->totalMenuItemsCount }}; });"
             @scroll.window.throttle.200ms="scrollHandler()">
 
+            {{-- Small screens only: horizontal category chips; md+ keeps sidebar + same column widths as before --}}
+            @if ($this->categoryList->isNotEmpty())
+                <div class="lg:hidden col-span-full w-full min-w-0 -mx-4 mb-1"
+                    x-data="{ activecat: '{{ $this->categoryList->first()?->id }}' }"
+                    x-init="
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) activecat = entry.target.dataset.catid;
+                            });
+                        }, { rootMargin: '-20% 0px -60% 0px' });
+                        document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
+                    ">
+                    <div class="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 py-2 touch-pan-x">
+                        @foreach ($this->categoryList as $cat)
+                            @php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); @endphp
+                            <button
+                                type="button"
+                                wire:key="cat-chip-{{ $cat->id }}"
+                                @click="
+                                    activecat = '{{ $cat->id }}';
+                                    const el = document.getElementById('cat-section-{{ $cat->id }}');
+                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                "
+                                class="flex-shrink-0 snap-center whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-normal transition"
+                                :class="activecat == '{{ $cat->id }}'
+                                    ? 'bg-[#F78433] text-black'
+                                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
+                            >
+                                {{ $catName }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            <!-- Categories (1fr): same fixed-in-viewport behavior as receipt (tracks grid cell on scroll/resize) -->
+            <div class="hidden lg:block w-full min-w-0 lg:col-span-1"
+                x-data="{
+                    categoriesFixedStyle: '',
+                    categoriesFixedSync() {
+                        const cell = this.$el;
+                        const rect = cell.getBoundingClientRect();
+                        const inset = 16;
+                        const top = Math.max(inset, rect.top);
+                        const maxH = Math.max(220, window.innerHeight - top - inset);
+                        const w = rect.width;
+                        const rtl = document.documentElement.getAttribute('dir') === 'rtl';
+                        if (rtl) {
+                            this.categoriesFixedStyle = 'position:fixed;z-index:20;overflow-y:auto;top:' + top + 'px;left:' + rect.left + 'px;width:' + w + 'px;max-height:' + maxH + 'px;';
+                        } else {
+                            this.categoriesFixedStyle = 'position:fixed;z-index:20;overflow-y:auto;top:' + top + 'px;right:' + (window.innerWidth - rect.right) + 'px;width:' + w + 'px;max-height:' + maxH + 'px;';
+                        }
+                    },
+                    init() {
+                        this.categoriesFixedSync();
+                        window.addEventListener('resize', () => this.categoriesFixedSync());
+                        window.addEventListener('scroll', () => this.categoriesFixedSync(), { passive: true });
+                        this.$nextTick(() => {
+                            const el = this.$refs.categoriesFixedPanel;
+                            if (el && typeof ResizeObserver !== 'undefined') {
+                                new ResizeObserver(() => this.categoriesFixedSync()).observe(el);
+                            }
+                        });
+                    }
+                }">
+                <div x-ref="categoriesFixedPanel" class="pb-4 scrollbar-hide" :style="categoriesFixedStyle">
+
+                    <!-- Single bordered container — click scrolls to section, highlights on scroll -->
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
+                        x-data="{ activecat: '{{ $this->categoryList->first()?->id }}' }"
+                        x-init="
+                            const observer = new IntersectionObserver((entries) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) activecat = entry.target.dataset.catid;
+                                });
+                            }, { rootMargin: '-20% 0px -60% 0px' });
+                            document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
+                        ">
+
+                        @foreach ($this->categoryList as $cat)
+                            @php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); @endphp
+                            <button
+                                @click="
+                                    activecat = '{{ $cat->id }}';
+                                    const el = document.getElementById('cat-section-{{ $cat->id }}');
+                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                "
+                                class="w-full flex items-center gap-2 px-4 py-3 text-left text-sm font-semibold transition-colors text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                                :class="activecat == '{{ $cat->id }}' ? 'text-gray-900 dark:text-white' : ''"
+                                wire:key="cat-filter-{{ $cat->id }}">
+                                <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                                <span class="truncate">{{ $catName }}</span>
+                            </button>
+                        @endforeach
+
+                    </div><!-- end single border container -->
+
+                </div>
+            </div>
+
             <!-- Products listing (right on desktop) -->
-            <div class="flex-1 min-w-0 space-y-4 lg:order-2">
+            <div class="flex-1 min-w-0 space-y-4 md:col-span-2 ">
                 @forelse ($this->menuItems as $key => $itemCat)
                     @php $catSection = $this->categoryList->firstWhere('category_name->'.session('locale', app()->getLocale()), $key) ?? $this->categoryList->first(fn($c) => $c->getTranslation('category_name', session('locale', app()->getLocale())) === $key); @endphp
                     <h3 id="cat-section-{{ $catSection?->id ?? Str::slug($key) }}"
                         data-catid="{{ $catSection?->id ?? Str::slug($key) }}"
                         class="mb-4 text-base font-semibold text-gray-900 lg:text-xl dark:text-white scroll-mt-4">{{ $key }}</h3>
-                    <div class="space-y-4 grid grid-cols-1 gap-10">
+                    <div class="space-y-4 grid grid-cols-1 gap-1">
                         @foreach ($itemCat as $item)
-                            <div @class([
-                                'flex items-center justify-between gap-6 cursor-pointer border shadow-sm rounded-lg hover:scale-[1.05] transition transform dark:border-gray-600 dark:lg:bg-gray-900 dark:shadow-sm',
-                                'bg-gray-100 dark:bg-gray-800' => !$item->in_stock,
-                                'bg-white dark:bg-gray-900' => $item->in_stock,
-                            ]) wire:key='menu-item-{{ $item->id . microtime() }}'>
-                                <div class="flex w-full p-3 space-x-4">
-                                    @if ($restaurant && !$restaurant->hide_menu_item_image_on_customer_site)
-                                        <img class="object-cover w-16 h-16 rounded-md cursor-pointer lg:w-24 lg:h-24"
-                                            wire:click="showItemDetail({{ $item->id }})"
-                                            src="{{ $item->item_photo_url }}" alt="{{ $item->item_name }}">
-                                    @endif
-                                    <div class="flex flex-col w-full gap-1 text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
-                                        <div class="inline-flex items-center text-sm font-semibold text-gray-900 lg:text-base dark:text-white">
-                                            <img src="{{ asset('img/' . $item->type . '.svg') }}" class="h-4 mr-1"
-                                                title="@lang('modules.menu.' . $item->type)" alt="" />
-                                            {{ $item->getTranslatedValue('item_name', session('locale')) }}
-                                        </div>
-                                        @if ($item->description)
-                                            <div class="w-full text-xs font-normal text-gray-500 cursor-pointer lg:text-sm dark:text-gray-400"
-                                                wire:click="showItemDetail({{ $item->id }})">
-                                                {{ str($item->getTranslatedValue('description', session('locale')))->limit(50) }}
-                                            </div>
-                                        @endif
-                                        @if ($item->preparation_time)
-                                            <div class="inline-flex items-center my-1 text-xs font-normal text-gray-700 dark:text-gray-400 max-w-56">
-                                                @lang('modules.menu.preparationTime') : {{ $item->preparation_time }} @lang('modules.menu.minutes')
-                                            </div>
-                                        @endif
-                                        <div class="flex items-center justify-between w-full">
-                                            <div>
-                                                @if ($item->variations_count == 0)
-                                                    <span class="font-semibold text-gray-900 dark:text-white">{!! currency_format($item->price, $restaurant->currency_id) !!}</span>
+                            <div
+                                @class([
+                                    'cursor-pointer border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-md shadow-sm hover:shadow-md transition',
+                                    'opacity-70' => !$item->in_stock,
+                                ])
+                                wire:key='menu-item-{{ $item->id . microtime() }}'
+                                wire:click='addCartItems({{ $item->id }}, {{ $item->variations_count }}, {{ $item->modifier_groups_count }})'
+                            >
+                                <div class="flex items-stretch justify-between gap-4 p-4 w-full">
+                                    <div class="flex-1 min-w-0 flex-col items-start justify-between">
+                                        <div class="flex items-start justify-between gap-4">
+                                            <div class="min-w-0">
+                                                <div class="inline-flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white">
+                                                    {{-- <img src="{{ asset('img/' . $item->type . '.svg') }}" class="h-4"
+                                                        title="@lang('modules.menu.' . $item->type)" alt="" /> --}}
+                                                    <span class="truncate">{{ $item->getTranslatedValue('item_name', session('locale')) }}</span>
+                                                </div>
+                                                @if ($item->description)
+                                                    <div class="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                                                        {{ $item->getTranslatedValue('description', session('locale')) }}
+                                                    </div>
                                                 @endif
                                             </div>
+                                        </div>
+
+                                        <div class="mt-3 flex items-center justify-between gap-3">
+                                            <div class="flex items-center gap-3 min-w-0">
+                                                @if ($item->variations_count == 0)
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-white whitespace-nowrap" style="background-color: #F7F7F7;">
+                                                        {!! currency_format($item->price, $restaurant->currency_id) !!}
+                                                    </span>
+                                                @endif
+                                                @if ($item->preparation_time)
+                                                    <span class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                                        @lang('modules.menu.preparationTime') : {{ $item->preparation_time }} @lang('modules.menu.minutes')
+                                                    </span>
+                                                @endif
+                                            </div>
+
                                             @if ($canCreateOrder)
                                                 @if (!$item->in_stock)
-                                                    <div class="text-red-500">Out of stock</div>
-                                                @elseif ($restaurant->allow_customer_orders)
-                                                    @if (isset($cartItemQty[$item->id]) && $cartItemQty[$item->id] > 0)
-                                                        <div class="relative flex items-center justify-start max-w-24 me-2" wire:key='orderItemQty-{{ $item->id }}-counter'>
-                                                            <button type="button"
-                                                                @if ($item->variations_count > 0) wire:click="subCartItems({{ $item->id }})"
-                                                                @elseif($item->modifier_groups_count > 0) wire:click="subModifiers({{ $item->id }})"
-                                                                @else wire:click="subQty('{{ $item->id }}')" @endif
-                                                                class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-s-md">
-                                                                <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                                                </svg>
-                                                            </button>
-                                                            <input type="text" wire:model='cartItemQty.{{ $item->id }}'
-                                                                class="min-w-10 bg-white border-x-0 border-gray-300 h-8 text-center text-gray-900 text-sm block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                                value="1" readonly />
-                                                            <button type="button"
-                                                                wire:click="@if ($item->variations_count > 0 || $item->modifier_groups_count > 0) addCartItems({{ $item->id }}, {{ $item->variations_count }}, {{ $item->modifier_groups_count }}) @else addQty('{{ $item->id }}') @endif"
-                                                                class="h-8 p-3 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-e-md">
-                                                                <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    @else
-                                                        @php $orderStats = getRestaurantOrderStats($shopBranch->id); @endphp
-                                                        @if($orderStats['unlimited'] || $orderStats['current_count'] < $orderStats['order_limit'])
-                                                            <x-cart-button
-                                                                wire:click='addCartItems({{ $item->id }}, {{ $item->variations_count }}, {{ $item->modifier_groups_count }})'
-                                                                wire:key='item-input-{{ $item->id . microtime() }}'>@lang('app.add')</x-cart-button>
-                                                        @endif
-                                                    @endif
+                                                    <div class="text-sm font-semibold text-red-600">@lang('modules.menu.notAvailable')</div>
                                                 @elseif ($item->variations_count > 0 && $restaurant->allow_customer_orders)
                                                     <x-secondary-button-table wire:click='showItemVariations({{ $item->id }})'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 me-1" viewBox="0 0 16 16">
@@ -316,6 +555,15 @@
                                                 @endif
                                             @endif
                                         </div>
+                                    </div>
+                                    <div
+                                        class="w-28 h-28 rounded-md overflow-hidden flex-shrink-0"
+                                    >
+                                        <img
+                                            class="w-full h-full object-cover"
+                                            src="{{ $item->item_photo_url }}"
+                                            alt="{{ $item->item_name }}"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -355,43 +603,184 @@
                 </div>
             </div>
 
-            <!-- Category filter accordion (left on desktop) -->
-            <div class="hidden lg:block w-64 xl:w-72 flex-shrink-0 lg:order-1">
-                <div class="sticky top-4 overflow-y-auto max-h-[calc(100vh-6rem)] pb-4">
+            <!-- Receipt (1fr): fixed in viewport; top + horizontal edge track the grid cell (updates on scroll/resize) -->
+            <div class="hidden md:block w-full min-w-0 md:col-span-1"
+                x-data="{
+                    receiptFixedStyle: '',
+                    receiptFixedSync() {
+                        const cell = this.$el;
+                        const rect = cell.getBoundingClientRect();
+                        const inset = 16;
+                        const top = Math.max(inset, rect.top);
+                        const maxH = Math.max(220, window.innerHeight - top - inset);
+                        const w = rect.width;
+                        const rtl = document.documentElement.getAttribute('dir') === 'rtl';
+                        if (rtl) {
+                            this.receiptFixedStyle = 'position:fixed;z-index:20;overflow-y:auto;top:' + top + 'px;left:' + rect.left + 'px;width:' + w + 'px;max-height:' + maxH + 'px;';
+                        } else {
+                            this.receiptFixedStyle = 'position:fixed;z-index:20;overflow-y:auto;top:' + top + 'px;right:' + (window.innerWidth - rect.right) + 'px;width:' + w + 'px;max-height:' + maxH + 'px;';
+                        }
+                    },
+                    init() {
+                        this.receiptFixedSync();
+                        window.addEventListener('resize', () => this.receiptFixedSync());
+                        window.addEventListener('scroll', () => this.receiptFixedSync(), { passive: true });
+                        this.$nextTick(() => {
+                            const el = this.$refs.receiptFixedPanel;
+                            if (el && typeof ResizeObserver !== 'undefined') {
+                                new ResizeObserver(() => this.receiptFixedSync()).observe(el);
+                            }
+                        });
+                    }
+                }">
+                <div x-ref="receiptFixedPanel" class="pb-4 scrollbar-hide" :style="receiptFixedStyle">
+                @if ($cartQty > 0)
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm overflow-hidden">
 
-                    <!-- Single bordered container — click scrolls to section, highlights on scroll -->
-                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
-                        x-data="{ activecat: '{{ $this->categoryList->first()?->id }}' }"
-                        x-init="
-                            const observer = new IntersectionObserver((entries) => {
-                                entries.forEach(entry => {
-                                    if (entry.isIntersecting) activecat = entry.target.dataset.catid;
-                                });
-                            }, { rootMargin: '-20% 0px -60% 0px' });
-                            document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
-                        ">
+                        <!-- Items list -->
+                        <div class="divide-y divide-gray-100 dark:divide-gray-700 max-h-[60vh] overflow-y-auto scrollbar-hide">
+                            @foreach ($orderItemList as $key => $item)
+                            <div class="p-4" wire:key="receipt-item-{{ $key }}">
 
-                        @foreach ($this->categoryList as $cat)
-                            @php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); @endphp
-                            <button
-                                @click="
-                                    activecat = '{{ $cat->id }}';
-                                    const el = document.getElementById('cat-section-{{ $cat->id }}');
-                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                "
-                                class="w-full flex items-center gap-2 px-4 py-3 text-left text-sm font-semibold transition-colors text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                                :class="activecat == '{{ $cat->id }}' ? 'text-gray-900 dark:text-white' : ''"
-                                wire:key="cat-filter-{{ $cat->id }}">
-                                <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                                <span class="truncate">{{ $catName }}</span>
-                            </button>
-                        @endforeach
+                                <!-- Name + Price row -->
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-sm font-semibold text-gray-900 dark:text-white text-end truncate">
+                                        {{ $item->getTranslatedValue('item_name', session('locale')) }}
+                                    </span>
+                                    <span class="text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
+                                        {!! currency_format($orderItemAmount[$key], $restaurant->currency_id) !!}
+                                    </span>
+                                </div>
 
-                    </div><!-- end single border container -->
+                                <!-- Addons toggle -->
+                                @if (!empty($itemModifiersSelected[$key]))
+                                <div x-data="{ open: false }" class="mt-1">
+                                    <button type="button" @click="open = !open"
+                                        class="flex items-center gap-1 text-xs font-medium"
+                                        style="color: var(--brand-primary);">
+                                        <svg x-bind:class="open ? 'rotate-180' : ''" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                        </svg>
+                                        @lang('app.show')
+                                    </button>
+                                    <div x-show="open" x-collapse class="mt-1 space-y-0.5 text-end">
+                                        @php
+                                            $groupedModifiers = [];
+                                            $allModOpts = \App\Models\ModifierOption::with('modifierGroup')
+                                                ->whereIn('id', $itemModifiersSelected[$key])
+                                                ->get()->keyBy('id');
+                                            foreach ($itemModifiersSelected[$key] as $modOptId) {
+                                                $opt = $allModOpts[$modOptId] ?? null;
+                                                if ($opt) {
+                                                    $groupName = $opt->modifierGroup->name ?? '';
+                                                    $groupedModifiers[$groupName][] = $opt->name;
+                                                }
+                                            }
+                                        @endphp
+                                        @foreach ($groupedModifiers as $groupName => $optionNames)
+                                        <div>
+                                            <div class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
+                                            @foreach ($optionNames as $optName)
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $optName }} ({{ $orderItemQty[$key] ?? 1 }})</div>
+                                            @endforeach
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
 
-                </div>
+                                <!-- Controls: delete | minus | qty | plus -->
+                                <div class="flex items-center justify-end gap-2 mt-3">
+                                    <!-- Plus -->
+                                    <button type="button" wire:click="addQty('{{ $key }}')"
+                                    class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                    style="background-color: #F78433;">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                    </svg>
+                                </button>
+                                <!-- Qty -->
+                                <span class="min-w-[1.5rem] text-center text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{{ $orderItemQty[$key] ?? 1 }}</span>
+                                <!-- Minus -->
+                                <button type="button" wire:click="subQty('{{ $key }}')"
+                                    class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                    style="background-color: #F78433;">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                    </svg>
+                                </button>
+                                <!-- Delete -->
+                                <button type="button" wire:click="removeItem('{{ $key }}')"
+                                    class="w-7 h-7 flex items-center justify-center rounded-md bg-red-500 hover:bg-red-600 text-white flex-shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                                </div>
+
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Summary + Place Order -->
+                        <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                            <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                                <span>@lang('modules.order.subTotal')</span>
+                                <span>{!! currency_format($subTotal, $restaurant->currency_id) !!}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm font-bold text-gray-900 dark:text-white">
+                                <span>@lang('modules.order.total')</span>
+                                <span>{!! currency_format($total, $restaurant->currency_id) !!}</span>
+                            </div>
+
+                            @if ($canCreateOrder && $restaurant->allow_customer_orders)
+                            <div class="pt-2">
+                                @php
+                                    $sidebarPayNow = $paymentGateway && (
+                                        $paymentGateway->is_qr_payment_enabled ||
+                                        $paymentGateway->stripe_status ||
+                                        $paymentGateway->razorpay_status ||
+                                        $paymentGateway->flutterwave_status ||
+                                        $paymentGateway->paypal_status ||
+                                        $paymentGateway->payfast_status ||
+                                        $paymentGateway->xendit_status ||
+                                        ($paymentGateway->epay_status ?? false) ||
+                                        $paymentGateway->is_offline_payment_enabled
+                                    );
+                                @endphp
+                                <button type="button"
+                                    wire:click="{{ $sidebarPayNow ? 'placeOrder(true)' : 'placeOrder' }}"
+                                    wire:loading.attr="disabled"
+                                    class="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2"
+                                    style="background-color: #F58533;">
+                                    <span wire:loading.remove wire:target="placeOrder">
+                                        {{ $sidebarPayNow ? __('modules.order.payNow') : __('modules.order.placeOrder') }}
+                                    </span>
+                                    <span wire:loading wire:target="placeOrder">
+                                        <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+                            @endif
+                        </div>
+
+                    </div>
+                @else
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm p-8 text-center">
+                        <div class="mx-auto mb-4 h-14 w-14 rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7.5M17 13l1.5 7.5M9 21h6"/>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-400 dark:text-white">
+                            أضف أصناف من القائمة
+                        </div>
+                    </div>
+                @endif
+            </div>
             </div>
 
         </div>
@@ -405,14 +794,14 @@
             @endif
         </div>
 
-        @if ($cartQty > 0)
+        {{-- @if ($cartQty > 0)
             <div class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1 left-1/2 -translate-x-1/2"
                 style="background-color: var(--brand-primary);">
                 <div>@lang('modules.order.totalItem'): {{ $cartQty }} &nbsp;|&nbsp;
                     {!! currency_format($subTotal, $restaurant->currency_id) !!} + @lang('modules.order.taxes')</div>
                 <x-secondary-button wire:click="showCartItems">@lang('modules.order.viewCart')</x-secondary-button>
             </div>
-        @endif
+        @endif --}}
     @endif
 
     @if ($showCart)
@@ -1509,18 +1898,15 @@
         </x-dialog-modal>
     @endif
 
-    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="xl">
-        <x-slot name="title">
-            @lang('modules.modifier.itemModifiers')
-        </x-slot>
-
+    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="lg" :noPadding="true">
         <x-slot name="content">
-            @if ($selectedModifierItem)
-                @livewire('pos.itemModifiers', [
-                    'menuItemId' => $selectedModifierItem,
-                    'orderTypeId' => $orderTypeId,
-                    'deliveryAppId' => null
-                ], key(str()->random(50)))
+            @if ($cartSelectedModifierModel)
+                @include('livewire.pos.item-modifiers', [
+                    'selectedModifierItem' => $cartSelectedModifierModel,
+                    'modifiers'            => $cartModifiers,
+                    'quantity'             => $modifierQuantity,
+                    'selectedVariationName'=> $selectedVariationName,
+                ])
             @endif
         </x-slot>
     </x-dialog-modal>

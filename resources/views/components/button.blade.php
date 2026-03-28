@@ -1,9 +1,9 @@
-<button {{ $attributes->merge(['type' => 'submit', 'class' => 'text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-3 py-2 text-center rtl:space-x-reverse', 'style' => 'background-color: var(--brand-primary); border-color: var(--brand-primary);']) }}
+<button {{ $attributes->merge(['type' => 'submit', 'class' => 'text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-3 py-2 text-center rtl:space-x-reverse'])->merge($attributes->has('style') ? [] : ['style' => 'background-color: #011646; border-color: #011646;']) }}
     wire:loading.attr="disabled" wire:target="{{ $target ?? 'submitForm' }}">
 
     <svg aria-hidden="true" wire:target="{{ $target ?? 'submitForm' }}" wire:loading.class.remove="hidden"
         class="inline w-4 h-4 ltr:mr-2 rtl:ml-2 text-gray-300 animate-spin hidden"
-        style="fill: var(--brand-primary)"
+        style="fill: #011646"
         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"

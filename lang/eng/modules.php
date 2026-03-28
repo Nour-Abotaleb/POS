@@ -736,6 +736,9 @@ return [
         'createNewCustomer' => 'Create New Customer',
         'existingCustomer' => 'Existing Customer',
         'createNewInstead' => 'Create New Instead',
+        'verifyPhone' => 'Verify phone number',
+        'phoneVerificationHeading' => 'Verify phone number',
+        'enterPhoneToContinue' => 'Enter your mobile number to continue',
     ],
 
     // Staff Module

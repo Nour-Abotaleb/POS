@@ -18,6 +18,10 @@ class ItemModifiers extends Component
     public $selectedVariationName;
     public $orderTypeId;
     public $deliveryAppId;
+    public int $quantity = 1;
+
+    public function incrementQuantity(): void { $this->quantity++; }
+    public function decrementQuantity(): void { if ($this->quantity > 1) $this->quantity--; }
 
     public function mount()
     {
@@ -116,6 +120,23 @@ class ItemModifiers extends Component
         }
     }
 
+    public function getTotalPriceProperty(): float
+    {
+        $base = (float) ($this->selectedModifierItem->price ?? 0);
+
+        $addonsTotal = 0;
+        $selectedIds = array_keys(array_filter($this->selectedModifiers));
+        foreach ($this->modifiers as $group) {
+            foreach ($group->options as $option) {
+                if (in_array($option->id, $selectedIds)) {
+                    $addonsTotal += (float) ($option->price ?? 0);
+                }
+            }
+        }
+
+        return ($base + $addonsTotal) * $this->quantity;
+    }
+
     public function saveModifiers()
     {
         $this->validateRequiredModifiers();
@@ -123,7 +144,7 @@ class ItemModifiers extends Component
             $this->menuItemId => array_keys(array_filter($this->selectedModifiers))
         ];
 
-        $this->dispatch('setPosModifier', $this->finalModifiers);
+        $this->dispatch('setPosModifier', modifierIds: $this->finalModifiers, quantity: $this->quantity);
     }
 
     public function validateRequiredModifiers()
