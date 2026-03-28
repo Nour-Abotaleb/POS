@@ -1,0 +1,26 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASS }}
+        script: |
+          # الدخول لمجلد الموقع (المسار الافتراضي في CloudPanel)
+          cd /home/nomufood/htdocs/nomufood.com
+          
+          # تأكد من أن السكريبت قابل للتنفيذ
+          chmod +x deploy.sh
+          
+          # تشغيل سكريبت الرفع الجاهز الخاص بك
+          ./deploy.sh
