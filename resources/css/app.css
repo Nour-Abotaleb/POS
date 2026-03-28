@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,7 +11,7 @@
     }
     .dark {
         --color-base: 76, 140, 228; /* #4C8CE4 */
-        --brand-primary: #4C8CE4;
+        --brand-primary: #4c8ce4;
     }
 }
 
@@ -94,25 +94,25 @@
 .dark .bg-skin-base,
 .dark [class*="bg-skin-base"],
 .dark [class*="bg-[#011646]"] {
-    background-color: #4C8CE4 !important;
+    background-color: #4c8ce4 !important;
 }
 .dark .border-skin-base,
 .dark [class*="border-skin-base"],
 .dark [border*="#011646"] {
-    border-color: #4C8CE4 !important;
+    border-color: #4c8ce4 !important;
 }
 .dark .text-skin-base,
 .dark [class*="text-skin-base"],
 .dark [class*="text-[#011646]"] {
-    color: #4C8CE4 !important;
+    color: #4c8ce4 !important;
 }
 .dark .hover\:bg-skin-base:hover,
 .dark .hover\:border-skin-base:hover {
-    background-color: #4C8CE4 !important;
-    border-color: #4C8CE4 !important;
+    background-color: #4c8ce4 !important;
+    border-color: #4c8ce4 !important;
 }
 .dark .hover\:text-skin-base:hover {
-    color: #4C8CE4 !important;
+    color: #4c8ce4 !important;
 }
 .dark .bg-skin-base\/10 {
     background-color: rgba(76, 140, 228, 0.1) !important;
@@ -133,30 +133,30 @@
     border-color: rgba(76, 140, 228, 0.5) !important;
 }
 .dark .fill-skin-base {
-    fill: #4C8CE4 !important;
+    fill: #4c8ce4 !important;
 }
 .dark .fill-skin-base\/80 {
     fill: rgba(76, 140, 228, 0.8) !important;
 }
 .dark .ring-skin-base:focus {
-    --tw-ring-color: #4C8CE4 !important;
+    --tw-ring-color: #4c8ce4 !important;
 }
 .dark .focus\:ring-skin-base:focus {
-    --tw-ring-color: #4C8CE4 !important;
+    --tw-ring-color: #4c8ce4 !important;
 }
 .dark .peer-checked\:bg-skin-base:checked ~ * {
-    background-color: #4C8CE4 !important;
+    background-color: #4c8ce4 !important;
 }
 .dark .theme-focus:focus {
-    border-color: #4C8CE4 !important;
+    border-color: #4c8ce4 !important;
     box-shadow: 0 0 0 3px rgba(76, 140, 228, 0.25) !important;
 }
 .dark .group:hover .group-hover-text-theme {
-    color: #4C8CE4 !important;
+    color: #4c8ce4 !important;
 }
 .dark .settings-tab-bar .active {
-    color: #4C8CE4 !important;
-    border-bottom-color: #4C8CE4 !important;
+    color: #4c8ce4 !important;
+    border-bottom-color: #4c8ce4 !important;
 }
 
 [x-cloak] {
@@ -251,9 +251,26 @@ body input[type="checkbox"]:checked {
 html.dark input[type="checkbox"],
 html.dark body input[type="checkbox"],
 html.dark input[type="checkbox"].theme-checkbox {
-    accent-color: #4C8CE4 !important;
+    accent-color: #4c8ce4 !important;
 }
 html.dark input[type="checkbox"].theme-checkbox:checked,
 html.dark input[type="checkbox"]:checked {
-    accent-color: #4C8CE4 !important;
+    accent-color: #4c8ce4 !important;
+}
+
+/* Shop cart (and elsewhere): scrollable but no visible scrollbar */
+.scrollbar-hide {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+.scrollbar-hide::-webkit-scrollbar-track,
+.scrollbar-hide::-webkit-scrollbar-thumb {
+    display: none !important;
+    background: transparent !important;
 }

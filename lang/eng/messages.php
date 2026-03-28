@@ -49,6 +49,8 @@ return [
     'cannotDeleteCurrentBranch' => 'Cannot delete current branch',
     'noTableReserved' => 'No table reserved',
     'noBranchCoordinates' => 'No branch coordinates',
+    'shopAtThisBranch' => 'Order from this branch',
+    'configureSmsOrEmailForOtp' => 'Enable SMS or add customer email in admin so OTP can be delivered.',
     'frontHeroHeading' => 'Front Hero Heading',
     'upgradeRequired' => 'Upgrade Required',
     'welcomeToUpgrade' => 'Welcome to Upgrade',

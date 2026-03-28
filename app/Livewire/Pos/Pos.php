@@ -328,6 +328,62 @@ class Pos extends Component
                 $this->updatedOrderTypeId($this->orderTypeId);
             }
         }
+
+        $this->checkMultiPosStatus();
+    }
+
+    private function checkMultiPosStatus(): void
+    {
+        $this->shouldBlockPos = false;
+        $this->hasPosMachine = false;
+        $this->machineStatus = null;
+        $this->posMachine = null;
+        $this->limitReached = false;
+        $this->limitMessage = '';
+
+        if (!module_enabled('MultiPOS')) {
+            return;
+        }
+
+        $cookieName = config('multipos.cookie.name', 'pos_token');
+        $deviceId = request()->cookie($cookieName);
+        $branchId = branch()->id;
+
+        if ($deviceId) {
+            $this->posMachine = Cache::remember(
+                'multipos_machine_' . $branchId . '_' . $deviceId,
+                60,
+                fn() => \Modules\MultiPOS\Entities\PosMachine::where('device_id', $deviceId)
+                    ->where('branch_id', $branchId)
+                    ->first()
+            );
+
+            if ($this->posMachine) {
+                $this->hasPosMachine = true;
+                $this->machineStatus = $this->posMachine->status;
+            }
+        }
+
+        if (!$this->hasPosMachine) {
+            $restaurant = branch()->restaurant;
+            $packageLimit = optional($restaurant->package)->multipos_limit;
+            if (!is_null($packageLimit) && $packageLimit >= 0) {
+                $currentCount = Cache::remember(
+                    'multipos_count_' . $branchId,
+                    60,
+                    fn() => \Modules\MultiPOS\Entities\PosMachine::where('branch_id', $branchId)
+                        ->whereIn('status', ['active', 'pending'])
+                        ->count()
+                );
+
+                if ($currentCount >= $packageLimit) {
+                    $this->limitReached = true;
+                    $this->limitMessage = __('multipos::messages.registration.limit_reached.message', ['limit' => $packageLimit]);
+                }
+            }
+        }
+
+        $this->shouldBlockPos = !$this->hasPosMachine || $this->machineStatus === 'pending' || $this->machineStatus === 'declined';
     }
 
     public function setOrderTypeChoice($value)

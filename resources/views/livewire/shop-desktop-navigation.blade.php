@@ -1,8 +1,10 @@
 
 <header class="hidden z-50 relative">
 
-    <nav class="bg-white border-gray-200 px-4 py-2.5 dark:bg-gray-800 sticky top-4 rounded-md mt-2 ">
-        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+    {{-- Same max-width + horizontal padding as guest main / cart grid --}}
+    <nav class="sticky top-4 mt-2 w-full">
+        <div class="mx-auto w-full max-w-screen-xl xl:max-w-screen-2xl px-4">
+        <div class="bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md py-2.5 flex flex-wrap justify-between items-center w-full">
             <div class="flex gap-8 items-center">
                 <a href="{{ route('shop_restaurant', [$restaurant->hash]) . '?branch=' . $shopBranch->id }}"
                     class="inline-flex items-center app-logo">
@@ -169,6 +171,7 @@
                 </button>
             </div>
 
+        </div>
         </div>
     </nav>
 </header>

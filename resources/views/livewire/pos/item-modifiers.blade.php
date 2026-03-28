@@ -1,101 +1,146 @@
-<div>
-    <div class="flex flex-col">
-        <!-- Item Header -->
-        <div class="flex gap-4 mb-4">
-            @if (restaurant() && !restaurant()->hide_menu_item_image_on_customer_site)
-                <img class="w-16 h-16 rounded-md object-cover" src="{{ $selectedModifierItem->item_photo_url }}" alt="{{ $selectedModifierItem->item_name }}">
-            @endif
-            <div class="text-sm font-normal text-gray-500 dark:text-gray-400 space-y-1">
-                <div class="text-base font-semibold text-gray-900 dark:text-white inline-flex items-center">
-                    <img src="{{ asset('img/'.$selectedModifierItem->type.'.svg') }}" class="h-4 me-2"
-                        title="@lang('modules.menu.' . $selectedModifierItem->type)" alt="" />
-                    {{ $selectedModifierItem->item_name }}
-                    @if ($selectedVariationName) <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ms-1">({{ $selectedVariationName }})</span> @endif
-                </div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">{{ $selectedModifierItem->description }}</div>
-                <div class="text-sm text-gray-800 dark:text-gray-400 mt-1 sm:mt-0 font-medium">
-                    {{ $selectedModifierItem->price ? currency_format($selectedModifierItem->price, $selectedModifierItem->branch->restaurant->currency_id) : __('--') }}
-                </div>
-            </div>
-        </div>
+<style>
+    .btn-add-item img { filter: invert(1) brightness(10) !important; }
+</style>
+<div class="text-base text-gray-900 dark:text-gray-100">
+    @php $currencyId = $selectedModifierItem->branch->restaurant->currency_id; @endphp
 
-        <!-- Modifiers List -->
-        @foreach ($modifiers as $modifier)
-        <div x-data="{ open: true }" class="flex flex-col items-start mb-4 border p-2 rounded-md bg-white dark:bg-gray-800 dark:border-gray-700">
-
-            <!-- Modifier Header (Clickable) -->
-            <div class="flex justify-between items-center w-full cursor-pointer select-none p-3 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
-                 @click="open = !open">
-                <div class="flex flex-col justify-between w-full">
-                    <div class="text-base font-semibold text-gray-900 dark:text-white">
-                        {{ $modifier->name }}
-                    </div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-0">
-                        {{ $modifier->description }}
-                    </div>
-                </div>
-
-            <!-- Expand/Collapse Icon -->
-            <svg x-bind:class="{ 'rotate-180': open }" class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 transform"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+    <!-- Hero Image -->
+    <div class="relative overflow-hidden rounded-t-lg" style="height: 300px;">
+        <!-- Close button -->
+        <button type="button"
+            wire:click="$dispatch('closeModifiersModal')"
+            class="absolute top-3 left-3 w-9 h-9 flex items-center justify-center bg-white/50 rounded-full shadow text-gray-500 hover:text-gray-700 z-10 border-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-border-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
+        </button>
+
+        @if (restaurant() && !restaurant()->hide_menu_item_image_on_customer_site)
+        <img class="w-full h-full object-cover"
+            src="{{ $selectedModifierItem->item_photo_url ?: asset('img/product.jpg') }}"
+            alt="{{ $selectedModifierItem->item_name }}">
+        @else
+        <img class="w-full h-full object-cover"
+            src="{{ asset('img/product.jpg') }}"
+            alt="{{ $selectedModifierItem->item_name }}">
+        @endif
+    </div>
+
+    <!-- Content -->
+    <div class="px-6 pb-6">
+    <!-- Item Info -->
+    <div class="pt-4 flex items-center justify-between gap-2">
+        <span class="text-xl font-bold text-gray-900 dark:text-white text-end">
+            {{ $selectedModifierItem->item_name }}
+            @if ($selectedVariationName)
+                <span class="text-sm font-normal text-gray-500">({{ $selectedVariationName }})</span>
+            @endif
+        </span>
+        @if ($selectedModifierItem->price)
+        <span class="text-base font-bold text-gray-900 dark:text-white whitespace-nowrap flex items-center gap-1">
+            {!! currency_format($selectedModifierItem->price, $currencyId) !!}
+        </span>
+        @endif
+    </div>
+
+    @if ($selectedModifierItem->description)
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 text-center">{{ $selectedModifierItem->description }}</p>
+    @endif
+
+    @if ($selectedModifierItem->calories || $selectedModifierItem->preparation_time)
+    <div class="mt-2 flex items-center gap-3 justify-start flex-wrap text-sm text-gray-500 dark:text-gray-400">
+        @if ($selectedModifierItem->preparation_time)
+        <span class="inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            {{ $selectedModifierItem->preparation_time }} @lang('modules.menu.minutes')
+        </span>
+        @endif
+        @if ($selectedModifierItem->calories)
+        <span class="inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"/>
+            </svg>
+            {{ $selectedModifierItem->calories }} @lang('modules.menu.calories')
+        </span>
+        @endif
+    </div>
+    @endif
+
+    <!-- Modifier Groups -->
+    @foreach ($modifiers as $modifier)
+    <div class="mt-5">
+        <!-- Group Header -->
+        <div class="text-start mb-2">
+            <div class="text-base font-semibold text-gray-900 dark:text-white">{{ $modifier->name }}</div>
+            @if ($modifier->description)
+            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $modifier->description }}</div>
+            @endif
+            @if ($modifier->itemModifiers->isNotEmpty() && ($modifier->itemModifiers->first()->max_items_on_order ?? null))
+            <div class="text-sm text-gray-400">@lang('app.max') {{ $modifier->itemModifiers->first()->max_items_on_order }}</div>
+            @endif
         </div>
 
-            <!-- Options Table (Collapsible) -->
-            <div x-show="open" x-collapse class="overflow-x-auto w-full transition-all duration-300 ease-in-out">
-                <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 mt-2">
-                    <thead class="bg-gray-100 dark:bg-gray-700">
-                        <tr>
-                            <th class="py-2.5 px-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                @lang('modules.modifier.optionName')
-                            </th>
-                            <th class="py-2.5 px-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                @lang('modules.menu.setPrice')
-                            </th>
-                            <th class="py-2.5 px-4 text-xs font-medium text-gray-500 uppercase dark:text-gray-400 text-right">
-                                @lang('app.select')
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                        @foreach ($modifier->options as $option)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="py-2.5 px-4 text-sm text-gray-900 dark:text-white">
-                                    {{ $option->name }}
-                                </td>
-                                <td class="py-2.5 px-4 text-sm text-gray-900 dark:text-white">
-                                    {{ $option->price ? currency_format($option->price, $selectedModifierItem->branch->restaurant->currency_id) : __('--') }}
-                                </td>
-                                <td class="py-2.5 px-4 text-right">
-                                    @if ($option->is_available)
-                                    <x-checkbox wire:model="selectedModifiers.{{ $option->id }}" wire:click="toggleSelection({{ $modifier->id }}, {{ $option->id }})" value="{{ $option->id }}" />
-                                    @else
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                        @lang('modules.menu.notAvailable')
-                                    </span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <x-input-error for="requiredModifiers.{{ $modifier->id }}" class="mt-2" />
+        <!-- Options -->
+        @foreach ($modifier->options as $option)
+        <div class="flex w-full items-center justify-between gap-3 py-3">
+            <div class="flex min-w-0 flex-1 items-center gap-3 text-start">
+                @if ($option->is_available)
+                    <x-checkbox
+                        class="shrink-0"
+                        wire:model="selectedModifiers.{{ $option->id }}"
+                        wire:click="toggleSelection({{ $modifier->id }}, {{ $option->id }})"
+                        value="{{ $option->id }}" />
+                @else
+                    <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                        @lang('modules.menu.notAvailable')
+                    </span>
+                @endif
+                <div class="min-w-0 text-gray-900 dark:text-white font-medium">{{ $option->name }}</div>
             </div>
-
+            @if ($option->is_available && $option->price)
+                <span class="shrink-0 text-sm font-medium text-gray-900 dark:text-gray-300 whitespace-nowrap flex items-center gap-1">{!! currency_format($option->price, $currencyId) !!}</span>
+            @endif
         </div>
         @endforeach
-    </div>
 
-    <!-- Save Button -->
-    <div class="mt-4 text-right">
-        <x-button
-            wire:click="saveModifiers"
-            class="bg-blue-500 hover:bg-blue-600 text-white">
-            @lang('app.save')
-        </x-button>
-        <x-secondary-button wire:click="$dispatch('closeModifiersModal')" class="ml-3">
-            @lang('app.cancel')
-        </x-secondary-button>
+        <x-input-error for="requiredModifiers.{{ $modifier->id }}" class="mt-2" />
     </div>
+    @endforeach
+
+    <!-- Bottom: Add button + quantity counter -->
+    <div class="flex items-center gap-3 mt-6">
+        
+        <div class="flex items-center justify-between bg-[#F8F8F8] rounded-md overflow-hidden min-w-[180px] flex-shrink-0 py-2.5 px-2" style="background-color: #F8F8F8">
+            <button type="button"
+            wire:click="incrementQuantity"
+            class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 dark:text-white py-2">
+            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+            </svg>
+            </button>
+            <span class="px-3 text-gray-900 dark:text-white font-medium text-xl sm:text-2xl tabular-nums select-none">{{ $quantity }}</span>
+            <button type="button"
+                wire:click="decrementQuantity"
+                class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 dark:text-white py-2">
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                </svg>
+            </button>
+        </div>
+        <button
+            type="button"
+            wire:click="saveModifiers"
+            wire:loading.attr="disabled"
+            class="btn-add-item flex-1 py-3.5 rounded-md text-white font-bold text-base transition"
+            style="background-color: #F5822A;">
+            <span wire:loading.remove wire:target="saveModifiers" class="inline-flex items-center justify-center gap-1">
+                @lang('app.add') ({!! currency_format($selectedModifierItem->price * $quantity, $currencyId) !!})
+            </span>
+            <span wire:loading wire:target="saveModifiers">...</span>
+        </button>
+    </div>
+    </div><!-- end .px-6 -->
 </div>

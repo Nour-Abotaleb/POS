@@ -193,7 +193,7 @@
                         'menuItemId' => $selectedModifierItem,
                         'orderTypeId' => $orderTypeId,
                         'deliveryAppId' => $selectedDeliveryApp
-                    ], key(str()->random(50)))
+                    ], key('pos-modifiers-' . $selectedModifierItem))
                 @elseif($showModifiersModal)
                     <div class="py-8 text-center text-gray-500 dark:text-gray-400">@lang('messages.loadingData')</div>
                 @endif

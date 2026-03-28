@@ -144,6 +144,8 @@ return array(
     'saveAndNew' => 'Save and Add New',
     'view' => 'View',
     'verify' => 'Verify',
+    'next' => 'Next',
+    'verification' => 'Verification',
     'accept' => 'Accept',
     'allow' => 'Allow',
     'decline' => 'Decline',

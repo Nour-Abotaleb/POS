@@ -1,9 +1,14 @@
+# Windows reserved name; a real file named "nul" in the repo breaks `git add .` (mmap error).
+/nul
 /.phpunit.cache
 /node_modules
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
+# Compiled Blade cache — should not be versioned; also avoids Windows Git mmap / add issues.
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
 /vendor
 .env
 .env.backup

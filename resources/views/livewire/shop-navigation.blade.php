@@ -1,13 +1,14 @@
 
 <header x-data="{ menuOpen: false }">
-    <nav style="background-color: #011646;" class="px-3 py-3 dark:bg-gray-900">
-        <div class="mx-auto max-w-3xl lg:max-w-screen-xl">
+    {{-- Full-width bar; inner row matches guest main column (same as cart grid) --}}
+    <nav style="background-color: #011646;" class="w-full py-3 dark:bg-gray-900">
+        <div class="mx-auto w-full max-w-screen-xl xl:max-w-screen-2xl px-4">
         <div class="flex items-center gap-2">
 
             {{-- Hamburger Menu --}}
             <button type="button"
                     @click="menuOpen = true"
-                    class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white transition">
+                    class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white transition">
                 <svg class="w-5 h-5" fill="#000" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                           d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -36,7 +37,7 @@
             {{-- Cart / Bag Icon --}}
             <a href="javascript:;"
                x-on:click="Livewire.dispatch('showCartItems')"
-               class="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white transition">
+               class="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                      stroke="#000" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -44,7 +45,7 @@
                 </svg>
             </a>
         </div>
-        </div>{{-- end max-width wrapper --}}
+        </div>
     </nav>
 
     {{-- Backdrop --}}
@@ -71,13 +72,13 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
-        class="fixed bg-white dark:bg-gray-800 z-50 shadow-2xl rounded-lg flex flex-col overflow-y-auto" style="width: min(85vw, 400px); top: 14px; bottom: 14px; inset-inline-start: 14px;"
+        class="fixed bg-white dark:bg-gray-800 z-50 shadow-2xl rounded-md flex flex-col overflow-y-auto" style="width: min(85vw, 400px); top: 14px; bottom: 14px; inset-inline-start: 14px;"
     >
         {{-- Close Button --}}
         <div class="flex items-center justify-start p-3 border-b border-gray-100 dark:border-gray-700">
             <button type="button"
                     @click="menuOpen = false"
-                    class="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                    class="w-10 h-10 flex items-center justify-center rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>

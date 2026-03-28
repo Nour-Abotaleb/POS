@@ -20,6 +20,12 @@
         background-color: var(--brand-primary) !important;
         border-color: var(--brand-primary) !important;
     }
+    /* Currency image inside add button: always white */
+    .btn-add-item img[style*="width:11px"],
+    .btn-add-item img[style*="width: 11px"],
+    .btn-add-item img[style*="height:12px"] {
+        filter: invert(1) !important;
+    }
     /* Dark mode: invert black SVG icons to white */
     .dark img[src*="waiter.svg"],
     .dark img[src*="checkout.svg"],
