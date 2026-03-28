@@ -520,6 +520,11 @@
                                                         title="@lang('modules.menu.' . $item->type)" alt="" /> --}}
                                                     <span class="truncate">{{ $item->getTranslatedValue('item_name', session('locale')) }}</span>
                                                 </div>
+                                                @if ($item->calories)
+                                                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                        {{ $item->calories }}
+                                                    </div>
+                                                @endif
                                                 @if ($item->description)
                                                     <div class="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
                                                         {{ $item->getTranslatedValue('description', session('locale')) }}
@@ -651,6 +656,11 @@
                                         {!! currency_format($orderItemAmount[$key], $restaurant->currency_id) !!}
                                     </span>
                                 </div>
+                                @if ($item->calories)
+                                    <div class="text-xs text-gray-500 dark:text-gray-400 text-end mt-0.5">
+                                        {{ $item->calories }}
+                                    </div>
+                                @endif
 
                                 <!-- Addons toggle -->
                                 @if (!empty($itemModifiersSelected[$key]))
