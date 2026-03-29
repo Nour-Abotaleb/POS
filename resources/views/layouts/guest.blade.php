@@ -7,6 +7,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Apply Tailwind dark class before paint (same rules as resources/js/app.js applyThemeClassFromStorage) --}}
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('color-theme');
+                var dark = t === 'dark' || (t === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.classList.toggle('dark', dark);
+            } catch (e) {}
+        })();
+    </script>
 
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $restaurant->uploadFavIconAppleTouchIconUrl }}">
@@ -26,6 +36,32 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Theme toggle: works even if Vite bundle is slow/fails; app.js replaces this with full handler + icon sync --}}
+    <script>
+        window.toggleColorTheme = function () {
+            var h = document.documentElement;
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    h.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    h.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (h.classList.contains('dark')) {
+                    h.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    h.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+            if (typeof window.__syncThemeToggleIcons === 'function') {
+                window.__syncThemeToggleIcons();
+            }
+        };
+    </script>
 
     <!-- Styles -->
     @livewireStyles

@@ -1063,6 +1063,7 @@ return [
         'fullAddress' => 'Full Address',
         'fullAddressPlaceholder' => 'Enter your full address details',
         'noAddressesFound' => 'No addresses found',
+        'noRegisteredAddresses' => 'No registered addresses.',
         'addAddressDescription' => 'Add your delivery addresses to make ordering faster',
         'saveAddress' => 'Save Address',
         'updateAddress' => 'Update Address',

@@ -12,6 +12,7 @@ return [
     'reports' => 'Reports',
     'settings' => 'Settings',
     'profile' => 'Profile',
+    'myInformation' => 'My information',
     'logout' => 'Logout',
     'sign_out' => 'Sign Out',
     'signOut' => 'Sign Out',

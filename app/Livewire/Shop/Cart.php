@@ -178,10 +178,6 @@ class Cart extends Component
     public $defaultDate;
     public $deliveryDateTime;
     public $showHalal;
-    public $headerType = 'text';
-    public $headerText;
-    public $headerImages = [];
-    public $isHeaderDisabled = false;
     public $showLocationModal = false;
     public $is_within_radius = true;
     public $menuItemsLoaded = 50;
@@ -271,9 +267,6 @@ class Cart extends Component
         $this->defaultDate = old('deliveryDateTime', $this->deliveryDateTime ?? $this->minDate);
 
         $this->taxMode = $this->order?->tax_mode ?? ($this->restaurant->tax_mode ?? 'order');
-
-        // Initialize header settings
-        $this->initializeHeaderSettings();
 
         // Handle location for QR orders only
         if ($this->cameFromQR) {
@@ -890,20 +883,6 @@ class Cart extends Component
         $lowest = $tiers->sortBy('min_distance')->first();
 
         return $lowest ? (float) $lowest->fee : 0.0;
-    }
-
-    public function initializeHeaderSettings()
-    {
-        $cartHeaderSetting = $this->restaurant->cartHeaderSetting;
-        if ($cartHeaderSetting) {
-            $this->headerType = $cartHeaderSetting->header_type;
-            $this->headerText = $cartHeaderSetting->header_text;
-            $this->headerImages = $cartHeaderSetting->images;
-            $this->isHeaderDisabled = $cartHeaderSetting->is_header_disabled ?? false;
-        } else {
-            $this->headerText = __('messages.frontHeroHeading');
-            $this->isHeaderDisabled = false;
-        }
     }
 
     public function filterMenuItems($id)

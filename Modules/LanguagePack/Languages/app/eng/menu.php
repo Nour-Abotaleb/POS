@@ -6,6 +6,7 @@ return array(
     'menus' => 'Menus',
     'menuItem' => 'Menu Items',
     'profile' => 'Profile',
+    'myInformation' => 'My information',
     'itemCategories' => 'Item Categories',
     'table' => 'Table',
     'areas' => 'Areas',

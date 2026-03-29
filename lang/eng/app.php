@@ -248,7 +248,8 @@ return array(
     'reset' => 'Reset',
     'filterByMenu' => 'Filter by Menu',
     'filterByCategory' => 'Filter by Category',
-    'toggleDarkMode' => 'Toggle Dark Mode',
+    'toggleDarkMode' => 'Dark mode',
+    'toggleLightMode' => 'Light mode',
     'notOnboarded' => 'Not Onboarded',
 
 

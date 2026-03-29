@@ -48,15 +48,7 @@
     @endif
 
     @if ($selectedModifierItem->calories || $selectedModifierItem->preparation_time)
-    <div class="mt-2 flex items-center gap-3 justify-start flex-wrap text-sm text-gray-500 dark:text-gray-400">
-        @if ($selectedModifierItem->preparation_time)
-        <span class="inline-flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-            {{ $selectedModifierItem->preparation_time }} @lang('modules.menu.minutes')
-        </span>
-        @endif
+    <div class="mt-2 flex items-center gap-3 justify-center flex-wrap text-sm text-gray-500 dark:text-gray-400">
         @if ($selectedModifierItem->calories)
         <span class="inline-flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -64,6 +56,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"/>
             </svg>
             {{ $selectedModifierItem->calories }} @lang('modules.menu.calories')
+        </span>
+        @endif
+        @if ($selectedModifierItem->preparation_time)
+        <span class="inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            {{ $selectedModifierItem->preparation_time }} @lang('modules.menu.minutes')
         </span>
         @endif
     </div>
@@ -135,7 +135,7 @@
             wire:click="saveModifiers"
             wire:loading.attr="disabled"
             class="btn-add-item flex-1 py-3.5 rounded-md text-white font-bold text-base transition"
-            style="background-color: #F5822A;">
+            style="background-color: #011646;">
             <span wire:loading.remove wire:target="saveModifiers" class="inline-flex items-center justify-center gap-1">
                 @lang('app.add') ({!! currency_format($selectedModifierItem->price * $quantity, $currencyId) !!})
             </span>

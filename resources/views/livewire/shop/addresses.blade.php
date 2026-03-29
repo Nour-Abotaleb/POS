@@ -1,18 +1,19 @@
-<div class="py-8 px-4 mx-auto lg:px-6">
-    <div class="mx-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                @lang('menu.myAddresses')
-            </h2>
-            @if(!$showAddressForm && $addresses->isNotEmpty() && $addresses->count() < \App\Livewire\Shop\Addresses::MAX_ADDRESSES)
-            <x-button wire:click="createNewAddress" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                @lang('app.addNew')
-            </x-button>
-            @endif
-        </div>
+<div class="w-full">
+        @if(!$showAddressForm && $addresses->isNotEmpty() && $addresses->count() < \App\Livewire\Shop\Addresses::MAX_ADDRESSES)
+            <div class="flex justify-end mb-6">
+                <button
+                    type="button"
+                    wire:click="createNewAddress"
+                    class="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rtl:flex-row-reverse"
+                    style="background-color: var(--brand-primary);"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    @lang('modules.delivery.addNewAddress')
+                </button>
+            </div>
+        @endif
 
         @if($showAddressForm)
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
@@ -56,21 +57,26 @@
         @endif
 
         @if($addresses->isEmpty() && !$showAddressForm)
-            <div class="flex flex-col items-center justify-center p-8 text-center bg-white rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <div class="w-16 h-16 mb-4 text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
+            <div class="mx-auto w-full max-w-xl rounded-md border border-gray-100 bg-white px-6 py-10 dark:bg-gray-800">
+                <div class="flex flex-col items-center text-center">
+                    <div class="relative mb-6 text-gray-300 dark:text-gray-600" aria-hidden="true">
+                        <svg class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.25">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                    </div>
+                    <p class="mb-8 text-base text-gray-500 dark:text-gray-400">
+                        @lang('modules.delivery.noRegisteredAddresses')
+                    </p>
+                    <button
+                        type="button"
+                        wire:click="createNewAddress"
+                        class="w-full rounded-md py-3 px-4 text-center text-base font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800"
+                        style="background-color: var(--brand-primary);"
+                    >
+                        @lang('modules.delivery.addNewAddress')
+                    </button>
                 </div>
-                <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">@lang('modules.delivery.noAddressesFound')</h3>
-                <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">@lang('modules.delivery.addAddressDescription')</p>
-                <x-button wire:click="createNewAddress" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    @lang('app.addNew')
-                </x-button>
             </div>
         @elseif(!$showAddressForm)
             <div class="grid gap-4">

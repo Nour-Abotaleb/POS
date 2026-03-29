@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Helper\Files;
 use App\Models\OrderType;
+use App\Models\ReservationSetting;
 use App\Models\StorageSetting;
+use App\Scopes\BranchScope;
 use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelPackageTools\Concerns\Package\HasServiceProviders;
@@ -41,6 +43,7 @@ class Branch extends BaseModel
     protected $casts = [
         'lat' => 'float',
         'lng' => 'float',
+        'is_active' => 'boolean',
     ];
 
     public function restaurant(): BelongsTo
@@ -71,6 +74,16 @@ class Branch extends BaseModel
     public function deliverySetting()
     {
         return $this->hasOne(BranchDeliverySetting::class, 'branch_id');
+    }
+
+    /**
+     * Table-reservation time slots per weekday (used on customer site for “branch hours”).
+     * Unscoped so staff branch session does not hide another branch’s settings.
+     */
+    public function reservationSettings(): HasMany
+    {
+        return $this->hasMany(ReservationSetting::class, 'branch_id')
+            ->withoutGlobalScope(BranchScope::class);
     }
 
     public function deliveryFeeTiers()
