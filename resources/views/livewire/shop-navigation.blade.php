@@ -225,7 +225,34 @@
         </ul>
     </div>
 
-    {{-- Dark mode: theme-toggle-nav wired in resources/js/app.js (initializeThemeToggle + livewire:morphed) --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const darkIcon = document.getElementById('theme-toggle-dark-icon-nav');
+            const lightIcon = document.getElementById('theme-toggle-light-icon-nav');
+            const btn = document.getElementById('theme-toggle-nav');
+            if (!btn) return;
+
+            if (localStorage.getItem('color-theme') === 'dark' ||
+                (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                lightIcon && lightIcon.classList.remove('hidden');
+            } else {
+                darkIcon && darkIcon.classList.remove('hidden');
+            }
+
+            btn.addEventListener('click', function () {
+                darkIcon && darkIcon.classList.toggle('hidden');
+                lightIcon && lightIcon.classList.toggle('hidden');
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+                document.dispatchEvent(new Event('dark-mode'));
+            });
+        });
+    </script>
 </header>
 <div class="w-full shrink-0" style="min-height: calc(4.5rem + env(safe-area-inset-top, 0px));" aria-hidden="true"></div>
 </div>
