@@ -5,7 +5,7 @@
 <x-shop-banner :restaurant="$restaurant" />
 
 <section class="bg-white dark:bg-transparent py-6 px-4 pb-12 min-h-[60vh]">
-    <div class="mx-auto max-w-screen-xl">
+    <div class="mx-auto">
         <div class="flex flex-col items-center mb-8">
             <!-- <div
                 class="rounded-md p-5 mb-1"

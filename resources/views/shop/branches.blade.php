@@ -38,7 +38,7 @@
 <x-shop-banner :restaurant="$restaurant" />
 
 <section class="bg-white dark:bg-transparent py-6 px-4 pb-12">
-    <div class="mx-auto max-w-screen-xl">
+    <div class="mx-auto">
         <div class="flex flex-col items-center mb-8">
             <!-- <div
                 class="rounded-2xl p-5 shadow-md mb-1"
