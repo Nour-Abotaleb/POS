@@ -75,6 +75,7 @@ return array(
     'newReservations' => 'New Reservations',
     'newWaiterRequest' => 'New Waiter Request',
     'language' => 'Language',
+    'logout' => 'Logout',
 
     // Restaurant and Modules
     'modules' => [

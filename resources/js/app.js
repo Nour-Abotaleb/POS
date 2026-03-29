@@ -71,99 +71,107 @@ document.addEventListener("livewire:morphed", () => {
     if (typeof initFlowbite === "function") {
         initFlowbite();
     }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
     initializeThemeToggle();
 });
 
-document.addEventListener('livewire:load', () => {
+document.addEventListener("DOMContentLoaded", () => {
+    bindThemeToggleDelegation();
     initializeThemeToggle();
 });
 
-// Initialize theme toggle safely and idempotently
-function initializeThemeToggle() {
-    const themeToggleBtn = document.getElementById("theme-toggle");
-    const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
-    const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
+/** Livewire 3: use livewire:init (livewire:load was removed in v3). */
+document.addEventListener("livewire:init", () => {
+    bindThemeToggleDelegation();
+    initializeThemeToggle();
+});
 
-    // Ensure html has correct theme class before manipulating icons
-    if (localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
+function applyThemeClassFromStorage() {
+    if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+        document.documentElement.classList.add("dark");
     } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove("dark");
     }
+}
 
-    // If required elements aren't present yet, do nothing
-    if (!themeToggleBtn || !themeToggleDarkIcon || !themeToggleLightIcon) {
+/** Sync moon/sun icons for admin bar + shop nav (same IDs in app.js + shop-navigation). */
+function syncThemeToggleIcons() {
+    const pairs = [
+        ["theme-toggle-dark-icon", "theme-toggle-light-icon"],
+        ["theme-toggle-dark-icon-nav", "theme-toggle-light-icon-nav"],
+    ];
+    const isDark = document.documentElement.classList.contains("dark");
+    for (const [darkId, lightId] of pairs) {
+        const d = document.getElementById(darkId);
+        const l = document.getElementById(lightId);
+        if (!d || !l) continue;
+        if (isDark) {
+            l.classList.remove("hidden");
+            d.classList.add("hidden");
+        } else {
+            d.classList.remove("hidden");
+            l.classList.add("hidden");
+        }
+    }
+}
+
+function themeToggleClickHandler() {
+    if (localStorage.getItem("color-theme")) {
+        if (localStorage.getItem("color-theme") === "light") {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+        }
+    } else {
+        if (document.documentElement.classList.contains("dark")) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
+        }
+    }
+    syncThemeToggleIcons();
+    document.dispatchEvent(new Event("dark-mode"));
+}
+
+/**
+ * One delegated listener so theme works after Livewire morphs and for drawer buttons inside Alpine x-show.
+ * Per-element listeners were lost when Livewire replaced the shop header DOM.
+ */
+function bindThemeToggleDelegation() {
+    if (window.__themeToggleDelegationBound) {
         return;
     }
-
-    // Set initial icon visibility based on current theme
-    if (document.documentElement.classList.contains('dark')) {
-        themeToggleLightIcon.classList.remove('hidden');
-        themeToggleDarkIcon.classList.add('hidden');
-    } else {
-        themeToggleDarkIcon.classList.remove('hidden');
-        themeToggleLightIcon.classList.add('hidden');
-    }
-
-    // Avoid attaching multiple listeners
-    if (themeToggleBtn.dataset.initialized === 'true') {
-        return;
-    }
-    themeToggleBtn.dataset.initialized = 'true';
-
-    let event = new Event("dark-mode");
-    themeToggleBtn.addEventListener("click", function () {
-        // Toggle html class and persist
-        if (localStorage.getItem("color-theme")) {
-            if (localStorage.getItem("color-theme") === "light") {
-                document.documentElement.classList.add("dark");
-                localStorage.setItem("color-theme", "dark");
-            } else {
-                document.documentElement.classList.remove("dark");
-                localStorage.setItem("color-theme", "light");
-            }
-        } else {
-            if (document.documentElement.classList.contains("dark")) {
-                document.documentElement.classList.remove("dark");
-                localStorage.setItem("color-theme", "light");
-            } else {
-                document.documentElement.classList.add("dark");
-                localStorage.setItem("color-theme", "dark");
-            }
+    window.__themeToggleDelegationBound = true;
+    document.addEventListener("click", function (e) {
+        const el =
+            e.target instanceof Element ? e.target : e.target?.parentElement;
+        const btn = el?.closest?.("#theme-toggle, #theme-toggle-nav");
+        if (!btn) {
+            return;
         }
-
-        // Sync icons
-        if (document.documentElement.classList.contains('dark')) {
-            themeToggleLightIcon.classList.remove('hidden');
-            themeToggleDarkIcon.classList.add('hidden');
-        } else {
-            themeToggleDarkIcon.classList.remove('hidden');
-            themeToggleLightIcon.classList.add('hidden');
-        }
-
-        document.dispatchEvent(event);
+        e.preventDefault();
+        themeToggleClickHandler();
     });
 }
 
-// Observe for the theme toggle button being (re)inserted by Livewire and init once
+/** Apply stored theme + sync icons (safe to call after every morph). */
+function initializeThemeToggle() {
+    applyThemeClassFromStorage();
+    syncThemeToggleIcons();
+}
+
 function observeThemeToggleMount() {
     try {
         initializeThemeToggle();
-        const body = document.body;
-        if (!body) return;
-        const observer = new MutationObserver(() => {
-            const btn = document.getElementById('theme-toggle');
-            if (btn && btn.dataset.initialized !== 'true') {
-                initializeThemeToggle();
-            }
-        });
-        observer.observe(body, { childList: true, subtree: true });
     } catch (e) {
-        console.warn('observeThemeToggleMount:', e);
+        console.warn("observeThemeToggleMount:", e);
     }
 }
 

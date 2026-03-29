@@ -16,6 +16,10 @@ export default {
 
     theme: {
         extend: {
+            /** Shop header row + guest main/footer: 90% of parent width. */
+            maxWidth: {
+                "screen-xl-mid": "90%",
+            },
             fill: {
                 skin: {
                     base: withOpacity("--color-base"),

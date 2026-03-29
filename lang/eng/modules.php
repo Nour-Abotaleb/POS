@@ -2003,6 +2003,9 @@ return [
         'createNewCustomer' => 'Create New Customer',
         'existingCustomer' => 'Existing Customer',
         'createNewInstead' => 'Create new instead',
+        'verifyPhone' => 'Verify phone number',
+        'phoneVerificationHeading' => 'Verify phone number',
+        'enterPhoneToContinue' => 'Enter your mobile number to continue',
         'walkin' => 'Walk-in',
     ],
 

@@ -1,8 +1,9 @@
 
-<header x-data="{ menuOpen: false }">
+<div>
+<header x-data="{ menuOpen: false }" class="fixed top-0 inset-x-0 z-[45] pt-[env(safe-area-inset-top,0px)] shadow-md bg-[#011646] dark:bg-[#011646] dark:bg-gray-900">
     {{-- Full-width bar; inner row matches guest main column (same as cart grid) --}}
-    <nav style="background-color: #011646;" class="w-full py-3 dark:bg-gray-900">
-        <div class="mx-auto w-full max-w-screen-xl xl:max-w-screen-2xl px-4">
+    <nav class="relative z-50 w-full py-3">
+        <div class="mx-auto w-full max-w-screen-xl-mid px-4">
         <div class="flex items-center gap-2">
 
             {{-- Hamburger Menu --}}
@@ -59,7 +60,7 @@
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="fixed inset-0 bg-black/40 z-40"
+        class="fixed inset-0 z-40 bg-black/50"
     ></div>
 
     {{-- Side Drawer --}}
@@ -75,10 +76,10 @@
         class="fixed bg-white dark:bg-gray-800 z-50 shadow-2xl rounded-md flex flex-col overflow-y-auto" style="width: min(85vw, 400px); top: 14px; bottom: 14px; inset-inline-start: 14px;"
     >
         {{-- Close Button --}}
-        <div class="flex items-center justify-start p-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center justify-start p-3 border-b border-gray-200 dark:border-gray-700">
             <button type="button"
                     @click="menuOpen = false"
-                    class="w-10 h-10 flex items-center justify-center rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                    class="w-10 h-10 flex items-center justify-center rounded-md bg-white transition shadow-md">
                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -171,17 +172,6 @@
                         @lang('menu.profile')
                     </a>
                 </li>
-
-                <li>
-                    <a href="{{ url('customer-logout').'?restaurant='.$restaurant->hash }}"
-                       class="flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                        </svg>
-                        @lang('app.logout')
-                    </a>
-                </li>
             @else
                 <li>
                     <button type="button"
@@ -196,11 +186,10 @@
                 </li>
             @endif
 
-            {{-- Language Switcher --}}
+            {{-- Language: tap عربي / English (no dropdown) when only ar+en are enabled --}}
             @if (languages()->count() > 1)
-                <li class="px-4 py-2 border-t border-gray-100 dark:border-gray-700 flex items-center gap-3">
-                    @livewire('shop.languageSwitcher')
-                    اللغة
+                <li class="border-t border-gray-100 dark:border-gray-700">
+                    @livewire('shop.languageSwitcher', ['variant' => 'menu'])
                 </li>
             @endif
 
@@ -220,35 +209,23 @@
                     @lang('app.toggleDarkMode')
                 </button>
             </li>
+
+            @if (!is_null(customer()))
+                <li class="border-t border-gray-100 dark:border-gray-700">
+                    <a href="{{ url('customer-logout').'?restaurant='.$restaurant->hash }}"
+                       class="flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        @lang('app.logout')
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const darkIcon = document.getElementById('theme-toggle-dark-icon-nav');
-            const lightIcon = document.getElementById('theme-toggle-light-icon-nav');
-            const btn = document.getElementById('theme-toggle-nav');
-            if (!btn) return;
-
-            if (localStorage.getItem('color-theme') === 'dark' ||
-                (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                lightIcon && lightIcon.classList.remove('hidden');
-            } else {
-                darkIcon && darkIcon.classList.remove('hidden');
-            }
-
-            btn.addEventListener('click', function () {
-                darkIcon && darkIcon.classList.toggle('hidden');
-                lightIcon && lightIcon.classList.toggle('hidden');
-                if (localStorage.getItem('color-theme') === 'light') {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                }
-                document.dispatchEvent(new Event('dark-mode'));
-            });
-        });
-    </script>
+    {{-- Dark mode: theme-toggle-nav wired in resources/js/app.js (initializeThemeToggle + livewire:morphed) --}}
 </header>
+<div class="w-full shrink-0" style="min-height: calc(4.5rem + env(safe-area-inset-top, 0px));" aria-hidden="true"></div>
+</div>

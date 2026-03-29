@@ -1,9 +1,9 @@
 
-<header class="hidden z-50 relative">
+<header class="hidden lg:block fixed top-0 inset-x-0 z-50 w-full pt-[env(safe-area-inset-top,0px)]">
 
     {{-- Same max-width + horizontal padding as guest main / cart grid --}}
     <nav class="sticky top-4 mt-2 w-full">
-        <div class="mx-auto w-full max-w-screen-xl xl:max-w-screen-2xl px-4">
+        <div class="mx-auto w-full max-w-screen-xl-mid px-4">
         <div class="bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md py-2.5 flex flex-wrap justify-between items-center w-full">
             <div class="flex gap-8 items-center">
                 <a href="{{ route('shop_restaurant', [$restaurant->hash]) . '?branch=' . $shopBranch->id }}"
@@ -175,3 +175,4 @@
         </div>
     </nav>
 </header>
+<div class="hidden lg:block h-[calc(5.25rem+env(safe-area-inset-top,0px))] w-full shrink-0" aria-hidden="true"></div>

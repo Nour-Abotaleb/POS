@@ -7,6 +7,8 @@ use App\Models\LanguageSetting;
 
 class LanguageSwitcher extends Component
 {
+    /** 'inline' (footer) | 'menu' (drawer row) */
+    public string $variant = 'inline';
 
     public function setLanguage($locale)
     {
@@ -23,10 +25,14 @@ class LanguageSwitcher extends Component
     {
         $locale = session('customer_locale') ?? global_setting()->locale;
 
-        $activeLanguage = LanguageSetting::where('language_code', $locale)->first();
+        $codes = languages()->pluck('language_code')->all();
+        $hasAr = in_array('ar', $codes, true);
+        $hasEn = in_array('en', $codes, true);
+        $onlyArEnPair = $hasAr && $hasEn && languages()->count() === 2;
 
         return view('livewire.shop.language-switcher', [
-            'activeLanguage' => $activeLanguage,
+            'currentLocale' => $locale,
+            'hasArEnToggle' => $onlyArEnPair,
         ]);
     }
 

@@ -1,4 +1,4 @@
-<div>
+<div class="w-full min-w-0 px-4">
     <!-- Order Type Selection Modal -->
     @php
         $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null;
@@ -65,14 +65,14 @@
 
                                 @if($orderTypeDeliveryStep === 'phone' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
-                                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
+                                        <div class="bg-white dark:bg-gray-800 rounded-md shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
                                             <div class="flex items-center justify-between gap-2">
-                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.close')">
+                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-start">@lang('modules.customer.phoneVerificationHeading')</h3>
+                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md" aria-label="@lang('app.close')">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                                 </button>
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('modules.customer.phoneVerificationHeading')</h3>
                                             </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p>
+                                            {{-- <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p> --}}
                                             <div class="flex gap-2">
                                                 <x-input type="text" class="w-28 shrink-0" wire:model="orderTypeDeliveryPhoneCode" placeholder="+966" />
                                                 <x-input type="tel" class="flex-1" wire:model="orderTypeDeliveryPhone" placeholder="55XXXXXXX" />
@@ -80,7 +80,7 @@
                                             <x-input-error for="orderTypeDeliveryPhoneCode" />
                                             <x-input-error for="orderTypeDeliveryPhone" />
                                             <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #F78433;">
+                                                class="w-full py-3 rounded-md text-white text-sm font-bold" style="background-color: #F78433;">
                                                 @lang('app.next')
                                             </button>
                                         </div>
@@ -372,7 +372,7 @@
         @endif
 
     @if ($showMenu)
-        <div class="grid grid-cols-1 gap-6 px-4 mt-4 mb-32 md:grid-cols-4 md:items-start"
+        <div class="grid grid-cols-1 gap-6 px-4 mt-4 mb-32 items-start md:grid-cols-3 lg:grid-cols-4"
             x-data="{
                 loadedCount: @entangle('menuItemsLoaded'),
                 totalCount: {{ $this->totalMenuItemsCount }},
@@ -392,41 +392,6 @@
             x-init="window.addEventListener('scroll', () => scrollHandler()); $watch('loadedCount', () => { totalCount = {{ $this->totalMenuItemsCount }}; });"
             @scroll.window.throttle.200ms="scrollHandler()">
 
-            {{-- Small screens only: horizontal category chips; md+ keeps sidebar + same column widths as before --}}
-            @if ($this->categoryList->isNotEmpty())
-                <div class="lg:hidden col-span-full w-full min-w-0 -mx-4 mb-1"
-                    x-data="{ activecat: '{{ $this->categoryList->first()?->id }}' }"
-                    x-init="
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach(entry => {
-                                if (entry.isIntersecting) activecat = entry.target.dataset.catid;
-                            });
-                        }, { rootMargin: '-20% 0px -60% 0px' });
-                        document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
-                    ">
-                    <div class="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 py-2 touch-pan-x">
-                        @foreach ($this->categoryList as $cat)
-                            @php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); @endphp
-                            <button
-                                type="button"
-                                wire:key="cat-chip-{{ $cat->id }}"
-                                @click="
-                                    activecat = '{{ $cat->id }}';
-                                    const el = document.getElementById('cat-section-{{ $cat->id }}');
-                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                "
-                                class="flex-shrink-0 snap-center whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-normal transition"
-                                :class="activecat == '{{ $cat->id }}'
-                                    ? 'bg-[#F78433] text-black'
-                                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
-                            >
-                                {{ $catName }}
-                            </button>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
             <!-- Categories (1fr): same fixed-in-viewport behavior as receipt (tracks grid cell on scroll/resize) -->
             <div class="hidden lg:block w-full min-w-0 lg:col-span-1"
                 x-data="{
@@ -435,7 +400,8 @@
                         const cell = this.$el;
                         const rect = cell.getBoundingClientRect();
                         const inset = 16;
-                        const top = Math.max(inset, rect.top);
+                        const headerReserve = 90;
+                        const top = Math.max(inset, rect.top, headerReserve);
                         const maxH = Math.max(220, window.innerHeight - top - inset);
                         const w = rect.width;
                         const rtl = document.documentElement.getAttribute('dir') === 'rtl';
@@ -495,7 +461,61 @@
             </div>
 
             <!-- Products listing (right on desktop) -->
-            <div class="flex-1 min-w-0 space-y-4 md:col-span-2 ">
+            <div class="min-w-0 w-full space-y-4 md:col-span-2 self-start overflow-visible">
+                @if ($this->categoryList->isNotEmpty())
+                    <div class="lg:hidden w-full min-w-0 mb-1 max-md:-mx-4 md:mx-0 min-h-[3.25rem] shrink-0"
+                        x-data="{
+                            activecat: '{{ $this->categoryList->first()?->id }}',
+                            chipBarStyle: '',
+                            chipBarSync() {
+                                const cell = this.$el;
+                                const rect = cell.getBoundingClientRect();
+                                const headerReserve = 68;
+                                const top = Math.max(headerReserve, rect.top);
+                                const w = Math.max(0, rect.width);
+                                const l = rect.left;
+                                this.chipBarStyle = 'position:fixed;z-index:40;top:' + top + 'px;left:' + l + 'px;width:' + w + 'px;overflow-x:auto;-webkit-overflow-scrolling:touch;';
+                            },
+                            init() {
+                                this.chipBarSync();
+                                window.addEventListener('resize', () => this.chipBarSync());
+                                window.addEventListener('scroll', () => this.chipBarSync(), { passive: true });
+                                this.$nextTick(() => {
+                                    if (typeof ResizeObserver !== 'undefined') {
+                                        new ResizeObserver(() => this.chipBarSync()).observe(this.$el);
+                                    }
+                                });
+                                const observer = new IntersectionObserver((entries) => {
+                                    entries.forEach(entry => {
+                                        if (entry.isIntersecting) this.activecat = entry.target.dataset.catid;
+                                    });
+                                }, { rootMargin: '-20% 0px -60% 0px' });
+                                document.querySelectorAll('[data-catid]').forEach(el => observer.observe(el));
+                            }
+                        }">
+                        <div class="flex gap-2 scrollbar-hide snap-x snap-mandatory px-4 py-2 touch-pan-x bg-white dark:bg-gray-900"
+                            :style="chipBarStyle">
+                            @foreach ($this->categoryList as $cat)
+                                @php $catName = $cat->getTranslation('category_name', session('locale', app()->getLocale())); @endphp
+                                <button
+                                    type="button"
+                                    wire:key="cat-chip-{{ $cat->id }}"
+                                    @click="
+                                        activecat = '{{ $cat->id }}';
+                                        const el = document.getElementById('cat-section-{{ $cat->id }}');
+                                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    "
+                                    class="flex-shrink-0 snap-center whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-normal transition"
+                                    :class="activecat == '{{ $cat->id }}'
+                                        ? 'bg-[#F78433] text-white'
+                                        : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
+                                >
+                                    {{ $catName }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
                 @forelse ($this->menuItems as $key => $itemCat)
                     @php $catSection = $this->categoryList->firstWhere('category_name->'.session('locale', app()->getLocale()), $key) ?? $this->categoryList->first(fn($c) => $c->getTranslation('category_name', session('locale', app()->getLocale())) === $key); @endphp
                     <h3 id="cat-section-{{ $catSection?->id ?? Str::slug($key) }}"
@@ -616,7 +636,8 @@
                         const cell = this.$el;
                         const rect = cell.getBoundingClientRect();
                         const inset = 16;
-                        const top = Math.max(inset, rect.top);
+                        const headerReserve = 90;
+                        const top = Math.max(inset, rect.top, headerReserve);
                         const maxH = Math.max(220, window.innerHeight - top - inset);
                         const w = rect.width;
                         const rtl = document.documentElement.getAttribute('dir') === 'rtl';
