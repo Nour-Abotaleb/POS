@@ -4,7 +4,7 @@ return [
   'menu' => 'قائمة طعام',
   'menus' => 'قوائم',
   'menuItem' => 'عناصر القائمة',
-  'profile' => 'حساب تعريفي',
+  'profile' => 'حسابي',
   'myInformation' => 'معلوماتي',
   'itemCategories' => 'فئات العناصر',
   'table' => 'طاولة',

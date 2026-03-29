@@ -78,6 +78,24 @@
         <link href="{{ asset('css/app-custom.css') }}" rel="stylesheet">
     @endif
 
+    {{-- After Vite + optional app-custom: shop cart .scrollbar-hide must win on production even if built CSS is stale --}}
+    <style>
+        .scrollbar-hide {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+        }
+        .scrollbar-hide::-webkit-scrollbar-track,
+        .scrollbar-hide::-webkit-scrollbar-thumb {
+            display: none !important;
+        }
+    </style>
+
     {{-- Include file for widgets if exist --}}
     @includeIf('sections.custom_script_customer')
 
