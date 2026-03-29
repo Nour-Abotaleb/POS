@@ -666,10 +666,10 @@ class UpdateMenuItem extends Component
     private function updateMenuItem(): void
     {
         $updateData = [
-            'item_name' => $this->translationNames[$this->globalLocale],
+            'item_name' => $this->translationNames[$this->globalLocale] ?: ($this->itemName ?: $this->menuItem->item_name),
             'price' => (!$this->hasVariations) ? $this->itemPrice : 0,
             'item_category_id' => $this->itemCategory,
-            'description' => $this->translationDescriptions[$this->globalLocale],
+            'description' => $this->translationDescriptions[$this->globalLocale] ?: ($this->itemDescription ?: $this->menuItem->description),
             'type' => $this->itemType,
             'preparation_time' => $this->preparationTime,
             'calories' => $this->calories,
@@ -687,9 +687,7 @@ class UpdateMenuItem extends Component
             $updateData['batch_serving_size'] = $this->batchServingSize;
         }
 
-        MenuItem::withoutGlobalScope(AvailableMenuItemScope::class)
-            ->where('id', $this->menuItem->id)
-            ->update($updateData);
+        $this->menuItem->update($updateData);
 
         // Refresh the model to get updated data
         $this->menuItem->refresh();

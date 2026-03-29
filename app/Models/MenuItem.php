@@ -114,14 +114,20 @@ class MenuItem extends BaseModel
         return $this->hasOne(MenuItemTranslation::class)->where('locale', $locale ?? app()->getLocale());
     }
 
+    /**
+     * Get value for specified attribute and locale with fallback and caching.
+     */
     public function getTranslatedValue(string $attribute, ?string $locale = null): string
     {
         $locale = $locale ?? app()->getLocale();
-        $cacheKey = "menu_item_{$this->id}_{$attribute}_{$locale}";
+        $updatedAt = $this->updated_at?->timestamp ?? '0';
+        $cacheKey = "menu_item_{$this->id}_{$attribute}_{$locale}_{$updatedAt}";
 
         return Cache::remember($cacheKey, 3600, function () use ($locale, $attribute) {
             $translation = $this->translation($locale)->first();
-            return $translation?->{$attribute} ?? $this->attributes[$attribute] ?? '';
+            // Fallback to base attribute if translation is missing or empty string
+            $value = $translation?->{$attribute};
+            return (string) (($value !== null && $value !== '') ? $value : ($this->attributes[$attribute] ?? ''));
         });
     }
 
@@ -133,6 +139,31 @@ class MenuItem extends BaseModel
     public function getDescriptionAttribute(): string
     {
         return $this->getTranslatedValue('description');
+    }
+
+    /**
+     * Clear all cached translations for this menu item.
+     */
+    public function clearTranslationCache(): void
+    {
+        $attributes = ['item_name', 'description'];
+        try {
+            $locales = array_keys(languages()->pluck('language_name', 'language_code')->toArray());
+            foreach ($locales as $locale) {
+                foreach ($attributes as $attribute) {
+                    // Clear both underscored keys (old) and suffixed keys (new)
+                    Cache::forget("menu_item_{$this->id}_{$attribute}_{$locale}");
+                    $updatedAt = $this->updated_at?->timestamp ?? '0';
+                    Cache::forget("menu_item_{$this->id}_{$attribute}_{$locale}_{$updatedAt}");
+                }
+            }
+        } catch (\Exception $e) {
+            // Fallback for basic locales if helper fails
+            foreach (['en', 'ar'] as $locale) {
+                Cache::forget("menu_item_{$this->id}_item_name_{$locale}");
+                Cache::forget("menu_item_{$this->id}_description_{$locale}");
+            }
+        }
     }
 
     public function itemPhotoUrl(): Attribute
