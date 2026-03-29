@@ -4,7 +4,8 @@
     {{-- Same max-width + horizontal padding as guest main / cart grid --}}
     <nav class="sticky top-4 mt-2 w-full">
         <div class="mx-auto w-full max-w-screen-xl-mid px-4">
-        <div class="bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md py-2.5 flex flex-wrap justify-between items-center w-full">
+        <div class="bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md py-2.5 flex flex-col w-full">
+            <div class="flex flex-wrap justify-between items-center gap-2 px-2.5">
             <div class="flex gap-8 items-center">
                 <a href="{{ route('shop_restaurant', [$restaurant->hash]) . '?branch=' . $shopBranch->id }}"
                     class="inline-flex items-center app-logo">
@@ -15,7 +16,21 @@
                     @endif
                 </a>
 
-                @livewire('forms.shopSelectBranch', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
+                @if ($restaurant->branches->count() > 1)
+                    <a href="{{ route('shop_branches', [$restaurant->hash]) }}?branch={{ $shopBranch->id }}"
+                        wire:navigate
+                        @class([
+                            'inline-flex items-center gap-2 px-3 py-2 rounded-md border text-sm font-semibold bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition',
+                            'ring-2 ring-[var(--brand-primary)] ring-offset-2 dark:ring-offset-gray-800' => request()->routeIs('shop_branches'),
+                        ])
+                        style="border-color: var(--brand-primary); color: var(--brand-primary);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt shrink-0" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                        </svg>
+                        @lang('menu.branches')
+                    </a>
+                @endif
 
 
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
@@ -71,6 +86,7 @@
 
 
                 <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button"
+                    onclick="window.toggleColorTheme && window.toggleColorTheme()"
                     class=" text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5" fill="#000000" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -130,6 +146,15 @@
                                 <a href="{{ route('profile', [$restaurant->hash]) }}" wire:navigate
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">@lang('menu.profile')</a>
                             </li>
+                            @if ($restaurant->branches->count() > 1)
+                            <li>
+                                <a href="{{ route('shop_branches', [$restaurant->hash]) }}?branch={{ $shopBranch->id }}"
+                                    wire:navigate
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    @lang('menu.branches')
+                                </a>
+                            </li>
+                            @endif
                             <li>
                                 <a href="{{ route('my_addresses', [$restaurant->hash]) }}" wire:navigate
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">@lang('menu.myAddresses')</a>
@@ -169,6 +194,8 @@
                             clip-rule="evenodd"></path>
                     </svg>
                 </button>
+            </div>
+
             </div>
 
         </div>

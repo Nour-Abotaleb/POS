@@ -188,6 +188,48 @@ class ShopController extends Controller
     }
 
     /**
+     * Branches grid (customer site): pick a branch — full page like mobile app screen.
+     */
+    public function branches(string $hash)
+    {
+        $restaurant = Restaurant::with(['currency', 'branches.reservationSettings'])->where('hash', $hash)->firstOrFail();
+        $shopBranch = $this->getShopBranch($restaurant);
+
+        $this->redirectIfSubdomainIsEnabled($restaurant);
+
+        if ($restaurant->branches->count() <= 1) {
+            $url = route('shop_restaurant', [$hash]);
+            if (request()->filled('branch')) {
+                $url .= '?branch='.urlencode((string) request('branch'));
+            }
+
+            return redirect()->to($url);
+        }
+
+        return view('shop.branches', compact('restaurant', 'shopBranch'));
+    }
+
+    /**
+     * Set session branch and go to shop home (same behavior as branch picker Livewire).
+     */
+    public function pickBranch(string $hash, $branchParam)
+    {
+        $restaurant = Restaurant::where('hash', $hash)->firstOrFail();
+        $branch = Branch::withoutGlobalScopes()
+            ->where('restaurant_id', $restaurant->id)
+            ->where(function ($q) use ($branchParam) {
+                $q->where('id', $branchParam)->orWhere('unique_hash', (string) $branchParam);
+            })
+            ->firstOrFail();
+
+        session(['branch' => $branch]);
+
+        $this->redirectIfSubdomainIsEnabled($restaurant);
+
+        return redirect()->to(route('shop_restaurant', [$hash]).'?branch='.$branch->id);
+    }
+
+    /**
      * Show contact page
      */
     public function contact(string $hash)

@@ -2,6 +2,7 @@
 
 @section('content')
 
+<x-shop-banner :restaurant="$restaurant" />
 
 <!-- Contact -->
 <div class="max-w-3xl px-4 py-16 mx-auto">

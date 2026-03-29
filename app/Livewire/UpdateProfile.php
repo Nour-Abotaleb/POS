@@ -21,22 +21,49 @@ class UpdateProfile extends Component
     public $allPhoneCodes;
     public $filteredPhoneCodes;
 
-    public function mount()
+    /** Show edit form vs. summary card (shop profile design). */
+    public $showEditForm = false;
+
+    public ?string $restaurantHash = null;
+
+    public $shopBranchId = null;
+
+    public function mount($restaurantHash = null, $shopBranchId = null)
     {
-        if (is_null(customer()))
-        {
+        if (is_null(customer())) {
             return $this->redirect(route('home'));
         }
-        
-        $this->fullName = customer()->name;
-        $this->email = customer()->email;
-        $this->phone = customer()->phone;
-        $this->phoneCode = customer()->phone_code;
-        $this->address = customer()->delivery_address;
+
+        $this->restaurantHash = $restaurantHash;
+        $this->shopBranchId = $shopBranchId;
+        $this->loadCustomerData();
 
         // Initialize phone codes
         $this->allPhoneCodes = collect(Country::pluck('phonecode')->unique()->filter()->values());
         $this->filteredPhoneCodes = $this->allPhoneCodes;
+    }
+
+    protected function loadCustomerData(): void
+    {
+        $c = customer();
+        $this->fullName = $c->name;
+        $this->email = $c->email;
+        $this->phone = $c->phone;
+        $this->phoneCode = $c->phone_code;
+        $this->address = $c->delivery_address;
+    }
+
+    public function startEditing(): void
+    {
+        $this->loadCustomerData();
+        $this->showEditForm = true;
+    }
+
+    public function cancelEditing(): void
+    {
+        $this->loadCustomerData();
+        $this->showEditForm = false;
+        $this->phoneCodeIsOpen = false;
     }
 
     public function updatedPhoneCodeIsOpen($value)
@@ -79,6 +106,9 @@ class UpdateProfile extends Component
 
         session(['customer' => $customer]);
         $this->dispatch('setCustomer', customer: $customer);
+
+        $this->loadCustomerData();
+        $this->showEditForm = false;
 
         $this->alert('success', __('messages.profileUpdated'), [
             'position' => 'center'

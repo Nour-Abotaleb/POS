@@ -91,6 +91,7 @@ function syncThemeToggleIcons() {
     const pairs = [
         ["theme-toggle-dark-icon", "theme-toggle-light-icon"],
         ["theme-toggle-dark-icon-nav", "theme-toggle-light-icon-nav"],
+        ["theme-toggle-label-dark", "theme-toggle-label-light"],
     ];
     const isDark = document.documentElement.classList.contains("dark");
     for (const [darkId, lightId] of pairs) {
@@ -129,46 +130,24 @@ function themeToggleClickHandler() {
     document.dispatchEvent(new Event("dark-mode"));
 }
 
-/** Alpine / Blade can call this directly: @click="window.toggleColorTheme()" */
+/** Guest layout inline script may define a stub first; we replace with full handler. */
 window.toggleColorTheme = themeToggleClickHandler;
 
-/**
- * One delegated listener: shop pages have no #theme-toggle, so the old code returned early
- * and never wired #theme-toggle-nav. Delegation survives Livewire morphs.
- */
-function bindThemeToggleDelegation() {
-    if (window.__themeToggleDelegationBound) {
-        return;
-    }
-    window.__themeToggleDelegationBound = true;
-    document.addEventListener(
-        "click",
-        function (e) {
-            const el =
-                e.target instanceof Element ? e.target : e.target?.parentElement;
-            const btn = el?.closest?.("#theme-toggle, #theme-toggle-nav");
-            if (!btn) {
-                return;
-            }
-            e.preventDefault();
-            themeToggleClickHandler();
-        },
-        true,
-    );
-}
+/** Optional hook for guest inline script after toggling (admin / legacy ID-based icons). */
+window.__syncThemeToggleIcons = syncThemeToggleIcons;
 
 function initializeThemeToggle() {
     applyThemeClassFromStorage();
     syncThemeToggleIcons();
 }
 
+window.initializeThemeToggle = initializeThemeToggle;
+
 document.addEventListener("DOMContentLoaded", () => {
-    bindThemeToggleDelegation();
     initializeThemeToggle();
 });
 
 document.addEventListener("livewire:init", () => {
-    bindThemeToggleDelegation();
     initializeThemeToggle();
 });
 

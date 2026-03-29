@@ -78,6 +78,8 @@ Route::group(['prefix' => 'restaurant'], function () {
     Route::get('/book-a-table/{hash}', [ShopController::class, 'bookTable'])->name('book_a_table');
     Route::get('/contact/{hash}', [ShopController::class, 'contact'])->name('contact');
     Route::get('/about-us/{hash}', [ShopController::class, 'about'])->name('about');
+    Route::get('/branches/{hash}', [ShopController::class, 'branches'])->name('shop_branches');
+    Route::get('/pick-branch/{hash}/{branch}', [ShopController::class, 'pickBranch'])->name('shop_pick_branch');
     Route::get('/profile/{hash}', [ShopController::class, 'profile'])->name('profile');
     Route::get('/orders-success/{id}', [ShopController::class, 'orderSuccess'])->name('order_success');
 });

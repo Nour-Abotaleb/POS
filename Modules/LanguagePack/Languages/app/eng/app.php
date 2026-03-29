@@ -255,5 +255,6 @@ return array(
     'via_pos' => 'POS',
     'via_shop' => 'Shop',
     'via_kiosk' => 'Kiosk',
-    'toggleDarkMode' => 'Toggle Dark Mode',
+    'toggleDarkMode' => 'Dark mode',
+    'toggleLightMode' => 'Light mode',
 );

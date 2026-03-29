@@ -56,7 +56,7 @@
                                             @endif
                                             <button type="button" wire:click="orderTypeDeliveryContinueFromMap" wire:loading.attr="disabled"
                                                 class="w-full py-3 rounded-xl text-white text-sm font-bold shadow-lg"
-                                                style="background-color: #F78433;">
+                                                style="background-color: #011646;">
                                                 @lang('app.next')
                                             </button>
                                         </div>
@@ -80,7 +80,7 @@
                                             <x-input-error for="orderTypeDeliveryPhoneCode" />
                                             <x-input-error for="orderTypeDeliveryPhone" />
                                             <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-md text-white text-sm font-bold" style="background-color: #F78433;">
+                                                class="w-full py-3 rounded-md text-white text-sm font-bold" style="background-color: #011646;">
                                                 @lang('app.next')
                                             </button>
                                         </div>
@@ -101,7 +101,7 @@
                                             <x-input type="text" inputmode="numeric" maxlength="6" class="block w-full text-center text-xl tracking-widest" wire:model="orderTypeDeliveryOtp" placeholder="----" autocomplete="one-time-code" />
                                             <x-input-error for="orderTypeDeliveryOtp" />
                                             <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #F78433;">
+                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #011646;">
                                                 @lang('app.verify')
                                             </button>
                                         </div>
@@ -287,89 +287,8 @@
 
 
 
-    @if(!$isHeaderDisabled)
-        <section class="px-4 bg-white dark:bg-gray-900">
-            @if($headerType === 'text')
-                <div class="py-2 px-4 mx-auto max-w-screen-xl text-center flex items-center justify-center bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
-                    <div class="w-44 h-28 rounded-md overflow-hidden bg-transparent">
-                        <img
-                            src="{{ asset('img/test-logo.png') }}"
-                            alt="Test Logo"
-                            class="w-full h-full object-contain"
-                        >
-                    </div>
-                </div>
-                @elseif($headerType === 'image' && count($headerImages) > 0)
-                <!-- Image Carousel -->
-                <div id="default-carousel" class="relative w-full touch-pan-y" data-carousel="slide">
-                    <!-- Carousel wrapper -->
-                    <div class="relative h-24 overflow-hidden border border-gray-200 rounded-lg shadow-lg sm:h-32 md:h-40 lg:h-48 dark:border-gray-700">
-                        @foreach($headerImages as $index => $image)
-                            <!-- Item {{ $index + 1 }} -->
-                            <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="{{ $image->image_url }}"
-                                    class="absolute block object-cover w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                                    alt="{{ $image->alt_text ?? 'Header Image' }}">
-                            </div>
-                        @endforeach
-                    </div>
-                @elseif($headerType === 'image' && count($headerImages) > 0)
-                    <!-- Image Carousel -->
-                    <div id="default-carousel" class="relative w-full touch-pan-y" data-carousel="slide">
-                        <!-- Carousel wrapper -->
-                        <div class="relative h-24 overflow-hidden border border-gray-200 rounded-lg shadow-lg sm:h-32 md:h-40 lg:h-48 dark:border-gray-700">
-                            @foreach($headerImages as $index => $image)
-                                <!-- Item {{ $index + 1 }} -->
-                                <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                                    <img src="{{ $image->image_url }}"
-                                        class="absolute block object-cover w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                                        alt="{{ $image->alt_text ?? 'Header Image' }}">
-                                </div>
-                            @endforeach
-                        </div>
-
-                        @if(count($headerImages) > 1)
-                            <!-- Slider indicators -->
-                            <div class="absolute z-30 flex space-x-2 -translate-x-1/2 bottom-3 sm:bottom-5 left-1/2 sm:space-x-3 rtl:space-x-reverse">
-                                @foreach($headerImages as $index => $image)
-                                    <button type="button"
-                                            class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-200 {{ $index === 0 ? 'bg-white dark:bg-gray-200' : 'bg-white/50 dark:bg-gray-200/50 hover:bg-white/75 dark:hover:bg-gray-200/75' }}"
-                                            aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-                                            aria-label="Slide {{ $index + 1 }}"
-                                            data-carousel-slide-to="{{ $index }}"></button>
-                                @endforeach
-                            </div>
-
-                            <!-- Slider controls - Hidden on mobile for better touch experience -->
-                            <button type="button" class="absolute top-0 z-30 items-center justify-center hidden h-full px-2 cursor-pointer start-0 sm:flex sm:px-4 group focus:outline-none" data-carousel-prev>
-                                <span class="inline-flex items-center justify-center w-8 h-8 transition-all duration-200 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                    <svg class="w-3 h-3 text-white sm:w-4 sm:h-4 dark:text-gray-200 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                                    </svg>
-                                    <span class="sr-only">Previous</span>
-                                </span>
-                            </button>
-                            <button type="button" class="absolute top-0 z-30 items-center justify-center hidden h-full px-2 cursor-pointer end-0 sm:flex sm:px-4 group focus:outline-none" data-carousel-next>
-                                <span class="inline-flex items-center justify-center w-8 h-8 transition-all duration-200 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                    <svg class="w-3 h-3 text-white sm:w-4 sm:h-4 dark:text-gray-200 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                    </svg>
-                                    <span class="sr-only">Next</span>
-                                </span>
-                            </button>
-                        @endif
-                    </div>
-                @else
-                    <!-- Default header if no custom settings -->
-                    <div
-                    class="py-4 px-4 mx-auto max-w-screen-xl text-center lg:py-8 lg:px-12 bg-[var(--brand-primary)]/10 dark:bg-gray-800 rounded-lg">
-                    <h1
-                        class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
-                            @lang('messages.frontHeroHeading')</h1>
-                    </div>
-                @endif
-            </section>
-        @endif
+    {{-- Admin: Settings → Customer site (text header or image carousel) --}}
+    <x-shop-banner :restaurant="$restaurant" text-banner-margin-top="mt-4" />
 
     @if ($showMenu)
         <div class="grid grid-cols-1 gap-6 px-4 mt-4 mb-32 items-start md:grid-cols-3 lg:grid-cols-4"
@@ -426,7 +345,7 @@
                 <div x-ref="categoriesFixedPanel" class="pb-4 scrollbar-hide" :style="categoriesFixedStyle">
 
                     <!-- Single bordered container — click scrolls to section, highlights on scroll -->
-                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm"
                         x-data="{ activecat: '{{ $this->categoryList->first()?->id }}' }"
                         x-init="
                             const observer = new IntersectionObserver((entries) => {
@@ -507,7 +426,7 @@
                                     "
                                     class="flex-shrink-0 snap-center whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-normal transition"
                                     :class="activecat == '{{ $cat->id }}'
-                                        ? 'bg-[#F78433] text-white'
+                                        ? 'bg-[#011646] text-white'
                                         : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
                                 >
                                     {{ $catName }}
@@ -525,7 +444,7 @@
                         @foreach ($itemCat as $item)
                             <div
                                 @class([
-                                    'cursor-pointer border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-md shadow-sm hover:shadow-md transition',
+                                    'cursor-pointer border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-md transition',
                                     'opacity-70' => !$item->in_stock,
                                 ])
                                 wire:key='menu-item-{{ $item->id . microtime() }}'
@@ -540,11 +459,11 @@
                                                         title="@lang('modules.menu.' . $item->type)" alt="" /> --}}
                                                     <span class="truncate">{{ $item->getTranslatedValue('item_name', session('locale')) }}</span>
                                                 </div>
-                                                @if ($item->calories)
+                                                {{-- @if ($item->calories)
                                                     <div class="text-xs text-gray-500 dark:text-gray-400">
                                                         {{ $item->calories }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                                 @if ($item->description)
                                                     <div class="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
                                                         {{ $item->getTranslatedValue('description', session('locale')) }}
@@ -554,31 +473,38 @@
                                         </div>
 
                                         <div class="mt-3 flex items-center justify-between gap-3">
-                                            <div class="flex items-center gap-3 min-w-0">
+                                            <div class="flex items-center gap-3 min-w-0 flex-1">
                                                 @if ($item->variations_count == 0)
                                                     <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-white whitespace-nowrap" style="background-color: #F7F7F7;">
                                                         {!! currency_format($item->price, $restaurant->currency_id) !!}
                                                     </span>
                                                 @endif
-                                                @if ($item->preparation_time)
+                                               {{-- @if ($item->preparation_time)
                                                     <span class="text-xs text-gray-600 dark:text-gray-400 truncate">
                                                         @lang('modules.menu.preparationTime') : {{ $item->preparation_time }} @lang('modules.menu.minutes')
                                                     </span>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
-                                            @if ($canCreateOrder)
-                                                @if (!$item->in_stock)
-                                                    <div class="text-sm font-semibold text-red-600">@lang('modules.menu.notAvailable')</div>
-                                                @elseif ($item->variations_count > 0 && $restaurant->allow_customer_orders)
-                                                    <x-secondary-button-table wire:click='showItemVariations({{ $item->id }})'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 me-1" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                                                        </svg>
-                                                        @lang('modules.menu.showVariations') ({{ $item->variations_count }})
-                                                    </x-secondary-button-table>
+                                            <div class="flex items-center justify-end gap-2 shrink-0">
+                                                @if ($item->calories)
+                                                    <span class="inline-flex items-center px-3 py-1.5 text-xs rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-white whitespace-nowrap" style="background-color: #F7F7F7;">
+                                                        {{ $item->calories }} @lang('modules.menu.calories')
+                                                    </span>
                                                 @endif
-                                            @endif
+                                                @if ($canCreateOrder)
+                                                    @if (!$item->in_stock)
+                                                        <div class="text-sm font-semibold text-red-600">@lang('modules.menu.notAvailable')</div>
+                                                    @elseif ($item->variations_count > 0 && $restaurant->allow_customer_orders)
+                                                        <x-secondary-button-table wire:click='showItemVariations({{ $item->id }})'>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4 me-1" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                                                            </svg>
+                                                            @lang('modules.menu.showVariations') ({{ $item->variations_count }})
+                                                        </x-secondary-button-table>
+                                                    @endif
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div
@@ -725,7 +651,7 @@
                                     <!-- Plus -->
                                     <button type="button" wire:click="addQty('{{ $key }}')"
                                     class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
-                                    style="background-color: #F78433;">
+                                    style="background-color: #011646;">
                                     <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                                     </svg>
@@ -735,7 +661,7 @@
                                 <!-- Minus -->
                                 <button type="button" wire:click="subQty('{{ $key }}')"
                                     class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
-                                    style="background-color: #F78433;">
+                                    style="background-color: #011646;">
                                     <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                                     </svg>
@@ -782,8 +708,8 @@
                                 <button type="button"
                                     wire:click="{{ $sidebarPayNow ? 'placeOrder(true)' : 'placeOrder' }}"
                                     wire:loading.attr="disabled"
-                                    class="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2"
-                                    style="background-color: #F58533;">
+                                    class="w-full py-3 rounded-md text-white font-bold text-sm flex items-center justify-center gap-2"
+                                    style="background-color: #011646;">
                                     <span wire:loading.remove wire:target="placeOrder">
                                         {{ $sidebarPayNow ? __('modules.order.payNow') : __('modules.order.placeOrder') }}
                                     </span>
@@ -800,7 +726,7 @@
 
                     </div>
                 @else
-                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm p-8 text-center">
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-8 text-center">
                         <div class="mx-auto mb-4 h-14 w-14 rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                             <svg class="w-7 h-7 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7.5M17 13l1.5 7.5M9 21h6"/>

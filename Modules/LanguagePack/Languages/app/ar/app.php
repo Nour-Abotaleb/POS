@@ -249,5 +249,6 @@ return [
   'via_pos' => 'نقاط البيع',
   'via_shop' => 'محل',
   'via_kiosk' => 'كشك',
-  'toggleDarkMode' => 'تبديل الوضع الداكن',
+  'toggleDarkMode' => 'وضع داكن',
+  'toggleLightMode' => 'وضع فاتح',
 ];
