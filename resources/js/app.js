@@ -12,27 +12,27 @@ window.ApexCharts = ApexCharts;
 
 // Desktop sidebar toggle: collapses/expands sidebar, updates localStorage, adjusts content margin, rotates icon
 window.toggleDesktopSidebar = function () {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-    const icon = document.getElementById('toggle-sidebar-icon');
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.getElementById("main-content");
+    const icon = document.getElementById("toggle-sidebar-icon");
     if (!sidebar) return;
-    const isCollapsed = sidebar.classList.contains('hidden');
+    const isCollapsed = sidebar.classList.contains("hidden");
     if (isCollapsed) {
-        sidebar.classList.remove('hidden');
-        sidebar.classList.add('flex', 'lg:flex');
+        sidebar.classList.remove("hidden");
+        sidebar.classList.add("flex", "lg:flex");
         if (mainContent) {
-            mainContent.classList.add('ltr:lg:ml-64', 'rtl:lg:mr-64');
+            mainContent.classList.add("ltr:lg:ml-64", "rtl:lg:mr-64");
         }
-        localStorage.setItem('menu-collapsed', 'false');
-        if (icon) icon.classList.remove('rotate-180');
+        localStorage.setItem("menu-collapsed", "false");
+        if (icon) icon.classList.remove("rotate-180");
     } else {
-        sidebar.classList.add('hidden');
-        sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
+        sidebar.classList.add("hidden");
+        sidebar.classList.remove("flex", "lg:flex", "translate-x-0");
         if (mainContent) {
-            mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
+            mainContent.classList.remove("ltr:lg:ml-64", "rtl:lg:mr-64");
         }
-        localStorage.setItem('menu-collapsed', 'true');
-        if (icon) icon.classList.add('rotate-180');
+        localStorage.setItem("menu-collapsed", "true");
+        if (icon) icon.classList.add("rotate-180");
     }
 };
 
@@ -57,7 +57,7 @@ window.toggleMobileSidebar = function () {
 // Check localStorage immediately to set initial state
 if (localStorage.getItem("menu-collapsed") === "true") {
     // Add a class to body or html to handle initial state
-    document.documentElement.classList.add('menu-collapsed');
+    document.documentElement.classList.add("menu-collapsed");
 }
 
 document.addEventListener("livewire:navigating", () => {
@@ -74,17 +74,6 @@ document.addEventListener("livewire:morphed", () => {
     initializeThemeToggle();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    bindThemeToggleDelegation();
-    initializeThemeToggle();
-});
-
-/** Livewire 3: use livewire:init (livewire:load was removed in v3). */
-document.addEventListener("livewire:init", () => {
-    bindThemeToggleDelegation();
-    initializeThemeToggle();
-});
-
 function applyThemeClassFromStorage() {
     if (
         localStorage.getItem("color-theme") === "dark" ||
@@ -97,7 +86,7 @@ function applyThemeClassFromStorage() {
     }
 }
 
-/** Sync moon/sun icons for admin bar + shop nav (same IDs in app.js + shop-navigation). */
+/** Admin bar + shop drawer moon/sun (Tailwind darkMode: "class" on documentElement). */
 function syncThemeToggleIcons() {
     const pairs = [
         ["theme-toggle-dark-icon", "theme-toggle-light-icon"],
@@ -140,32 +129,48 @@ function themeToggleClickHandler() {
     document.dispatchEvent(new Event("dark-mode"));
 }
 
+/** Alpine / Blade can call this directly: @click="window.toggleColorTheme()" */
+window.toggleColorTheme = themeToggleClickHandler;
+
 /**
- * One delegated listener so theme works after Livewire morphs and for drawer buttons inside Alpine x-show.
- * Per-element listeners were lost when Livewire replaced the shop header DOM.
+ * One delegated listener: shop pages have no #theme-toggle, so the old code returned early
+ * and never wired #theme-toggle-nav. Delegation survives Livewire morphs.
  */
 function bindThemeToggleDelegation() {
     if (window.__themeToggleDelegationBound) {
         return;
     }
     window.__themeToggleDelegationBound = true;
-    document.addEventListener("click", function (e) {
-        const el =
-            e.target instanceof Element ? e.target : e.target?.parentElement;
-        const btn = el?.closest?.("#theme-toggle, #theme-toggle-nav");
-        if (!btn) {
-            return;
-        }
-        e.preventDefault();
-        themeToggleClickHandler();
-    });
+    document.addEventListener(
+        "click",
+        function (e) {
+            const el =
+                e.target instanceof Element ? e.target : e.target?.parentElement;
+            const btn = el?.closest?.("#theme-toggle, #theme-toggle-nav");
+            if (!btn) {
+                return;
+            }
+            e.preventDefault();
+            themeToggleClickHandler();
+        },
+        true,
+    );
 }
 
-/** Apply stored theme + sync icons (safe to call after every morph). */
 function initializeThemeToggle() {
     applyThemeClassFromStorage();
     syncThemeToggleIcons();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    bindThemeToggleDelegation();
+    initializeThemeToggle();
+});
+
+document.addEventListener("livewire:init", () => {
+    bindThemeToggleDelegation();
+    initializeThemeToggle();
+});
 
 function observeThemeToggleMount() {
     try {
@@ -181,36 +186,43 @@ document.addEventListener("livewire:navigated", () => {
         observeThemeToggleMount();
 
         // Check initial state on page load
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const isPosPage = mainContent && mainContent.getAttribute('data-pos-page') === 'true';
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("main-content");
+        const isPosPage =
+            mainContent && mainContent.getAttribute("data-pos-page") === "true";
 
         // On POS desktop, sidebar starts collapsed so the expand arrow works
         if (isPosPage && sidebar && window.innerWidth >= 1024) {
-            localStorage.setItem('menu-collapsed', 'true');
+            localStorage.setItem("menu-collapsed", "true");
         }
 
         // Initial state without transitions (skip on POS so sidebar stays hidden on desktop)
-        if (window.innerWidth >= 1024 && sidebar != null && mainContent != null && !isPosPage) {
+        if (
+            window.innerWidth >= 1024 &&
+            sidebar != null &&
+            mainContent != null &&
+            !isPosPage
+        ) {
             if (localStorage.getItem("menu-collapsed") === "true") {
-                sidebar.classList.add('hidden');
-                sidebar.classList.remove('flex', 'lg:flex', 'translate-x-0');
-                mainContent.classList.remove('ltr:lg:ml-64', 'rtl:lg:mr-64');
+                sidebar.classList.add("hidden");
+                sidebar.classList.remove("flex", "lg:flex", "translate-x-0");
+                mainContent.classList.remove("ltr:lg:ml-64", "rtl:lg:mr-64");
             } else {
-                sidebar.classList.remove('hidden', '-translate-x-full');
-                sidebar.classList.add('flex', 'lg:flex', 'translate-x-0');
-                mainContent.classList.add('ltr:lg:ml-64', 'rtl:lg:mr-64');
+                sidebar.classList.remove("hidden", "-translate-x-full");
+                sidebar.classList.add("flex", "lg:flex", "translate-x-0");
+                mainContent.classList.add("ltr:lg:ml-64", "rtl:lg:mr-64");
             }
         }
 
         // Initial rotation state for the single toggle icon
-        const toggleIcon = document.getElementById('toggle-sidebar-icon');
+        const toggleIcon = document.getElementById("toggle-sidebar-icon");
         if (toggleIcon) {
-            const collapsed = isPosPage || localStorage.getItem("menu-collapsed") === "true";
-            toggleIcon.classList.toggle('rotate-180', collapsed);
+            const collapsed =
+                isPosPage || localStorage.getItem("menu-collapsed") === "true";
+            toggleIcon.classList.toggle("rotate-180", collapsed);
         }
 
-        const toggleSidebar = document.getElementById('toggle-sidebar');
+        const toggleSidebar = document.getElementById("toggle-sidebar");
         if (toggleSidebar) {
             toggleSidebar.onclick = window.toggleDesktopSidebar;
         }
@@ -220,25 +232,31 @@ document.addEventListener("livewire:navigated", () => {
 
         if (sidebar) {
             const sidebarBackdrop = document.getElementById("sidebarBackdrop");
-            const toggleSidebarMobileSearch = document.getElementById("toggleSidebarMobileSearch");
+            const toggleSidebarMobileSearch = document.getElementById(
+                "toggleSidebarMobileSearch",
+            );
 
-            if (toggleSidebarMobileSearch && typeof toggleSidebarMobileSearch.addEventListener === 'function') {
+            if (
+                toggleSidebarMobileSearch &&
+                typeof toggleSidebarMobileSearch.addEventListener === "function"
+            ) {
                 toggleSidebarMobileSearch.addEventListener("click", () => {
-                    if (window.toggleMobileSidebar) window.toggleMobileSidebar();
+                    if (window.toggleMobileSidebar)
+                        window.toggleMobileSidebar();
                 });
             }
         }
 
         // Reinitialize Flowbite components (may fail on pages with different DOM, e.g. POS)
-        if (typeof initFlowbite === 'function') {
+        if (typeof initFlowbite === "function") {
             try {
                 initFlowbite();
             } catch (e) {
-                console.warn('Flowbite init:', e);
+                console.warn("Flowbite init:", e);
             }
         }
     } catch (err) {
-        console.warn('livewire:navigated handler:', err);
+        console.warn("livewire:navigated handler:", err);
     }
 });
 
@@ -267,21 +285,22 @@ window.addEventListener("load", (ev) => {
 
 function initPasswordToggles() {
     // Remove existing listeners to prevent duplicates
-    document.removeEventListener('click', handlePasswordToggle);
+    document.removeEventListener("click", handlePasswordToggle);
     // Add single event listener on document
-    document.addEventListener('click', handlePasswordToggle);
+    document.addEventListener("click", handlePasswordToggle);
 }
 
 function handlePasswordToggle(event) {
-    const toggleButton = event.target && event.target.closest('.toggle-password');
+    const toggleButton =
+        event.target && event.target.closest(".toggle-password");
     if (!toggleButton) return;
 
-    const wrapper = toggleButton.closest('.relative');
+    const wrapper = toggleButton.closest(".relative");
     if (!wrapper) return;
 
-    const passwordInput = wrapper.querySelector('.password');
-    const eyeIcon = wrapper.querySelector('.eye-icon');
-    const eyeSlashIcon = wrapper.querySelector('.eye-slash-icon');
+    const passwordInput = wrapper.querySelector(".password");
+    const eyeIcon = wrapper.querySelector(".eye-icon");
+    const eyeSlashIcon = wrapper.querySelector(".eye-slash-icon");
     if (!passwordInput || !eyeIcon || !eyeSlashIcon) return;
 
     const isPassword = passwordInput.type === "password";
@@ -293,11 +312,10 @@ function handlePasswordToggle(event) {
 initPasswordToggles();
 
 // Re-initialize when Livewire updates the DOM
-document.addEventListener('livewire:navigated', () => {
+document.addEventListener("livewire:navigated", () => {
     try {
         initPasswordToggles();
     } catch (e) {
-        console.warn('initPasswordToggles:', e);
+        console.warn("initPasswordToggles:", e);
     }
 });
-
