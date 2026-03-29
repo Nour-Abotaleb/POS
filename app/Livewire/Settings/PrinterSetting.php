@@ -17,7 +17,7 @@ class PrinterSetting extends Component
 {
     use WithPagination, LivewireAlert;
     public $title;
-    public $printChoice;
+    public $printChoice = 'browserPopupPrint';
     public $printFormat; // thermalPrinter / nonThermalPrinter
     // public $selectprintFormat; // thermal56mm, thermal80mm, etc.
     public $invoiceQrCode;

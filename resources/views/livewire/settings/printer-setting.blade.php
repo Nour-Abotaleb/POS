@@ -245,7 +245,7 @@
                 @lang('modules.printerSetting.downloadDesktopApp')
             </h4>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Windows -->
                 @if(!empty($desktopApp->windows_file_path))
                 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 text-center hover:shadow-md transition-shadow {{ request()->header('User-Agent') && str_contains(strtolower(request()->header('User-Agent')), 'windows') ? 'ring-2 ring-blue-500 ring-offset-2 bg-blue-50 dark:bg-blue-900/20' : '' }}">
@@ -297,6 +297,30 @@
                     </a>
                 </div>
                 @endif
+
+                <!-- Android -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 text-center hover:shadow-md transition-shadow {{ request()->header('User-Agent') && str_contains(strtolower(request()->header('User-Agent')), 'android') ? 'ring-2 ring-green-500 ring-offset-2 bg-green-50 dark:bg-green-900/20' : '' }}">
+                    <div class="flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0004.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592c.0416-.0714.017-.1637-.0544-.2046-.0714-.042-.1637-.0174-.2046.0544l-1.9973 3.459c-1.4925-.6892-3.2104-1.0772-5.0601-1.0772-1.8497 0-3.5676.388-5.0601 1.0772l-1.9973-3.459c-.0416-.0718-.1336-.0964-.2046-.0544-.0714.0409-.096.1332-.0544.2046l1.9973 3.4592C4.3855 10.5982 2.3431 13.9113 2 17.8427h20c-.3431-3.9314-2.3855-7.2445-5.0725-8.5213"></path></svg>
+                        <h5 class="ml-2 text-lg font-semibold text-gray-900 dark:text-white">Android</h5>
+                        @if(request()->header('User-Agent') && str_contains(strtolower(request()->header('User-Agent')), 'android'))
+                            <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                @lang('modules.printerSetting.yourDevice')
+                            </span>
+                        @endif
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Download RawBT Print Service for Android</p>
+                    <a href="https://play.google.com/store/apps/details?id=ru.a402d.rawbtprinter" target="_blank"
+                       class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                        <svg class="w-4 h-4 me-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Download RawBT
+                    </a>
+                </div>
             </div>
         </div>
     @endif

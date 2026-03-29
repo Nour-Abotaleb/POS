@@ -656,8 +656,8 @@
                    (document.referrer.includes('android-app://'));
         }
 
-        // Show back button if in PWA mode
-        if (isPWA()) {
+        // Show back button if in PWA mode or mobile
+        if (isPWA() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             const backButton = document.getElementById('backButton');
             if (backButton) {
                 backButton.style.display = 'block';
@@ -669,33 +669,15 @@
             if (window.history.length > 1) {
                 window.history.back();
             } else {
-                // If no history, redirect to orders page or home
                 window.location.href = '{{ route("orders.index") }}';
             }
         }
 
-        // Auto-trigger print dialog when page loads and close the window afterward
         window.onload = function() {
-            const closeAfterPrint = () => {
-                // In PWA, navigate back instead of trying to close the window
-                if (isPWA()) {
-                    goBack();
-                } else {
-                    window.close();
-                }
-            };
-
-            // Set handler for after print where supported
-            if ('onafterprint' in window) {
-                window.onafterprint = function() {
-                    closeAfterPrint();
-                };
-            } else {
-                // Fallback: attempt to close shortly after print is triggered
-                setTimeout(closeAfterPrint, 1000);
-            }
-
-            window.print();
+            // Delay print slightly to ensure all fonts and assets are loaded for Android
+            setTimeout(function() {
+                window.print();
+            }, 500);
         };
     </script>
 </body>
