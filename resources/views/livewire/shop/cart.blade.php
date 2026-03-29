@@ -288,7 +288,7 @@
 
 
     {{-- Admin: Settings → Customer site (text header or image carousel) --}}
-    <x-shop-banner :restaurant="$restaurant" text-banner-margin-top="mt-4" />
+    <x-shop-banner :restaurant="$restaurant" />
 
     @if ($showMenu)
         <div class="grid grid-cols-1 gap-6 px-4 mt-4 mb-32 items-start md:grid-cols-3 lg:grid-cols-4"

@@ -57,7 +57,7 @@
         @endif
 
         @if($addresses->isEmpty() && !$showAddressForm)
-            <div class="mx-auto w-full max-w-xl rounded-md border border-gray-100 bg-white px-6 py-10 dark:bg-gray-800">
+            <div class="mx-auto mt-4 w-full max-w-xl rounded-md border border-gray-100 bg-white px-6 py-10 dark:bg-gray-800">
                 <div class="flex flex-col items-center text-center">
                     <div class="relative mb-6 text-gray-300 dark:text-gray-600" aria-hidden="true">
                         <svg class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.25">
