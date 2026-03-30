@@ -212,7 +212,7 @@ return array(
     'reset' => 'إعادة تعيين',
     'filterByMenu' => 'فلترة حسب القائمة',
     'filterByCategory' => 'فلترة حسب الفئة',
-    'toggleDarkMode' => 'تبديل الوضع المظلم',
+    'toggleDarkMode' => ' الوضع ',
     'notOnboarded' => 'لم يتم الإعداد',
     'createdAt' => 'تاريخ الإنشاء',
 
