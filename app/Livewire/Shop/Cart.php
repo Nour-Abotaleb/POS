@@ -671,6 +671,40 @@ class Cart extends Component
         $this->orderTypeDeliveryStep = 'otp';
     }
 
+    /**
+     * Firebase Phone Auth flow:
+     * - The OTP is sent from the browser via Firebase
+     * - Backend only ensures the Customer exists and moves UI to the OTP step
+     */
+    public function orderTypeDeliveryFirebaseOtpSent(string $phoneCode, string $phone): void
+    {
+        // Store values so the next step can load the correct Customer
+        $this->orderTypeDeliveryPhoneCode = $phoneCode;
+        $this->orderTypeDeliveryPhone = $phone;
+
+        $this->validate([
+            'orderTypeDeliveryPhoneCode' => 'required',
+            'orderTypeDeliveryPhone' => 'required|string|min:6',
+        ]);
+
+        // Create or reuse a customer record for this phone within the restaurant
+        Customer::withoutGlobalScopes()->firstOrCreate(
+            [
+                'phone_code' => $this->orderTypeDeliveryPhoneCode,
+                'phone' => $this->orderTypeDeliveryPhone,
+                'restaurant_id' => $this->restaurant->id,
+            ],
+            ['name' => 'Guest']
+        );
+
+        $this->alert('success', __('messages.verificationCodeSent'), [
+            'toast' => true,
+            'position' => 'top-end',
+        ]);
+
+        $this->orderTypeDeliveryStep = 'otp';
+    }
+
     public function orderTypeDeliveryVerifyAndComplete(): void
     {
         $this->validate([
@@ -689,6 +723,45 @@ class Cart extends Component
                 'position' => 'top-end',
             ]);
 
+            return;
+        }
+
+        session(['customer' => $customer]);
+        $this->customer = $customer;
+        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
+        $this->orderTypeDeliveryOtp = '';
+        $this->orderTypeDeliveryStep = 'map';
+        $this->dispatch('init-order-type-delivery-map');
+    }
+
+    /**
+     * Firebase Phone Auth flow:
+     * - OTP verification is done on the client with Firebase
+     * - Backend only loads the Customer and continues checkout
+     *
+     * Note: This trusts the Firebase client confirmation.
+     */
+    public function orderTypeDeliveryFirebaseVerifyAndComplete(): void
+    {
+        // Phone fields are set by orderTypeDeliveryFirebaseOtpSent()
+        $this->validate([
+            'orderTypeDeliveryPhoneCode' => 'required',
+            'orderTypeDeliveryPhone' => 'required|string|min:6',
+        ]);
+
+        $customer = Customer::withoutGlobalScopes()
+            ->where('phone_code', $this->orderTypeDeliveryPhoneCode)
+            ->where('phone', $this->orderTypeDeliveryPhone)
+            ->where('restaurant_id', $this->restaurant->id)
+            ->first();
+
+        if (! $customer) {
+            $this->alert('error', __('messages.invalidVerificationCode'), [
+                'toast' => true,
+                'position' => 'top-end',
+            ]);
+
+            $this->orderTypeDeliveryStep = 'phone';
             return;
         }
 

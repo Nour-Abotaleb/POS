@@ -68,19 +68,34 @@
                                         <div class="bg-white dark:bg-gray-800 rounded-md shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
                                             <div class="flex items-center justify-between gap-2">
                                                 <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-start">@lang('modules.customer.phoneVerificationHeading')</h3>
-                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md" aria-label="@lang('app.close')">
+                                                <button type="button" id="orderTypeDeliveryCloseFlowBtn" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md" aria-label="@lang('app.close')">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                                 </button>
                                             </div>
                                             {{-- <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p> --}}
                                             <div class="flex gap-2">
-                                                <x-input type="text" class="w-28 shrink-0" wire:model="orderTypeDeliveryPhoneCode" placeholder="+966" />
-                                                <x-input type="tel" class="flex-1" wire:model="orderTypeDeliveryPhone" placeholder="55XXXXXXX" />
+                                                <x-input
+                                                    id="orderTypeDeliveryPhoneCodeInput"
+                                                    type="text"
+                                                    class="w-28 shrink-0"
+                                                    wire:model="orderTypeDeliveryPhoneCode"
+                                                    placeholder="+966"
+                                                />
+                                                <x-input
+                                                    id="orderTypeDeliveryPhoneInput"
+                                                    type="tel"
+                                                    class="flex-1"
+                                                    wire:model="orderTypeDeliveryPhone"
+                                                    placeholder="55XXXXXXX"
+                                                />
                                             </div>
                                             <x-input-error for="orderTypeDeliveryPhoneCode" />
                                             <x-input-error for="orderTypeDeliveryPhone" />
-                                            <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-md text-white text-sm font-bold" style="background-color: #011646;">
+                                            <div id="orderTypeDeliveryFirebaseError" class="text-sm text-red-600 text-center" style="display: none;"></div>
+                                            <div id="orderTypeDeliveryRecaptchaContainer" style="display: none;"></div>
+                                            <button type="button" id="orderTypeDeliverySendOtpBtn"
+                                                class="w-full py-3 rounded-md text-white text-sm font-bold"
+                                                style="background-color: #011646;">
                                                 @lang('app.next')
                                             </button>
                                         </div>
@@ -91,17 +106,28 @@
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
                                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-center">
                                             <div class="flex items-center justify-between gap-2">
-                                                <button type="button" wire:click="orderTypeDeliveryBackToPhone" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.back')">
+                                                <button type="button" id="orderTypeDeliveryBackToPhoneBtn" wire:click="orderTypeDeliveryBackToPhone" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.back')">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                                                 </button>
                                                 <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('app.verification')</h3>
                                             </div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">@lang('messages.verificationCodeSent')</p>
                                             <p class="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">+{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}</p>
-                                            <x-input type="text" inputmode="numeric" maxlength="6" class="block w-full text-center text-xl tracking-widest" wire:model="orderTypeDeliveryOtp" placeholder="----" autocomplete="one-time-code" />
+                                            <x-input
+                                                id="orderTypeDeliveryOtpInput"
+                                                type="text"
+                                                inputmode="numeric"
+                                                maxlength="6"
+                                                class="block w-full text-center text-xl tracking-widest"
+                                                wire:model="orderTypeDeliveryOtp"
+                                                placeholder="----"
+                                                autocomplete="one-time-code"
+                                            />
                                             <x-input-error for="orderTypeDeliveryOtp" />
-                                            <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #011646;">
+                                            <div id="orderTypeDeliveryFirebaseOtpError" class="text-sm text-red-600 text-center" style="display: none;"></div>
+                                            <button type="button" id="orderTypeDeliveryVerifyOtpBtn"
+                                                class="w-full py-3 rounded-xl text-white text-sm font-bold"
+                                                style="background-color: #011646;">
                                                 @lang('app.verify')
                                             </button>
                                         </div>
@@ -179,6 +205,167 @@
 
     @script
     <script>
+        (function () {
+        // Delivery checkout: Firebase Phone Auth (OTP) for phone verification modal (ES5 compatible)
+        var firebaseConfig = {!! json_encode(config('firebase.web')) !!};
+        console.log('Firebase config used on page:', firebaseConfig);
+        var orderTypeDeliveryConfirmationResult = null;
+
+        function setFirebaseError(elId, message) {
+            var el = document.getElementById(elId);
+            if (!el) return;
+            if (!message) {
+                el.textContent = '';
+                el.style.display = 'none';
+                return;
+            }
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+
+        function loadFirebaseSdk() {
+            if (window.firebase && window.firebase.auth && window.firebase.auth.RecaptchaVerifier) return Promise.resolve();
+            if (window.__orderTypeDeliveryFirebaseSdkLoading) return window.__orderTypeDeliveryFirebaseSdkLoading;
+
+            window.__orderTypeDeliveryFirebaseSdkLoading = (function () {
+                function loadScript(src) {
+                    return new Promise(function (resolve, reject) {
+                        var s = document.createElement('script');
+                        s.src = src;
+                        s.async = true;
+                        s.onload = resolve;
+                        s.onerror = function () { reject(new Error('Failed to load: ' + src)); };
+                        document.head.appendChild(s);
+                    });
+                }
+
+                // Compat builds let us call RecaptchaVerifier + signInWithPhoneNumber easily
+                return loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js')
+                    .then(function () { return loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js'); });
+            })();
+
+            return window.__orderTypeDeliveryFirebaseSdkLoading;
+        }
+
+        function getE164Phone(phoneCode, phone) {
+            var cc = String(phoneCode || '').replace(/[^\d]/g, '');
+            var p = String(phone || '').replace(/[^\d]/g, '');
+            if (!cc || !p) return null;
+            return '+' + cc + p;
+        }
+
+        function ensureFirebaseApp() {
+            var required = ['apiKey', 'authDomain', 'projectId', 'appId'];
+            var missing = [];
+            for (var i = 0; i < required.length; i++) {
+                var k = required[i];
+                if (!firebaseConfig || !firebaseConfig[k]) missing.push(k);
+            }
+            if (missing.length) {
+                throw new Error('Firebase config missing in .env: ' + missing.join(', '));
+            }
+
+            if (window.firebase && window.firebase.apps && window.firebase.apps.length) return window.firebase.apps[0];
+            return window.firebase.initializeApp(firebaseConfig);
+        }
+
+        function orderTypeDeliveryFirebaseSendOtp() {
+            var sendBtn = document.getElementById('orderTypeDeliverySendOtpBtn');
+            if (sendBtn) sendBtn.disabled = true;
+
+            orderTypeDeliveryConfirmationResult = null;
+            setFirebaseError('orderTypeDeliveryFirebaseError', '');
+
+            return loadFirebaseSdk()
+                .then(function () {
+                    ensureFirebaseApp();
+                    var auth = window.firebase.auth();
+
+                    var phoneCodeEl = document.getElementById('orderTypeDeliveryPhoneCodeInput');
+                    var phoneEl = document.getElementById('orderTypeDeliveryPhoneInput');
+                    var phoneCode = phoneCodeEl ? phoneCodeEl.value : '';
+                    var phone = phoneEl ? phoneEl.value : '';
+                    var e164 = getE164Phone(phoneCode, phone);
+                    if (!e164) throw new Error('Enter a valid phone number.');
+
+                    var appVerifier = new window.firebase.auth.RecaptchaVerifier(
+                        'orderTypeDeliveryRecaptchaContainer',
+                        { size: 'invisible' },
+                        auth
+                    );
+
+                    return auth.signInWithPhoneNumber(e164, appVerifier).then(function (result) {
+                        orderTypeDeliveryConfirmationResult = result;
+                        return $wire.call('orderTypeDeliveryFirebaseOtpSent', phoneCode, phone);
+                    });
+                })
+                .catch(function (err) {
+                    var msg = (err && err.message) ? err.message : String(err);
+                    setFirebaseError('orderTypeDeliveryFirebaseError', msg);
+                })
+                .finally(function () {
+                    if (sendBtn) sendBtn.disabled = false;
+                });
+        }
+
+        function orderTypeDeliveryFirebaseConfirmOtp() {
+            var verifyBtn = document.getElementById('orderTypeDeliveryVerifyOtpBtn');
+            if (verifyBtn) verifyBtn.disabled = true;
+
+            setFirebaseError('orderTypeDeliveryFirebaseOtpError', '');
+
+            return loadFirebaseSdk()
+                .then(function () {
+                    var otpEl = document.getElementById('orderTypeDeliveryOtpInput');
+                    var otp = otpEl ? otpEl.value : '';
+
+                    if (!orderTypeDeliveryConfirmationResult) throw new Error('OTP session not ready. Please resend code.');
+                    if (String(otp).trim().length < 4) throw new Error('Enter the OTP code.');
+
+                    return orderTypeDeliveryConfirmationResult.confirm(String(otp).trim()).then(function () {
+                        return $wire.call('orderTypeDeliveryFirebaseVerifyAndComplete');
+                    });
+                })
+                .catch(function (err) {
+                    var msg = (err && err.message) ? err.message : String(err);
+                    setFirebaseError('orderTypeDeliveryFirebaseOtpError', msg);
+                })
+                .finally(function () {
+                    if (verifyBtn) verifyBtn.disabled = false;
+                });
+        }
+
+        // Event delegation (modal steps are conditionally rendered by Livewire)
+        document.addEventListener('click', function (e) {
+            function closest(el, selector) {
+                while (el && el.nodeType === 1) {
+                    if (el.matches && el.matches(selector)) return el;
+                    el = el.parentElement;
+                }
+                return null;
+            }
+
+            var backToPhone = closest(e.target, '#orderTypeDeliveryBackToPhoneBtn');
+            var closeFlow = closest(e.target, '#orderTypeDeliveryCloseFlowBtn');
+            if (backToPhone || closeFlow) {
+                orderTypeDeliveryConfirmationResult = null;
+                setFirebaseError('orderTypeDeliveryFirebaseError', '');
+                setFirebaseError('orderTypeDeliveryFirebaseOtpError', '');
+                return;
+            }
+
+            var send = closest(e.target, '#orderTypeDeliverySendOtpBtn');
+            if (send) {
+                orderTypeDeliveryFirebaseSendOtp();
+                return;
+            }
+
+            var verify = closest(e.target, '#orderTypeDeliveryVerifyOtpBtn');
+            if (verify) {
+                orderTypeDeliveryFirebaseConfirmOtp();
+            }
+        });
+
         $wire.on('init-order-type-delivery-map', () => {
             const MAP_KEY = @js($orderTypeMapApiKey ?? '');
             const BR_LAT = {{ (float) $orderTypeBranchLat }};
@@ -241,6 +428,7 @@
             script.async = true;
             document.head.appendChild(script);
         });
+        })();
     </script>
     @endscript
 
