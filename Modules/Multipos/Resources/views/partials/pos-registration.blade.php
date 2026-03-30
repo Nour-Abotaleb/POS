@@ -223,7 +223,7 @@
                     </x-secondary-button>
                     <x-button type="button" id="register_device_button" onclick="validateAndSubmit()"
                         class="w-full sm:ml-3 sm:w-auto sm:text-sm"
-                        style="display: {{ isset($limitReached) && $limitReached ? 'none' : 'inline-flex' }};">
+                        style="background-color: var(--brand-primary); border-color: var(--brand-primary); color: #fff; display: {{ isset($limitReached) && $limitReached ? 'none' : 'inline-flex' }};">
                         @lang('multipos::messages.registration.form.register_button')
                     </x-button>
                     <x-secondary-button id="cancel_button" onclick="window.location.href='{{ route('dashboard') }}'"

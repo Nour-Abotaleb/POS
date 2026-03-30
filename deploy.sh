@@ -126,7 +126,7 @@ print_success "Caches cleared and optimized"
 # Step 8: Build assets (if package.json exists)
 if [ -f "package.json" ]; then
     print_info "Building frontend assets..."
-    npm install --production
+    npm ci
     npm run build
     print_success "Assets built successfully"
 fi
