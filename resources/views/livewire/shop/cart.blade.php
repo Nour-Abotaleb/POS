@@ -451,7 +451,7 @@
                                 wire:click='addCartItems({{ $item->id }}, {{ $item->variations_count }}, {{ $item->modifier_groups_count }})'
                             >
                                 <div class="flex items-stretch justify-between gap-4 p-4 w-full">
-                                    <div class="flex-1 min-w-0 flex-col items-start justify-between">
+                                    <div class="flex-1 min-w-0 flex-col items-start justify-between gap-4">
                                         <div class="flex items-start justify-between gap-4">
                                             <div class="min-w-0">
                                                 <div class="inline-flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white">
@@ -472,10 +472,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="mt-3 flex items-center justify-between gap-3">
+                                        <div class="mt-4 flex items-center justify-between gap-3">
                                             <div class="flex items-center gap-3 min-w-0 flex-1">
                                                 @if ($item->variations_count == 0)
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-white whitespace-nowrap" style="background-color: #F7F7F7;">
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-black whitespace-nowrap" style="background-color: #F7F7F7;">
                                                         {!! currency_format($item->price, $restaurant->currency_id) !!}
                                                     </span>
                                                 @endif
@@ -488,7 +488,7 @@
 
                                             <div class="flex items-center justify-end gap-2 shrink-0">
                                                 @if ($item->calories)
-                                                    <span class="inline-flex items-center px-3 py-1.5 text-xs rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-white whitespace-nowrap" style="background-color: #F7F7F7;">
+                                                    <span class="inline-flex items-center px-3 py-1.5 text-xs rounded-lg bg-[#F7F7F7] dark:bg-gray-800 font-medium text-gray-900 dark:text-black whitespace-nowrap" style="background-color: #F7F7F7;">
                                                         {{ $item->calories }} @lang('modules.menu.calories')
                                                     </span>
                                                 @endif
@@ -511,7 +511,7 @@
                                         class="w-28 h-28 rounded-md overflow-hidden flex-shrink-0"
                                     >
                                         <img
-                                            class="w-full h-full object-cover"
+                                            class="w-full h-full object-cover cart-item-photo-invert"
                                             src="{{ $item->item_photo_url }}"
                                             alt="{{ $item->item_name }}"
                                         >
@@ -532,6 +532,12 @@
                         <span class="text-lg">@lang('messages.noItemAdded')</span>
                     </div>
                 @endforelse
+
+                <style>
+                    .dark .cart-item-photo-invert {
+                        filter: invert(1) brightness(10) !important;
+                    }
+                </style>
 
                 <!-- Load More Indicator -->
                 <div class="flex items-center justify-center py-6 px-4">

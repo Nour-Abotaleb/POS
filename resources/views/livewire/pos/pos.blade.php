@@ -1,4 +1,4 @@
-<div class="relative">
+<div class="relative flex-1 min-h-0 flex flex-col">
     {{-- Include MultiPOS registration and status handling --}}
     @if(module_enabled('MultiPOS'))
         @include('multipos::partials.pos-registration', [
@@ -47,7 +47,7 @@
                 </button>
             </div>
             {{-- Products (menu) section: on mobile appears below order panel (order-2), on desktop left (order-1). flex-none on mobile avoids empty space when panel is closed. --}}
-            <div class="order-2 lg:order-1 min-w-0 flex-none lg:flex-[2] flex flex-col pt-0 lg:pt-16 overflow-hidden" data-pos-products-panel>
+            <div class="order-2 lg:order-1 min-w-0 flex-none lg:flex-[2] flex flex-col min-h-0 pt-0 lg:pt-16 overflow-y-auto pos-slider-scroll-hide" data-pos-products-panel>
                 @include('pos.menu')
             </div>
             {{-- Order panel: on mobile first (order-1), on desktop right (order-2). Width/flex controlled by layout CSS so desktop always shows 500px. --}}

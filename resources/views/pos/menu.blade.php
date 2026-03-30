@@ -48,7 +48,7 @@
         transition: background-color 0.2s ease;
     }
 </style>
-<div class="w-full h-full min-h-0 flex flex-col">
+<div class="w-full flex-1 min-h-0 flex flex-col">
     @php
         $orderStats = getRestaurantOrderStats(branch()->id);
         $orderLimitReached = !$orderStats['unlimited'] && $orderStats['current_count'] >= $orderStats['order_limit'];
