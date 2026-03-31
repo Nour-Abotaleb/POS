@@ -618,10 +618,18 @@ class Cart extends Component
 
     public function orderTypeDeliverySendOtp(): void
     {
-        $this->validate([
-            'orderTypeDeliveryPhoneCode' => 'required',
-            'orderTypeDeliveryPhone' => 'required|string|min:6',
-        ]);
+        $this->validate(
+            [
+                'orderTypeDeliveryPhoneCode' => 'required',
+                'orderTypeDeliveryPhone' => 'required|string|min:6',
+            ],
+            [
+                'orderTypeDeliveryPhoneCode.required' => __('messages.phoneCodeRequired'),
+                'orderTypeDeliveryPhone.required'     => __('messages.phoneNumberRequired'),
+                'orderTypeDeliveryPhone.min'          => __('messages.invalidPhoneNumber'),
+                'orderTypeDeliveryPhone.string'       => __('messages.invalidPhoneNumber'),
+            ]
+        );
 
         if ($this->customer
             && (string) $this->customer->phone_code === (string) $this->orderTypeDeliveryPhoneCode
@@ -673,9 +681,16 @@ class Cart extends Component
 
     public function orderTypeDeliveryVerifyAndComplete(): void
     {
-        $this->validate([
-            'orderTypeDeliveryOtp' => 'required|string|min:4',
-        ]);
+        $this->validate(
+            [
+                'orderTypeDeliveryOtp' => 'required|string|min:4',
+            ],
+            [
+                'orderTypeDeliveryOtp.required' => __('messages.otpRequired'),
+                'orderTypeDeliveryOtp.min'      => __('messages.invalidOtp'),
+                'orderTypeDeliveryOtp.string'   => __('messages.invalidOtp'),
+            ]
+        );
 
         $customer = Customer::withoutGlobalScopes()
             ->where('phone_code', $this->orderTypeDeliveryPhoneCode)

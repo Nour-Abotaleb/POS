@@ -1,16 +1,16 @@
 <div
-    class="relative z-40 flex flex-col h-full lg:h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
-    <div class="flex items-center justify-between w-full mb-2">
+    class="relative z-40 flex flex-col h-full lg:h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-y-auto lg:overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
+    <div class="flex items-center gap-2 w-full mb-2 min-w-0">
 
-        {{-- LEFT SIDE : ORDER TYPES --}}
+        {{-- LEFT SIDE : ORDER TYPES (scrollable on overflow) --}}
         @if($this->orderTypes->count())
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto pb-0.5" style="-ms-overflow-style:none;scrollbar-width:none;">
             @foreach($this->orderTypes as $type)
                 <button
                     type="button"
                     wire:click="$set('orderTypeId', {{ $type->id }})"
                     style="{{ $orderTypeId === $type->id ? 'background-color: var(--brand-primary); border-color: var(--brand-primary);' : '' }}"
-                    class="px-3 py-1.5 text-xs rounded-lg border transition-all
+                    class="whitespace-nowrap flex-shrink-0 px-3 py-1.5 text-xs rounded-lg border transition-all
                     {{ $orderTypeId === $type->id
                         ? 'text-white'
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
@@ -23,10 +23,9 @@
             @endforeach
 
             @if($orderTypeSlug === 'delivery' && $selectedDeliveryApp)
-                <span class="text-xs text-gray-500 dark:text-gray-400 mx-2">•</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400">@lang('modules.order.deliveryPlatformLabel'):</span>
-
-                <span class="text-sm font-medium text-gray-900 dark:text-white">
+                <span class="whitespace-nowrap flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 mx-1">•</span>
+                <span class="whitespace-nowrap flex-shrink-0 text-xs text-gray-500 dark:text-gray-400">@lang('modules.order.deliveryPlatformLabel'):</span>
+                <span class="whitespace-nowrap flex-shrink-0 text-sm font-medium text-gray-900 dark:text-white">
                     @if($selectedDeliveryApp === 'default')
                         @lang('modules.order.defaultDeliveryPlatform')
                     @else
@@ -38,7 +37,7 @@
         @endif
 
         {{-- RIGHT SIDE : ORDER NUMBER + TABLE --}}
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 flex-shrink-0">
 
             {{-- ORDER NUMBER --}}
             <div class="inline-flex items-center gap-1 text-sm !text-[#298000] 

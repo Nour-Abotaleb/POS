@@ -65,23 +65,41 @@
 
                                 @if($orderTypeDeliveryStep === 'phone' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
-                                        <div class="bg-white dark:bg-gray-800 rounded-md shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-start">@lang('modules.customer.phoneVerificationHeading')</h3>
-                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md" aria-label="@lang('app.close')">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-5">
+                                            {{-- Header: title (RTL right) + circle close button (RTL left) --}}
+                                            <div class="flex items-center justify-between gap-3">
+                                                <h3 class="py-2 text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                                                    @lang('modules.customer.phoneVerificationHeading')
+                                                </h3>
+                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow"
+                                                    class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full bg-white shadow-md dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300"
+                                                    aria-label="@lang('app.close')">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
                                                 </button>
                                             </div>
-                                            {{-- <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p> --}}
-                                            <div class="flex gap-2">
-                                                <x-input type="text" class="w-28 shrink-0" wire:model="orderTypeDeliveryPhoneCode" placeholder="+966" />
-                                                <x-input type="tel" class="flex-1" wire:model="orderTypeDeliveryPhone" placeholder="55XXXXXXX" />
+
+                                            {{-- Combined phone input --}}
+                                            <div class="my-4 flex rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 dark:focus-within:ring-gray-500 bg-white dark:bg-gray-900">
+                                                <input type="tel"
+                                                class="flex-1 min-w-0 border-0 bg-transparent px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0"
+                                                wire:model="orderTypeDeliveryPhone"
+                                                placeholder="55XXXXXXX" />
+                                                <input type="text"
+                                                    class="w-16 shrink-0 border-0 bg-gray-50 px-3 py-3 text-sm text-center font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-0 border-e border-gray-200 dark:border-gray-600"
+                                                    wire:model="orderTypeDeliveryPhoneCode"
+                                                    placeholder="+966" />
                                             </div>
+
                                             <x-input-error for="orderTypeDeliveryPhoneCode" />
                                             <x-input-error for="orderTypeDeliveryPhone" />
+
                                             <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-md text-white text-sm font-bold" style="background-color: #011646;">
-                                                @lang('app.next')
+                                                class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90 mt-4"
+                                                style="background-color: var(--brand-primary);">
+                                                <span wire:loading.remove wire:target="orderTypeDeliverySendOtp">@lang('app.next')</span>
+                                                <span wire:loading wire:target="orderTypeDeliverySendOtp">...</span>
                                             </button>
                                         </div>
                                     </div>
@@ -89,20 +107,40 @@
 
                                 @if($orderTypeDeliveryStep === 'otp' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
-                                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-center">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <button type="button" wire:click="orderTypeDeliveryBackToPhone" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.back')">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-5">
+                                            {{-- Header: title (RTL right) + circle back/close button (RTL left) --}}
+                                            <div class="flex items-center justify-between gap-3">
+                                                <h3 class="text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                                                    @lang('app.verification')
+                                                </h3>
+                                                <button type="button" wire:click="orderTypeDeliveryBackToPhone"
+                                                    class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300"
+                                                    aria-label="@lang('app.back')">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
                                                 </button>
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('app.verification')</h3>
                                             </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">@lang('messages.verificationCodeSent')</p>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">+{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}</p>
-                                            <x-input type="text" inputmode="numeric" maxlength="6" class="block w-full text-center text-xl tracking-widest" wire:model="orderTypeDeliveryOtp" placeholder="----" autocomplete="one-time-code" />
+
+                                            {{-- Info text --}}
+                                            <p class="text-sm text-black dark:text-gray-400 text-center">@lang('messages.verificationCodeSent')</p>
+                                            <p class="mt-2 mb-3 text-base font-semibold text-gray-900 dark:text-white text-center" dir="ltr">
+                                                +{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}
+                                            </p>
+
+                                            {{-- OTP input --}}
+                                            <input type="text" inputmode="numeric" maxlength="6"
+                                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-center text-xl leading-none font-semibold tracking-[0.5em] py-2.5 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent"
+                                                wire:model="orderTypeDeliveryOtp"
+                                                placeholder="_ _ _ _"
+                                                autocomplete="one-time-code" />
                                             <x-input-error for="orderTypeDeliveryOtp" />
+
                                             <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
-                                                class="w-full py-3 rounded-xl text-white text-sm font-bold" style="background-color: #011646;">
-                                                @lang('app.verify')
+                                                class="mt-4 w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
+                                                style="background-color: var(--brand-primary);">
+                                                <span wire:loading.remove wire:target="orderTypeDeliveryVerifyAndComplete">@lang('app.verify')</span>
+                                                <span wire:loading wire:target="orderTypeDeliveryVerifyAndComplete">...</span>
                                             </button>
                                         </div>
                                     </div>
@@ -1306,85 +1344,98 @@
         </div>
     @endif
 
-    <x-dialog-modal wire:model.live="showCustomerNameModal" maxWidth="sm">
-        <x-slot name="title">
-
-        </x-slot>
+    <x-dialog-modal wire:model.live="showCustomerNameModal" maxWidth="sm" noPadding>
+        <x-slot name="title"></x-slot>
 
         <x-slot name="content">
             @if (!is_null($customer))
-                <form wire:submit="submitCustomerName">
+                <form wire:submit="submitCustomerName" class="p-6 space-y-5">
                     @csrf
-                    <div class="space-y-4">
-                        <div>
-                            <x-label for="customerName" value="{{ __('modules.customer.enterName') }}" />
-                            <x-input id="customerName" class="block w-full mt-1" type="text"
-                                wire:model='customerName' />
-                            <x-input-error for="customerName" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-label for="customerPhone" value="{{ __('modules.customer.phone') }}" />
-                            <div class="flex gap-2 mt-1">
-                                <!-- Phone Code Dropdown -->
-                                <div x-data="{ isOpen: @entangle('phoneCodeIsOpen').live }" @click.away="isOpen = false" class="relative w-28">
-                                    <div @click="isOpen = !isOpen"
-                                        class="p-2 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm">
-                                                @if($customerPhoneCode)
-                                                    +{{ $customerPhoneCode }}
-                                                @else
-                                                    {{ __('modules.settings.select') }}
-                                                @endif
-                                            </span>
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
 
-                                    <ul x-show="isOpen" x-transition class="absolute z-50 w-full mt-1 overflow-auto bg-white rounded-lg shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-                                        <li class="sticky top-0 px-2 py-2 bg-white dark:bg-gray-700 z-10">
-                                            <input wire:model.live.debounce.300ms="phoneCodeSearch" class="block w-full px-2 py-1 text-sm border border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white" type="text" placeholder="{{ __('placeholders.search') }}" />
+                    {{-- Header: title + close button --}}
+                    <div class="flex items-center justify-between gap-3">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                            @lang('messages.completeYourInfo')
+                        </h3>
+                        <button type="button" wire:click="$toggle('showCustomerNameModal')"
+                            class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Name --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            {{ __('modules.customer.enterName') }}
+                        </label>
+                        <input id="customerName" type="text" wire:model="customerName"
+                            class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent" />
+                        <x-input-error for="customerName" class="mt-1.5" />
+                    </div>
+
+                    {{-- Phone --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            {{ __('modules.customer.phone') }}
+                        </label>
+                        <div class="flex rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 dark:focus-within:ring-gray-500 bg-white dark:bg-gray-900">
+                            <div x-data="{ isOpen: @entangle('phoneCodeIsOpen').live }" @click.away="isOpen = false" class="relative shrink-0">
+                                <button type="button" @click="isOpen = !isOpen"
+                                    class="flex items-center gap-1 px-3 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 border-e border-gray-200 dark:border-gray-600 bg-transparent h-full">
+                                    <span>{{ $customerPhoneCode ? '+' . $customerPhoneCode : __('modules.settings.select') }}</span>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul x-show="isOpen" x-transition @click.stop
+                                    class="absolute z-50 start-0 top-full mt-1 w-36 overflow-auto bg-white dark:bg-gray-700 rounded-lg shadow-lg max-h-52 ring-1 ring-black/10">
+                                    <li class="sticky top-0 px-2 py-2 bg-white dark:bg-gray-700 z-10">
+                                        <input wire:model.live.debounce.300ms="phoneCodeSearch"
+                                            class="block w-full px-2 py-1 text-sm border border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                                            type="text" placeholder="{{ __('placeholders.search') }}" />
+                                    </li>
+                                    @forelse ($phonecodes as $phonecode)
+                                        <li @click="$wire.selectPhoneCode('{{ $phonecode }}')"
+                                            wire:key="info-phone-code-{{ $phonecode }}"
+                                            class="py-2 px-3 text-sm text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                                            :class="{ 'bg-gray-100 dark:bg-gray-600': '{{ $phonecode }}' === '{{ $customerPhoneCode }}' }">
+                                            +{{ $phonecode }}
                                         </li>
-                                        @forelse ($phonecodes as $phonecode)
-                                            <li @click="$wire.selectPhoneCode('{{ $phonecode }}')"
-                                                wire:key="cart-phone-code-{{ $phonecode }}"
-                                                class="relative py-2 pl-3 text-gray-900 cursor-pointer select-none pr-9 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-300"
-                                                :class="{ 'bg-gray-100 dark:bg-gray-600': '{{ $phonecode }}' === '{{ $customerPhoneCode }}' }">
-                                                <span class="block text-sm">+{{ $phonecode }}</span>
-                                            </li>
-                                        @empty
-                                            <li class="py-2 pl-3 text-gray-500 dark:text-gray-400">
-                                                {{ __('modules.settings.noPhoneCodesFound') }}
-                                            </li>
-                                        @endforelse
-                                    </ul>
-                                </div>
-
-                                <!-- Phone Number Input -->
-                                <x-input id="customerPhone" class="block w-full" type="tel"
-                                    wire:model='customerPhone' placeholder="1234567890" />
+                                    @empty
+                                        <li class="py-2 px-3 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ __('modules.settings.noPhoneCodesFound') }}
+                                        </li>
+                                    @endforelse
+                                </ul>
                             </div>
-                            <x-input-error for="customerPhoneCode" class="mt-2" />
-                            <x-input-error for="customerPhone" class="mt-2" />
+                            <input id="customerPhone" type="tel" wire:model="customerPhone" placeholder="1234567890"
+                                class="flex-1 min-w-0 border-0 bg-transparent px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none" />
                         </div>
-
-                        @if ($orderType === 'delivery' || $orderTypeSlug === 'delivery')
-                            <div>
-                                <x-label for="customerAddress" value="{{ __('modules.customer.address') }}" />
-                                <x-textarea id="customerAddress" class="block w-full mt-1"
-                                    wire:model='customerAddress' rows="4" />
-                                <x-input-error for="customerAddress" class="mt-2" />
-                            </div>
-                        @endif
+                        <x-input-error for="customerPhoneCode" class="mt-1.5" />
+                        <x-input-error for="customerPhone" class="mt-1.5" />
                     </div>
 
-                    <div class="flex justify-between w-full pb-4 mt-6 space-x-4">
-                        <x-button>@lang('app.continue')</x-button>
-                        <x-button-cancel wire:click="$toggle('showCustomerNameModal')"
-                            wire:loading.attr="disabled">@lang('app.cancel')</x-button-cancel>
-                    </div>
+                    @if ($orderType === 'delivery' || $orderTypeSlug === 'delivery')
+                        {{-- Address --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                {{ __('modules.customer.address') }}
+                            </label>
+                            <textarea id="customerAddress" wire:model="customerAddress" rows="3"
+                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent resize-none"></textarea>
+                            <x-input-error for="customerAddress" class="mt-1.5" />
+                        </div>
+                    @endif
+
+                    {{-- Submit --}}
+                    <button type="submit" wire:loading.attr="disabled"
+                        class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
+                        style="background-color: var(--brand-primary);">
+                        <span wire:loading.remove wire:target="submitCustomerName">@lang('app.continue')</span>
+                        <span wire:loading wire:target="submitCustomerName">...</span>
+                    </button>
                 </form>
             @endif
         </x-slot>

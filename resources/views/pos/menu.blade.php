@@ -314,7 +314,7 @@
                     }
                 }"
                 >
-                <ul class="pos-menu-items-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 pb-8
+                <ul class="pos-menu-items-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 pb-24 lg:pb-8
                     [&::-webkit-scrollbar]:w-2
                     [&::-webkit-scrollbar-track]:rounded
                     [&::-webkit-scrollbar-track]:bg-gray-200

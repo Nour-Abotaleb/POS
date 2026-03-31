@@ -1,6 +1,13 @@
 <?php
 
 return [
+    'invalidPhoneNumber' => 'Invalid phone number',
+    'phoneCodeRequired' => 'Country code is required',
+    'phoneNumberRequired' => 'Phone number is required',
+    'otpRequired' => 'Verification code is required',
+    'invalidOtp' => 'Invalid verification code',
+    'verificationCodeSent' => 'A verification code has been sent to your number',
+    'completeYourInfo' => 'Complete Your Info',
     // Phone and Contact
     'phoneCodeDetected' => '🌍 Phone code detected',
 
