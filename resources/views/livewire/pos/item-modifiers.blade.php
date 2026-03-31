@@ -1,11 +1,11 @@
 <style>
     .btn-add-item img { filter: invert(1) brightness(10) !important; }
 </style>
-<div class="text-base text-gray-900 dark:text-gray-100">
+<div class="text-base text-gray-900 dark:text-gray-100 flex flex-col max-h-[85vh] md:max-h-[95vh]">
     @php $currencyId = $selectedModifierItem->branch->restaurant->currency_id; @endphp
 
     <!-- Hero Image -->
-    <div class="relative overflow-hidden rounded-t-lg" style="height: 300px;">
+    <div class="relative overflow-hidden rounded-t-lg h-[240px] md:h-[260px] lg:h-[300px] flex-shrink-0">
         <!-- Close button -->
         <button type="button"
             wire:click="$dispatch('closeModifiersModal')"
@@ -26,8 +26,8 @@
         @endif
     </div>
 
-    <!-- Content -->
-    <div class="px-6 pb-6">
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pb-2">
     <!-- Item Info -->
     <div class="pt-4 flex items-center justify-between gap-2">
         <span class="text-xl font-bold text-gray-900 dark:text-white text-end">
@@ -109,11 +109,11 @@
         <x-input-error for="requiredModifiers.{{ $modifier->id }}" class="mt-2" />
     </div>
     @endforeach
+    </div><!-- end scrollable -->
 
-    <!-- Bottom: Add button + quantity counter -->
-    <div class="flex items-center gap-3 mt-6">
-        
-        <div class="flex items-center justify-between bg-[#F8F8F8] rounded-md overflow-hidden min-w-[180px] flex-shrink-0 py-2.5 px-2" style="background-color: #F8F8F8">
+    <!-- Fixed Bottom: Add button + quantity counter -->
+    <div class="flex-shrink-0 flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700">
+        <div class="flex items-center justify-between bg-[#F8F8F8] rounded-md overflow-hidden md:min-w-[180px] flex-shrink-0 py-2.5 px-2" style="background-color: #F8F8F8">
             <button type="button"
             wire:click="incrementQuantity"
             class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 dark:text-white py-2">
@@ -142,5 +142,4 @@
             <span wire:loading wire:target="saveModifiers">...</span>
         </button>
     </div>
-    </div><!-- end .px-6 -->
 </div>

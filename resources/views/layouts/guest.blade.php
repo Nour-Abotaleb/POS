@@ -109,7 +109,7 @@
         @livewire('shop.cart', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch, 'modalOnly' => true])
     @endunless
 
-    <div class="mx-auto w-full max-w-screen-xl-mid min-h-svh min-w-0">
+    <div class="mx-auto w-full lg:max-w-screen-xl-mid min-h-svh min-w-0">
         <div class="flex mt-0 dark:bg-gray-900 min-w-0">
             <div id="main-content" class="w-full min-w-0 h-full dark:bg-gray-900">
                 <main>
@@ -123,7 +123,7 @@
     @stack('modals')
 
     <footer class="p-4 bg-white sm:p-6 dark:bg-gray-800 border-t dark:border-gray-600">
-        <div class="mx-auto max-w-screen-xl-mid">
+        <div class="mx-auto lg:max-w-screen-xl-mid">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">&copy; {{ now()->year }} <a
                         href="" class="hover:underline">{{ $restaurant->name }}</a>. @lang('app.allRightsReserved')

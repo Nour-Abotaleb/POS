@@ -1,4 +1,4 @@
-<div class="w-full min-w-0 px-4">
+<div class="w-full min-w-0">
     <!-- Order Type Selection Modal -->
     @php
         $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null;
@@ -897,210 +897,150 @@
             @endif
         </div>
 
-        {{-- @if ($cartQty > 0)
-            <div class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1 left-1/2 -translate-x-1/2"
-                style="background-color: var(--brand-primary);">
-                <div>@lang('modules.order.totalItem'): {{ $cartQty }} &nbsp;|&nbsp;
-                    {!! currency_format($subTotal, $restaurant->currency_id) !!} + @lang('modules.order.taxes')</div>
-                <x-secondary-button wire:click="showCartItems">@lang('modules.order.viewCart')</x-secondary-button>
-            </div>
-        @endif --}}
+        @if ($cartQty > 0)
+        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 mx-2 mb-6 rounded-md text-white shadow-xl lg:hidden"
+            style="background-color: var(--brand-primary);">
+            {{-- Cart icon with badge --}}
+            <button type="button" wire:click="showCartItems" class="relative">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
+            </button>
+            {{-- Place order button --}}
+            <button type="button" wire:click="showCartItems"
+            class="flex items-center gap-2 font-bold text-base text-white">
+            <span>@lang('modules.order.placeOrder')</span>
+        </button>
+        {{-- Total --}}
+        <div class="text-base font-bold dark">
+            {!! currency_format($total, $restaurant->currency_id) !!}
+        </div>
+        </div>
+        @endif
     @endif
 
     @if ($showCart)
 
-        {{-- Order type selection removed - users select at the beginning via modal --}}
+        {{-- Mobile cart: items list + fixed bottom bar --}}
+        <div class="pb-28">
 
-        <div class="px-4 mt-4 space-y-4">
+            {{-- Items --}}
             @foreach ($orderItemList as $key => $item)
-                <div class="flex items-center justify-between gap-6 transition bg-white border rounded-lg shadow-sm hover:shadow-md dark:border-gray-600 dark:lg:bg-gray-900 dark:shadow-sm"
-                    wire:key='menu-item-{{ $item->id . microtime() }}'>
-                    <div class="flex w-full p-4 space-x-4 dark:bg-gray-800 dark:text-gray-200">
-                        <!-- Item Image -->
-                        @if ($restaurant && !$restaurant->hide_menu_item_image_on_customer_site)
+            @php
+                $displayPrice = $this->getItemDisplayPrice($key);
+                $totalAmount  = $orderItemAmount[$key];
+            @endphp
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800"
+                wire:key='cart-item-{{ $item->id . microtime() }}'>
 
-                            <img class="object-cover w-10 h-10 rounded-lg cursor-pointer lg:w-16 lg:h-16"
-                                wire:click="showItemDetail({{ $item->id }})" src="{{ $item->item_photo_url }}"
-                                alt="{{ $item->item_name }}">
-                        @endif
+                {{-- Image --}}
+                @if ($restaurant && !$restaurant->hide_menu_item_image_on_customer_site)
+                    <img class="w-20 h-20 rounded-xl object-cover flex-shrink-0 cursor-pointer"
+                        wire:click="showItemDetail({{ $item->id }})"
+                        src="{{ $item->item_photo_url }}" alt="{{ $item->item_name }}">
+                @endif
 
-                        <!-- Item Details -->
-                        <div class="flex-1 min-w-0">
-                            <div
-                                class="flex flex-col items-start justify-between w-full gap-2 sm:flex-row sm:items-baseline">
-                                <!-- Item Name and Details -->
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <div
-                                        class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        <img src="{{ asset('img/' . $item->type . '.svg') }}" class="h-4 me-2"
-                                            title="@lang('modules.menu.' . $item->type)" alt="" />
-                                        {{ $item->item_name }}
-                                    </div>
-                                    @if ($item->calories)
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">
-                                            {{ $item->calories }}
-                                        </span>
-                                    @endif
+                {{-- Details --}}
+                <div class="flex-1 min-w-0 text-end">
+                    <div class="font-bold text-gray-900 dark:text-white text-sm">{{ $item->item_name }}</div>
 
-                                    @if (isset($orderItemVariation[$key]))
-                                        <span
-                                            class="px-2.5 py-0.5 bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-sm text-xs font-sm">
-                                            {{ $orderItemVariation[$key]->variation }}
-                                        </span>
-                                    @endif
+                    @if ($item->description)
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 line-clamp-2">{{ $item->description }}</div>
+                    @endif
 
-                                    {{-- @if ($item->preparation_time)
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">
-                                            @lang('modules.menu.preparationTime'): {{ $item->preparation_time }} @lang('modules.menu.minutes')
-                                        </span>
-                                    @endif --}}
-                                </div>
+                    @if ($item->calories)
+                        <div class="text-xs text-gray-400 mt-0.5">{{ $item->calories }} @lang('modules.menu.calories')</div>
+                    @endif
 
-                                <!-- Quantity Controls and Price -->
-                                <div class="flex flex-wrap items-center justify-between gap-3 sm:w-auto md:w-1/3">
-                                    <!-- Quantity Controls -->
-                                    <div class="flex items-center">
-                                        <button type="button" wire:click="subQty('{{ $key }}')"
-                                            class="h-8 p-2 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-s-md">
-                                            <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true"
-                                                viewBox="0 0 18 2">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                    @if (isset($orderItemVariation[$key]))
+                        <span class="inline-block mt-1 px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs">
+                            {{ $orderItemVariation[$key]->variation }}
+                        </span>
+                    @endif
+
+                    {{-- Modifiers --}}
+                    @if (!empty($itemModifiersSelected[$key]))
+                        <div class="flex flex-wrap justify-end gap-1 mt-1">
+                            @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--brand-primary)]/10" style="color: var(--brand-primary);">
+                                    {{ $this->modifierOptions[$modifierOptionId]->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    {{-- Item note --}}
+                    @if (isset($this->itemNotes[$key]) && !empty($this->itemNotes[$key]))
+                        <span class="inline-flex items-center gap-1 mt-1 px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                            {{ $this->itemNotes[$key] }}
+                            <button wire:click="$set('itemNotes.{{ $key }}', '')" class="text-gray-400 hover:text-red-500">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </span>
+                    @else
+                        <div x-data="{ showNoteInput: false, noteText: '' }" class="mt-1 flex justify-end">
+                            <button x-show="!showNoteInput"
+                                @click="showNoteInput = true; $nextTick(() => $refs.noteInput.focus())"
+                                class="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-[var(--brand-primary)] transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-3 h-3" xml:space="preserve">
+                                    <path d="M11.3 26.5 4 28l1.5-7.3L21.6 4.5c.8-.8 2.1-.8 2.9 0l2.9 2.9c.8.8.8 2.1 0 2.9zm7.4-19 5.8 5.8m-5.8 0-8.8 8.8"
+                                        style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
+                                </svg>
+                                @lang('modules.order.addNote')
+                            </button>
+                            <div x-show="showNoteInput" x-cloak @click.away="showNoteInput = false" class="flex w-full mt-1">
+                                <div class="relative flex-1">
+                                    <x-input x-ref="noteInput" x-model="noteText" type="text"
+                                        class="w-full pr-16 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        :placeholder="__('placeholders.addItemNotesPlaceholder')"
+                                        @keydown.enter="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false" />
+                                    <div class="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+                                        <button @click="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false"
+                                            class="p-1 text-white rounded hover:opacity-90" style="background-color: var(--brand-primary);">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 13 4 4L19 7"/>
                                             </svg>
                                         </button>
-
-                                        <input type="text" wire:model='orderItemQty.{{ $key }}'
-                                            class="w-12 h-8 text-sm text-center text-gray-900 bg-white border-gray-300 border-x-0 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                            readonly />
-
-                                        <button type="button" wire:click="addQty('{{ $key }}')"
-                                            class="h-8 p-2 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-e-md">
-                                            <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true"
-                                                viewBox="0 0 18 18">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                        <button @click="showNoteInput = false" class="p-1 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                             </svg>
                                         </button>
                                     </div>
-
-                                    <!-- Price and Amount -->
-                                    @php
-                                        // Use display price (base price without tax for inclusive items)
-                                        $displayPrice = $this->getItemDisplayPrice($key);
-                                        // Total amount per line (what customer pays)
-                                        $totalAmount = $orderItemAmount[$key];
-                                    @endphp
-                                    <div class="flex flex-col items-end gap-1">
-                                        @if ($taxMode === 'item' && $restaurant?->tax_inclusive)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                {!! currency_format($displayPrice, $restaurant->currency_id) !!} ×
-                                                {{ $orderItemQty[$key] }}
-                                            </div>
-                                        @endif
-                                        <span
-                                            class="text-base font-semibold text-gray-900 dark:text-white whitespace-nowrap">
-                                            {!! currency_format($totalAmount, $restaurant->currency_id) !!}
-                                        </span>
-                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- Modifiers (Shown below if present) -->
-                            @if (!empty($itemModifiersSelected[$key]))
-                                <div class="flex flex-wrap gap-2 mt-2">
-                                    @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--brand-primary)]/10" style="color: var(--brand-primary);">
-                                            {{ $this->modifierOptions[$modifierOptionId]->name }}
-                                            <span class="ml-1" style="color: var(--brand-primary);">
-                                                {!! currency_format($this->modifierOptions[$modifierOptionId]->price, $this->modifierOptions[$modifierOptionId]->modifierGroup->branch->restaurant->currency_id) !!}
-                                            </span>
-                                        </span>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            <!-- Item Notes Section -->
-                            <div class="mt-2">
-                                @if (isset($this->itemNotes[$key]) && !empty($this->itemNotes[$key]))
-                                    <div class="flex items-center mt-2">
-                                        <span
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                            <svg class="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" stroke="currentColor"
-                                                fill="none">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 8h10M7 12h4m1 8-4-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3z" />
-                                            </svg>
-                                            <span class="mr-1.5">{{ $this->itemNotes[$key] }}</span>
-                                            <button wire:click="$set('itemNotes.{{ $key }}', '')"
-                                                class="text-gray-400 transition-colors duration-200 hover:text-red-500">
-                                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </div>
-                                @else
-                                    <div x-data="{ showNoteInput: false, noteText: '' }" class="mt-2">
-                                        <button x-show="!showNoteInput"
-                                            @click="showNoteInput = true; $nextTick(() => $refs.noteInput.focus())"
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-full text-gray-700 hover:bg-[var(--brand-primary)]/10 hover:text-[var(--brand-primary)] dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-600 transition-all duration-200 group">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
-                                                class="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-200"
-                                                xml:space="preserve">
-                                                <path
-                                                    d="M11.3 26.5 4 28l1.5-7.3L21.6 4.5c.8-.8 2.1-.8 2.9 0l2.9 2.9c.8.8.8 2.1 0 2.9zm7.4-19 5.8 5.8m-5.8 0-8.8 8.8"
-                                                    style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" />
-                                            </svg>
-                                            <span class="whitespace-nowrap">@lang('modules.order.addNote')</span>
-                                        </button>
-                                        <div x-show="showNoteInput" x-cloak @click.away="showNoteInput = false"
-                                            x-transition:enter="transition ease-out duration-200"
-                                            x-transition:enter-start="opacity-0 transform scale-95"
-                                            x-transition:enter-end="opacity-100 transform scale-100"
-                                            class="flex items-center mt-2">
-
-                                            <div class="flex w-full">
-                                                <div class="relative flex-1">
-                                                    <x-input x-ref="noteInput" x-model="noteText" type="text"
-                                                        class="w-full pr-20 text-sm border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-[var(--brand-primary)] focus:border-[var(--brand-primary)]"
-                                                        :placeholder="__('placeholders.addItemNotesPlaceholder')"
-                                                        @keydown.enter="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false" />
-                                                    <div
-                                                        class="absolute inset-y-0 right-0 flex items-center gap-1 pr-2">
-                                                        <button
-                                                            @click="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false"
-                                                            class="p-1.5 text-white rounded-md hover:opacity-90 transition-colors duration-200" style="background-color: var(--brand-primary);"
-                                                            title="@lang('app.save')">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-3.5 h-3.5" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="m5 13 4 4L19 7" />
-                                                            </svg>
-                                                        </button>
-                                                        <button @click="showNoteInput = false"
-                                                            class="p-1.5 text-gray-500 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                                                            title="@lang('app.cancel')">
-                                                            <svg class="w-3.5 h-3.5"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="M6 18 18 6M6 6l12 12" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         </div>
+                    @endif
+
+                    {{-- Price + qty controls --}}
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="flex items-center gap-1">
+                            <button type="button" wire:click="addQty('{{ $key }}')"
+                                class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                style="background-color: var(--brand-primary);">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                            <span class="w-7 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $orderItemQty[$key] ?? 1 }}</span>
+                            <button type="button" wire:click="subQty('{{ $key }}')"
+                                class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                style="background-color: var(--brand-primary);">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                            {!! currency_format($totalAmount, $restaurant->currency_id) !!}
+                        </span>
                     </div>
                 </div>
+            </div>
             @endforeach
 
             @if ($cartQty > 0)
@@ -1335,99 +1275,6 @@
                         </div>
                     @endif
 
-                    <div class="w-full h-auto pt-3 pb-4 text-center select-none"
-                        wire:key='order-{{ microtime() }}'>
-                        <div class="flex gap-2">
-
-                            @if (is_null($customer) && ($restaurant->customer_login_required || $orderTypeSlug == 'delivery'))
-                                <x-button class="justify-center w-full" wire:click="$dispatch('showSignup')">
-                                    @lang('app.next')
-                                </x-button>
-                            @elseif ($orderTypeSlug == 'pickup')
-                                <x-button class="justify-center w-full" wire:click="showPickupDateTime">
-                                    @lang('app.next')
-                                </x-button>
-                            @else
-                                <div class="grid w-full grid-cols-2 gap-2">
-                                    @php
-                                        $isPaymentEnabled =
-                                            in_array($orderTypeSlug, ['dine_in', 'delivery', 'pickup']) &&
-                                            (($orderTypeSlug == 'dine_in' && $paymentGateway->is_dine_in_payment_enabled) ||
-                                                ($orderTypeSlug == 'delivery' &&
-                                                    $paymentGateway->is_delivery_payment_enabled) ||
-                                                ($orderTypeSlug == 'pickup' && $paymentGateway->is_pickup_payment_enabled));
-
-                                        $showPayNow =
-                                            $paymentGateway->is_qr_payment_enabled ||
-                                            $paymentGateway->stripe_status ||
-                                            $paymentGateway->razorpay_status ||
-                                            $paymentGateway->flutterwave_status ||
-                                            $paymentGateway->paypal_status ||
-                                            $paymentGateway->payfast_status ||
-                                            $paymentGateway->xendit_status ||
-                                            $paymentGateway->epay_status ||
-                                            $paymentGateway->is_offline_payment_enabled;
-
-                                        $loadingSpinner = '
-                                            <div role="status" class="flex items-center">
-                                                <svg aria-hidden="true" class="w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-gray-700"
-                                                    viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                                </svg>
-                                            </div>';
-                                    @endphp
-
-                                    @if (!$order)
-                                        @if ($showPayNow)
-                                            <x-button class="flex items-center justify-center w-full gap-2"
-                                                wire:click="placeOrder(true)" wire:loading.delay.attr="disabled">
-                                                <span wire:loading.delay
-                                                    wire:target="placeOrder(true)">{!! $loadingSpinner !!}</span>
-                                                @lang('modules.order.payNow')
-                                            </x-button>
-
-                                            @if (!$isPaymentEnabled)
-                                                <x-secondary-button
-                                                    class="flex items-center justify-center w-full gap-2"
-                                                    wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                                    <span wire:loading.delay
-                                                        wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                                    @lang('modules.order.payLater')
-                                                </x-secondary-button>
-                                            @endif
-                                        @else
-                                            <x-button class="flex items-center justify-center w-full gap-2"
-                                                wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                                <span wire:loading.delay
-                                                    wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                                @lang('modules.order.placeOrder')
-                                            </x-button>
-                                        @endif
-                                    @else
-                                        <x-button class="flex items-center justify-center w-full gap-2"
-                                            wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                            <span wire:loading.delay
-                                                wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                            @lang('modules.order.placeOrder')
-                                        </x-button>
-                                    @endif
-
-                                </div>
-
-                            @endif
-                        </div>
-
-                        <div class="flex mt-4">
-                            <a href="javascript:;" wire:click="showMenuItems"
-                                class="relative text-gray-500 transition-colors duration-300 group hover:text-[var(--brand-primary)]">
-                                <span class="inline-block">@lang('app.back')</span>
-                                <span
-                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--brand-primary)] group-hover:w-full transition-all duration-300 ease-in-out"></span>
-                            </a>
-                        </div>
-                    </div>
-
                 </div>
             @else
                 <div class="p-4 text-center md:py-7 md:px-5">
@@ -1436,7 +1283,7 @@
                     </h3>
 
                     <a class="inline-flex items-center justify-center px-3 py-2 mt-3 text-sm font-medium text-white border border-transparent rounded-lg gap-x-2 hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
- style="background-color: var(--brand-primary);"
+                        style="background-color: var(--brand-primary);"
                         href="{{ module_enabled('Subdomain') ? url('/') : route('shop_restaurant', [$restaurant->hash]) }}"
                         wire:navigate>
                         @lang('modules.order.placeOrder')
@@ -1444,6 +1291,92 @@
                 </div>
             @endif
         </div>
+
+        {{-- Fixed bottom bar --}}
+        @if ($cartQty > 0)
+        @php
+            $isPaymentEnabled =
+                in_array($orderTypeSlug, ['dine_in', 'delivery', 'pickup']) &&
+                (($orderTypeSlug == 'dine_in' && $paymentGateway->is_dine_in_payment_enabled) ||
+                    ($orderTypeSlug == 'delivery' && $paymentGateway->is_delivery_payment_enabled) ||
+                    ($orderTypeSlug == 'pickup' && $paymentGateway->is_pickup_payment_enabled));
+
+            $showPayNow =
+                $paymentGateway->is_qr_payment_enabled ||
+                $paymentGateway->stripe_status ||
+                $paymentGateway->razorpay_status ||
+                $paymentGateway->flutterwave_status ||
+                $paymentGateway->paypal_status ||
+                $paymentGateway->payfast_status ||
+                $paymentGateway->xendit_status ||
+                $paymentGateway->epay_status ||
+                $paymentGateway->is_offline_payment_enabled;
+        @endphp
+        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 text-white shadow-xl"
+            style="background-color: var(--brand-primary);">
+
+            {{-- Total price --}}
+            <div class="text-base font-bold">
+                {!! currency_format($total, $restaurant->currency_id) !!}
+            </div>
+
+            {{-- Action button(s) --}}
+            <div class="flex items-center gap-2">
+                @if (is_null($customer) && ($restaurant->customer_login_required || $orderTypeSlug == 'delivery'))
+                    <button type="button" wire:click="$dispatch('showSignup')"
+                        class="flex items-center gap-2 font-bold text-base text-white">
+                        <span>@lang('app.next')</span>
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                @elseif ($orderTypeSlug == 'pickup')
+                    <button type="button" wire:click="showPickupDateTime"
+                        class="flex items-center gap-2 font-bold text-base text-white">
+                        <span>@lang('app.next')</span>
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                @else
+                    @if (!$order && $showPayNow)
+                        <button type="button" wire:click="placeOrder(true)" wire:loading.attr="disabled"
+                            class="flex items-center gap-1.5 font-bold text-sm text-white/80 border border-white/40 rounded-lg px-3 py-1.5">
+                            <span wire:loading wire:target="placeOrder(true)">...</span>
+                            <span wire:loading.remove wire:target="placeOrder(true)">@lang('modules.order.payNow')</span>
+                        </button>
+                        @if (!$isPaymentEnabled)
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.payLater')</span>
+                            <div class="relative">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                <span class="absolute -top-2 -right-2 w-4 h-4 flex items-center justify-center rounded-full bg-orange-400 text-white text-[10px] font-bold">{{ $cartQty }}</span>
+                            </div>
+                        </button>
+                        @endif
+                    @else
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.placeOrder')</span>
+                            <div class="relative">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                <span class="absolute -top-2 -right-2 w-4 h-4 flex items-center justify-center rounded-full bg-orange-400 text-white text-[10px] font-bold">{{ $cartQty }}</span>
+                            </div>
+                        </button>
+                    @endif
+                @endif
+            </div>
+        </div>
+        @endif
     @endif
 
     <x-dialog-modal wire:model.live="showCustomerNameModal" maxWidth="sm" noPadding>
