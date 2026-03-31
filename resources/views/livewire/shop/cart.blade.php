@@ -6,14 +6,14 @@
         $orderTypeBranchLat = $shopBranch->lat ?? 24.7136;
         $orderTypeBranchLng = $shopBranch->lng ?? 46.6753;
     @endphp
-    <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl">
+    <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl" noPadding>
         <x-slot name="title"></x-slot>
 
         <x-slot name="content">
             <div x-data="{ activeTab: {{ $firstOrderTypeId ?? 'null' }} }">
 
                 {{-- Order Type Tabs --}}
-                <div class="flex gap-1 mb-5">
+                <div class="flex gap-1 mb-5 px-6 pt-4">
                     @foreach($orderTypes ?? [] as $orderType)
                         <button
                             type="button"
@@ -35,10 +35,10 @@
                         $isDeliveryOrderType = strtolower((string) ($orderType->slug ?? '')) === 'delivery'
                             || strtolower((string) ($orderType->type ?? '')) === 'delivery';
                     @endphp
-                    <div x-show="activeTab === {{ $orderType->id }}" x-cloak class="space-y-4 mb-5">
+                    <div x-show="activeTab === {{ $orderType->id }}" x-cloak class="space-y-4">
                         @if($isDeliveryOrderType)
                             <div wire:key="order-type-delivery-panel-{{ $orderType->id }}"
-                                class="relative rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden min-h-[420px] bg-gray-100 dark:bg-gray-900">
+                                class="relative overflow-hidden min-h-[420px] bg-gray-100 dark:bg-gray-900">
                                 <div id="order-type-delivery-map" class="absolute inset-0 min-h-[420px] z-0" wire:ignore></div>
 
                                 @if($orderTypeDeliveryStep === 'map' && $orderTypeDeliveryPendingTypeId === $orderType->id)
@@ -578,7 +578,7 @@
                 </style>
 
                 <!-- Load More Indicator -->
-                <div class="flex items-center justify-center py-6 px-4">
+                <div class="flex items-center justify-center py-6 px-2">
                     @if(!$this->allItemsLoaded)
                         <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
                             <svg class="inline animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

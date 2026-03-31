@@ -231,14 +231,14 @@
             <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto sm:mt-10 pb-4" dir="{{ session('customer_is_rtl') ? 'rtl' : 'ltr' }}">
                 <div class="text-center space-y-2">
                     <div class="text-sm font-bold text-gray-900 dark:text-white">@lang('menu.branch_hours_from')</div>
-                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[3rem] flex items-center justify-center">
+                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[2.5rem] flex items-center justify-center">
                         <span x-show="activeDay().closed" x-cloak class="text-gray-500 dark:text-gray-400">@lang('menu.branch_hours_closed_day')</span>
                         <span x-show="!activeDay().closed" x-text="activeDay().from || '—'"></span>
                     </div>
                 </div>
                 <div class="text-center space-y-2">
                     <div class="text-sm font-bold text-gray-900 dark:text-white">@lang('menu.branch_hours_to')</div>
-                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[3rem] flex items-center justify-center">
+                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[2.5rem] flex items-center justify-center">
                         <span x-show="activeDay().closed" x-cloak class="text-gray-500 dark:text-gray-400">@lang('menu.branch_hours_closed_day')</span>
                         <span x-show="!activeDay().closed" x-text="activeDay().to || '—'"></span>
                     </div>
