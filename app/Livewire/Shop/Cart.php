@@ -59,6 +59,7 @@ class Cart extends Component
     use LivewireAlert;
     use PrinterSetting;
 
+    public bool $modalOnly = false;
     public $search;
     public $tableID;
     public $filterCategories;

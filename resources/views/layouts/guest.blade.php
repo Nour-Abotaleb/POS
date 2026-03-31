@@ -105,6 +105,10 @@
 
     @livewire('shopNavigation', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch])
 
+    @unless(request()->routeIs('shop_restaurant'))
+        @livewire('shop.cart', ['restaurant' => $restaurant, 'shopBranch' => $shopBranch, 'modalOnly' => true])
+    @endunless
+
     <div class="mx-auto w-full max-w-screen-xl-mid min-h-svh min-w-0">
         <div class="flex mt-0 dark:bg-gray-900 min-w-0">
             <div id="main-content" class="w-full min-w-0 h-full dark:bg-gray-900">

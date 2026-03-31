@@ -426,6 +426,7 @@
 
 
 
+    @if(!$modalOnly)
     {{-- Admin: Settings → Customer site (text header or image carousel) --}}
     <x-shop-banner :restaurant="$restaurant" />
 
@@ -2354,5 +2355,6 @@
             });
         </script>
     @endscript
+    @endif {{-- !$modalOnly --}}
 
 </div>
