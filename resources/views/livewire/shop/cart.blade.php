@@ -130,7 +130,7 @@
 
                                             {{-- OTP input --}}
                                             <input type="text" inputmode="numeric" maxlength="6"
-                                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-center text-xl leading-none font-semibold tracking-[0.5em] py-2.5 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent"
+                                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-center text-xl leading-none font-semibold tracking-[0.5em] py-2 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent"
                                                 wire:model="orderTypeDeliveryOtp"
                                                 placeholder="_ _ _ _"
                                                 autocomplete="one-time-code" />
