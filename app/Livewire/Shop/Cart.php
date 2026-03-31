@@ -717,7 +717,6 @@ class Cart extends Component
 
     public function orderTypeDeliveryCloseFlow(): void
     {
-        $this->showOrderTypeModal = false;
         $this->orderTypeDeliveryStep = 'idle';
         $this->orderTypeDeliveryPendingTypeId = null;
         $this->orderTypeDeliveryPhone = '';

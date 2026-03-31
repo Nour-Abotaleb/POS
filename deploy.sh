@@ -46,7 +46,7 @@ mkdir -p $BACKUP_DIR
 
 # Step 2: Backup database
 print_info "Backing up database..."
-php artisan backup:run --only-db 2>/dev/null || print_warning "Backup package not installed. Skipping database backup."
+php artisan backup:database 2>/dev/null || print_warning "Backup package not installed. Skipping database backup."
 
 # Step 3: Enable maintenance mode
 print_info "Enabling maintenance mode..."
