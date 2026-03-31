@@ -2721,7 +2721,9 @@ class Cart extends Component
         return OrderType::where('branch_id', $this->shopBranch->id)
             ->where('is_active', true)
             ->where('enable_from_customer_site', true)
-            ->get();
+            ->get()
+            ->sortByDesc(fn($ot) => strtolower((string) ($ot->slug ?? '')) === 'delivery' || strtolower((string) ($ot->type ?? '')) === 'delivery')
+            ->values();
     }
 
     /**
