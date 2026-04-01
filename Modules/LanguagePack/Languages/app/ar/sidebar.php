@@ -1,5 +1,5 @@
 <?php 
 return [
-  'dashboard' => 'لوحة القيادة',
+  'dashboard' => 'لوحة التحكم',
   'menu' => 'قائمة طعام',
 ];

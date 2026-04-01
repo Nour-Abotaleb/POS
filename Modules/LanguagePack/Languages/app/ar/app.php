@@ -121,7 +121,7 @@ return [
   'moduleSwitchMessage' => 'تنشيط أو إلغاء تنشيط وحدة :name',
   'updateModule' => 'تحديث الوحدة النمطية',
   'notify' => 'إخطار',
-  'moduleNotifySwitchMessage' => 'سيخفي ذلك/إظهار رسالة تحديث جديدة على لوحة القيادة لوحدة :name',
+  'moduleNotifySwitchMessage' => 'سيخفي ذلك/إظهار رسالة تحديث جديدة على لوحة التحكم لوحدة :name',
   'verifyEnvato' => 'تحقق من رمز الشراء',
   'findPurchaseCode' => 'انقر فوق هذا الرابط للعثور على رمز الشراء الخاص بك.',
   'moduleSettingsInstall' => 'وحدة تثبيت/تحديث',

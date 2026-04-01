@@ -383,7 +383,7 @@ return [
     'note' => 'Σημείωμα',
     'paymentDetails' => 'Λεπτομέρειες πληρωμής',
     'paystack' => 'Παραχώρηση',
-    'kotBillAndPayment' => 'Kot, Bill & Payment',
+    'kotBillAndPayment' => 'KOT & Payment',
     'cancelled' => 'Ακυρώθηκε',
     'prefixSettings' => 'Ρυθμίσεις προθέματος',
     'orderSettingsHelp' => 'Ρυθμίστε τις ρυθμίσεις παραγγελίας για να διαχειριστείτε τον τρόπο επεξεργασίας των παραγγελιών.',

@@ -536,7 +536,7 @@
             <div class="h-auto pt-3 select-none text-center w-full">
                 @if (in_array('KOT', restaurant_modules()))
                     <div class="flex gap-1.5">
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot')">@lang('modules.order.kot')</span>
                             <span wire:loading wire:target="saveOrder('kot')">
@@ -551,7 +551,7 @@
                                 @lang('modules.order.kot')
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot', 'print')">@lang('modules.order.kotAndPrint')</span>
@@ -567,7 +567,7 @@
                                 @lang('modules.order.kotAndPrint')
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot','bill','payment', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove
@@ -606,7 +606,7 @@
                 @endif
                 @if (!$orderID || ($orderID && $orderDetail && $orderDetail->status == 'draft'))
                     <div class="flex gap-3 mt-3">
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: #EA580B;" wire:click="saveOrder('bill')"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #EA580B;" wire:click="saveOrder('bill')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('bill')">@lang('modules.order.bill')</span>
                             <span wire:loading wire:target="saveOrder('bill')">
@@ -621,7 +621,7 @@
                                 @lang('modules.order.bill')
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: #0D9F6E;"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #0D9F6E;"
                             wire:click="saveOrder('bill', 'payment')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('bill', 'payment')">@lang('modules.order.billAndPayment')</span>
@@ -637,7 +637,7 @@
                                 @lang('modules.order.billAndPayment')
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: #3F82F7;"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #3F82F7;"
                             wire:click="saveOrder('bill', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('bill', 'print')">@lang('modules.order.createBillAndPrintReceipt')</span>

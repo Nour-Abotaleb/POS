@@ -13,6 +13,10 @@
     [dir="rtl"] .pos-slider-next-arrow {
         transform: rotate(180deg);
     }
+    /* Invert food-type icon in dark mode */
+    .dark .pos-menu-item-type-icon {
+        filter: invert(1) brightness(10) !important;
+    }
     /* Desktop: products panel always in normal layout (as before), never fixed overlay; keep flex layout so content and category filter show correctly */
     @media (min-width: 1024px) {
         .pos-menu-panel {
@@ -356,7 +360,7 @@
                                     {{-- Image Section --}}
                                     @if (!$restaurant->hide_menu_item_image_on_pos)
                                     <div class="relative aspect-square hidden md:block">
-                                        <img class="w-full lg:w-32 lg:h-32 object-cover rounded-t-lg"
+                                        <img class="w-full lg:w-32 lg:h-32 object-cover rounded-t-lg pos-menu-item-type-icon"
                                             src="{{ $item->item_photo_url }}"
                                             alt="{{ $item->item_name }}"
                                             loading="lazy"

@@ -28,7 +28,7 @@
   }
   @media (min-width: 768px) {
     .multipos-nav-status {
-      max-width: 150px;
+      max-width: 130px;
     }
   }
   @media (min-width: 1280px) {
@@ -234,14 +234,14 @@
     }
   }
   .nav-counter-btn .nav-counter-badge {
-    padding: 0.125rem 0.25rem;
+    padding: 0.125rem 0.2rem;
     margin-inline-start: 0.125rem;
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 1024px) {
     .nav-counter-btn .nav-counter-badge {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-      margin-inline-start: 0.5rem;
+      padding-left: 0.2rem;
+      padding-right: 0.2rem;
+      margin-inline-start: 0.2rem;
     }
   }
 </style>
@@ -276,7 +276,7 @@
         @endif
 
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
-          <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
+          <img src="{{ restaurant()->logoUrl }}" class="h-8" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
           {{-- @if (restaurant()->show_logo_text)
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden md:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>

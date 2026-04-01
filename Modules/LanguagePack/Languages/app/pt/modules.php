@@ -383,7 +383,7 @@ return [
     'note' => 'Observação',
     'paymentDetails' => 'Detalhes de pagamento',
     'paystack' => 'PayStack',
-    'kotBillAndPayment' => 'Kot, Bill & Pay',
+    'kotBillAndPayment' => 'KOT & Pay',
     'cancelled' => 'Cancelado',
     'prefixSettings' => 'Configurações de prefixo',
     'orderSettingsHelp' => 'Defina as configurações de pedidos para gerenciar como os pedidos são processados.',

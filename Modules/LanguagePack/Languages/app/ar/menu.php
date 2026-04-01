@@ -1,6 +1,6 @@
 <?php 
 return [
-  'dashboard' => 'لوحة القيادة',
+  'dashboard' => 'لوحة التحكم',
   'menu' => 'قائمة طعام',
   'menus' => 'قوائم',
   'menuItem' => 'عناصر القائمة',

@@ -618,8 +618,8 @@ return [
         'try_adjusting' => 'جرب تعديل معايير البحث أو التصفية',
 
         // Messages
-        'edit_restriction_message' => 'لأغراض التدقيق، يمكن تعديل حركات المخزون من آخر 7 أيام فقط. المعاملات الأقدم للقراءة فقط.',
-        'edit_restriction_tooltip' => 'يمكن تعديل حركات آخر 7 أيام فقط <br> <small>لأغراض التدقيق</small>',
+        'edit_restriction_message' => 'لعناصر التدقيق، يمكن تعديل حركات المخزون من آخر 7 أيام فقط. المعاملات الأقدم للقراءة فقط.',
+        'edit_restriction_tooltip' => 'يمكن تعديل حركات آخر 7 أيام فقط <br> <small>لعناصر التدقيق</small>',
 
         'fields' => [
             'quantity' => 'الكمية',

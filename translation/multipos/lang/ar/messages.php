@@ -217,7 +217,7 @@ return [
     'title' => 'إدارة محطات نقاط البيع',
     'pos_terminals' => 'محطات نقاط البيع',
     'add_terminal' => 'أضف المحطة الطرفية',
-    'back_to_dashboard' => 'العودة إلى لوحة القيادة',
+    'back_to_dashboard' => 'العودة إلى لوحة التحكم',
     'edit_terminal' => 'تحرير المحطة',
     'delete_terminal' => 'يمسح',
     'no_terminals' => 'لا محطات',
