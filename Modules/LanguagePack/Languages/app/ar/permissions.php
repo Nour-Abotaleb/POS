@@ -111,7 +111,7 @@ return [
     'Area' => 'منطقة',
     'Table' => 'طاولة',
     'Reservation' => 'حجز',
-    'KOT' => 'كوت',
+    'KOT' => 'kot',
     'Order' => 'طلب',
     'Customer' => 'عميل',
     'Staff' => 'طاقم عمل',

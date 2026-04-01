@@ -24,7 +24,7 @@ return [
   'tableDeleted' => 'تم حذف الجدول بنجاح!',
   'setTableNo' => 'تحتاج إلى تعيين رقم الجدول',
   'enterPax' => 'أدخل رقم باكس.',
-  'selectWaiter' => 'حدد النادل الذي أخذ الطلب.',
+  'selectWaiter' => 'اختر النادل الذي أخذ الطلب.',
   'orderItemRequired' => 'تحتاج إلى إضافة عناصر إلى الطلب.',
   'orderSaved' => 'وضع النظام بنجاح.',
   'kotGenerated' => 'ولدت KOT بنجاح.',

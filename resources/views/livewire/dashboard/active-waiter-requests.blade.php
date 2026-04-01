@@ -1,7 +1,7 @@
 <div class="relative">
     <a @if(pusherSettings()->is_enabled_pusher_broadcast) wire:poll.15s.visible @else wire:poll.10s.visible @endif
     href="{{ route('waiter-requests.index') }}" wire:navigate
-    class="nav-counter-btn items-center xl:px-1 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
+    class="nav-counter-btn items-center xl:px-2 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
     data-tooltip-target="active-waiter-requests-tooltip-toggle"
     >
     <img src="{{ asset('img/waiter.svg') }}" alt="Active Waiter Requests" class="w-5 h-5">

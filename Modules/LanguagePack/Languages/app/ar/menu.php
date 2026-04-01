@@ -12,7 +12,7 @@ return [
   'tables' => 'الطاولات',
   'orders' => 'طلبات',
   'pos' => 'نقاط البيع',
-  'kot' => 'كوت',
+  'kot' => 'kot',
   'myAccount' => 'حسابي',
   'myOrders' => 'أوامري',
   'customers' => 'عملاء',
