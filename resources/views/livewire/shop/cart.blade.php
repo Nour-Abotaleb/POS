@@ -510,7 +510,10 @@
                                 <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
-                                <span class="truncate">{{ $catName }}</span>
+                                <span class="min-w-0 truncate">{{ $catName }}</span>
+                                <span class="shrink-0 text-[11px] font-medium text-gray-500 dark:text-gray-300">
+                                    ({{ (int) ($cat->items_count ?? 0) }})
+                                </span>
                             </button>
                         @endforeach
 
@@ -569,7 +572,10 @@
                                         ? 'bg-[#011646] text-white'
                                         : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
                                 >
-                                    {{ $catName }}
+                                    <span class="inline-flex items-center gap-2">
+                                        <span>{{ $catName }}</span>
+                                        <span class="text-[11px] opacity-90">({{ (int) ($cat->items_count ?? 0) }})</span>
+                                    </span>
                                 </button>
                             @endforeach
                         </div>

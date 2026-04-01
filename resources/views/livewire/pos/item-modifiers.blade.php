@@ -1,11 +1,14 @@
 <style>
     .btn-add-item img { filter: invert(1) brightness(10) !important; }
 </style>
-<div class="text-base text-gray-900 dark:text-gray-100 flex flex-col max-h-[85vh] md:max-h-[95vh]">
+<div class="text-base text-gray-900 dark:text-gray-100 flex flex-col" style="max-height: 85vh; max-height: 85svh;">
     @php $currencyId = $selectedModifierItem->branch->restaurant->currency_id; @endphp
 
     <!-- Hero Image -->
-    <div class="relative overflow-hidden rounded-t-lg h-[240px] md:h-[260px] lg:h-[300px] flex-shrink-0">
+    <div
+        class="relative overflow-hidden rounded-t-lg flex-shrink-0"
+        style="height: clamp(240px, 30vh, 300px);"
+    >
         <!-- Close button -->
         <button type="button"
             wire:click="$dispatch('closeModifiersModal')"

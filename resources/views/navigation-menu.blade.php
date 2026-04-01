@@ -43,9 +43,9 @@
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
           <img src="{{ restaurant()->logoUrl }}" class="h-8 ltr:mr-3 rtl:ml-3" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
-          @if (restaurant()->show_logo_text)
+          {{-- @if (restaurant()->show_logo_text)
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden md:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>
-          @endif
+          @endif --}}
         </a>
 
         <button id="toggle-sidebar" type="button" class="items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mx-2 hidden {{ request()->routeIs('pos.*') ? '' : 'lg:inline-flex' }}">
