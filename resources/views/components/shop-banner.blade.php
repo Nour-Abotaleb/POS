@@ -24,7 +24,7 @@
         @if ($headerType === 'text')
             <div
                 class="mx-auto {{ $textBannerMarginTop ?: 'mt-4' }} flex items-center justify-center rounded-xl border border-gray-200 bg-[var(--brand-primary)]/10 px-4 py-5 text-center dark:border-gray-700 dark:bg-gray-800 sm:px-6 sm:py-6"
-                style="min-height: clamp(14rem, 18vw, 18rem);"
+                style="min-height: clamp(12rem, 18vw, 15rem);"
             >
                 <div class="max-w-3xl text-gray-900 dark:text-white">
                     <p class="whitespace-pre-line text-base font-semibold leading-snug sm:text-lg md:text-xl">
@@ -129,7 +129,7 @@
         @else
             <div
                 class="mx-auto max-w-screen-xl rounded-xl bg-[var(--brand-primary)]/10 px-4 py-5 text-center dark:bg-gray-800 sm:py-6 lg:px-12"
-                style="min-height: clamp(7rem, 18vw, 11rem); max-height: clamp(8rem, 22vw, 14rem);"
+                style="min-height: clamp(12rem, 18vw, 15rem);"
             >
                 <h1
                     class="text-2xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white md:text-3xl"
