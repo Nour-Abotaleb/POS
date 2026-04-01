@@ -244,6 +244,9 @@
       margin-inline-start: 0.2rem;
     }
   }
+  .dark .app-logo img {
+    filter: invert(1);
+  }
 </style>
 @endassets
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -276,7 +279,7 @@
         @endif
 
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
-          <img src="{{ restaurant()->logoUrl }}" class="h-8 dark:invert" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
+          <img src="{{ restaurant()->logoUrl }}" class="h-8" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
           {{-- @if (restaurant()->show_logo_text)
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden md:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>

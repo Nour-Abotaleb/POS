@@ -536,53 +536,43 @@
             <div class="h-auto pt-3 select-none text-center w-full">
                 @if (in_array('KOT', restaurant_modules()))
                     <div class="flex gap-1.5">
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
-                            <span wire:loading.remove wire:target="saveOrder('kot')">@lang('modules.order.kot')</span>
-                            <span wire:loading wire:target="saveOrder('kot')">
-                                <svg class="animate-spin -ml-1 mr-1 h-4 w-4 inline-flex text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.kot')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('kot')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.kot')
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
-                            <span wire:loading.remove wire:target="saveOrder('kot', 'print')">@lang('modules.order.kotAndPrint')</span>
-                            <span wire:loading wire:target="saveOrder('kot', 'print')" class="inline-flex items-center">
-                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.kotAndPrint')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('kot', 'print')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.kotAndPrint')
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: var(--brand-primary);"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot','bill','payment', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
-                            <span wire:loading.remove
-                                wire:target="saveOrder('kot','bill','payment', 'print')">@lang('modules.order.kotBillAndPayment')</span>
-                            <span wire:loading wire:target="saveOrder('kot','bill','payment', 'print')" >
-                                <svg class="animate-spin inline-flex -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.kotBillAndPayment')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('kot','bill','payment', 'print')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.kotBillAndPayment')
                         </button>
                         @if (!$orderID || ($orderID && $orderDetail && $orderDetail->status !== 'draft'))
                         <button class="rounded-xl hover:opacity-90 text-white w-auto py-2 px-2.5 relative inline-flex items-center justify-center" style="background-color: var(--brand-primary);" wire:click="saveOrder('draft')"
@@ -606,52 +596,43 @@
                 @endif
                 @if (!$orderID || ($orderID && $orderDetail && $orderDetail->status == 'draft'))
                     <div class="flex gap-3 mt-3">
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #EA580B;" wire:click="saveOrder('bill')"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: #EA580B;" wire:click="saveOrder('bill')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
-                            <span wire:loading.remove wire:target="saveOrder('bill')">@lang('modules.order.bill')</span>
-                            <span wire:loading wire:target="saveOrder('bill')">
-                                <svg class="animate-spin inline-flex items-center -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.bill')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('bill')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.bill')
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #0D9F6E;"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: #0D9F6E;"
                             wire:click="saveOrder('bill', 'payment')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
-                            <span wire:loading.remove wire:target="saveOrder('bill', 'payment')">@lang('modules.order.billAndPayment')</span>
-                            <span wire:loading wire:target="saveOrder('bill', 'payment')">
-                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-flex items-center" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.billAndPayment')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('bill', 'payment')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.billAndPayment')
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative text-xs md:text-sm text-nowrap" style="background-color: #3F82F7;"
+                        <button class="rounded-xl text-white w-full p-2 text-xs md:text-sm text-nowrap flex items-center justify-center gap-1.5" style="background-color: #3F82F7;"
                             wire:click="saveOrder('bill', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
-                            <span wire:loading.remove wire:target="saveOrder('bill', 'print')">@lang('modules.order.createBillAndPrintReceipt')</span>
-                            <span wire:loading wire:target="saveOrder('bill', 'print')" class="inline-flex items-center">
-                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                    </path>
-                                </svg>
-                                @lang('modules.order.createBillAndPrintReceipt')
-                            </span>
+                            <svg wire:loading wire:target="saveOrder('bill', 'print')" class="animate-spin h-4 w-4 shrink-0 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            @lang('modules.order.createBillAndPrintReceipt')
                         </button>
                     </div>
                 @endif
