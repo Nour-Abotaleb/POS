@@ -305,5 +305,21 @@ return [
     'myOrders' => 'طلباتي',
     'myBookings' => 'حجوزاتي',
     'myAccount' => 'حسابي',
+    'branches' => 'الفروع',
+
+    // Branch hours (customer site)
+    'branch_hours_from' => 'من',
+    'branch_hours_to' => 'إلى',
+    'branch_hours_closed_day' => 'مغلق',
+    'branch_hours_title' => 'ساعات العمل',
+
+    // Days (customer site)
+    'day_monday' => 'الإثنين',
+    'day_tuesday' => 'الثلاثاء',
+    'day_wednesday' => 'الأربعاء',
+    'day_thursday' => 'الخميس',
+    'day_friday' => 'الجمعة',
+    'day_saturday' => 'السبت',
+    'day_sunday' => 'الأحد',
     'openMainMenu' => 'فتح القائمة الرئيسية',
 ];

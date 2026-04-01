@@ -1460,6 +1460,11 @@ return [
         'myOrders' => 'طلباتي',
         'customerOrderBoard' => 'لوحة طلبات العملاء',
         'selectOrderType' => 'اختر نوع الطلب',
+        // Order types (customer site)
+        'dine_in' => 'داخل المطعم',
+        'delivery' => 'توصيل',
+        'pickup' => 'استلام',
+        'curbside' => 'استلام من السيارة',
         'selectOrderTypeDescription' => 'اختر نوع الطلب من القائمة المتاحة',
         'setAsDefault' => 'تعيين كافتراضي',
         'skipThisSelectionNextTime' => 'تخطي هذا الاختيار في المرة القادمة',

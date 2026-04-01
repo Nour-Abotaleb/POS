@@ -177,6 +177,11 @@ return [
     'refresh' => 'ينعش',
   ],
   'order' => [
+    // Order types (customer site)
+    'dine_in' => 'داخل المطعم',
+    'delivery' => 'توصيل',
+    'pickup' => 'استلام',
+    'curbside' => 'استلام من السيارة',
     'date' => 'تاريخ',
     'dateParts' => 'أجزاء التاريخ',
     'showYear' => 'عرض سنة',
