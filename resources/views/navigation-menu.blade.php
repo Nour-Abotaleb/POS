@@ -1,3 +1,4 @@
+@assets
 <style>
   #pos-header-search::placeholder {
     color: #A3A3A3 !important;
@@ -214,6 +215,7 @@
     }
   }
 </style>
+@endassets
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
   <div class="pos-nav-inner">
     <div class="flex items-center justify-between">
