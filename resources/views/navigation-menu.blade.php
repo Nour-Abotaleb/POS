@@ -219,10 +219,29 @@
      they show on md+ even when Tailwind responsive variants are purged in production. */
   .nav-counter-btn {
     display: none;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
   }
   @media (min-width: 768px) {
     .nav-counter-btn {
       display: inline-flex;
+    }
+  }
+  @media (min-width: 1024px) {
+    .nav-counter-btn {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+  .nav-counter-btn .nav-counter-badge {
+    padding: 0.125rem 0.25rem;
+    margin-inline-start: 0.125rem;
+  }
+  @media (min-width: 1100px) {
+    .nav-counter-btn .nav-counter-badge {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-inline-start: 0.5rem;
     }
   }
 </style>
