@@ -276,7 +276,7 @@
         @endif
 
         <a href="{{ route('dashboard') }}" class="flex items-center app-logo">
-          <img src="{{ restaurant()->logoUrl }}" class="h-8" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
+          <img src="{{ restaurant()->logoUrl }}" class="h-8 dark:invert" alt="" onerror="this.onerror=null; this.style.visibility='hidden';" />
 
           {{-- @if (restaurant()->show_logo_text)
           <span class="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white hidden md:block ltr:mr-2 rtl:ml-2">{{ Str::limit(restaurant()->name, 10) }}</span>
