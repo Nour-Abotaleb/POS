@@ -113,7 +113,12 @@
                                                 class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90 mt-4"
                                                 style="background-color: var(--brand-primary);">
                                                 <span wire:loading.remove wire:target="orderTypeDeliverySendOtp">@lang('app.next')</span>
-                                                <span wire:loading wire:target="orderTypeDeliverySendOtp">...</span>
+                                                <span wire:loading wire:target="orderTypeDeliverySendOtp" class="inline-flex items-center justify-center">
+                                                    <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                                    </svg>
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
@@ -154,7 +159,12 @@
                                                 class="mt-4 w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
                                                 style="background-color: var(--brand-primary);">
                                                 <span wire:loading.remove wire:target="orderTypeDeliveryVerifyAndComplete">@lang('app.verify')</span>
-                                                <span wire:loading wire:target="orderTypeDeliveryVerifyAndComplete">...</span>
+                                                <span wire:loading wire:target="orderTypeDeliveryVerifyAndComplete" class="inline-flex items-center justify-center">
+                                                    <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                                    </svg>
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
@@ -1475,7 +1485,12 @@
                         class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
                         style="background-color: var(--brand-primary);">
                         <span wire:loading.remove wire:target="submitCustomerName">@lang('app.continue')</span>
-                        <span wire:loading wire:target="submitCustomerName">...</span>
+                        <span wire:loading wire:target="submitCustomerName" class="inline-flex items-center justify-center">
+                            <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                            </svg>
+                        </span>
                     </button>
                 </form>
             @endif
