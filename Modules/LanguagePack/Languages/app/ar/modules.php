@@ -181,6 +181,8 @@ return [
     'dine_in' => 'داخل المطعم',
     'delivery' => 'توصيل',
     'pickup' => 'استلام',
+    'delivery_in_car' => 'توصيل للسيارة',
+    'delivery-in-car' => 'توصيل للسيارة',
     'curbside' => 'استلام من السيارة',
     'date' => 'تاريخ',
     'dateParts' => 'أجزاء التاريخ',

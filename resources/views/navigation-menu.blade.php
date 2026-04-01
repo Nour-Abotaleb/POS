@@ -10,14 +10,217 @@
     color: #A3A3A3 !important;
     opacity: 1;
   }
+  /* MultiPOS header chip: plain CSS so responsive rules work even if Tailwind md:/xl: variants are missing from production CSS */
+  .multipos-nav-status {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #E0E5F2;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    overflow: hidden;
+    max-width: 80px;
+    padding: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .multipos-nav-status {
+      max-width: 150px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .multipos-nav-status {
+      max-width: none;
+      padding: 0.625rem 0.75rem;
+    }
+  }
+  @media (min-width: 1280px) and (max-width: 1456px) {
+    .multipos-nav-status {
+      max-width: 150px;
+    }
+  }
+  .dark .multipos-nav-status {
+    background-color: rgb(75 85 99);
+    border-color: rgb(156 163 175);
+  }
+
+  /* POS / nav header: plain CSS for sm/md/lg/xl so production builds without those Tailwind variants still match */
+  .pos-nav-inner {
+    padding: 0.75rem;
+  }
+  @media (min-width: 1024px) {
+    .pos-nav-inner {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      padding-left: 0.75rem;
+      padding-right: 1.25rem;
+    }
+  }
+
+  .pos-nav-mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (min-width: 1024px) {
+    .pos-nav-mobile-menu-btn {
+      display: none;
+    }
+  }
+
+  .pos-nav-sidebar-toggle {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .pos-nav-sidebar-toggle.show-on-lg {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  .pos-header-search-wrap {
+    margin-inline-start: 0.25rem;
+  }
+  @media (min-width: 640px) {
+    .pos-header-search-wrap {
+      margin-inline-start: 1rem;
+    }
+  }
+
+  #pos-header-search {
+    width: 7rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    #pos-header-search {
+      width: 9rem;
+    }
+  }
+  @media (min-width: 768px) {
+    #pos-header-search {
+      width: 11rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    #pos-header-search {
+      width: 7rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    #pos-header-search {
+      width: 12rem;
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem;
+    }
+  }
+
+  .pos-nav-add-customer {
+    width: auto;
+    padding: 0.5rem;
+  }
+  @media (min-width: 1280px) {
+    .pos-nav-add-customer {
+      padding: 0.625rem 0.75rem;
+    }
+  }
+
+  .pos-nav-add-customer-label {
+    display: none;
+  }
+  @media (min-width: 1280px) {
+    .pos-nav-add-customer-label {
+      display: block;
+    }
+  }
+
+  .pos-nav-reset-btn {
+    padding: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .pos-nav-reset-btn {
+      width: auto;
+    }
+  }
+  @media (min-width: 1280px) {
+    .pos-nav-reset-btn {
+      padding: 0.625rem 0.75rem;
+    }
+  }
+
+  .pos-nav-upgrade-btn {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .pos-nav-upgrade-btn {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+  }
+
+  .pos-nav-upgrade-label {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .pos-nav-upgrade-label {
+      display: inline;
+    }
+  }
+
+  .pos-nav-trial-inline {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .pos-nav-trial-inline {
+      display: inline-flex;
+    }
+  }
+
+  .pos-nav-trial-btn {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .pos-nav-trial-btn {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+  }
+
+  .pos-nav-trial-text {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  @media (min-width: 640px) {
+    .pos-nav-trial-text {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  .pos-nav-fs-tooltip {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  @media (min-width: 1280px) {
+    .pos-nav-fs-tooltip {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+  }
 </style>
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+  <div class="pos-nav-inner">
     <div class="flex items-center justify-between">
 
       <div class="flex items-center justify-start">
         <button type="button" id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"
-          class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          class="pos-nav-mobile-menu-btn p-2 text-gray-600 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           <svg id="toggleSidebarMobileHamburger" class="pos-mobile-nav-hamburger w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
@@ -48,7 +251,7 @@
           @endif --}}
         </a>
 
-        <button id="toggle-sidebar" type="button" class="items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mx-2 hidden {{ request()->routeIs('pos.*') ? '' : 'lg:inline-flex' }}">
+        <button id="toggle-sidebar" type="button" class="pos-nav-sidebar-toggle items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mx-2 {{ request()->routeIs('pos.*') ? '' : 'show-on-lg' }}">
           <svg id="toggle-sidebar-icon" class="w-6 h-6 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7M19 19l-7-7 7-7"/>
           </svg>
@@ -58,7 +261,7 @@
           @if (request()->routeIs('pos.*'))
           {{-- POS screen order: 1) Search, 2) MultiPOS last update, 3) Customer, 4) Reset, 5) rest (orders/reservations/waiter below) --}}
 
-          <div class="flex items-center gap-2 ms-1 sm:ms-4">
+          <div class="pos-header-search-wrap flex items-center gap-2">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +272,7 @@
               <input
                 id="pos-header-search"
                 type="text"
-                class="w-28 sm:w-36 md:w-44 lg:w-28 xl:w-48 border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2 xl:py-2.5 border-gray-200 rounded-lg text-sm"
+                class="border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2 border-gray-200 rounded-lg text-sm"
                 placeholder="@lang('placeholders.searchMenuItems')"
                 oninput="var v = this.value; window.dispatchEvent(new CustomEvent('pos:set-search', { detail: { value: v } })); if (window.Livewire && window.Livewire.dispatch) window.Livewire.dispatch('pos-set-search', { value: v }); var inPage = document.getElementById('pos-products-search'); if (inPage && inPage.value !== v) { inPage.value = v; inPage.dispatchEvent(new Event('input', { bubbles: true })); }"
               />
@@ -77,7 +280,7 @@
           </div>
 
           @if(module_enabled('MultiPOS') && ($posMachine = pos_machine()) && $posMachine->status === 'active')
-          <div class="flex items-center shrink-0 bg-white dark:bg-gray-600 border border-[#E0E5F2] dark:border-gray-400 py-2 xl:py-2.5 px-2 xl:px-3 rounded-lg text-sm max-w-[80px] md:max-w-[150px] xl:max-w-none overflow-hidden [@media(min-width:1280px)_and_(max-width:1456px)]:max-w-[150px]">
+          <div class="multipos-nav-status">
             <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 2C6.49 2 2 6.49 2 12C2 17.51 6.49 22 12 22C17.51 22 22 17.51 22 12C22 6.49 17.51 2 12 2ZM16.78 9.7L11.11 15.37C10.97 15.51 10.78 15.59 10.58 15.59C10.38 15.59 10.19 15.51 10.05 15.37L7.22 12.54C6.93 12.25 6.93 11.77 7.22 11.48C7.51 11.19 7.99 11.19 8.28 11.48L10.58 13.78L15.72 8.64C16.01 8.35 16.49 8.35 16.78 8.64C17.07 8.93 17.07 9.4 16.78 9.7Z" fill="#34C759"/>
             </svg>
@@ -94,7 +297,7 @@
               try { window.dispatchEvent(new CustomEvent('pos:show-add-customer')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === 'function') window.Livewire.dispatch('showAddCustomerModal'); } catch (e) {}
             "
-            class="inline-flex items-center px-2 xl:px-3 py-2 xl:py-2.5 gap-1 text-xs"
+            class="pos-nav-add-customer inline-flex items-center gap-1 text-xs"
             title="{{ __('app.addCustomerDetails') }}"
           >
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -104,7 +307,7 @@
             <path d="M16.2416 14.9833H13.7583" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M15 13.7667V16.2583" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-            <span class="hidden xl:block">@lang('app.customer')</span>
+            <span class="pos-nav-add-customer-label">@lang('app.customer')</span>
           </x-primary-link>
 
           <div class="flex items-center gap-2">
@@ -112,7 +315,7 @@
                 type="button"
                 onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; var inPage = document.getElementById('pos-products-search'); if (inPage) { inPage.value = ''; inPage.dispatchEvent(new Event('input', { bubbles: true })); } window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"
                 style="background-color: var(--brand-primary); border-color: var(--brand-primary);"
-                class="text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-2 xl:px-3 py-2 xl:py-2.5 text-center inline-flex items-center gap-1"
+                class="pos-nav-reset-btn text-white justify-center font-semibold rounded-lg text-sm text-center inline-flex items-center gap-1"
                 title="@lang('app.reset')"
               >
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,16 +357,16 @@
           @livewire('restaurant.stop-impersonate-restaurant')
           @if (restaurant()->package->package_type == \App\Enums\PackageType::DEFAULT)
             <a href="{{ route('pricing.plan') }}" wire:navigate class="inline-flex" >
-              <x-secondary-button class="inline-flex items-center gap-2 shadow-md text-skin-base dark:text-skin-base hover:origin-center group px-2 sm:px-3">
+              <x-secondary-button class="pos-nav-upgrade-btn inline-flex items-center gap-2 shadow-md text-skin-base dark:text-skin-base hover:origin-center group">
                 <svg class="w-5 h-5 text-current group-hover:scale-110 duration-500" width="24" height="24" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/></svg>
-                <span class="hidden sm:inline">@lang('modules.settings.upgradeLicense')</span>
+                <span class="pos-nav-upgrade-label">@lang('modules.settings.upgradeLicense')</span>
               </x-secondary-button>
             </a>
           @elseif (restaurant()->package->package_type == \App\Enums\PackageType::TRIAL)
-            <a href="{{ route('pricing.plan') }}" wire:navigate class="hidden lg:inline-flex" >
-              <x-secondary-button class="px-2 sm:px-3">
+            <a href="{{ route('pricing.plan') }}" wire:navigate class="pos-nav-trial-inline" >
+              <x-secondary-button class="pos-nav-trial-btn">
                 @php $daysLeftInTrial = floor(now(timezone())->diffInDays(\Carbon\Carbon::parse(restaurant()->trial_ends_at)->addDays(1))); @endphp
-                <span class="text-xs sm:text-sm">{{ $daysLeftInTrial > 0 ? $daysLeftInTrial .' ' . __('modules.package.daysLeftTrial') : __('modules.package.trialExpired') }}</span>
+                <span class="pos-nav-trial-text">{{ $daysLeftInTrial > 0 ? $daysLeftInTrial .' ' . __('modules.package.daysLeftTrial') : __('modules.package.trialExpired') }}</span>
               </x-secondary-button>
             </a>
           @endif
@@ -173,7 +376,7 @@
               <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"/>
             </svg>
           </button>
-          <div id="fullscreen-tooltip-toggle" role="tooltip" class="absolute z-10 invisible inline-block px-2 xl:px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">@lang('app.viewInFullscreen')<div class="tooltip-arrow" data-popper-arrow></div></div>
+          <div id="fullscreen-tooltip-toggle" role="tooltip" class="pos-nav-fs-tooltip absolute z-10 invisible inline-block py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">@lang('app.viewInFullscreen')<div class="tooltip-arrow" data-popper-arrow></div></div>
           <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button"
             onclick="window.toggleColorTheme && window.toggleColorTheme()"
             class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">

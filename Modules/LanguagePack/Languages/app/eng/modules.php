@@ -276,6 +276,8 @@ return [
         'dine_in' => 'Dine In',
         'delivery' => 'Delivery',
         'pickup' => 'Pickup',
+        'delivery_in_car' => 'Delivery in car',
+        'delivery-in-car' => 'Delivery in car',
         'pickupAt' => 'Pickup At',
         'out_for_delivery' => 'Out For Delivery',
         'infoout_for_delivery' => 'Order is out for delivery',

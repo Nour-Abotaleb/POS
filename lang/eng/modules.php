@@ -271,6 +271,8 @@ return [
         'selectOrderTypeDescription' => 'Select order type from available list',
         'dineIn' => 'Dine In',
         'dine_in' => 'Dine In',
+        'delivery_in_car' => 'Delivery in car',
+        'delivery-in-car' => 'Delivery in car',
         'dineInDescription' => 'Enjoy your meal at our restaurant',
         'takeaway' => 'Takeaway',
         'delivery' => 'Delivery',
