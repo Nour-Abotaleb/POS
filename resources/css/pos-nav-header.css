@@ -1,0 +1,217 @@
+/**
+ * POS / app bar header — plain CSS (not Tailwind responsive variants).
+ * Loaded via app.css + Vite so rules always ship in public/build (Livewire inline <style> is unreliable).
+ */
+#pos-header-search::placeholder {
+    color: #a3a3a3 !important;
+    opacity: 1;
+}
+#pos-header-search::-webkit-input-placeholder {
+    color: #a3a3a3 !important;
+}
+#pos-header-search::-moz-placeholder {
+    color: #a3a3a3 !important;
+    opacity: 1;
+}
+
+.multipos-nav-status {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #e0e5f2;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    overflow: hidden;
+    max-width: 80px;
+    padding: 0.5rem;
+}
+@media (min-width: 768px) {
+    .multipos-nav-status {
+        max-width: 150px;
+    }
+}
+@media (min-width: 1280px) {
+    .multipos-nav-status {
+        max-width: none;
+        padding: 0.625rem 0.75rem;
+    }
+}
+@media (min-width: 1280px) and (max-width: 1456px) {
+    .multipos-nav-status {
+        max-width: 150px;
+    }
+}
+.dark .multipos-nav-status {
+    background-color: rgb(75 85 99);
+    border-color: rgb(156 163 175);
+}
+
+.pos-nav-inner {
+    padding: 0.75rem;
+}
+@media (min-width: 1024px) {
+    .pos-nav-inner {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        padding-left: 0.75rem;
+        padding-right: 1.25rem;
+    }
+}
+
+.pos-nav-mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (min-width: 1024px) {
+    .pos-nav-mobile-menu-btn {
+        display: none;
+    }
+}
+
+.pos-nav-sidebar-toggle {
+    display: none;
+}
+@media (min-width: 1024px) {
+    .pos-nav-sidebar-toggle.show-on-lg {
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+.pos-header-search-wrap {
+    margin-inline-start: 0.25rem;
+}
+@media (min-width: 640px) {
+    .pos-header-search-wrap {
+        margin-inline-start: 1rem;
+    }
+}
+
+#pos-header-search {
+    width: 7rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+@media (min-width: 640px) {
+    #pos-header-search {
+        width: 9rem;
+    }
+}
+@media (min-width: 768px) {
+    #pos-header-search {
+        width: 11rem;
+    }
+}
+@media (min-width: 1024px) {
+    #pos-header-search {
+        width: 7rem;
+    }
+}
+@media (min-width: 1280px) {
+    #pos-header-search {
+        width: 12rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+    }
+}
+
+.pos-nav-add-customer {
+    width: auto;
+    padding: 0.5rem;
+}
+@media (min-width: 1280px) {
+    .pos-nav-add-customer {
+        padding: 0.625rem 0.75rem;
+    }
+}
+
+.pos-nav-add-customer-label {
+    display: none;
+}
+@media (min-width: 1280px) {
+    .pos-nav-add-customer-label {
+        display: block;
+    }
+}
+
+.pos-nav-reset-btn {
+    padding: 0.5rem;
+}
+@media (min-width: 640px) {
+    .pos-nav-reset-btn {
+        width: auto;
+    }
+}
+@media (min-width: 1280px) {
+    .pos-nav-reset-btn {
+        padding: 0.625rem 0.75rem;
+    }
+}
+
+.pos-nav-upgrade-btn {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+@media (min-width: 640px) {
+    .pos-nav-upgrade-btn {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.pos-nav-upgrade-label {
+    display: none;
+}
+@media (min-width: 640px) {
+    .pos-nav-upgrade-label {
+        display: inline;
+    }
+}
+
+.pos-nav-trial-inline {
+    display: none;
+}
+@media (min-width: 1024px) {
+    .pos-nav-trial-inline {
+        display: inline-flex;
+    }
+}
+
+.pos-nav-trial-btn {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+@media (min-width: 640px) {
+    .pos-nav-trial-btn {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.pos-nav-trial-text {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+@media (min-width: 640px) {
+    .pos-nav-trial-text {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+    }
+}
+
+.pos-nav-fs-tooltip {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+@media (min-width: 1280px) {
+    .pos-nav-fs-tooltip {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
