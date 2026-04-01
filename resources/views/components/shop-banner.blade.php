@@ -24,7 +24,7 @@
         @if ($headerType === 'text')
             <div
                 class="mx-auto {{ $textBannerMarginTop ?: 'mt-4' }} flex items-center justify-center rounded-xl border border-gray-200 bg-[var(--brand-primary)]/10 px-4 py-5 text-center dark:border-gray-700 dark:bg-gray-800 sm:px-6 sm:py-6"
-                style="min-height: clamp(9rem, 18vw, 15rem);"
+                style="min-height: clamp(14rem, 18vw, 18rem);"
             >
                 <div class="max-w-3xl text-gray-900 dark:text-white">
                     <p class="whitespace-pre-line text-base font-semibold leading-snug sm:text-lg md:text-xl">
