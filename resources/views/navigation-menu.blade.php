@@ -214,6 +214,17 @@
       padding-right: 0.75rem;
     }
   }
+
+  /* Today-orders / reservations / waiter-requests counter buttons: plain CSS so
+     they show on md+ even when Tailwind responsive variants are purged in production. */
+  .nav-counter-btn {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .nav-counter-btn {
+      display: inline-flex;
+    }
+  }
 </style>
 @endassets
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
