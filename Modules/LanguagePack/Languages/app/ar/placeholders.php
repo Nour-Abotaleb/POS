@@ -73,7 +73,7 @@ return [
   'addDeliveryTypeName' => 'على سبيل المثال ، التعبير عن التسليم',
   'addDeliveryTypeDescription' => 'على سبيل المثال ، التسليم السريع في غضون 30 دقيقة',
   'search' => 'يبحث',
-  'searchModifierGroups' => 'مجموعات المعدل البحث ...',
+  'searchModifierGroups' => 'مجموعات التعديلات البحث ...',
   'headerTextPlaceHolder' => 'أدخل نص رأسك المخصص هنا ...',
   'tableLockTimeoutPlaceholder' => 'أدخل المهلة بالدقائق. الافتراضي هو 10 دقائق.',
   'featureDescriptionPlaceHolder' => 'أدخل وصف الميزة هنا ...',

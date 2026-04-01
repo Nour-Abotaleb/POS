@@ -141,7 +141,7 @@ return [
     'menu_settings' => 'إعدادات القائمة',
     'menu_categories' => 'فئات القائمة',
     'menu_items' => 'عناصر القائمة',
-    'modifier_groups' => 'مجموعات المعدلات',
+    'modifier_groups' => 'مجموعات التعديلاتات',
     'pricing_settings' => 'إعدادات التسعير',
     'show_prices' => 'إظهار الأسعار',
     'show_descriptions' => 'إظهار الأوصاف',

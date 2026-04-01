@@ -69,7 +69,7 @@
               <input
                 id="pos-header-search"
                 type="text"
-                class="w-28 sm:w-40 md:w-50 lg:w-52 border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2.5 border-gray-200 rounded-lg text-sm"
+                class="w-28 sm:w-36 md:w-44 lg:w-28 xl:w-48 border-[#E0E5F2] dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-gray-500 dark:focus:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-600 rounded-md shadow-sm block pl-10 pr-3 py-2 xl:py-2.5 border-gray-200 rounded-lg text-sm"
                 placeholder="@lang('placeholders.searchMenuItems')"
                 oninput="var v = this.value; window.dispatchEvent(new CustomEvent('pos:set-search', { detail: { value: v } })); if (window.Livewire && window.Livewire.dispatch) window.Livewire.dispatch('pos-set-search', { value: v }); var inPage = document.getElementById('pos-products-search'); if (inPage && inPage.value !== v) { inPage.value = v; inPage.dispatchEvent(new Event('input', { bubbles: true })); }"
               />
@@ -77,14 +77,13 @@
           </div>
 
           @if(module_enabled('MultiPOS') && ($posMachine = pos_machine()) && $posMachine->status === 'active')
-          <div class="hidden md:flex items-center shrink-0 bg-white dark:bg-gray-600 border border-[#E0E5F2] dark:border-gray-400 py-2.5 px-2 rounded-lg text-sm">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="flex items-center shrink-0 bg-white dark:bg-gray-600 border border-[#E0E5F2] dark:border-gray-400 py-2 xl:py-2.5 px-2 xl:px-3 rounded-lg text-sm max-w-[80px] md:max-w-[150px] xl:max-w-none overflow-hidden [@media(min-width:1280px)_and_(max-width:1456px)]:max-w-[150px]">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 2C6.49 2 2 6.49 2 12C2 17.51 6.49 22 12 22C17.51 22 22 17.51 22 12C22 6.49 17.51 2 12 2ZM16.78 9.7L11.11 15.37C10.97 15.51 10.78 15.59 10.58 15.59C10.38 15.59 10.19 15.51 10.05 15.37L7.22 12.54C6.93 12.25 6.93 11.77 7.22 11.48C7.51 11.19 7.99 11.19 8.28 11.48L10.58 13.78L15.72 8.64C16.01 8.35 16.49 8.35 16.78 8.64C17.07 8.93 17.07 9.4 16.78 9.7Z" fill="#34C759"/>
             </svg>
-            <span class="ml-1 text-[#A3A3A3]" style="color: #A3A3A3;">{{ $posMachine->alias ?? __('multipos::messages.registration.device') }}</span>
+            <span class="ml-1 truncate text-[#A3A3A3]" style="color: #A3A3A3;">{{ $posMachine->alias ?? __('multipos::messages.registration.device') }}</span>
             @if($posMachine->last_seen_at)
-              <span class="ms-1 text-[#A3A3A3] rounded-full text-[#A3A3A3]" style="color: #A3A3A3;">. </span>
-              <span class="text-[#A3A3A3]" style="color: #A3A3A3;">{{ $posMachine->last_seen_at->diffForHumans() }}</span>
+              <span class="ms-1 shrink-0 inline text-[#A3A3A3]" style="color: #A3A3A3;">. {{ $posMachine->last_seen_at->diffForHumans() }}</span>
             @endif
           </div>
           @endif
@@ -95,15 +94,17 @@
               try { window.dispatchEvent(new CustomEvent('pos:show-add-customer')); } catch (e) {}
               try { if (window.Livewire && typeof window.Livewire.dispatch === 'function') window.Livewire.dispatch('showAddCustomerModal'); } catch (e) {}
             "
-            class="inline-flex items-center py-2 gap-1 text-xs"
-            style="padding-left: 0.7rem; padding-right: 0.7rem;"
+            class="inline-flex items-center px-2 xl:px-3 py-2 xl:py-2.5 gap-1 text-xs"
             title="{{ __('app.addCustomerDetails') }}"
           >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.5 11H16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 16.5V5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 10C12.3012 10 14.1667 8.13454 14.1667 5.83335C14.1667 3.53217 12.3012 1.66669 10 1.66669C7.69882 1.66669 5.83334 3.53217 5.83334 5.83335C5.83334 8.13454 7.69882 10 10 10Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.84167 18.3333C2.84167 15.1083 6.05001 12.5 10 12.5C10.8 12.5 11.575 12.6083 12.3 12.8083" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.3333 15C18.3333 15.2667 18.3 15.525 18.2333 15.775C18.1583 16.1083 18.025 16.4334 17.85 16.7167C17.275 17.6834 16.2167 18.3334 15 18.3334C14.1417 18.3334 13.3667 18.0083 12.7833 17.475C12.5333 17.2583 12.3166 17 12.15 16.7167C11.8416 16.2167 11.6667 15.625 11.6667 15C11.6667 14.1 12.025 13.275 12.6083 12.675C13.2167 12.05 14.0667 11.6667 15 11.6667C15.9833 11.6667 16.875 12.0917 17.475 12.775C18.0083 13.3667 18.3333 14.15 18.3333 15Z" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.2416 14.9833H13.7583" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 13.7667V16.2583" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-            <span class="hidden md:block">@lang('app.customer')</span>
+            <span class="hidden xl:block">@lang('app.customer')</span>
           </x-primary-link>
 
           <div class="flex items-center gap-2">
@@ -111,7 +112,7 @@
                 type="button"
                 onclick="var el = document.getElementById('pos-header-search'); if (el) el.value = ''; var inPage = document.getElementById('pos-products-search'); if (inPage) { inPage.value = ''; inPage.dispatchEvent(new Event('input', { bubbles: true })); } window.dispatchEvent(new CustomEvent('pos:reset-search')); window.dispatchEvent(new CustomEvent('pos:reset-filters')); if (window.Livewire && window.Livewire.dispatch) { window.Livewire.dispatch('pos-reset-filters'); window.Livewire.dispatch('pos-reset-search'); }"
                 style="background-color: var(--brand-primary); border-color: var(--brand-primary);"
-                class="text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center gap-1"
+                class="text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-2 xl:px-3 py-2 xl:py-2.5 text-center inline-flex items-center gap-1"
                 title="@lang('app.reset')"
               >
               <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,7 +173,7 @@
               <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"/>
             </svg>
           </button>
-          <div id="fullscreen-tooltip-toggle" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">@lang('app.viewInFullscreen')<div class="tooltip-arrow" data-popper-arrow></div></div>
+          <div id="fullscreen-tooltip-toggle" role="tooltip" class="absolute z-10 invisible inline-block px-2 xl:px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">@lang('app.viewInFullscreen')<div class="tooltip-arrow" data-popper-arrow></div></div>
           <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button"
             onclick="window.toggleColorTheme && window.toggleColorTheme()"
             class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">

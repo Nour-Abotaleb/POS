@@ -1,20 +1,24 @@
-<?php 
+<?php
+
 return [
-  'menu' => [
-    'units' => 'Units',
-    'inventory' => 'Inventory',
-    'inventoryItems' => 'Inventory Items',
-    'dashboard' => 'Dashboard',
-    'inventoryStocks' => 'Inventory Stocks',
-    'inventoryMovements' => 'Inventory Movements',
-    'recipes' => 'Recipes',
-    'purchaseOrders' => 'Purchase Orders',
-    'reports' => 'Reports',
-    'settings' => 'Settings',
-    'purchaseOrderSettings' => 'Purchase Order Settings',
-    'suppliers' => 'Suppliers',
-    'inventoryItemCategories' => 'Inventory Item Categories',
-  ],
+    'menu' => [
+        'units' => 'الوحدات',
+        'inventory' => 'المخزون',
+        'inventoryItems' => 'عناصر المخزون',
+        'dashboard' => 'لوحة المعلومات',
+        'inventoryStocks' => 'أرصدة المخزون',
+        'inventoryMovements' => 'حركات المخزون',
+        'recipes' => 'الوصفات',
+        'batchRecipes' => 'وصفات الدفعات',
+        'batchInventory' => 'مخزون الدفعات',
+        'purchaseOrders' => 'أوامر الشراء',
+        'reports' => 'التقارير',
+        'batchReports' => 'تقارير الدفعات',
+        'settings' => 'الإعدادات',
+        'purchaseOrderSettings' => 'إعدادات أمر الشراء',
+        'suppliers' => 'الموردون',
+        'inventoryItemCategories' => 'فئات عناصر المخزون',
+    ],
   'supplier' => [
     'suppliers' => 'Suppliers',
     'suppliersDescription' => 'Manage your restaurant suppliers',

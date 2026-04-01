@@ -101,19 +101,41 @@
                 padding-top: 5rem !important;
             }
         }
-        @media (min-width: 1024px) and (max-width: 1485px) {
-            body.pos-route-active .pos-nav-counters {
-                display: none !important;
+        @media (min-width: 768px) and (max-width: 1280px) {
+            body.pos-route-active .pos-nav-counters button,
+            body.pos-route-active .pos-nav-counters a {
+                font-size: 0.7rem !important;
+                padding: 0.25rem 0.4rem !important;
+            }
+            body.pos-route-active .pos-nav-counters svg {
+                width: 14px !important;
+                height: 14px !important;
+            }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+            body.pos-route-active .pos-order-panel-wrapper select,
+            body.pos-route-active .pos-order-panel-wrapper input[type="number"] {
+                font-size: 0.75rem !important;
+                padding-top: 0.35rem !important;
+                padding-bottom: 0.35rem !important;
             }
         }
     </style>
 
     @if (user()->restaurant_id ?? false)
     <style>
-        @media (min-width: 1024px) {
+        @media (min-width: 768px) {
             body.pos-route-active #sidebar { display: none !important; }
             body.pos-route-active #main-content { margin-left: 0 !important; margin-right: 0 !important; }
             body.pos-route-active #toggle-sidebar { display: none !important; }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+            body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 280px !important; min-width: 280px !important; }
+        }
+        @media (min-width: 1024px) {
+            body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 390px !important; min-width: 390px !important; }
+        }
+        @media (min-width: 1280px) {
             body.pos-route-active .pos-order-panel-wrapper { flex: 0 0 auto !important; width: 500px !important; min-width: 500px !important; }
         }
         @media (max-width: 1023px) {

@@ -1,17 +1,17 @@
 <div class="relative">
 <a href="{{ route('orders.index') }}" wire:navigate wire:key="today-orders-link"
-    class="hidden lg:inline-flex items-center px-1 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
+    class="hidden md:inline-flex items-center xl:px-1 py-1 text-sm font-medium text-center text-gray-600 bg-white border-skin-base border rounded-md focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300"
     data-tooltip-target="today-orders-tooltip-toggle"
     >
     <img src="{{ asset('img/checkout.svg') }}" alt="Today Orders" class="w-5 h-5">
     <span @if(!pusherSettings()->is_enabled_pusher_broadcast) wire:poll.15s.visible.keep-alive="refreshOrders" wire:key="today-orders-count" @endif
-        class="inline-flex items-center justify-center px-2 py-0.5 ms-2 text-xs font-semibold text-white bg-skin-base rounded-md" style="background-color: var(--brand-primary); border-color: var(--brand-primary);">
+        class="inline-flex items-center justify-center px-0.5 xl:px-1 py-0.5 ms-0.5 xl:ms-1 text-xs font-semibold text-white bg-skin-base rounded-md" style="background-color: var(--brand-primary); border-color: var(--brand-primary);">
         {{ $count }}
     </span>
 
 </a>
 <div id="today-orders-tooltip-toggle" role="tooltip"
-    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+    class="absolute z-10 invisible inline-block px-1 xl:px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
     @lang('modules.order.todayOrder')
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>

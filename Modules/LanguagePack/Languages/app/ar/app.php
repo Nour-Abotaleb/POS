@@ -31,7 +31,7 @@ return [
   'active' => 'نشيط',
   'inactive' => 'غير نشط',
   'status' => 'حالة',
-  'showAll' => 'أظهر كل شيء',
+  'showAll' => 'عرض الكل',
   'clear' => 'واضح',
   'error' => 'خطأ',
   'print' => 'مطبعة',

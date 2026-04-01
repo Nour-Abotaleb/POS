@@ -1,6 +1,6 @@
 <div
-    class="relative z-40 flex flex-col h-full lg:h-screen min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 pr-4 px-2 py-4 dark:bg-gray-800 overflow-y-auto lg:overflow-hidden rounded-md self-stretch w-full lg:w-[500px] lg:min-w-[500px] max-w-full">
-    <div class="flex items-center gap-2 w-full mb-2 min-w-0">
+    class="relative z-40 flex flex-col h-full min-h-0 flex-shrink-0 bg-white border-l dark:border-gray-700 px-2 lg:px-1.5 pr-4 lg:pr-2 py-4 lg:py-2 dark:bg-gray-800 overflow-y-auto overflow-x-hidden rounded-md self-stretch w-full max-w-full">
+    <div class="flex items-center gap-1.5 lg:gap-1 w-full my-2 min-w-0">
 
         {{-- LEFT SIDE : ORDER TYPES (scrollable on overflow) --}}
         @if($this->orderTypes->count())
@@ -40,8 +40,8 @@
         <div class="flex items-center gap-2 flex-shrink-0">
 
             {{-- ORDER NUMBER --}}
-            <div class="inline-flex items-center gap-1 text-sm !text-[#298000] 
-            !bg-[#E6FFF0] rounded-lg px-2 py-2 text-nowrap" style="background:#E6FFF0;color:#298000">
+            <div class="inline-flex items-center gap-1 text-xs xl:text-sm !text-[#298000] 
+            !bg-[#E6FFF0] rounded-lg px-1 xl:px-2 py-2 text-nowrap" style="background:#E6FFF0;color:#298000">
 
                 @if(!isOrderPrefixEnabled())
                     @lang('modules.order.orderNumber') #{{ $orderNumber }}
@@ -68,18 +68,20 @@
         <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2 pr-1">
             <div class="mt-2">
 
-            <div class="flex w-full items-center gap-2">
+            <div class="flex w-full items-center gap-1.5 lg:gap-1">
 
                 @if ($orderType == 'dine_in')
-                    <div class="flex w-full flex-wrap items-center gap-2">
+                    <div class="flex w-full flex-wrap items-center gap-1.5 lg:gap-1">
                         {{-- 1. Select Waiter (extends to fill width) --}}
                         <div class="inline-flex min-w-0 flex-1 items-center gap-2">
                             @if (auth()->user()->roles->pluck('display_name')->contains('Waiter'))
-                                <span class="text-xs min-w-0 flex-1 truncate px-2 py-1 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600" style="border-color: var(--brand-primary);" title="{{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}">
+                                <span class="text-xs min-w-0 flex-1 truncate h-8 xl:h-10 inline-flex items-center px-3 rounded-md bg-gray-100 dark:text-gray-200 dark:bg-gray-600"
+                                    style="border-color: var(--brand-primary);"
+                                    title="{{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}">
                                     {{ $users->where('id', $selectWaiter)->first()->name ?? __('modules.order.selectWaiter') }}
                                 </span>
                             @else
-                                <x-select class="text-xs min-w-0 w-full border-[var(--brand-primary)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]" wire:model.defer='selectWaiter'>
+                                <x-select class="text-xs lg:text-[0.65rem] min-w-0 w-full h-8 xl:h-10 border-[var(--brand-primary)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]" wire:model.defer='selectWaiter'>
                                     <option value="">@lang('modules.order.selectWaiter')</option>
                                     @foreach ($users as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -90,19 +92,19 @@
 
                         {{-- 2. Pax --}}
                         <div class="inline-flex shrink-0 items-center text-xs dark:text-gray-300">
-                            <div class="inline-flex items-center gap-1.5 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 focus-within:ring-1 focus-within:ring-gray-500 dark:focus-within:ring-gray-400 focus-within:border-gray-500 dark:focus-within:border-gray-400 [&_input]:h-5 [&_input]:min-h-0">
+                            <div class="inline-flex h-8 xl:h-10 items-center gap-1.5 px-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 focus-within:ring-1 focus-within:ring-gray-500 dark:focus-within:ring-gray-400 focus-within:border-gray-500 dark:focus-within:border-gray-400 [&_input]:h-6 [&_input]:min-h-0">
                                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0" style="color: var(--brand-primary);">
                                     <path d="M6.48831 7.69958C6.41748 7.6925 6.33248 7.6925 6.25456 7.69958C4.56873 7.64291 3.22998 6.26166 3.22998 4.56166C3.22998 2.82625 4.63248 1.41666 6.37498 1.41666C8.1104 1.41666 9.51998 2.82625 9.51998 4.56166C9.5129 6.26166 8.17415 7.64291 6.48831 7.69958Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M11.6237 2.83334C12.9979 2.83334 14.1029 3.94542 14.1029 5.3125C14.1029 6.65125 13.0404 7.74209 11.7158 7.79167C11.6591 7.78459 11.5954 7.78459 11.5316 7.79167" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M2.94664 10.3133C1.23247 11.4608 1.23247 13.3308 2.94664 14.4713C4.89455 15.7746 8.08914 15.7746 10.0371 14.4713C11.7512 13.3238 11.7512 11.4538 10.0371 10.3133C8.09622 9.01709 4.90164 9.01709 2.94664 10.3133Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M12.9908 14.1667C13.5008 14.0604 13.9825 13.855 14.3792 13.5504C15.4842 12.7217 15.4842 11.3546 14.3792 10.5258C13.9896 10.2283 13.515 10.03 13.0121 9.91666" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <x-input type="number" step="1" min="1" class="w-12 text-xs border-0 p-0 bg-transparent focus:ring-0 focus:border-0 dark:bg-transparent" wire:model.defer="noOfPax" />
+                                <x-input type="number" step="1" min="1" class="w-12 lg:w-9 text-xs border-0 p-0 bg-transparent focus:ring-0 focus:border-0 dark:bg-transparent" wire:model.defer="noOfPax" />
                             </div>
                         </div>
 
                         {{-- 3. Add Note --}}
-                        <x-secondary-button class="relative shrink-0 text-xs p-2" wire:click="$toggle('showKotNote')" :title="__('modules.order.addNote')" data-tooltip-target="tooltip-note">
+                        <x-secondary-button class="relative shrink-0 h-8 xl:h-10 w-10 p-0 inline-flex items-center justify-center" wire:click="$toggle('showKotNote')" :title="__('modules.order.addNote')" data-tooltip-target="tooltip-note">
                             @if ($this->orderNote)
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="absolute top-1 right-1" style="color: var(--brand-primary);" viewBox="0 0 16 16">
                                     <circle cx="8" cy="8" r="8" />
@@ -120,7 +122,7 @@
                         </div>
 
                         {{-- 4. Merge Table --}}
-                        <x-secondary-button wire:click="openMergeTableModal" class="shrink-0 p-2" :title="__('modules.order.mergeTables')">
+                        <x-secondary-button wire:click="openMergeTableModal" class="shrink-0 h-8 xl:h-10 w-10 p-0 inline-flex items-center justify-center" :title="__('modules.order.mergeTables')">
                             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);">
                                 <path d="M12.24 7.40209L14.875 4.76707L12.24 2.13209" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M2.125 4.76707H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -130,7 +132,7 @@
                         </x-secondary-button>
 
                         {{-- 5. Assign Table --}}
-                        <x-secondary-button wire:click="openTableChangeConfirmation" class="shrink-0 p-2" :title="__('modules.order.setTable')">
+                        <x-secondary-button wire:click="openTableChangeConfirmation" class="shrink-0 h-8 xl:h-10 w-10 p-0 inline-flex items-center justify-center" :title="__('modules.order.setTable')">
                             <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--brand-primary);">
                                 <g clip-path="url(#clip0_kot_row_table)">
                                     <path d="M15.633 4.24998L17.2997 7.08331H2.69967L4.36634 4.24998H15.633ZM16.6663 2.83331H3.33301L0.833008 7.08331V8.49998H2.49967V13.4583H4.16634V11.3333H15.833V13.4583H17.4997V8.49998H19.1663V7.08331L16.6663 2.83331ZM4.16634 9.91665V8.49998H15.833V9.91665H4.16634Z" fill="currentColor"/>
@@ -533,8 +535,8 @@
 
             <div class="h-auto pt-3 select-none text-center w-full">
                 @if (in_array('KOT', restaurant_modules()))
-                    <div class="flex gap-3">
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
+                    <div class="flex gap-1.5">
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);" wire:click="saveOrder('kot')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot')">@lang('modules.order.kot')</span>
                             <span wire:loading wire:target="saveOrder('kot')">
@@ -549,7 +551,7 @@
                                 @lang('modules.order.kot')
                             </span>
                         </button>
-                        <button class="rounded-xl text-white w-full p-2 relative" style="background-color: var(--brand-primary);"
+                        <button class="rounded-xl text-white w-full p-2 relative text-xs" style="background-color: var(--brand-primary);"
                             wire:click="saveOrder('kot', 'print')" wire:loading.attr="disabled"
                             wire:loading.class="opacity-50">
                             <span wire:loading.remove wire:target="saveOrder('kot', 'print')">@lang('modules.order.kotAndPrint')</span>
@@ -583,7 +585,7 @@
                             </span>
                         </button>
                         @if (!$orderID || ($orderID && $orderDetail && $orderDetail->status !== 'draft'))
-                        <button class="rounded-xl hover:opacity-90 text-white w-auto py-2 px-4 relative inline-flex items-center justify-center" style="background-color: var(--brand-primary);" wire:click="saveOrder('draft')"
+                        <button class="rounded-xl hover:opacity-90 text-white w-auto py-2 px-2.5 relative inline-flex items-center justify-center" style="background-color: var(--brand-primary);" wire:click="saveOrder('draft')"
                             wire:loading.attr="disabled" wire:loading.class="opacity-50" title="@lang('modules.order.saveAsDraft')">
                             <span wire:loading.remove wire:target="saveOrder('draft')">
                                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">

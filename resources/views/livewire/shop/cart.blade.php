@@ -664,7 +664,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="w-28 h-28 rounded-md overflow-hidden flex-shrink-0"
+                                        class="w-24 h-24 md:w-28 md:h-28 rounded-md overflow-hidden flex-shrink-0"
                                     >
                                         <img
                                             class="w-full h-full object-cover cart-item-photo-invert"

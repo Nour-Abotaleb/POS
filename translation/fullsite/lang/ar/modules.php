@@ -1501,7 +1501,7 @@ return [
         'kotBillAndPayment' => 'KOT وفاتورة ودفع',
         'bill' => 'الفاتورة',
         'billAndPayment' => 'فاتورة ودفع',
-        'createBillAndPrintReceipt' => 'إنشاء فاتورة وطباعة الإيصال',
+        'createBillAndPrintReceipt' => 'طباعة الإيصال',
         'all' => 'الكل',
         'newOrder' => 'طلب جديد',
         'in_kitchen' => 'في المطبخ',

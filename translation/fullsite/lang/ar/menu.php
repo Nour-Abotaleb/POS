@@ -22,7 +22,7 @@ return [
     'menus' => 'القوائم',
     'menuItem' => 'عناصر القائمة',
     'itemCategories' => 'فئات العناصر',
-    'modifierGroups' => 'مجموعات المعدلات',
+    'modifierGroups' => 'مجموعات التعديلاتات',
     'itemModifiers' => 'معدلات العناصر',
     'waiterRequest' => 'طلبات النادل',
     'deliveryExecutive' => 'مندوبي التوصيل',
@@ -87,7 +87,7 @@ return [
     'unavailable' => 'غير متاح',
     'modifiers' => 'المعدلات',
     'add_modifier' => 'إضافة معدل',
-    'modifier_groups' => 'مجموعات المعدلات',
+    'modifier_groups' => 'مجموعات التعديلاتات',
     
     // Order Management
     'active_orders' => 'الطلبات النشطة',
