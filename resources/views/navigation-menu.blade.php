@@ -42,6 +42,11 @@
       max-width: 150px;
     }
   }
+  @media (min-width: 1457px) and (max-width: 1476px) {
+    .multipos-nav-status {
+      max-width: 240px;
+    }
+  }
   .dark .multipos-nav-status {
     background-color: rgb(75 85 99);
     border-color: rgb(156 163 175);
