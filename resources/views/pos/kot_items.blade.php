@@ -497,30 +497,13 @@
                 @endif --}}
 
                 {{-- Show only total tax --}}
-                @if(count($orderItemList) > 0)
-                    @php
-                        $totalTaxAmount = 0;
-                        if ($taxMode == 'order') {
-                            foreach ($taxes as $item) {
-                                $totalTaxAmount += ($item->tax_percent / 100) * $discountedTotal;
-                            }
-                        } else {
-                            foreach ($orderItemList as $key => $item) {
-                                $qty = $orderItemQty[$key] ?? 1;
-                                $totalTaxAmount += ($itemTaxAmount[$key] ?? 0) * $qty;
-                            }
-                        }
-                    @endphp
-                    @if($totalTaxAmount > 0)
-                        <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
-                            <div>
-                                @lang('modules.order.totalTax')
-                            </div>
-                            <div class="flex items-center gap-1">
-                                {!! currency_format($totalTaxAmount, $restaurant->currency_id) !!}
-                            </div>
+                @if(($totalTaxAmount ?? 0) > 0)
+                    <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
+                        <div>@lang('modules.order.totalTax')</div>
+                        <div class="flex items-center gap-1">
+                            {!! currency_format($totalTaxAmount, $restaurant->currency_id) !!}
                         </div>
-                    @endif
+                    </div>
                 @endif
 
                 <div class="flex justify-between items-center gap-1 font-medium dark:text-neutral-300">
