@@ -847,10 +847,12 @@
 
                         <!-- Summary + Place Order -->
                         <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                            @if(!($restaurant->tax_inclusive ?? false))
                             <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <span>@lang('modules.order.subTotal')</span>
                                 <span>{!! currency_format($subTotal, $restaurant->currency_id) !!}</span>
                             </div>
+                            @endif
                             @if(!($restaurant->tax_inclusive ?? false))
                                 @if ($taxMode == 'order')
                                     @foreach ($taxes ?? [] as $taxItem)
@@ -1185,6 +1187,7 @@
                             </div>
                         </div>
 
+                        @if(!($restaurant->tax_inclusive ?? false))
                         <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
                             <div>
                                 @lang('modules.order.subTotal')
@@ -1193,6 +1196,7 @@
                                 {!! currency_format($subTotal, $restaurant->currency_id) !!}
                             </div>
                         </div>
+                        @endif
 
                         @if (count($orderItemList) > 0 && $extraCharges && count($extraCharges) > 0)
                             @foreach ($extraCharges as $charge)
