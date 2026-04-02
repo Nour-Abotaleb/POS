@@ -110,7 +110,7 @@
       width: 7rem;
     }
   }
-  @media (min-width: 1280px) {
+  @media (min-width: 1310px) {
     #pos-header-search {
       width: 12rem;
       padding-top: 0.625rem;
