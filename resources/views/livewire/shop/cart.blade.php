@@ -765,11 +765,11 @@
                                         {!! currency_format($orderItemAmount[$key], $restaurant->currency_id) !!}
                                     </span>
                                 </div>
-                                @if ($item->calories)
+                             {{--@if ($item->calories)
                                     <div class="text-xs text-gray-500 dark:text-gray-400 text-end mt-0.5">
                                         {{ $item->calories }}
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 <!-- Addons toggle -->
                                 @if (!empty($itemModifiersSelected[$key]))
@@ -782,7 +782,7 @@
                                         </svg>
                                         @lang('app.show')
                                     </button>
-                                    <div x-show="open" x-collapse class="mt-1 space-y-0.5 text-end">
+                                    <div x-show="open" x-collapse class="mt-1 space-y-0.5 text-start">
                                         @php
                                             $groupedModifiers = [];
                                             $allModOpts = \App\Models\ModifierOption::with('modifierGroup')
@@ -792,15 +792,19 @@
                                                 $opt = $allModOpts[$modOptId] ?? null;
                                                 if ($opt) {
                                                     $groupName = $opt->modifierGroup->name ?? '';
-                                                    $groupedModifiers[$groupName][] = $opt->name;
+                                                    $groupedModifiers[$groupName][] = [
+                                                        'id'   => $modOptId,
+                                                        'name' => $opt->name,
+                                                    ];
                                                 }
                                             }
                                         @endphp
-                                        @foreach ($groupedModifiers as $groupName => $optionNames)
+                                        @foreach ($groupedModifiers as $groupName => $options)
                                         <div>
                                             <div class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
-                                            @foreach ($optionNames as $optName)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $optName }} ({{ $orderItemQty[$key] ?? 1 }})</div>
+                                            @foreach ($options as $opt)
+                                            @php $optQty = $itemModifierOptionQtys[$key][$opt['id']] ?? 1; @endphp
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $opt['name'] }} ({{ $optQty }})</div>
                                             @endforeach
                                         </div>
                                         @endforeach
@@ -847,6 +851,34 @@
                                 <span>@lang('modules.order.subTotal')</span>
                                 <span>{!! currency_format($subTotal, $restaurant->currency_id) !!}</span>
                             </div>
+                            @if ($taxMode == 'order')
+                                @foreach ($taxes ?? [] as $taxItem)
+                                    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                        <span>{{ $taxItem->tax_name }} ({{ $taxItem->tax_percent }}%)</span>
+                                        <span>{!! currency_format(($taxItem->tax_percent / 100) * $subTotal, $restaurant->currency_id) !!}</span>
+                                    </div>
+                                @endforeach
+                            @elseif (!empty($orderItemTaxDetails))
+                                @php
+                                    $sidebarTaxTotals = [];
+                                    foreach ($orderItemTaxDetails as $taxDetailItem) {
+                                        $qty = $taxDetailItem['qty'] ?? 1;
+                                        foreach (($taxDetailItem['tax_breakup'] ?? []) as $taxName => $taxInfo) {
+                                            if (!isset($sidebarTaxTotals[$taxName])) {
+                                                $sidebarTaxTotals[$taxName] = ['percent' => $taxInfo['percent'], 'amount' => $taxInfo['amount'] * $qty];
+                                            } else {
+                                                $sidebarTaxTotals[$taxName]['amount'] += $taxInfo['amount'] * $qty;
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                @foreach ($sidebarTaxTotals as $taxName => $taxInfo)
+                                    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                        <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
+                                        <span>{!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}</span>
+                                    </div>
+                                @endforeach
+                            @endif
                             <div class="flex items-center justify-between text-sm font-bold text-gray-900 dark:text-white">
                                 <span>@lang('modules.order.total')</span>
                                 <span>{!! currency_format($total, $restaurant->currency_id) !!}</span>
@@ -1978,7 +2010,7 @@
         </x-dialog-modal>
     @endif
 
-    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="lg" :noPadding="true">
+    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="md" :noPadding="true">
         <x-slot name="content">
             @if ($cartSelectedModifierModel)
                 @include('livewire.pos.item-modifiers', [

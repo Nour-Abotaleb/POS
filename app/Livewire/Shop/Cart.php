@@ -148,10 +148,13 @@ class Cart extends Component
     public $orderBeingProcessed = false;
     public $showModifiersModal = false;
     public $itemModifiersSelected = [];
+    public array $itemModifierOptionQtys = [];
     public $selectedModifierItem;
     public $cartSelectedModifierModel = null;
     public $cartModifiers = [];
     public $selectedModifiers = [];
+    public float $modifierTotalDisplay = 0.0;
+    public array $optionQuantities = [];
     public int $modifierQuantity = 1;
     public $selectedVariationName = null;
     public $showItemDetailModal = false;
@@ -2296,6 +2299,7 @@ class Cart extends Component
     private function loadModifiersForItem($menuItemId, $variationId = null): void
     {
         $this->selectedModifiers = [];
+        $this->optionQuantities = [];
         $this->modifierQuantity = 1;
         $this->cartSelectedModifierModel = MenuItem::with(['branch.restaurant'])->find($menuItemId);
         $this->selectedVariationName = $variationId ? (MenuItemVariation::find($variationId)?->variation ?? null) : null;
@@ -2313,6 +2317,7 @@ class Cart extends Component
                 }
             }
         }
+        $this->modifierTotalDisplay = (float) ($this->cartSelectedModifierModel?->price ?? 0) * $this->modifierQuantity;
     }
 
     public function toggleSelection($groupId, $optionId): void
@@ -2338,8 +2343,46 @@ class Cart extends Component
         }
     }
 
-    public function incrementQuantity(): void { $this->modifierQuantity++; }
-    public function decrementQuantity(): void { if ($this->modifierQuantity > 1) $this->modifierQuantity--; }
+    public function updatedSelectedModifiers(): void
+    {
+        $this->recalculateModifierTotal();
+    }
+
+    public function incrementOptionQty(int $optionId): void
+    {
+        $this->optionQuantities[$optionId] = ($this->optionQuantities[$optionId] ?? 0) + 1;
+        $this->selectedModifiers[$optionId] = $optionId;
+        $this->recalculateModifierTotal();
+    }
+
+    public function decrementOptionQty(int $optionId): void
+    {
+        $qty = ($this->optionQuantities[$optionId] ?? 1) - 1;
+        if ($qty <= 0) {
+            unset($this->optionQuantities[$optionId]);
+            $this->selectedModifiers[$optionId] = false;
+        } else {
+            $this->optionQuantities[$optionId] = $qty;
+        }
+        $this->recalculateModifierTotal();
+    }
+
+    public function recalculateModifierTotal(): void
+    {
+        $base = (float) ($this->cartSelectedModifierModel?->price ?? 0);
+        $addons = 0;
+        $selectedIds = array_filter(array_map('intval', array_keys(array_filter($this->optionQuantities))));
+        if (!empty($selectedIds)) {
+            $prices = ModifierOption::whereIn('id', $selectedIds)->pluck('price', 'id');
+            foreach ($selectedIds as $id) {
+                $addons += (float) ($prices[$id] ?? 0) * ($this->optionQuantities[$id] ?? 1);
+            }
+        }
+        $this->modifierTotalDisplay = ($base + $addons) * $this->modifierQuantity;
+    }
+
+    public function incrementQuantity(): void { $this->modifierQuantity++; $this->recalculateModifierTotal(); }
+    public function decrementQuantity(): void { if ($this->modifierQuantity > 1) { $this->modifierQuantity--; $this->recalculateModifierTotal(); } }
 
     public function saveModifiers(): void
     {
@@ -2364,11 +2407,11 @@ class Cart extends Component
         }
 
         $finalModifiers = [$this->selectedModifierItem => array_keys(array_filter($this->selectedModifiers))];
-        $this->setPosModifier($finalModifiers, $this->modifierQuantity);
+        $this->setPosModifier($finalModifiers, $this->modifierQuantity, $this->optionQuantities);
     }
 
     #[On('setPosModifier')]
-    public function setPosModifier(array $modifierIds, int $quantity = 1)
+    public function setPosModifier(array $modifierIds, int $quantity = 1, array $optionQuantities = [])
     {
         // Check radius restriction before adding items with modifiers
         if (!$this->checkRadiusRestriction()) {
@@ -2412,6 +2455,7 @@ class Cart extends Component
         $this->cartItemQty[$keyId] = ($this->cartItemQty[$keyId] ?? 0) + $quantity;
         $this->orderItemQty[$keyId] = $quantity;
         $this->itemModifiersSelected[$keyId] = Arr::flatten($modifierIds);
+        $this->itemModifierOptionQtys[$keyId] = $optionQuantities;
 
         // Set price context on modifiers before calculating total
         $modifierTotal = 0;
@@ -2421,7 +2465,7 @@ class Cart extends Component
                 if ($this->orderTypeId) {
                     $modifier->setPriceContext($this->orderTypeId, null);
                 }
-                $modifierTotal += $modifier->price;
+                $modifierTotal += $modifier->price * ($optionQuantities[$modifierId] ?? 1);
             }
         }
 

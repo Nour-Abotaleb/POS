@@ -2976,7 +2976,7 @@ class Pos extends Component
     }
 
     #[On('setPosModifier')]
-    public function setPosModifier($modifierIds)
+    public function setPosModifier($modifierIds, $quantity = 1, $optionQuantities = [])
     {
         $this->showModifiersModal = false;
 
@@ -3009,9 +3009,11 @@ class Pos extends Component
         // Get modifier options with price context set
         $modifierOptions = $this->getModifierOptionsProperty();
         $modifierTotal = collect($this->itemModifiersSelected[$keyId])
-            ->sum(fn($modifierId) => isset($modifierOptions[$modifierId]) ? $modifierOptions[$modifierId]->price : 0);
+            ->sum(fn($modifierId) => isset($modifierOptions[$modifierId])
+                ? $modifierOptions[$modifierId]->price * ($optionQuantities[$modifierId] ?? 1)
+                : 0);
 
-        $this->orderItemModifiersPrice[$keyId] = (1 * (isset($this->itemModifiersSelected[$keyId]) ? $modifierTotal : 0));
+        $this->orderItemModifiersPrice[$keyId] = (isset($this->itemModifiersSelected[$keyId]) ? $modifierTotal : 0);
 
         $this->syncCart($keyId);
     }

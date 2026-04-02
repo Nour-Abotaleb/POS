@@ -289,7 +289,7 @@
 </div>
 <!-- End Icon Blocks -->
 
-<!-- Testimonials -->
+{{-- <!-- Testimonials -->
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
 
     <!-- Title -->
@@ -370,10 +370,10 @@
     </div>
     <!-- End Grid -->
 </div>
-<!-- End Testimonials -->
+<!-- End Testimonials --> --}}
 
 
-<!-- Features -->
+{{-- <!-- Features -->
 <div class="overflow-hidden" id="simple-pricing">
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <!-- Title -->
@@ -390,7 +390,7 @@
 
     </div>
 </div>
-<!-- End Features -->
+<!-- End Features --> --}}
 
 <!-- FAQ -->
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto" id="user-faqs">

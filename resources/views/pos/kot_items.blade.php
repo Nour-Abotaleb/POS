@@ -208,7 +208,7 @@
                                     <div class="inline-flex flex-wrap gap-2 text-xs text-gray-600 dark:text-white">
                                         @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
                                             <div
-                                                class="inline-flex items-center justify-between text-xs mb-1 py-0.5 px-1 border-l-2 border-blue-500 bg-gray-200 dark:bg-gray-900 rounded-md">
+                                                class="inline-flex items-center justify-between text-xs mb-1 py-0.5 px-1 bg-gray-200 dark:bg-gray-900 rounded-md">
                                                 <span
                                                     class="text-gray-900 dark:text-white">{{ $this->modifierOptions[$modifierOptionId]->name }}</span>
                                                 <span

@@ -379,11 +379,11 @@
                                         <h5 class="text-xs font-medium text-gray-900 dark:text-white min-h-[1.5rem]">
                                             {{ $item->item_name }}
                                         </h5>
-                                        @if ($item->calories)
+                                        {{-- @if ($item->calories)
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                                 {{ $item->calories }}
                                             </div>
-                                        @endif
+                                        @endif --}}
                                         @if ($orderLimitReached)
                                             <div class="text-red-500 text-xs">@lang('messages.orderLimitReached')</div>
                                         @elseif (!$item->in_stock)

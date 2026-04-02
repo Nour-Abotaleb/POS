@@ -195,7 +195,7 @@
     <!-- End Icon Blocks -->
     @endif
 
-    @if(!$frontReviews->isEmpty())
+    {{-- @if(!$frontReviews->isEmpty())
     <!-- Testimonials -->
 
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -234,9 +234,9 @@
         <!-- End Grid -->
     </div>
     <!-- End Testimonials -->
-    @endif
+    @endif --}}
 
-    <!-- Features -->
+    {{-- <!-- Features -->
     <div id="simple-pricing" class="mb-5"> </div>
     <div class="overflow-hidden" id="simple-pricing">
         <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -254,7 +254,7 @@
 
         </div>
     </div>
-    <!-- End Features -->
+    <!-- End Features --> --}}
 
     @if(!$frontFaqs->isEmpty())
     <!-- FAQ -->

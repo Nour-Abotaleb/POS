@@ -70,28 +70,11 @@
     </script>
 
     <script>
-        if (localStorage.getItem("menu-collapsed") === "true") {
-            document.documentElement.style.visibility = 'hidden';
-            window.addEventListener('DOMContentLoaded', () => {
-                const sidebar = document.getElementById('sidebar');
-                const icon = document.getElementById('toggle-sidebar-icon');
-
-                if (sidebar) {
-                    sidebar.classList.add('hidden');
-                    sidebar.classList.remove('flex', 'lg:flex');
-                }
-                if (icon) icon.classList.add('rotate-180');
-
-                setTimeout(() => {
-                    document.documentElement.style.visibility = 'visible';
-                }, 50);
-            });
-        } else {
-            window.addEventListener('DOMContentLoaded', () => {
-                const icon = document.getElementById('toggle-sidebar-icon');
-                if (icon) icon.classList.remove('rotate-180');
-            });
-        }
+        localStorage.setItem("menu-collapsed", "false");
+        window.addEventListener('DOMContentLoaded', () => {
+            const icon = document.getElementById('toggle-sidebar-icon');
+            if (icon) icon.classList.remove('rotate-180');
+        });
     </script>
 
     {{-- When on POS route (including after wire:navigate), hide sidebar on desktop --}}

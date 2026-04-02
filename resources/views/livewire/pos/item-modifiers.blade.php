@@ -97,23 +97,41 @@
 
         <!-- Options -->
         @foreach ($modifier->options as $option)
-        <div class="flex w-full items-center justify-between gap-3 py-3">
-            <div class="flex min-w-0 flex-1 items-center gap-3 text-start">
-                @if ($option->is_available)
-                    <x-checkbox
-                        class="shrink-0"
-                        wire:model="selectedModifiers.{{ $option->id }}"
-                        wire:click="toggleSelection({{ $modifier->id }}, {{ $option->id }})"
-                        value="{{ $option->id }}" />
-                @else
-                    <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                        @lang('modules.menu.notAvailable')
-                    </span>
+        @php $optQty = $optionQuantities[$option->id] ?? 0; @endphp
+        <div class="flex w-full items-center justify-between gap-3 py-2">
+            <div class="flex min-w-0 flex-1 flex-col gap-1.5 text-start">
+                <div class="flex items-center gap-3">
+                    @if ($option->is_available)
+                        <x-checkbox
+                            class="shrink-0"
+                            wire:model="selectedModifiers.{{ $option->id }}"
+                            wire:change="incrementOptionQty({{ $option->id }})"
+                            value="{{ $option->id }}" />
+                    @else
+                        <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                            @lang('modules.menu.notAvailable')
+                        </span>
+                    @endif
+                    <div class="min-w-0 text-gray-900 dark:text-white font-medium">{{ $option->name }}</div>
+                </div>
+                @if ($optQty > 0)
+                    <div class="flex items-center gap-2 ms-7">
+                        <button type="button" wire:click="decrementOptionQty({{ $option->id }})"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
+                            style="background-color: var(--brand-primary);">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h16"/></svg>
+                        </button>
+                        <span class="w-5 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $optQty }}</span>
+                        <button type="button" wire:click="incrementOptionQty({{ $option->id }})"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
+                            style="background-color: var(--brand-primary);">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 1v16M1 9h16"/></svg>
+                        </button>
+                    </div>
                 @endif
-                <div class="min-w-0 text-gray-900 dark:text-white font-medium">{{ $option->name }}</div>
             </div>
-            @if ($option->is_available && $option->price)
-                <span class="item-modifiers-currency shrink-0 text-sm font-medium text-gray-900 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1">{!! currency_format($option->price, $currencyId) !!}</span>
+            @if ($option->is_available)
+                <span class="item-modifiers-currency shrink-0 text-sm font-medium text-gray-900 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1">{!! currency_format($option->price ?? 0, $currencyId) !!}</span>
             @endif
         </div>
         @endforeach
@@ -149,7 +167,7 @@
             class="btn-add-item flex-1 py-3.5 rounded-md text-white font-bold text-base transition"
             style="background-color: #011646;">
             <span wire:loading.remove wire:target="saveModifiers" class="text-xs md:text-sm lg:text-base inline-flex items-center justify-center gap-1">
-                @lang('app.add') (<span class="btn-add-item-currency item-modifiers-currency inline-flex items-center gap-0">{!! currency_format($selectedModifierItem->price * $quantity, $currencyId) !!}</span>)
+                @lang('app.add') (<span class="btn-add-item-currency item-modifiers-currency inline-flex items-center gap-0">{!! currency_format(isset($modifierTotalDisplay) && $modifierTotalDisplay > 0 ? $modifierTotalDisplay : $selectedModifierItem->price * $quantity, $currencyId) !!}</span>)
             </span>
             <span wire:loading wire:target="saveModifiers" class="inline-flex items-center justify-center">
                 <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">

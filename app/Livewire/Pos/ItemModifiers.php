@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\MenuItem;
 use App\Models\MenuItemVariation;
 use App\Models\ModifierGroup;
+use App\Models\ModifierOption;
 
 class ItemModifiers extends Component
 {
@@ -19,9 +20,30 @@ class ItemModifiers extends Component
     public $orderTypeId;
     public $deliveryAppId;
     public int $quantity = 1;
+    public float $modifierTotalDisplay = 0.0;
+    public array $optionQuantities = [];
 
-    public function incrementQuantity(): void { $this->quantity++; }
-    public function decrementQuantity(): void { if ($this->quantity > 1) $this->quantity--; }
+    public function incrementQuantity(): void { $this->quantity++; $this->recalculateModifierTotal(); }
+    public function decrementQuantity(): void { if ($this->quantity > 1) { $this->quantity--; $this->recalculateModifierTotal(); } }
+
+    public function incrementOptionQty(int $optionId): void
+    {
+        $this->optionQuantities[$optionId] = ($this->optionQuantities[$optionId] ?? 0) + 1;
+        $this->selectedModifiers[$optionId] = $optionId;
+        $this->recalculateModifierTotal();
+    }
+
+    public function decrementOptionQty(int $optionId): void
+    {
+        $qty = ($this->optionQuantities[$optionId] ?? 1) - 1;
+        if ($qty <= 0) {
+            unset($this->optionQuantities[$optionId]);
+            $this->selectedModifiers[$optionId] = false;
+        } else {
+            $this->optionQuantities[$optionId] = $qty;
+        }
+        $this->recalculateModifierTotal();
+    }
 
     public function mount()
     {
@@ -73,6 +95,7 @@ class ItemModifiers extends Component
 
         // Set price context on all modifier options
         $this->applyPriceContext();
+        $this->modifierTotalDisplay = (float) ($this->selectedModifierItem->price ?? 0);
     }
 
     public function hydrate()
@@ -137,6 +160,27 @@ class ItemModifiers extends Component
         return ($base + $addonsTotal) * $this->quantity;
     }
 
+    public function recalculateModifierTotal(): void
+    {
+        $base = (float) ($this->selectedModifierItem->price ?? 0);
+        $addons = 0;
+
+        $selected = array_filter($this->optionQuantities, fn($q) => $q > 0);
+        if (!empty($selected)) {
+            $prices = ModifierOption::whereIn('id', array_keys($selected))->pluck('price', 'id');
+            foreach ($selected as $optionId => $qty) {
+                $addons += (float) ($prices[$optionId] ?? 0) * $qty;
+            }
+        }
+
+        $this->modifierTotalDisplay = ($base + $addons) * $this->quantity;
+    }
+
+    public function updatedSelectedModifiers(): void
+    {
+        $this->recalculateModifierTotal();
+    }
+
     public function saveModifiers()
     {
         $this->validateRequiredModifiers();
@@ -144,7 +188,7 @@ class ItemModifiers extends Component
             $this->menuItemId => array_keys(array_filter($this->selectedModifiers))
         ];
 
-        $this->dispatch('setPosModifier', modifierIds: $this->finalModifiers, quantity: $this->quantity);
+        $this->dispatch('setPosModifier', modifierIds: $this->finalModifiers, quantity: $this->quantity, optionQuantities: $this->optionQuantities);
     }
 
     public function validateRequiredModifiers()
