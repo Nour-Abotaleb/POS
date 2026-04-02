@@ -851,33 +851,35 @@
                                 <span>@lang('modules.order.subTotal')</span>
                                 <span>{!! currency_format($subTotal, $restaurant->currency_id) !!}</span>
                             </div>
-                            @if ($taxMode == 'order')
-                                @foreach ($taxes ?? [] as $taxItem)
-                                    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                                        <span>{{ $taxItem->tax_name }} ({{ $taxItem->tax_percent }}%)</span>
-                                        <span>{!! currency_format(($taxItem->tax_percent / 100) * $subTotal, $restaurant->currency_id) !!}</span>
-                                    </div>
-                                @endforeach
-                            @elseif (!empty($orderItemTaxDetails))
-                                @php
-                                    $sidebarTaxTotals = [];
-                                    foreach ($orderItemTaxDetails as $taxDetailItem) {
-                                        $qty = $taxDetailItem['qty'] ?? 1;
-                                        foreach (($taxDetailItem['tax_breakup'] ?? []) as $taxName => $taxInfo) {
-                                            if (!isset($sidebarTaxTotals[$taxName])) {
-                                                $sidebarTaxTotals[$taxName] = ['percent' => $taxInfo['percent'], 'amount' => $taxInfo['amount'] * $qty];
-                                            } else {
-                                                $sidebarTaxTotals[$taxName]['amount'] += $taxInfo['amount'] * $qty;
+                            @if(!($restaurant->tax_inclusive ?? false))
+                                @if ($taxMode == 'order')
+                                    @foreach ($taxes ?? [] as $taxItem)
+                                        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                            <span>{{ $taxItem->tax_name }} ({{ $taxItem->tax_percent }}%)</span>
+                                            <span>{!! currency_format(($taxItem->tax_percent / 100) * $subTotal, $restaurant->currency_id) !!}</span>
+                                        </div>
+                                    @endforeach
+                                @elseif (!empty($orderItemTaxDetails))
+                                    @php
+                                        $sidebarTaxTotals = [];
+                                        foreach ($orderItemTaxDetails as $taxDetailItem) {
+                                            $qty = $taxDetailItem['qty'] ?? 1;
+                                            foreach (($taxDetailItem['tax_breakup'] ?? []) as $taxName => $taxInfo) {
+                                                if (!isset($sidebarTaxTotals[$taxName])) {
+                                                    $sidebarTaxTotals[$taxName] = ['percent' => $taxInfo['percent'], 'amount' => $taxInfo['amount'] * $qty];
+                                                } else {
+                                                    $sidebarTaxTotals[$taxName]['amount'] += $taxInfo['amount'] * $qty;
+                                                }
                                             }
                                         }
-                                    }
-                                @endphp
-                                @foreach ($sidebarTaxTotals as $taxName => $taxInfo)
-                                    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                                        <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
-                                        <span>{!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}</span>
-                                    </div>
-                                @endforeach
+                                    @endphp
+                                    @foreach ($sidebarTaxTotals as $taxName => $taxInfo)
+                                        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                            <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
+                                            <span>{!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}</span>
+                                        </div>
+                                    @endforeach
+                                @endif
                             @endif
                             <div class="flex items-center justify-between text-sm font-bold text-gray-900 dark:text-white">
                                 <span>@lang('modules.order.total')</span>
@@ -1208,6 +1210,7 @@
                             @endforeach
                         @endif
 
+                        @if(!($restaurant->tax_inclusive ?? false))
                         @if ($taxMode == 'order')
                             @foreach ($taxes ?? [] as $item)
                                 <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400" wire:key="order-tax-{{ $item->id }}">
@@ -1252,10 +1255,6 @@
                                 <div class="flex justify-between mt-2 text-sm text-gray-500 dark:text-neutral-400">
                                     <div>
                                         @lang('modules.order.totalTax')
-                                        <span
-                                            class="ml-2 px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300">
-                                            @lang($restaurant?->tax_inclusive ? 'modules.settings.taxInclusive' : 'modules.settings.taxExclusive')
-                                        </span>
                                     </div>
                                     <div>
                                         {!! currency_format($totalTax, $restaurant->currency_id) !!}
@@ -1263,6 +1262,7 @@
                                 </div>
                             @endif
                         @endif
+                        @endif {{-- !tax_inclusive --}}
 
                         @if ($orderType === 'delivery' && !is_null($deliveryFee))
                             <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
