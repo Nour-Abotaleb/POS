@@ -496,8 +496,8 @@
                     @endif
                 @endif --}}
 
-                {{-- Show only total tax --}}
-                @if(($totalTaxAmount ?? 0) > 0)
+                {{-- Show only total tax (exclusive only — inclusive tax is already embedded in item prices) --}}
+                @if(($totalTaxAmount ?? 0) > 0 && !($restaurant->tax_inclusive ?? false))
                     <div class="flex justify-between text-gray-500 text-xs dark:text-neutral-400">
                         <div>@lang('modules.order.totalTax')</div>
                         <div class="flex items-center gap-1">
