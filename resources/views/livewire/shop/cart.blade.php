@@ -801,10 +801,10 @@
                                         @endphp
                                         @foreach ($groupedModifiers as $groupName => $options)
                                         <div>
-                                            <div class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
+                                            <div class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
                                             @foreach ($options as $opt)
                                             @php $optQty = $itemModifierOptionQtys[$key][$opt['id']] ?? 1; @endphp
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $opt['name'] }} ({{ $optQty }})</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $opt['name'] }} ({{ $optQty }})</div>
                                             @endforeach
                                         </div>
                                         @endforeach

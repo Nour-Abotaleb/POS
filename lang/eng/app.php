@@ -280,4 +280,5 @@ return array(
     'regards' => 'Regards',
     'name' => 'Name',
     'customer' => 'Customer',
+    'show' => 'Show',
 );

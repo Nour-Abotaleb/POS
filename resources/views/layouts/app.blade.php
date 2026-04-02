@@ -196,7 +196,7 @@
 </head>
 
 
-<body class="font-sans antialiased dark:bg-gray-900" id="main-body">
+<body class="font-sans antialiased dark:bg-gray-900{{ request()->routeIs('pos.*') ? ' pos-route-active' : '' }}" id="main-body">
 
     @if (user()->restaurant_id)
         @livewire('navigation-menu')

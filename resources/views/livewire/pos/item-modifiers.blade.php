@@ -10,6 +10,12 @@
     .btn-add-item .btn-add-item-currency svg {
         filter: invert(1) brightness(10) !important;
     }
+    /* Checkbox: brand primary background + border when checked */
+    .item-modifier-cb:checked {
+        background-color: var(--brand-primary) !important;
+        border-color: var(--brand-primary) !important;
+        accent-color: var(--brand-primary);
+    }
 </style>
     @php $currencyId = $selectedModifierItem->branch->restaurant->currency_id; @endphp
 
@@ -103,7 +109,7 @@
                 <div class="flex items-center gap-3">
                     @if ($option->is_available)
                         <x-checkbox
-                            class="shrink-0"
+                            class="shrink-0 item-modifier-cb"
                             wire:model="selectedModifiers.{{ $option->id }}"
                             wire:change="incrementOptionQty({{ $option->id }})"
                             value="{{ $option->id }}" />
@@ -116,16 +122,16 @@
                 </div>
                 @if ($optQty > 0)
                     <div class="flex items-center gap-2 ms-7">
-                        <button type="button" wire:click="decrementOptionQty({{ $option->id }})"
-                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
-                            style="background-color: var(--brand-primary);">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h16"/></svg>
-                        </button>
-                        <span class="w-5 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $optQty }}</span>
                         <button type="button" wire:click="incrementOptionQty({{ $option->id }})"
                             class="w-7 h-7 flex items-center justify-center rounded-md text-white"
                             style="background-color: var(--brand-primary);">
                             <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 1v16M1 9h16"/></svg>
+                        </button>
+                        <span class="w-5 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $optQty }}</span>
+                           <button type="button" wire:click="decrementOptionQty({{ $option->id }})"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
+                            style="background-color: var(--brand-primary);">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h16"/></svg>
                         </button>
                     </div>
                 @endif
