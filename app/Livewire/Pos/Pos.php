@@ -154,6 +154,18 @@ class Pos extends Component
         $this->customer = Customer::find($customerId);
     }
 
+    public function hydrate()
+    {
+        // Re-load taxes on every Livewire request to ensure they survive re-hydration
+        // (Eloquent Collections stored as public properties can lose data between requests)
+        if (empty($this->taxes) || (is_countable($this->taxes) && count($this->taxes) === 0)) {
+            $restaurantId = $this->restaurant->id ?? restaurant()->id;
+            $this->taxes = cache()->remember('taxes_' . $restaurantId, 60 * 60 * 24, function () use ($restaurantId) {
+                return Tax::where('restaurant_id', $restaurantId)->get();
+            });
+        }
+    }
+
     public function mount()
     {
         $this->restaurant = restaurant()->load(['paymentGateways', 'package']);

@@ -1142,6 +1142,29 @@ class Cart extends Component
         $this->calculateTotal();
     }
 
+    public function removeItem($id)
+    {
+        $menuID = str_replace('"', '', explode('_', $id)[0]);
+
+        unset($this->orderItemList[$id]);
+        unset($this->orderItemVariation[$id]);
+        unset($this->orderItemAmount[$id]);
+        unset($this->orderItemQty[$id]);
+        unset($this->itemModifiersSelected[$id]);
+        unset($this->itemModifierOptionQtys[$id]);
+        unset($this->orderItemModifiersPrice[$id]);
+        unset($this->itemNotes[$id]);
+
+        if (isset($this->cartItemQty[$menuID])) {
+            $this->cartItemQty[$menuID] = max(0, ($this->cartItemQty[$menuID] - 1));
+            if ($this->cartItemQty[$menuID] === 0) {
+                unset($this->cartItemQty[$menuID]);
+            }
+        }
+
+        $this->calculateTotal();
+    }
+
     public function calculateTotal()
     {
         $this->cartQty = 0;
