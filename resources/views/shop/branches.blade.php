@@ -104,11 +104,7 @@
                     class="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700"
                 >
                     <div class="flex items-center justify-between gap-3 p-4">
-                        <a
-                            href="{{ route('shop_pick_branch', [$restaurant->hash, $branch->id]) }}"
-                            wire:navigate
-                            class="min-w-0 flex-1 text-start rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800"
-                        >
+                        <div class="min-w-0 flex-1 text-start">
                             <h2 class="font-bold text-gray-900 dark:text-white leading-snug">
                                 {{ $branch->name }}
                             </h2>
@@ -128,7 +124,7 @@
                                     </span>
                                 @endif
                             </div>
-                        </a>
+                        </div>
 
                         <div class="flex gap-2 shrink-0">
                             @if ($branch->phone)
@@ -136,7 +132,6 @@
                                     href="tel:{{ preg_replace('/\s+/', '', $branch->phone) }}"
                                     class="p-1 text-black font-light hover:text-[var(--brand-primary)] hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                                     title="@lang('menu.branch_call')"
-                                    onclick="event.stopPropagation()"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
@@ -150,7 +145,6 @@
                                     rel="noopener noreferrer"
                                     class="p-1 rounded-md text-gray-600 hover:text-[var(--brand-primary)] hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                                     title="@lang('menu.branch_map')"
-                                    onclick="event.stopPropagation()"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>

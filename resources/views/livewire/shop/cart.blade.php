@@ -43,7 +43,7 @@
                     @endforeach
                 </div>
 
-                {{-- Delivery: map + phone + OTP; other types: branch cards --}}
+                {{-- Delivery: map + phone (+ OTP UI commented out — Cart::orderTypeDeliverySendOtp skips OTP for now); other types: branch cards --}}
                 @foreach($orderTypes ?? [] as $orderType)
                     @php
                         $isDeliveryOrderType = strtolower((string) ($orderType->slug ?? '')) === 'delivery'
@@ -124,10 +124,10 @@
                                     </div>
                                 @endif
 
+                                {{-- OTP modal (disabled — use Cart::orderTypeDeliverySendOtp without OTP; restore when SMS/email OTP is required)
                                 @if($orderTypeDeliveryStep === 'otp' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
                                         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-5">
-                                            {{-- Header: title (RTL right) + circle back/close button (RTL left) --}}
                                             <div class="flex items-center justify-between gap-3">
                                                 <h3 class="text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
                                                     @lang('app.verification')
@@ -140,21 +140,16 @@
                                                     </svg>
                                                 </button>
                                             </div>
-
-                                            {{-- Info text --}}
                                             <p class="text-sm text-black dark:text-gray-400 text-center">@lang('messages.verificationCodeSent')</p>
                                             <p class="mt-2 mb-3 text-base font-semibold text-gray-900 dark:text-white text-center" dir="ltr">
                                                 +{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}
                                             </p>
-
-                                            {{-- OTP input --}}
                                             <input type="text" inputmode="numeric" maxlength="6"
                                                 class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-center text-xl leading-none font-semibold tracking-[0.5em] py-2 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent"
                                                 wire:model="orderTypeDeliveryOtp"
                                                 placeholder="_ _ _ _"
                                                 autocomplete="one-time-code" />
                                             <x-input-error for="orderTypeDeliveryOtp" />
-
                                             <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
                                                 class="mt-4 w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
                                                 style="background-color: var(--brand-primary);">
@@ -169,6 +164,7 @@
                                         </div>
                                     </div>
                                 @endif
+                                --}}
                             </div>
                         @else
                             @php
@@ -213,11 +209,7 @@
                                     <article wire:key="modal-branch-{{ $orderType->id }}-{{ $branch->id }}"
                                         class="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
                                         <div class="flex items-center justify-between gap-3 p-4">
-                                            <a
-                                                href="{{ $branch->id !== $shopBranch->id ? route('shop_pick_branch', [$restaurant->hash, $branch->id]) : '#' }}"
-                                                @if($branch->id !== $shopBranch->id) wire:navigate @endif
-                                                class="min-w-0 flex-1 text-start rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
-                                            >
+                                            <div class="min-w-0 flex-1 text-start">
                                                 <h2 class="font-bold text-gray-900 dark:text-white leading-snug">{{ $branch->name }}</h2>
                                                 @if($branch->address)
                                                     <p class="mt-1.5 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ $branch->address }}</p>
@@ -233,12 +225,11 @@
                                                         </span>
                                                     @endif
                                                 </div>
-                                            </a>
+                                            </div>
                                             <div class="flex gap-2 shrink-0">
                                                 @if($branch->phone)
                                                     <a href="tel:{{ preg_replace('/\s+/', '', $branch->phone) }}"
-                                                        class="p-1 text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition"
-                                                        onclick="event.stopPropagation()">
+                                                        class="p-1 text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                                         </svg>
@@ -246,8 +237,7 @@
                                                 @endif
                                                 @if($mapHref)
                                                     <a href="{{ $mapHref }}" target="_blank" rel="noopener noreferrer"
-                                                        class="p-1 rounded-md text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition"
-                                                        onclick="event.stopPropagation()">
+                                                        class="p-1 rounded-md text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -940,35 +930,41 @@
 
         </div>
 
+        {{-- Fixed waiter + login strip (lg:hidden = mobile/tablet only) — commented out per request
+        @if ($this->shouldShowWaiterButtonMobile || (is_null(customer()) && $restaurant->customer_login_required))
         <div class="fixed flex justify-center w-full max-w-lg gap-6 px-4 bottom-24 lg:hidden">
             @if ($this->shouldShowWaiterButtonMobile)
                 @livewire('forms.callWaiterButton', ['tableNumber' => $table->id ?? null, 'shopBranch' => $shopBranch])
             @endif
             @if (is_null(customer()) && $restaurant->customer_login_required)
-                <x-button type="button" wire:click="$dispatch('showSignup')">@lang('app.login')</x-button>
+                <button type="button" wire:click="$dispatch('showSignup')">
+                    @lang('app.login')
+                </button>
             @endif
         </div>
+        @endif
+        --}}
 
         @if ($cartQty > 0)
         <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 mx-2 mb-6 rounded-md text-white shadow-xl lg:hidden"
             style="background-color: var(--brand-primary);">
             {{-- Cart icon with badge --}}
-            <button type="button" wire:click="showCartItems" class="relative">
+            <button type="button" wire:click="showCartItems" class="relative flex-shrink-0">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
                 <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
             </button>
-            {{-- Place order button --}}
-            <button type="button" wire:click="showCartItems"
-            class="flex items-center gap-2 font-bold text-base text-white">
-            <span>@lang('modules.order.placeOrder')</span>
-        </button>
-        {{-- Total --}}
-        <div class="text-base font-bold dark">
-            {!! currency_format($total, $restaurant->currency_id) !!}
-        </div>
+            <div class="flex flex-1 items-center justify-center min-w-0 px-2">
+                <button type="button" wire:click="showCartItems"
+                    class="flex items-center gap-2 font-bold text-base text-white">
+                    <span>@lang('modules.order.placeOrder')</span>
+                </button>
+            </div>
+            <div class="text-base font-bold flex-shrink-0">
+                {!! currency_format($total, $restaurant->currency_id) !!}
+            </div>
         </div>
         @endif
     @endif
@@ -1364,16 +1360,19 @@
                 $paymentGateway->epay_status ||
                 $paymentGateway->is_offline_payment_enabled;
         @endphp
-        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 text-white shadow-xl"
+        {{-- Same mobile bar layout as shop home: cart + badge | action label | total --}}
+        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 mx-2 mb-6 rounded-md text-white shadow-xl lg:hidden"
             style="background-color: var(--brand-primary);">
 
-            {{-- Total price --}}
-            <div class="text-base font-bold">
-                {!! currency_format($total, $restaurant->currency_id) !!}
-            </div>
+            <button type="button" wire:click="showMenuItems" class="relative flex-shrink-0" aria-label="@lang('menu.back')">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
+            </button>
 
-            {{-- Action button(s) --}}
-            <div class="flex items-center gap-2">
+            <div class="flex flex-1 items-center justify-center gap-2 min-w-0 px-2">
                 @if (is_null($customer) && ($restaurant->customer_login_required || $orderTypeSlug == 'delivery'))
                     <button type="button" wire:click="$dispatch('showSignup')"
                         class="flex items-center gap-2 font-bold text-base text-white">
@@ -1393,7 +1392,7 @@
                 @else
                     @if (!$order && $showPayNow)
                         <button type="button" wire:click="placeOrder(true)" wire:loading.attr="disabled"
-                            class="flex items-center gap-1.5 font-bold text-sm text-white/80 border border-white/40 rounded-lg px-3 py-1.5">
+                            class="flex items-center gap-2 font-bold text-base text-white">
                             <span wire:loading wire:target="placeOrder(true)">...</span>
                             <span wire:loading.remove wire:target="placeOrder(true)">@lang('modules.order.payNow')</span>
                         </button>
@@ -1402,13 +1401,6 @@
                             class="flex items-center gap-2 font-bold text-base text-white">
                             <span wire:loading wire:target="placeOrder">...</span>
                             <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.payLater')</span>
-                            <div class="relative">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                </svg>
-                                <span class="absolute -top-2 -right-2 w-4 h-4 flex items-center justify-center rounded-full bg-orange-400 text-white text-[10px] font-bold">{{ $cartQty }}</span>
-                            </div>
                         </button>
                         @endif
                     @else
@@ -1416,16 +1408,13 @@
                             class="flex items-center gap-2 font-bold text-base text-white">
                             <span wire:loading wire:target="placeOrder">...</span>
                             <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.placeOrder')</span>
-                            <div class="relative">
-                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                </svg>
-                                <span class="absolute -top-2 -right-2 w-4 h-4 flex items-center justify-center rounded-full bg-orange-400 text-white text-[10px] font-bold">{{ $cartQty }}</span>
-                            </div>
                         </button>
                     @endif
                 @endif
+            </div>
+
+            <div class="text-base font-bold flex-shrink-0">
+                {!! currency_format($total, $restaurant->currency_id) !!}
             </div>
         </div>
         @endif

@@ -110,8 +110,7 @@
                     @if ($option->is_available)
                         <x-checkbox
                             class="shrink-0 item-modifier-cb"
-                            wire:model="selectedModifiers.{{ $option->id }}"
-                            wire:change="incrementOptionQty({{ $option->id }})"
+                            wire:model.live="selectedModifiers.{{ $option->id }}"
                             value="{{ $option->id }}" />
                     @else
                         <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">

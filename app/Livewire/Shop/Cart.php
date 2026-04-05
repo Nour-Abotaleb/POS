@@ -104,7 +104,7 @@ class Cart extends Component
     public $orderTypeSlug; // Add orderTypeSlug
     public $showOrderTypeModal = false; // Modal for order type selection
 
-    /** Delivery (توصيل) flow inside order-type modal: map → phone → OTP */
+    /** Delivery (توصيل) flow inside order-type modal: map → phone (OTP step temporarily disabled) */
     public string $orderTypeDeliveryStep = 'idle';
 
     public ?int $orderTypeDeliveryPendingTypeId = null;
@@ -130,6 +130,10 @@ class Cart extends Component
     public string $orderTypeDeliveryOtp = '';
 
     public string $orderTypeDeliveryPhoneCode = '';
+
+    /** After order-type delivery phone step: show customer profile modal before continuing on map (no placeOrder). */
+    public bool $customerNameModalAfterDeliveryPhoneFlow = false;
+
     public $cameFromQR = false; // Track if user came from QR code
     public $payNow = false;
     public $offline_payment_status;
@@ -638,8 +642,7 @@ class Cart extends Component
         if ($this->customer
             && (string) $this->customer->phone_code === (string) $this->orderTypeDeliveryPhoneCode
             && (string) $this->customer->phone === (string) $this->orderTypeDeliveryPhone) {
-            $this->orderTypeDeliveryStep = 'map';
-            $this->dispatch('init-order-type-delivery-map');
+            $this->openDeliveryMapWithCustomerProfileModal($this->customer);
 
             return;
         }
@@ -653,6 +656,14 @@ class Cart extends Component
             ['name' => 'Guest']
         );
 
+        // OTP step disabled: create/sign in customer and go to map (re-enable block below when OTP is required again).
+        $customer->email_otp = null;
+        $customer->save();
+
+        $this->orderTypeDeliveryOtp = '';
+        $this->openDeliveryMapWithCustomerProfileModal($customer);
+
+        /*
         $customer->email_otp = (string) random_int(1000, 9999);
         $customer->save();
 
@@ -681,6 +692,7 @@ class Cart extends Component
         }
 
         $this->orderTypeDeliveryStep = 'otp';
+        */
     }
 
     public function orderTypeDeliveryVerifyAndComplete(): void
@@ -711,16 +723,16 @@ class Cart extends Component
             return;
         }
 
-        session(['customer' => $customer]);
-        $this->customer = $customer;
-        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
         $this->orderTypeDeliveryOtp = '';
-        $this->orderTypeDeliveryStep = 'map';
-        $this->dispatch('init-order-type-delivery-map');
+        $this->openDeliveryMapWithCustomerProfileModal($customer);
     }
 
     public function orderTypeDeliveryCloseFlow(): void
     {
+        if ($this->customerNameModalAfterDeliveryPhoneFlow) {
+            $this->showCustomerNameModal = false;
+        }
+        $this->customerNameModalAfterDeliveryPhoneFlow = false;
         $this->orderTypeDeliveryStep = 'idle';
         $this->orderTypeDeliveryPendingTypeId = null;
         $this->orderTypeDeliveryPhone = '';
@@ -762,10 +774,29 @@ class Cart extends Component
 
     protected function resetOrderTypeDeliveryFlow(): void
     {
+        $this->customerNameModalAfterDeliveryPhoneFlow = false;
         $this->orderTypeDeliveryStep = 'idle';
         $this->orderTypeDeliveryPendingTypeId = null;
         $this->orderTypeDeliveryPhone = '';
         $this->orderTypeDeliveryOtp = '';
+    }
+
+    protected function openDeliveryMapWithCustomerProfileModal(Customer $customer): void
+    {
+        session(['customer' => $customer]);
+        $this->customer = $customer;
+        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
+
+        $name = $customer->name ?? '';
+        $this->customerName = ($name === 'Guest' || $name === '') ? '' : (string) $name;
+        $this->customerPhone = $this->orderTypeDeliveryPhone;
+        $this->customerPhoneCode = $this->orderTypeDeliveryPhoneCode;
+        $this->customerAddress = (string) ($customer->delivery_address ?? '');
+
+        $this->customerNameModalAfterDeliveryPhoneFlow = true;
+        $this->orderTypeDeliveryStep = 'map';
+        $this->dispatch('init-order-type-delivery-map');
+        $this->showCustomerNameModal = true;
     }
 
     protected function deliveryFlowSmsOtpEnabled(): bool
@@ -1361,8 +1392,17 @@ class Cart extends Component
         $this->updatedPhoneCodeSearch();
     }
 
+    public function updatedShowCustomerNameModal($value): void
+    {
+        if (! $value && $this->customerNameModalAfterDeliveryPhoneFlow) {
+            $this->customerNameModalAfterDeliveryPhoneFlow = false;
+        }
+    }
+
     public function submitCustomerName()
     {
+        $fromOrderTypeDeliveryPhone = $this->customerNameModalAfterDeliveryPhoneFlow;
+
         $rules = [
             'customerName' => 'required',
             'customerPhoneCode' => 'required',
@@ -1372,9 +1412,11 @@ class Cart extends Component
             ],
         ];
 
-        // Require address when order type is delivery
-        if ($this->orderType === 'delivery' || $this->orderTypeSlug === 'delivery') {
-            $rules['customerAddress'] = 'required';
+        // Address is collected on the map step during order-type delivery flow
+        if (! $fromOrderTypeDeliveryPhone) {
+            if ($this->orderType === 'delivery' || $this->orderTypeSlug === 'delivery') {
+                $rules['customerAddress'] = 'required';
+            }
         }
 
         $this->validate($rules);
@@ -1390,6 +1432,10 @@ class Cart extends Component
         $this->dispatch('setCustomer', customer: $this->customer);
 
         $this->showCustomerNameModal = false;
+
+        if ($fromOrderTypeDeliveryPhone) {
+            return;
+        }
 
         $this->placeOrder($this->payNow);
     }
@@ -2366,9 +2412,57 @@ class Cart extends Component
         }
     }
 
+    /**
+     * Shop cart embeds item-modifiers as a partial; wire:model binds here. Keep optionQuantities in sync when checkboxes change.
+     */
+    public function updated($propertyName): void
+    {
+        if (! is_string($propertyName)) {
+            return;
+        }
+        if ($propertyName !== 'selectedModifiers' && ! str_starts_with($propertyName, 'selectedModifiers.')) {
+            return;
+        }
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
     public function updatedSelectedModifiers(): void
     {
+        $this->syncOptionQuantitiesFromSelectedModifiers();
         $this->recalculateModifierTotal();
+    }
+
+    private function syncOptionQuantitiesFromSelectedModifiers(): void
+    {
+        foreach ($this->cartModifiers as $group) {
+            foreach ($group->options as $option) {
+                if (! $option->is_available) {
+                    continue;
+                }
+                $id = $option->id;
+                $raw = $this->selectedModifiers[$id] ?? false;
+                if ($this->isModifierOptionSelected($raw)) {
+                    if (($this->optionQuantities[$id] ?? 0) < 1) {
+                        $this->optionQuantities[$id] = 1;
+                    }
+                } else {
+                    unset($this->optionQuantities[$id]);
+                }
+            }
+        }
+    }
+
+    private function isModifierOptionSelected(mixed $raw): bool
+    {
+        if ($raw === false || $raw === null || $raw === '' || $raw === 0 || $raw === '0') {
+            return false;
+        }
+        if (is_string($raw) && strtolower($raw) === 'false') {
+            return false;
+        }
+
+        return true;
     }
 
     public function incrementOptionQty(int $optionId): void

@@ -176,9 +176,57 @@ class ItemModifiers extends Component
         $this->modifierTotalDisplay = ($base + $addons) * $this->quantity;
     }
 
+    /**
+     * Checkbox uses wire:model only (no $event in wire:change — that breaks on some Livewire/shop requests → 500).
+     */
+    public function updated($propertyName): void
+    {
+        if (! is_string($propertyName)) {
+            return;
+        }
+        if ($propertyName !== 'selectedModifiers' && ! str_starts_with($propertyName, 'selectedModifiers.')) {
+            return;
+        }
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
     public function updatedSelectedModifiers(): void
     {
+        $this->syncOptionQuantitiesFromSelectedModifiers();
         $this->recalculateModifierTotal();
+    }
+
+    private function syncOptionQuantitiesFromSelectedModifiers(): void
+    {
+        foreach ($this->modifiers as $group) {
+            foreach ($group->options as $option) {
+                if (! $option->is_available) {
+                    continue;
+                }
+                $id = $option->id;
+                $raw = $this->selectedModifiers[$id] ?? false;
+                if ($this->isModifierOptionSelected($raw)) {
+                    if (($this->optionQuantities[$id] ?? 0) < 1) {
+                        $this->optionQuantities[$id] = 1;
+                    }
+                } else {
+                    unset($this->optionQuantities[$id]);
+                }
+            }
+        }
+    }
+
+    private function isModifierOptionSelected(mixed $raw): bool
+    {
+        if ($raw === false || $raw === null || $raw === '' || $raw === 0 || $raw === '0') {
+            return false;
+        }
+        if (is_string($raw) && strtolower($raw) === 'false') {
+            return false;
+        }
+
+        return true;
     }
 
     public function saveModifiers()
