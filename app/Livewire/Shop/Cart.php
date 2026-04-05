@@ -36,6 +36,7 @@ use App\Models\RestaurantCharge;
 use App\Models\MenuItemVariation;
 use App\Models\FlutterwavePayment;
 use App\Models\AdminPayfastPayment;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use App\Events\SendNewOrderReceived;
 use App\Models\AdminPaystackPayment;
@@ -1573,8 +1574,24 @@ class Cart extends Component
             Order::where('id', $this->order->id)->update([
                 'status' => 'pending_verification',
             ]);
-            $this->printKot($this->order);
-            $this->sendNotifications($this->order);
+
+            $updateOrderId = $this->order->id;
+            Bus::dispatchAfterResponse(function () use ($updateOrderId) {
+                $orderModel = Order::find($updateOrderId);
+                if (! $orderModel) {
+                    return;
+                }
+                try {
+                    (new static)->printKot($orderModel, null);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop KOT print (update order): '.$e->getMessage());
+                }
+                try {
+                    static::dispatchOrderPlacedNotifications($orderModel);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop order notifications (update order): '.$e->getMessage());
+                }
+            });
 
             $this->alert('success', __('messages.orderSaved'), [
                 'toast' => false,
@@ -1583,7 +1600,16 @@ class Cart extends Component
                 'cancelButtonText' => __('app.close')
             ]);
 
-            $this->redirect(route('order_success', [$this->order->uuid]));
+            // Relative URL keeps the same host as the customer (avoids landing redirect when APP_URL ≠ browser URL).
+            $this->redirect(route('order_success', [$this->order->uuid], absolute: false));
+            return;
+        }
+
+        // Guest checkout blocked: open order-type modal (delivery phone / identity flow) instead of failing or redirecting.
+        if ($this->restaurant->customer_login_required && ! $this->customer) {
+            $this->payNow = $pay;
+            $this->openOrderTypeModal();
+
             return;
         }
 
@@ -1653,7 +1679,7 @@ class Cart extends Component
                 'branch_id' => $this->shopBranch->id,
                 'table_id' => $table->id ?? null,
                 'date_time' => now(),
-                'customer_id' => $this->customer->id ?? null,
+                'customer_id' => $this->customer?->id,
                 'sub_total' => $this->subTotal,
                 'total' => $this->total,
                 'order_type' => $this->orderTypeSlug ?? $this->orderType,
@@ -1792,7 +1818,8 @@ class Cart extends Component
             'tax_mode' => $this->taxMode,
         ]);
 
-        if ($order->status != 'draft') {
+        // Pay now: keep KOT print in-request so flow matches existing payment modal behaviour.
+        if ($pay && $order->status != 'draft') {
             $this->printKot($order, $kot);
         }
 
@@ -1811,7 +1838,27 @@ class Cart extends Component
                 'status' => 'kot'
             ]);
 
-            $this->sendNotifications($order);
+            $orderId = $order->id;
+            $kotId = $kot->id;
+            Bus::dispatchAfterResponse(function () use ($orderId, $kotId) {
+                $orderModel = Order::find($orderId);
+                $kotModel = Kot::find($kotId);
+                if (! $orderModel || ! $kotModel) {
+                    return;
+                }
+                if ($orderModel->status !== 'draft') {
+                    try {
+                        (new static)->printKot($orderModel, $kotModel);
+                    } catch (\Throwable $e) {
+                        Log::error('Deferred shop KOT print: '.$e->getMessage());
+                    }
+                }
+                try {
+                    static::dispatchOrderPlacedNotifications($orderModel);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop order notifications: '.$e->getMessage());
+                }
+            });
 
             $this->alert('success', __('messages.orderSaved'), [
                 'toast' => false,
@@ -1821,7 +1868,7 @@ class Cart extends Component
             ]);
 
             cache()->forget('branch_' . $this->shopBranch->id . '_order_stats');
-            $this->redirect(route('order_success', [$order->uuid]));
+            $this->redirect(route('order_success', [$order->uuid], absolute: false));
         }
     }
 
@@ -1896,7 +1943,7 @@ class Cart extends Component
                 'cancelButtonText' => __('app.close')
             ]);
 
-            $this->redirect(route('order_success', $payment->order->uuid));
+            $this->redirect(route('order_success', $payment->order->uuid, absolute: false));
         }
     }
 
@@ -2329,7 +2376,10 @@ class Cart extends Component
         $this->paymentOrder = null;
     }
 
-    public function sendNotifications($order)
+    /**
+     * Runs broadcast + admin notifications + customer bill email. Safe to call from jobs / afterResponse.
+     */
+    public static function dispatchOrderPlacedNotifications(Order $order): void
     {
         NewOrderCreated::dispatch($order);
 
@@ -2338,9 +2388,14 @@ class Cart extends Component
             try {
                 $order->customer->notify(new SendOrderBill($order));
             } catch (\Exception $e) {
-                Log::error('Error sending order bill email: ' . $e->getMessage());
+                Log::error('Error sending order bill email: '.$e->getMessage());
             }
         }
+    }
+
+    public function sendNotifications($order)
+    {
+        self::dispatchOrderPlacedNotifications($order);
     }
 
     public function toggleQrCode()

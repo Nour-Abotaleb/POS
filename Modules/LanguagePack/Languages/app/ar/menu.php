@@ -14,7 +14,7 @@ return [
   'pos' => 'نقاط البيع',
   'kot' => 'kot',
   'myAccount' => 'حسابي',
-  'myOrders' => 'أوامري',
+  'myOrders' => 'طلباتي',
   'customers' => 'عملاء',
   'newOrder' => 'أمر جديد',
   'payments' => 'المدفوعات',

@@ -260,7 +260,7 @@ return [
     'taxes' => 'الضرائب',
     'viewCart' => 'عرض العربة',
     'placeOrder' => 'تنفيذ الطلب',
-    'myOrders' => 'أوامري',
+    'myOrders' => 'طلباتي',
     'includeTax' => 'يشمل الضرائب',
     'payNow' => 'تنفيذ الطلب',
     'payLater' => 'دفع في وقت لاحق',

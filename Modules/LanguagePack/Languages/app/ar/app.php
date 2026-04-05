@@ -45,7 +45,7 @@ return [
   'name' => 'اسم',
   'description' => 'وصف',
   'login' => 'تسجيل الدخول',
-  'continue' => 'يكمل',
+  'continue' => 'متابعة',
   'verificationCode' => 'إرسال رمز التحقق',
   'next' => 'التالي',
   'resendVerificatonCode' => 'إعادة تقديم رمز التحقق',
