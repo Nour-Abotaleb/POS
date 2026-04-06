@@ -135,6 +135,12 @@ class Cart extends Component
     /** After order-type delivery phone step: show customer profile modal before continuing on map (no placeOrder). */
     public bool $customerNameModalAfterDeliveryPhoneFlow = false;
 
+    /** Guest clicked Place order while login required: after auth, close order-type modal and run checkout. */
+    public bool $pendingPlaceOrderAfterAuth = false;
+
+    /** Next setCustomer is from delivery phone/map sync — do not auto-place order yet. */
+    protected bool $suppressSetCustomerAutoPlaceOrder = false;
+
     public $cameFromQR = false; // Track if user came from QR code
     public $payNow = false;
     public $offline_payment_status;
@@ -786,6 +792,7 @@ class Cart extends Component
     {
         session(['customer' => $customer]);
         $this->customer = $customer;
+        $this->suppressSetCustomerAutoPlaceOrder = true;
         $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
 
         $name = $customer->name ?? '';
@@ -1338,8 +1345,32 @@ class Cart extends Component
     #[On('setCustomer')]
     public function setCustomer($customer)
     {
-        $customer = Customer::find($customer['id']);
-        $this->customer = $customer;
+        $id = null;
+        if (is_array($customer)) {
+            $id = $customer['id'] ?? null;
+        } elseif (is_object($customer) && isset($customer->id)) {
+            $id = $customer->id;
+        }
+        if (! $id) {
+            return;
+        }
+
+        $this->customer = Customer::find($id);
+
+        $skipAutoPlace = $this->suppressSetCustomerAutoPlaceOrder
+            || $this->customerNameModalAfterDeliveryPhoneFlow;
+
+        $this->suppressSetCustomerAutoPlaceOrder = false;
+
+        if (
+            $this->pendingPlaceOrderAfterAuth
+            && $this->customer
+            && ! $skipAutoPlace
+        ) {
+            $this->pendingPlaceOrderAfterAuth = false;
+            $this->showOrderTypeModal = false;
+            $this->placeOrder($this->payNow);
+        }
     }
 
     #[On('open-order-type-modal')]
@@ -1608,10 +1639,14 @@ class Cart extends Component
         // Guest checkout blocked: open order-type modal (delivery phone / identity flow) instead of failing or redirecting.
         if ($this->restaurant->customer_login_required && ! $this->customer) {
             $this->payNow = $pay;
+            $this->pendingPlaceOrderAfterAuth = true;
             $this->openOrderTypeModal();
 
             return;
         }
+
+        // Logged-in checkout: clear any stale “resume after auth” flag
+        $this->pendingPlaceOrderAfterAuth = false;
 
         if ($this->orderType == 'delivery') {
             $deliverySetting = $this->shopBranch->deliverySetting ?? null;
