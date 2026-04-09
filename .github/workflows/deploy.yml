@@ -2,25 +2,212 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@master
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        password: ${{ secrets.SERVER_PASS }}
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql, gd, zip, bcmath, redis
+        coverage: none
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install Composer dependencies
+      run: composer install --no-dev --optimize-autoloader --no-interaction
+      
+    - name: Install NPM dependencies
+      run: npm ci
+      
+    - name: Build assets
+      run: npm run build
+      
+    - name: Create deployment archive
+      run: |
+        tar -czf nomufood-deploy.tar.gz \
+          --exclude=node_modules \
+          --exclude=.git \
+          --exclude=tests \
+          --exclude=.env \
+          --exclude=.env.example \
+          --exclude=storage/logs/*.log \
+          --exclude=storage/framework/cache/data/* \
+          --exclude=storage/framework/sessions/* \
+          --exclude=storage/framework/views/* \
+          .
+          
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
         script: |
-          # الدخول لمجلد الموقع (المسار الافتراضي في CloudPanel)
-          cd /home/nomufood/htdocs/nomufood.com
+          # متغيرات
+          PROJECT_PATH="/home/nomufood/htdocs/nomufood.com"
+          BACKUP_PATH="/home/nomufood/backups"
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           
-          # تأكد من أن السكريبت قابل للتنفيذ
-          chmod +x deploy.sh
+          # إنشاء مجلد النسخ الاحتياطية
+          mkdir -p ${BACKUP_PATH}
           
-          # تشغيل سكريبت الرفع الجاهز الخاص بك
-          ./deploy.sh
+          # نسخة احتياطية من قاعدة البيانات
+          echo "Creating database backup..."
+          mysqldump -u ${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} ${{ secrets.DB_DATABASE }} > ${BACKUP_PATH}/db_backup_${TIMESTAMP}.sql
+          
+          # نسخة احتياطية من الملفات الحالية
+          echo "Creating files backup..."
+          if [ -d "${PROJECT_PATH}" ]; then
+            tar -czf ${BACKUP_PATH}/files_backup_${TIMESTAMP}.tar.gz -C ${PROJECT_PATH} .
+          fi
+          
+          # وضع الموقع في وضع الصيانة
+          echo "Enabling maintenance mode..."
+          if [ -f "${PROJECT_PATH}/artisan" ]; then
+            cd ${PROJECT_PATH}
+            php artisan down --message="جاري التحديث، سنعود قريباً" --retry=60 || true
+          fi
+          
+          # إنشاء مجلد المشروع إذا لم يكن موجوداً
+          mkdir -p ${PROJECT_PATH}
+          
+    - name: Upload deployment archive
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        source: "nomufood-deploy.tar.gz"
+        target: "/tmp/"
+        
+    - name: Extract and setup
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          PROJECT_PATH="/home/nomufood/htdocs/nomufood.com"
+          
+          # استخراج الملفات الجديدة
+          echo "Extracting new files..."
+          cd ${PROJECT_PATH}
+          tar -xzf /tmp/nomufood-deploy.tar.gz
+          rm /tmp/nomufood-deploy.tar.gz
+          
+          # إعداد ملف البيئة
+          echo "Setting up environment file..."
+          if [ ! -f ".env" ]; then
+            cp .env.production .env
+          fi
+          
+          # إعداد الصلاحيات
+          echo "Setting permissions..."
+          chown -R nomufood:nomufood .
+          chmod -R 755 .
+          chmod -R 775 storage
+          chmod -R 775 bootstrap/cache
+          chmod 600 .env
+          
+          # تحديث متغيرات البيئة
+          echo "Updating environment variables..."
+          sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
+          sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
+          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+          sed -i "s|APP_URL=.*|APP_URL=https://nomufood.com|" .env
+          
+          # توليد مفتاح التطبيق إذا لم يكن موجوداً
+          if ! grep -q "APP_KEY=base64:" .env; then
+            echo "Generating application key..."
+            php artisan key:generate --force
+          fi
+          
+          # تشغيل migrations
+          echo "Running migrations..."
+          php artisan migrate --force
+          
+          # إنشاء storage link
+          echo "Creating storage link..."
+          php artisan storage:link
+          
+          # مسح وإعادة بناء cache
+          echo "Clearing and rebuilding cache..."
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan route:clear
+          php artisan view:clear
+          
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan optimize
+          
+          # إعادة تشغيل queue workers إذا كان متاحاً
+          if command -v supervisorctl &> /dev/null; then
+            echo "Restarting queue workers..."
+            supervisorctl restart nomufood-worker:* || true
+          fi
+          
+          # إلغاء وضع الصيانة
+          echo "Disabling maintenance mode..."
+          php artisan up
+          
+          echo "Deployment completed successfully!"
+          echo "Deployment time: $(date)"
+          
+    - name: Notify deployment status
+      uses: appleboy/ssh-action@v1.0.0
+      if: always()
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          PROJECT_PATH="/home/nomufood/htdocs/nomufood.com"
+          cd ${PROJECT_PATH}
+          
+          # اختبار سريع
+          echo "=== Deployment Status ==="
+          echo "Site URL: https://nomufood.com"
+          echo "Deployment time: $(date)"
+          
+          # فحص حالة التطبيق
+          if php artisan --version > /dev/null 2>&1; then
+            echo "✅ Laravel is working"
+            echo "Laravel version: $(php artisan --version)"
+          else
+            echo "❌ Laravel has issues"
+          fi
+          
+          # فحص قاعدة البيانات
+          if php artisan migrate:status > /dev/null 2>&1; then
+            echo "✅ Database connection is working"
+          else
+            echo "❌ Database connection failed"
+          fi
+          
+          # فحص الـ cache
+          if php artisan config:show app.name > /dev/null 2>&1; then
+            echo "✅ Configuration cache is working"
+          else
+            echo "❌ Configuration cache failed"
+          fi
+          
+          echo "=== End Status ==="
