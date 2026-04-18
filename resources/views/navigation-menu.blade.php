@@ -221,44 +221,47 @@
   }
 
   /* Today-orders / reservations / waiter-requests counter buttons: plain CSS so
-     they show on md+ even when Tailwind responsive variants are purged in production. */
+     they show on md+ even when Tailwind responsive variants are purged in production.
+     Padding/badge match desktop (lg) from tablet (md) up so chip width is consistent. */
   .nav-counter-btn {
     display: none;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
   }
   @media (min-width: 768px) {
     .nav-counter-btn {
       display: inline-flex;
     }
   }
-  @media (min-width: 1024px) {
-    .nav-counter-btn {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-  }
   .nav-counter-btn .nav-counter-badge {
-    padding: 0.125rem 0.2rem;
-    margin-inline-start: 0.125rem;
-  }
-  @media (min-width: 1024px) {
-    .nav-counter-btn .nav-counter-badge {
-      padding-left: 0.2rem;
-      padding-right: 0.2rem;
-      margin-inline-start: 0.2rem;
-    }
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+    margin-inline-start: 0.2rem;
   }
   .dark .app-logo img {
     filter: invert(1);
   }
 </style>
 @endassets
+@php
+  $showDashboardNavCounters = !request()->routeIs('pos.*') && (
+    (in_array('Waiter Request', restaurant_modules()) && user_can('Manage Waiter Request') && restaurant()->hide_new_waiter_request == 0)
+    || (in_array('Reservation', restaurant_modules()) && user_can('Show Reservation') && restaurant()->hide_new_reservations == 0 && in_array('Table Reservation', restaurant_modules()))
+    || (in_array('Order', restaurant_modules()) && user_can('Show Order') && restaurant()->hide_new_orders == 0)
+  );
+@endphp
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-  <div class="pos-nav-inner">
-    <div class="flex items-center justify-between">
+  <div class="pos-nav-inner relative">
+    <div class="flex items-center justify-between flex-nowrap gap-2">
 
-      <div class="flex items-center justify-start">
+      <div class="flex items-center justify-start min-w-0 flex-1 shrink">
+        {{-- z-20: stay above dashboard counter strip (lg:z-10 full-width overlay) so sidebar toggle stays clickable --}}
+        <div class="relative z-20 flex items-center shrink-0">
         <button type="button" id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" onclick="if(window.toggleMobileSidebar)window.toggleMobileSidebar();(event||window.event).stopPropagation();"
           class="pos-nav-mobile-menu-btn p-2 text-gray-600 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           <svg id="toggleSidebarMobileHamburger" class="pos-mobile-nav-hamburger w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -296,6 +299,24 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7M19 19l-7-7 7-7"/>
           </svg>
         </button>
+        </div>
+
+        {{-- max-lg: beside logo (no wrap). lg+: align with main content column. --}}
+        @if ($showDashboardNavCounters)
+          <div class="flex flex-nowrap items-center gap-2 shrink-0 md:gap-4 lg:absolute lg:inset-y-0 lg:left-0 lg:right-0 lg:z-10 lg:pointer-events-none">
+            <div class="flex flex-nowrap items-center gap-2 md:gap-4 lg:pointer-events-auto lg:ps-[calc(16rem+1rem)]">
+              @if (in_array('Waiter Request', restaurant_modules()) && user_can('Manage Waiter Request') && restaurant()->hide_new_waiter_request == 0)
+                @livewire('dashboard.activeWaiterRequests')
+              @endif
+              @if (in_array('Reservation', restaurant_modules()) && user_can('Show Reservation') && restaurant()->hide_new_reservations == 0 && in_array('Table Reservation', restaurant_modules()))
+                @livewire('dashboard.todayReservations')
+              @endif
+              @if (in_array('Order', restaurant_modules()) && user_can('Show Order') && restaurant()->hide_new_orders == 0)
+                @livewire('dashboard.todayOrders')
+              @endif
+            </div>
+          </div>
+        @endif
 
         <div class="flex items-center gap-2">
           @if (request()->routeIs('pos.*'))
@@ -385,8 +406,12 @@
           </div>
           @endif
 
-          {{-- Non-POS: dark mode, language, profile, display, etc. on the LEFT beside logo --}}
-          @if (!request()->routeIs('pos.*'))
+        </div>
+      </div>
+
+      {{-- Right side (non-POS): fullscreen, theme, language, profile, displays. POS: empty. --}}
+      <div class="relative z-20 flex items-center gap-2 flex-wrap shrink-0 justify-end">
+        @if (!request()->routeIs('pos.*'))
           <button id="toggleSidebarMobileSearch" type="button"
             class="p-2 text-gray-500 rounded-lg hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
             <span class="sr-only">Search</span>
@@ -425,116 +450,85 @@
           </button>
           <div id="tooltip-toggle" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">@lang('app.toggleDarkMode')<div class="tooltip-arrow" data-popper-arrow></div></div>
           @livewire('settings.languageSwitcher')
-          <!-- Profile -->
-        <div class="flex items-center w-8">
-          <div class="flex w-full">
-            <button type="button"
-              class="inline-flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
-              <span class="sr-only">Open user menu</span>
-              <img class="w-8 h-8 rounded-full" src="{{ auth()->user()->profile_photo_path ? asset_url_local_s3(auth()->user()->profile_photo_path):auth()->user()->profile_photo_url }}" alt="user photo">
-            </button>
-          </div>
-          <!-- Dropdown menu -->
-          <div
-            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-            id="dropdown-2">
-            <div class="px-4 py-3" role="none">
-              <p class="text-sm text-gray-900 dark:text-white" role="none">
-                {{ auth()->user()->name }}
-              </p>
-              <p class="text-sm font-medium text-gray-500 truncate dark:text-gray-300" role="none">
-                {{ auth()->user()->email }}
-              </p>
+          <div class="flex items-center w-8">
+            <div class="flex w-full">
+              <button type="button"
+                class="inline-flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-8 h-8 rounded-full" src="{{ auth()->user()->profile_photo_path ? asset_url_local_s3(auth()->user()->profile_photo_path):auth()->user()->profile_photo_url }}" alt="user photo">
+              </button>
             </div>
-            <ul class="py-1" role="none">
-              <li>
-                <a href="{{ route('profile.show') }}" wire:navigate
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">@lang('menu.profile')</a>
-              </li>
-
-              @if (user_can('Manage Settings') && in_array('Settings', restaurant_modules()))
-              <li>
-                <a href="{{ route('settings.index') }}" wire:navigate
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">@lang('menu.settings')</a>
-              </li>
-
-              @endif
-
-              <li>
-                <form method="POST" action="{{ route('logout') }}" x-data>
-                  @csrf
-                  <a href="{{ route('logout') }}" @click.prevent="$root.submit();"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">@lang('menu.signOut')</a>
-                </form>
-              </li>
-            </ul>
-          </div>
-        </div>
-        @endif
-
-        @if (!request()->routeIs('pos.*'))
-        <!-- Display (Customer Display, Order Board, Kiosk) -->
-        <div class="flex items-center w-8">
-          <div class="flex w-full">
-            <button type="button"
-              class="inline-flex items-center justify-center w-10 h-10 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
-              id="user-menu-button-3" aria-expanded="false" data-dropdown-toggle="dropdown-3" data-dropdown-placement="left-end">
-              <span class="sr-only">Open user menu</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" viewBox="0 0 512 512" xml:space="preserve"><path d="M112 441.328h288v32H112zM0 38.672v352h200v34.656h112v-34.656h200v-352zm216 323.25v-16h80v16zm248-35.25H48v-240h416z" style="fill:currentColor"/></svg>
-
-            </button>
-          </div>
-          <!-- Dropdown menu -->
-          <div
-            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-            id="dropdown-3">
-
-            <ul class="py-1" role="none">
-              @if (in_array('Customer Display', restaurant_modules()))
-              <li>
-                <a href="{{ route('customer.display') }}" target="_blank"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">@lang('menu.customerDisplay')</a>
-              </li>
-              <li>
-                <a href="{{ route('customer.order-board') }}" target="_blank"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">@lang('modules.order.customerOrderBoard')</a>
-              </li>
-              @endif
-
-              @if (module_enabled('Kiosk') && in_array('Kiosk', restaurant_modules()))
+            <div
+              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+              id="dropdown-2">
+              <div class="px-4 py-3" role="none">
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  {{ auth()->user()->name }}
+                </p>
+                <p class="text-sm font-medium text-gray-500 truncate dark:text-gray-300" role="none">
+                  {{ auth()->user()->email }}
+                </p>
+              </div>
+              <ul class="py-1" role="none">
                 <li>
-                    <a href="{{ route('kiosk.restaurant', restaurant()->hash). '?branch=' . branch()->unique_hash }}" target="_blank"
+                  <a href="{{ route('profile.show') }}" wire:navigate
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">@lang('kiosk::modules.menu.kiosk')</a>
+                    role="menuitem">@lang('menu.profile')</a>
                 </li>
-              @endif
-
-            </ul>
+                @if (user_can('Manage Settings') && in_array('Settings', restaurant_modules()))
+                <li>
+                  <a href="{{ route('settings.index') }}" wire:navigate
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">@lang('menu.settings')</a>
+                </li>
+                @endif
+                <li>
+                  <form method="POST" action="{{ route('logout') }}" x-data>
+                    @csrf
+                    <a href="{{ route('logout') }}" @click.prevent="$root.submit();"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem">@lang('menu.signOut')</a>
+                  </form>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        @endif
-
-        </div>
-      </div>
-
-      {{-- Right side: non-POS only the 3 icons (order, reservation, waiter) --}}
-      <div class="flex items-center gap-4 w-fit justify-end">
-        @if (!request()->routeIs('pos.*'))
-          @if (in_array('Order', restaurant_modules()) && user_can('Show Order') && restaurant()->hide_new_orders == 0)
-            @livewire('dashboard.todayOrders')
-          @endif
-          @if (in_array('Reservation', restaurant_modules()) && user_can('Show Reservation') && restaurant()->hide_new_reservations == 0 && in_array('Table Reservation', restaurant_modules()))
-            @livewire('dashboard.todayReservations')
-          @endif
-          @if (in_array('Waiter Request', restaurant_modules()) && user_can('Manage Waiter Request') && restaurant()->hide_new_waiter_request == 0)
-            @livewire('dashboard.activeWaiterRequests')
-          @endif
+          <div class="flex items-center w-8">
+            <div class="flex w-full">
+              <button type="button"
+                class="inline-flex items-center justify-center w-10 h-10 text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
+                id="user-menu-button-3" aria-expanded="false" data-dropdown-toggle="dropdown-3" data-dropdown-placement="left-end">
+                <span class="sr-only">Open user menu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" viewBox="0 0 512 512" xml:space="preserve"><path d="M112 441.328h288v32H112zM0 38.672v352h200v34.656h112v-34.656h200v-352zm216 323.25v-16h80v16zm248-35.25H48v-240h416z" style="fill:currentColor"/></svg>
+              </button>
+            </div>
+            <div
+              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+              id="dropdown-3">
+              <ul class="py-1" role="none">
+                @if (in_array('Customer Display', restaurant_modules()))
+                <li>
+                  <a href="{{ route('customer.display') }}" target="_blank"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">@lang('menu.customerDisplay')</a>
+                </li>
+                <li>
+                  <a href="{{ route('customer.order-board') }}" target="_blank"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem">@lang('modules.order.customerOrderBoard')</a>
+                </li>
+                @endif
+                @if (module_enabled('Kiosk') && in_array('Kiosk', restaurant_modules()))
+                  <li>
+                      <a href="{{ route('kiosk.restaurant', restaurant()->hash). '?branch=' . branch()->unique_hash }}" target="_blank"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem">@lang('kiosk::modules.menu.kiosk')</a>
+                  </li>
+                @endif
+              </ul>
+            </div>
+          </div>
         @endif
       </div>
     </div>

@@ -138,6 +138,12 @@ class Cart extends Component
     /** Guest clicked Place order while login required: after auth, close order-type modal and run checkout. */
     public bool $pendingPlaceOrderAfterAuth = false;
 
+    /**
+     * Guest checkout phases: idle → awaiting_order_type (order-type modal) → awaiting_identity (signup/login).
+     * Prevents anonymous orders that redirect straight to orders-success without phone/login.
+     */
+    public string $guestCheckoutPhase = 'idle';
+
     /** Next setCustomer is from delivery phone/map sync — do not auto-place order yet. */
     protected bool $suppressSetCustomerAutoPlaceOrder = false;
 
@@ -548,6 +554,11 @@ class Cart extends Component
         $this->orderType = $orderType->type;
         // Close the modal
         $this->showOrderTypeModal = false;
+
+        if ($this->pendingPlaceOrderAfterAuth && ! $this->customer && ! $this->cameFromQR) {
+            $this->guestCheckoutPhase = 'awaiting_identity';
+            $this->dispatch('showSignup');
+        }
     }
 
     public function onOrderTypeModalTabChanged($orderTypeId): void
@@ -570,7 +581,8 @@ class Cart extends Component
                 $this->orderTypeDeliveryPhone = '';
                 $this->orderTypeDeliveryPhoneCode = (string) $this->customerPhoneCode;
             }
-            $this->dispatch('init-order-type-delivery-map');
+            // Do not load Google Maps here — phone step shows first; map init runs when step becomes
+            // 'map' (openDeliveryMapWithCustomerProfileModal / orderTypeDeliveryBackToMap) so the phone UI is not tied to map load.
         } else {
             $this->orderTypeDeliveryStep = 'idle';
             $this->orderTypeDeliveryPendingTypeId = null;
@@ -1357,6 +1369,8 @@ class Cart extends Component
 
         $this->customer = Customer::find($id);
 
+        $this->guestCheckoutPhase = 'idle';
+
         $skipAutoPlace = $this->suppressSetCustomerAutoPlaceOrder
             || $this->customerNameModalAfterDeliveryPhoneFlow;
 
@@ -1377,14 +1391,69 @@ class Cart extends Component
     public function openOrderTypeModal()
     {
         $this->showOrderTypeModal = true;
-        $first = OrderType::where('branch_id', $this->shopBranch->id)
-            ->where('is_active', true)
-            ->where('enable_from_customer_site', true)
-            ->orderBy('id')
-            ->first();
+        // Must match customer UI order (getOrderTypesProperty: delivery first, etc.) — not orderBy('id'),
+        // or Alpine activeTab and Livewire delivery/phone state get out of sync.
+        $first = $this->orderTypes->first();
         if ($first) {
             $this->onOrderTypeModalTabChanged($first->id);
         }
+    }
+
+    /**
+     * Guest must open order-type modal before checkout (unless already past it and only login is missing).
+     */
+    public function guestNeedsOrderTypeModalBeforeCheckout(): bool
+    {
+        if ($this->cameFromQR) {
+            return false;
+        }
+
+        return ! $this->customer && $this->guestCheckoutPhase !== 'awaiting_identity';
+    }
+
+    /**
+     * Same intent as desktop cart sidebar: pay-now when any shop payment method is enabled.
+     */
+    protected function checkoutOffersPayNowIntent(): bool
+    {
+        $gw = $this->paymentGateway;
+
+        if (! $gw) {
+            return false;
+        }
+
+        return (bool) (
+            $gw->is_qr_payment_enabled
+            || $gw->stripe_status
+            || $gw->razorpay_status
+            || $gw->flutterwave_status
+            || $gw->paypal_status
+            || $gw->payfast_status
+            || $gw->xendit_status
+            || ($gw->epay_status ?? false)
+            || $gw->is_offline_payment_enabled
+        );
+    }
+
+    /**
+     * Mobile menu bottom bar: label says "place order" — guests who need identity must hit checkout modal,
+     * not only open the cart sheet (order summary).
+     */
+    public function checkoutFromMobileMenuStrip(): void
+    {
+        if (! $this->customer && $this->guestCheckoutPhase === 'awaiting_identity') {
+            $this->dispatch('showSignup');
+
+            return;
+        }
+
+        if ($this->guestNeedsOrderTypeModalBeforeCheckout()) {
+            $this->placeOrder($this->checkoutOffersPayNowIntent());
+
+            return;
+        }
+
+        $this->showCartItems();
     }
 
     #[On('showCartItems')]
@@ -1636,8 +1705,16 @@ class Cart extends Component
             return;
         }
 
-        // Guest checkout blocked: open order-type modal (delivery phone / identity flow) instead of failing or redirecting.
-        if ($this->restaurant->customer_login_required && ! $this->customer) {
+        // Guest: never create an anonymous order — order-type modal first, then signup/login (delivery may create customer inside modal).
+        // QR/table flow keeps legacy anonymous checkout without this gate.
+        if (! $this->customer && ! $this->cameFromQR) {
+            if ($this->guestCheckoutPhase === 'awaiting_identity') {
+                $this->dispatch('showSignup');
+
+                return;
+            }
+
+            $this->guestCheckoutPhase = 'awaiting_order_type';
             $this->payNow = $pay;
             $this->pendingPlaceOrderAfterAuth = true;
             $this->openOrderTypeModal();

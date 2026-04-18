@@ -24,7 +24,13 @@
                 },
                 closeHours() { this.hoursModalOpen = false; },
                 activeDay() { return this.hoursDays[this.hoursSelected] || { closed: true, from: null, to: null, label: '' }; }
-            }" @keydown.escape.window="closeHours()">
+            }"
+                x-init="$watch(() => $wire.showOrderTypeModal, (open) => {
+                    if (open) {
+                        activeTab = {{ $firstOrderTypeId !== null ? (int) $firstOrderTypeId : 'null' }};
+                    }
+                })"
+                @keydown.escape.window="closeHours()">
 
                 {{-- Order Type Tabs --}}
                 <div class="flex gap-1 mb-5 px-6 pt-4">
@@ -255,6 +261,16 @@
                                         </div>
                                     </article>
                                 @endforeach
+
+                                {{-- Confirm order type (pickup / dine-in / etc.): required so guests can finish modal and reach login --}}
+                                <div class="px-6 pb-6">
+                                    <button type="button"
+                                        wire:click="selectOrderTypeFromModal({{ $orderType->id }})"
+                                        class="w-full py-3 rounded-xl text-white text-sm font-bold shadow-lg"
+                                        style="background-color: #011646;">
+                                        @lang('app.next')
+                                    </button>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -957,7 +973,7 @@
                 <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
             </button>
             <div class="flex flex-1 items-center justify-center min-w-0 px-2">
-                <button type="button" wire:click="showCartItems"
+                <button type="button" wire:click="checkoutFromMobileMenuStrip"
                     class="flex items-center gap-2 font-bold text-base text-white">
                     <span>@lang('modules.order.placeOrder')</span>
                 </button>
@@ -1373,14 +1389,28 @@
             </button>
 
             <div class="flex flex-1 items-center justify-center gap-2 min-w-0 px-2">
-                @if (is_null($customer) && ($restaurant->customer_login_required || $orderTypeSlug == 'delivery'))
-                    <button type="button" wire:click="$dispatch('showSignup')"
-                        class="flex items-center gap-2 font-bold text-base text-white">
-                        <span>@lang('app.next')</span>
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
+                @if (is_null($customer))
+                    {{-- Guests always go through Cart::placeOrder → order-type modal then login; no anonymous checkout --}}
+                    @if (!$order && $showPayNow)
+                        <button type="button" wire:click="placeOrder(true)" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder(true)">...</span>
+                            <span wire:loading.remove wire:target="placeOrder(true)">@lang('modules.order.payNow')</span>
+                        </button>
+                        @if (!$isPaymentEnabled)
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.payLater')</span>
+                        </button>
+                        @endif
+                    @else
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.placeOrder')</span>
+                        </button>
+                    @endif
                 @elseif ($orderTypeSlug == 'pickup')
                     <button type="button" wire:click="showPickupDateTime"
                         class="flex items-center gap-2 font-bold text-base text-white">
