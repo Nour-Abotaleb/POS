@@ -332,6 +332,7 @@ return [
         'allergens' => 'Allergens',
         'nutritionalInfo' => 'Nutritional Information',
         'calories' => 'Calories',
+        'caloriesAbbrev' => 'CAL',
         'servingSize' => 'Serving Size',
         'preparationTime' => 'Preparation Time',
         'cookingTime' => 'Cooking Time',
@@ -547,6 +548,8 @@ return [
         // Pricing & Availability
         'setPrice' => 'Price',
         'preparationTime' => 'Preparation Time',
+        'calories' => 'Calories',
+        'caloriesAbbrev' => 'CAL',
         'minutes' => 'minutes',
         'isAvailable' => 'Is Available',
         'available' => 'Available',

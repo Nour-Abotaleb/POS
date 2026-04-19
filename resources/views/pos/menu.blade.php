@@ -379,28 +379,28 @@
                                         <h5 class="text-xs font-medium text-gray-900 dark:text-white min-h-[1.5rem]">
                                             {{ $item->item_name }}
                                         </h5>
-                                        {{-- @if ($item->calories)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                {{ $item->calories }}
-                                            </div>
-                                        @endif --}}
                                         @if ($orderLimitReached)
                                             <div class="text-red-500 text-xs">@lang('messages.orderLimitReached')</div>
                                         @elseif (!$item->in_stock)
                                             <div class="text-red-500">Out of stock</div>
                                         @else
 
-                                        <div class="mt-1 flex items-center justify-between gap-2">
+                                        <div class="mt-1 flex items-center justify-between gap-2 min-w-0">
                                             @if ($item->variations_count == 0)
-                                                <span class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                                <span class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-1 min-w-0 truncate">
                                                     {!! currency_format($item->price, $restaurant->currency_id) !!}
                                                 </span>
                                             @else
-                                                <span class="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                                <span class="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1 min-w-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 shrink-0">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                                                     </svg>
                                                     @lang('modules.menu.showVariations')
+                                                </span>
+                                            @endif
+                                            @if (! is_null($item->calories))
+                                                <span class="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-md p-1 tabular-nums shrink-0 leading-none">
+                                                    {{ number_format((int) $item->calories) }} <span class="uppercase tracking-tight">@lang('modules.menu.caloriesAbbrev')</span>
                                                 </span>
                                             @endif
                                         </div>

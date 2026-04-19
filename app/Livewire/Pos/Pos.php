@@ -3168,99 +3168,82 @@ class Pos extends Component
         $search = $this->search;
         $limit = $this->menuItemsLoaded;
 
-        $cacheKey = sprintf(
-            'pos.menu_items.%s.%s',
-            branch()->id,
-            md5(json_encode([
-                'orderTypeId' => $orderTypeId,
-                'deliveryAppId' => $normalizedDeliveryAppId,
-                'filterCategories' => $filterCategories,
-                'menuId' => $menuId,
-                'search' => $search,
-                'limit' => $limit,
-            ]))
-        );
+        // Do not cache menu item Eloquent collections: serialized caches broke `calories` on some servers
+        // (stale rows, multi-node cache, or hydration). POS list is bounded by ->take($limit); query cost is acceptable.
+        $builder = MenuItem::withCount('variations', 'modifierGroups')
+            ->with([
+                // Contextually eager load prices for items based on current order type and delivery app
+                'prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
+                    $q->where('status', true)
+                        ->whereNull('menu_item_variation_id'); // Only item-level prices
 
-        $query = Cache::remember(
-            $cacheKey,
-            now()->addHours(2),
-            function () use ($orderTypeId, $normalizedDeliveryAppId, $filterCategories, $menuId, $search, $limit) {
-                $builder = MenuItem::withCount('variations', 'modifierGroups')
-                    ->with([
-                        // Contextually eager load prices for items based on current order type and delivery app
-                        'prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
-                            $q->where('status', true)
-                                ->whereNull('menu_item_variation_id'); // Only item-level prices
+                    if ($orderTypeId) {
+                        $q->where(function ($query) use ($orderTypeId) {
+                            $query->where('order_type_id', $orderTypeId);
+                        });
+                    }
 
-                            if ($orderTypeId) {
-                                $q->where(function($query) use ($orderTypeId) {
-                                    $query->where('order_type_id', $orderTypeId);
-                                });
-                            }
+                    if ($normalizedDeliveryAppId) {
+                        $q->where(function ($query) use ($normalizedDeliveryAppId) {
+                            $query->where('delivery_app_id', $normalizedDeliveryAppId)
+                                  ->orWhereNull('delivery_app_id');
+                        });
+                    } else {
+                        $q->whereNull('delivery_app_id');
+                    }
+                },
+                // Contextually eager load variations with their prices
+                'variations.prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
+                    $q->where('status', true);
 
-                            if ($normalizedDeliveryAppId) {
-                                $q->where(function($query) use ($normalizedDeliveryAppId) {
-                                    $query->where('delivery_app_id', $normalizedDeliveryAppId)
-                                          ->orWhereNull('delivery_app_id');
-                                });
-                            } else {
-                                $q->whereNull('delivery_app_id');
-                            }
-                        },
-                        // Contextually eager load variations with their prices
-                        'variations.prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
-                            $q->where('status', true);
+                    if ($orderTypeId) {
+                        $q->where(function ($query) use ($orderTypeId) {
+                            $query->where('order_type_id', $orderTypeId);
+                        });
+                    }
 
-                            if ($orderTypeId) {
-                                $q->where(function($query) use ($orderTypeId) {
-                                    $query->where('order_type_id', $orderTypeId);
-                                });
-                            }
+                    if ($normalizedDeliveryAppId) {
+                        $q->where(function ($query) use ($normalizedDeliveryAppId) {
+                            $query->where('delivery_app_id', $normalizedDeliveryAppId)
+                                  ->orWhereNull('delivery_app_id');
+                        });
+                    } else {
+                        $q->whereNull('delivery_app_id');
+                    }
+                },
+                // Contextually eager load modifier options and their prices
+                'modifierGroups.options.prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
+                    $q->where('status', true);
 
-                            if ($normalizedDeliveryAppId) {
-                                $q->where(function($query) use ($normalizedDeliveryAppId) {
-                                    $query->where('delivery_app_id', $normalizedDeliveryAppId)
-                                          ->orWhereNull('delivery_app_id');
-                                });
-                            } else {
-                                $q->whereNull('delivery_app_id');
-                            }
-                        },
-                        // Contextually eager load modifier options and their prices
-                        'modifierGroups.options.prices' => function ($q) use ($orderTypeId, $normalizedDeliveryAppId) {
-                            $q->where('status', true);
+                    if ($orderTypeId) {
+                        $q->where(function ($query) use ($orderTypeId) {
+                            $query->where('order_type_id', $orderTypeId);
+                        });
+                    }
 
-                            if ($orderTypeId) {
-                                $q->where(function($query) use ($orderTypeId) {
-                                    $query->where('order_type_id', $orderTypeId);
-                                });
-                            }
+                    if ($normalizedDeliveryAppId) {
+                        $q->where(function ($query) use ($normalizedDeliveryAppId) {
+                            $query->where('delivery_app_id', $normalizedDeliveryAppId)
+                                  ->orWhereNull('delivery_app_id');
+                        });
+                    } else {
+                        $q->whereNull('delivery_app_id');
+                    }
+                },
+            ]);
 
-                            if ($normalizedDeliveryAppId) {
-                                $q->where(function($query) use ($normalizedDeliveryAppId) {
-                                    $query->where('delivery_app_id', $normalizedDeliveryAppId)
-                                          ->orWhereNull('delivery_app_id');
-                                });
-                            } else {
-                                $q->whereNull('delivery_app_id');
-                            }
-                        }
-                    ]);
+        if (! empty($filterCategories)) {
+            $builder = $builder->where('item_category_id', $filterCategories);
+        }
 
-                if (!empty($filterCategories)) {
-                    $builder = $builder->where('item_category_id', $filterCategories);
-                }
+        if (! empty($menuId)) {
+            $builder = $builder->where('menu_id', $menuId);
+        }
 
-                if (!empty($menuId)) {
-                    $builder = $builder->where('menu_id', $menuId);
-                }
-
-                return $builder
-                    ->search('item_name', $search)
-                    ->take($limit)
-                    ->get();
-            }
-        );
+        $query = $builder
+            ->search('item_name', $search)
+            ->take($limit)
+            ->get();
 
         if ($this->orderTypeId) {
             foreach ($query as $menuItem) {

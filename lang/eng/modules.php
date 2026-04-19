@@ -551,6 +551,7 @@ return [
         'setPrice' => 'Price',
         'preparationTime' => 'Preparation Time',
         'calories' => 'Calories',
+        'caloriesAbbrev' => 'CAL',
         'minutes' => 'minutes',
         'isAvailable' => 'Is Available',
         'available' => 'Available',

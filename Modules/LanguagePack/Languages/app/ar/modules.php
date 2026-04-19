@@ -45,6 +45,7 @@ return [
     'itemType' => 'نوع البند',
     'preparationTime' => 'وقت التحضير',
     'calories' => 'سعرة حرارية',
+    'caloriesAbbrev' => 'CAL',
     'minutes' => 'دقائق',
     'browseMenu' => 'تصفح القائمة',
     'isAvailable' => 'متاح',

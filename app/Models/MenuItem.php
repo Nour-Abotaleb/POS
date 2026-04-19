@@ -55,6 +55,7 @@ class MenuItem extends BaseModel
 
     protected $casts = [
         'show_on_customer_site' => 'boolean',
+        'calories' => 'integer',
     ];
 
     protected $appends = [

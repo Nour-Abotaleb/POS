@@ -432,6 +432,7 @@ return [
         'setPrice' => 'السعر',
         'preparationTime' => 'وقت التحضير',
         'calories' => 'سعرة حرارية',
+        'caloriesAbbrev' => 'CAL',
         'minutes' => 'دقائق',
         'isAvailable' => 'متاح',
         'available' => 'متاح',
