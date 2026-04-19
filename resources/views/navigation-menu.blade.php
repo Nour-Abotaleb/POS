@@ -243,6 +243,15 @@
     padding-bottom: 0.125rem;
     margin-inline-start: 0.2rem;
   }
+
+  /* Dashboard counters align with main column: sidebar w-64 (16rem) + body px-4 (1rem). Plain CSS —
+     Tailwind lg:ps-[calc(16rem+1rem)] can be omitted from prod CSS if JIT/safelist misses arbitrary values. */
+  @media (min-width: 1024px) {
+    .nav-dashboard-counters-align-lg {
+      padding-inline-start: calc(16rem + 1rem);
+    }
+  }
+
   .dark .app-logo img {
     filter: invert(1);
   }
@@ -304,7 +313,7 @@
         {{-- max-lg: beside logo (no wrap). lg+: align with main content column. --}}
         @if ($showDashboardNavCounters)
           <div class="flex flex-nowrap items-center gap-2 shrink-0 md:gap-4 lg:absolute lg:inset-y-0 lg:left-0 lg:right-0 lg:z-10 lg:pointer-events-none">
-            <div class="flex flex-nowrap items-center gap-2 md:gap-4 lg:pointer-events-auto lg:ps-[calc(16rem+1rem)]">
+            <div class="nav-dashboard-counters-align-lg flex flex-nowrap items-center gap-2 md:gap-4 lg:pointer-events-auto">
               @if (in_array('Waiter Request', restaurant_modules()) && user_can('Manage Waiter Request') && restaurant()->hide_new_waiter_request == 0)
                 @livewire('dashboard.activeWaiterRequests')
               @endif
