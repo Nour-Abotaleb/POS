@@ -3,13 +3,13 @@
 <header x-data="{ menuOpen: false }" class="fixed top-0 inset-x-0 z-[45] pt-[env(safe-area-inset-top,0px)] shadow-md bg-[#011646] dark:bg-[#011646] dark:bg-gray-900">
     {{-- Full-width bar; inner row matches guest main column (same as cart grid) --}}
     <nav class="relative z-50 w-full py-3">
-        <div class="mx-auto w-full max-w-screen-xl-mid px-4">
+        <div class="mx-auto w-full lg:lg:max-w-screen-xl-mid px-4">
         <div class="flex items-center gap-2">
 
             {{-- Hamburger Menu --}}
             <button type="button"
                     @click="menuOpen = true"
-                    class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 transition">
+                    class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 dark:text-white transition">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                           d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -20,7 +20,7 @@
             {{-- Order Type Selector --}}
             <button type="button"
                     x-on:click="Livewire.dispatch('open-order-type-modal')"
-                    class="flex-1 flex items-center gap-2 bg-white dark:bg-gray-800 rounded-md px-3 py-1 text-end hover:bg-gray-50 dark:hover:bg-gray-700 transition min-h-[42px]">
+                    class="flex-1 flex items-center gap-2 bg-white dark:bg-gray-800 rounded-md px-3 py-1 text-end hover:bg-gray-50 dark:hover:bg-gray-700 transition min-h-[41px]">
                     <div class="min-w-0 flex-1">
                         <div class="text-xs font-medium text-gray-600 dark:text-gray-300 leading-tight">
                             @lang('modules.order.orderType')
@@ -38,7 +38,7 @@
             {{-- Cart / Bag Icon --}}
             <a href="javascript:;"
                x-on:click="Livewire.dispatch('showCartItems')"
-               class="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 transition">
+               class="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 dark:text-white transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"

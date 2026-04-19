@@ -188,7 +188,7 @@ return [
   'safeDrops' => 'Safe Drops',
   'countedCash' => 'Counted Cash',
   'count' => 'بشمار',
-  'subtotal' => 'جمع فرعی',
+  'subtotal' => 'مجموع فرعی',
   'total' => 'مجموع',
   'totalExpected' => 'Total Expected',
   'totalCounted' => 'Total Counted',

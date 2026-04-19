@@ -11,7 +11,7 @@ return [
   'generateCredentials' => 'توليد بيانات الاعتماد',
   'pusherBeams' => 'عوارض البواد (إشعار دفع المتصفح)',
   'pusherChannels' => 'قنوات Pusher (تحديث الصفحة المباشرة)',
-  'pusherDashboard' => 'لوحة القيادة بوهي',
+  'pusherDashboard' => 'لوحة التحكم بوهي',
   'pusherChannelsDescription' => 'تكوين قنوات Pusher لتحديثات الصفحة في الوقت الفعلي (البث لارافيل).',
   'pusherBeamsDescription' => 'تكوين عوارض Puster لإخطارات دفع المتصفح.',
   'desktopApplicationSettings' => 'إعدادات تطبيق سطح المكتب',

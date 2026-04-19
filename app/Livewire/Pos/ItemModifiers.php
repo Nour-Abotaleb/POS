@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\MenuItem;
 use App\Models\MenuItemVariation;
 use App\Models\ModifierGroup;
+use App\Models\ModifierOption;
 
 class ItemModifiers extends Component
 {
@@ -19,9 +20,30 @@ class ItemModifiers extends Component
     public $orderTypeId;
     public $deliveryAppId;
     public int $quantity = 1;
+    public float $modifierTotalDisplay = 0.0;
+    public array $optionQuantities = [];
 
-    public function incrementQuantity(): void { $this->quantity++; }
-    public function decrementQuantity(): void { if ($this->quantity > 1) $this->quantity--; }
+    public function incrementQuantity(): void { $this->quantity++; $this->recalculateModifierTotal(); }
+    public function decrementQuantity(): void { if ($this->quantity > 1) { $this->quantity--; $this->recalculateModifierTotal(); } }
+
+    public function incrementOptionQty(int $optionId): void
+    {
+        $this->optionQuantities[$optionId] = ($this->optionQuantities[$optionId] ?? 0) + 1;
+        $this->selectedModifiers[$optionId] = $optionId;
+        $this->recalculateModifierTotal();
+    }
+
+    public function decrementOptionQty(int $optionId): void
+    {
+        $qty = ($this->optionQuantities[$optionId] ?? 1) - 1;
+        if ($qty <= 0) {
+            unset($this->optionQuantities[$optionId]);
+            $this->selectedModifiers[$optionId] = false;
+        } else {
+            $this->optionQuantities[$optionId] = $qty;
+        }
+        $this->recalculateModifierTotal();
+    }
 
     public function mount()
     {
@@ -73,6 +95,7 @@ class ItemModifiers extends Component
 
         // Set price context on all modifier options
         $this->applyPriceContext();
+        $this->modifierTotalDisplay = (float) ($this->selectedModifierItem->price ?? 0);
     }
 
     public function hydrate()
@@ -137,6 +160,75 @@ class ItemModifiers extends Component
         return ($base + $addonsTotal) * $this->quantity;
     }
 
+    public function recalculateModifierTotal(): void
+    {
+        $base = (float) ($this->selectedModifierItem->price ?? 0);
+        $addons = 0;
+
+        $selected = array_filter($this->optionQuantities, fn($q) => $q > 0);
+        if (!empty($selected)) {
+            $prices = ModifierOption::whereIn('id', array_keys($selected))->pluck('price', 'id');
+            foreach ($selected as $optionId => $qty) {
+                $addons += (float) ($prices[$optionId] ?? 0) * $qty;
+            }
+        }
+
+        $this->modifierTotalDisplay = ($base + $addons) * $this->quantity;
+    }
+
+    /**
+     * Checkbox uses wire:model only (no $event in wire:change — that breaks on some Livewire/shop requests → 500).
+     */
+    public function updated($propertyName): void
+    {
+        if (! is_string($propertyName)) {
+            return;
+        }
+        if ($propertyName !== 'selectedModifiers' && ! str_starts_with($propertyName, 'selectedModifiers.')) {
+            return;
+        }
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
+    public function updatedSelectedModifiers(): void
+    {
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
+    private function syncOptionQuantitiesFromSelectedModifiers(): void
+    {
+        foreach ($this->modifiers as $group) {
+            foreach ($group->options as $option) {
+                if (! $option->is_available) {
+                    continue;
+                }
+                $id = $option->id;
+                $raw = $this->selectedModifiers[$id] ?? false;
+                if ($this->isModifierOptionSelected($raw)) {
+                    if (($this->optionQuantities[$id] ?? 0) < 1) {
+                        $this->optionQuantities[$id] = 1;
+                    }
+                } else {
+                    unset($this->optionQuantities[$id]);
+                }
+            }
+        }
+    }
+
+    private function isModifierOptionSelected(mixed $raw): bool
+    {
+        if ($raw === false || $raw === null || $raw === '' || $raw === 0 || $raw === '0') {
+            return false;
+        }
+        if (is_string($raw) && strtolower($raw) === 'false') {
+            return false;
+        }
+
+        return true;
+    }
+
     public function saveModifiers()
     {
         $this->validateRequiredModifiers();
@@ -144,7 +236,7 @@ class ItemModifiers extends Component
             $this->menuItemId => array_keys(array_filter($this->selectedModifiers))
         ];
 
-        $this->dispatch('setPosModifier', modifierIds: $this->finalModifiers, quantity: $this->quantity);
+        $this->dispatch('setPosModifier', modifierIds: $this->finalModifiers, quantity: $this->quantity, optionQuantities: $this->optionQuantities);
     }
 
     public function validateRequiredModifiers()

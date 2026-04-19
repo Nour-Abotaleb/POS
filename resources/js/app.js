@@ -63,6 +63,13 @@ if (localStorage.getItem("menu-collapsed") === "true") {
 document.addEventListener("livewire:navigating", () => {
     // Mutate the HTML before the page is navigated away...
     initFlowbite();
+
+    // When leaving the POS page, reset sidebar state so the next page starts expanded
+    const mainContent = document.getElementById("main-content");
+    const isPosPage = mainContent && mainContent.getAttribute("data-pos-page") === "true";
+    if (isPosPage) {
+        localStorage.setItem("menu-collapsed", "false");
+    }
 });
 
 // Re-init Flowbite after any Livewire DOM update (e.g. menus card switch, deferred load)

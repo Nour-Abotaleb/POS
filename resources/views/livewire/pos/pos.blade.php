@@ -17,7 +17,7 @@
         @livewire('forms.OrderTypeSelection')
         @endif
 
-        <div class="pos-container flex flex-col lg:flex-row flex-1 min-h-0 h-full gap-3" x-data="{
+        <div class="pos-container flex flex-col md:flex-row flex-1 min-h-0 h-full gap-3" x-data="{
             init() {
                 if (typeof Alpine === 'undefined') return;
                 if (!Alpine.store('pos')) Alpine.store('pos', { showProductsPanel: false });
@@ -30,7 +30,7 @@
             }
         }">
             {{-- Single menu toggle: fixed so it stays visible when products panel is full screen. Shows Menu to open, X/Close to close. --}}
-            <div class="fixed bottom-6 right-6 z-50 lg:hidden">
+            <div class="fixed bottom-6 right-6 z-50 md:hidden">
                 <button type="button"
                     @click="toggleMenu()"
                     style="background-color: var(--brand-primary); border-color: var(--brand-primary);"
@@ -182,7 +182,7 @@
             </x-dialog-modal>
         @endif
 
-        <x-dialog-modal wire:model="showModifiersModal" maxWidth="xl">
+        <x-dialog-modal wire:model="showModifiersModal" maxWidth="md" :noPadding="true">
             <x-slot name="title">
                 @lang('modules.modifier.itemModifiers')
             </x-slot>

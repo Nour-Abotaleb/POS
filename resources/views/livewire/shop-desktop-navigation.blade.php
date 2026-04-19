@@ -3,7 +3,7 @@
 
     {{-- Same max-width + horizontal padding as guest main / cart grid --}}
     <nav class="sticky top-4 mt-2 w-full">
-        <div class="mx-auto w-full max-w-screen-xl-mid px-4">
+        <div class="mx-auto w-full lg:max-w-screen-xl-mid px-4">
         <div class="bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md py-2.5 flex flex-col w-full">
             <div class="flex flex-wrap justify-between items-center gap-2 px-2.5">
             <div class="flex gap-8 items-center">

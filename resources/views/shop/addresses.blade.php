@@ -17,7 +17,7 @@
                     class="h-16 w-auto max-w-[140px] object-contain mx-auto"
                 />
             </div> -->
-            <h1 class="mt-6 w-full text-start text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 class="w-full text-start text-2xl font-bold text-gray-900 dark:text-white">
                 @lang('menu.myAddresses')
             </h1>
         </div>

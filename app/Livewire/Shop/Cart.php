@@ -36,6 +36,7 @@ use App\Models\RestaurantCharge;
 use App\Models\MenuItemVariation;
 use App\Models\FlutterwavePayment;
 use App\Models\AdminPayfastPayment;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use App\Events\SendNewOrderReceived;
 use App\Models\AdminPaystackPayment;
@@ -59,6 +60,7 @@ class Cart extends Component
     use LivewireAlert;
     use PrinterSetting;
 
+    public bool $modalOnly = false;
     public $search;
     public $tableID;
     public $filterCategories;
@@ -103,7 +105,7 @@ class Cart extends Component
     public $orderTypeSlug; // Add orderTypeSlug
     public $showOrderTypeModal = false; // Modal for order type selection
 
-    /** Delivery (توصيل) flow inside order-type modal: map → phone → OTP */
+    /** Delivery (توصيل) flow inside order-type modal: map → phone (OTP step temporarily disabled) */
     public string $orderTypeDeliveryStep = 'idle';
 
     public ?int $orderTypeDeliveryPendingTypeId = null;
@@ -129,6 +131,22 @@ class Cart extends Component
     public string $orderTypeDeliveryOtp = '';
 
     public string $orderTypeDeliveryPhoneCode = '';
+
+    /** After order-type delivery phone step: show customer profile modal before continuing on map (no placeOrder). */
+    public bool $customerNameModalAfterDeliveryPhoneFlow = false;
+
+    /** Guest clicked Place order while login required: after auth, close order-type modal and run checkout. */
+    public bool $pendingPlaceOrderAfterAuth = false;
+
+    /**
+     * Guest checkout phases: idle → awaiting_order_type (order-type modal) → awaiting_identity (signup/login).
+     * Prevents anonymous orders that redirect straight to orders-success without phone/login.
+     */
+    public string $guestCheckoutPhase = 'idle';
+
+    /** Next setCustomer is from delivery phone/map sync — do not auto-place order yet. */
+    protected bool $suppressSetCustomerAutoPlaceOrder = false;
+
     public $cameFromQR = false; // Track if user came from QR code
     public $payNow = false;
     public $offline_payment_status;
@@ -147,10 +165,13 @@ class Cart extends Component
     public $orderBeingProcessed = false;
     public $showModifiersModal = false;
     public $itemModifiersSelected = [];
+    public array $itemModifierOptionQtys = [];
     public $selectedModifierItem;
     public $cartSelectedModifierModel = null;
     public $cartModifiers = [];
     public $selectedModifiers = [];
+    public float $modifierTotalDisplay = 0.0;
+    public array $optionQuantities = [];
     public int $modifierQuantity = 1;
     public $selectedVariationName = null;
     public $showItemDetailModal = false;
@@ -533,6 +554,11 @@ class Cart extends Component
         $this->orderType = $orderType->type;
         // Close the modal
         $this->showOrderTypeModal = false;
+
+        if ($this->pendingPlaceOrderAfterAuth && ! $this->customer && ! $this->cameFromQR) {
+            $this->guestCheckoutPhase = 'awaiting_identity';
+            $this->dispatch('showSignup');
+        }
     }
 
     public function onOrderTypeModalTabChanged($orderTypeId): void
@@ -555,7 +581,8 @@ class Cart extends Component
                 $this->orderTypeDeliveryPhone = '';
                 $this->orderTypeDeliveryPhoneCode = (string) $this->customerPhoneCode;
             }
-            $this->dispatch('init-order-type-delivery-map');
+            // Do not load Google Maps here — phone step shows first; map init runs when step becomes
+            // 'map' (openDeliveryMapWithCustomerProfileModal / orderTypeDeliveryBackToMap) so the phone UI is not tied to map load.
         } else {
             $this->orderTypeDeliveryStep = 'idle';
             $this->orderTypeDeliveryPendingTypeId = null;
@@ -618,16 +645,23 @@ class Cart extends Component
 
     public function orderTypeDeliverySendOtp(): void
     {
-        $this->validate([
-            'orderTypeDeliveryPhoneCode' => 'required',
-            'orderTypeDeliveryPhone' => 'required|string|min:6',
-        ]);
+        $this->validate(
+            [
+                'orderTypeDeliveryPhoneCode' => 'required',
+                'orderTypeDeliveryPhone' => 'required|string|min:6',
+            ],
+            [
+                'orderTypeDeliveryPhoneCode.required' => __('messages.phoneCodeRequired'),
+                'orderTypeDeliveryPhone.required'     => __('messages.phoneNumberRequired'),
+                'orderTypeDeliveryPhone.min'          => __('messages.invalidPhoneNumber'),
+                'orderTypeDeliveryPhone.string'       => __('messages.invalidPhoneNumber'),
+            ]
+        );
 
         if ($this->customer
             && (string) $this->customer->phone_code === (string) $this->orderTypeDeliveryPhoneCode
             && (string) $this->customer->phone === (string) $this->orderTypeDeliveryPhone) {
-            $this->orderTypeDeliveryStep = 'map';
-            $this->dispatch('init-order-type-delivery-map');
+            $this->openDeliveryMapWithCustomerProfileModal($this->customer);
 
             return;
         }
@@ -641,6 +675,14 @@ class Cart extends Component
             ['name' => 'Guest']
         );
 
+        // OTP step disabled: create/sign in customer and go to map (re-enable block below when OTP is required again).
+        $customer->email_otp = null;
+        $customer->save();
+
+        $this->orderTypeDeliveryOtp = '';
+        $this->openDeliveryMapWithCustomerProfileModal($customer);
+
+        /*
         $customer->email_otp = (string) random_int(1000, 9999);
         $customer->save();
 
@@ -669,6 +711,7 @@ class Cart extends Component
         }
 
         $this->orderTypeDeliveryStep = 'otp';
+        */
     }
 
     /**
@@ -707,9 +750,16 @@ class Cart extends Component
 
     public function orderTypeDeliveryVerifyAndComplete(): void
     {
-        $this->validate([
-            'orderTypeDeliveryOtp' => 'required|string|min:4',
-        ]);
+        $this->validate(
+            [
+                'orderTypeDeliveryOtp' => 'required|string|min:4',
+            ],
+            [
+                'orderTypeDeliveryOtp.required' => __('messages.otpRequired'),
+                'orderTypeDeliveryOtp.min'      => __('messages.invalidOtp'),
+                'orderTypeDeliveryOtp.string'   => __('messages.invalidOtp'),
+            ]
+        );
 
         $customer = Customer::withoutGlobalScopes()
             ->where('phone_code', $this->orderTypeDeliveryPhoneCode)
@@ -726,12 +776,8 @@ class Cart extends Component
             return;
         }
 
-        session(['customer' => $customer]);
-        $this->customer = $customer;
-        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
         $this->orderTypeDeliveryOtp = '';
-        $this->orderTypeDeliveryStep = 'map';
-        $this->dispatch('init-order-type-delivery-map');
+        $this->openDeliveryMapWithCustomerProfileModal($customer);
     }
 
     /**
@@ -775,7 +821,10 @@ class Cart extends Component
 
     public function orderTypeDeliveryCloseFlow(): void
     {
-        $this->showOrderTypeModal = false;
+        if ($this->customerNameModalAfterDeliveryPhoneFlow) {
+            $this->showCustomerNameModal = false;
+        }
+        $this->customerNameModalAfterDeliveryPhoneFlow = false;
         $this->orderTypeDeliveryStep = 'idle';
         $this->orderTypeDeliveryPendingTypeId = null;
         $this->orderTypeDeliveryPhone = '';
@@ -817,10 +866,30 @@ class Cart extends Component
 
     protected function resetOrderTypeDeliveryFlow(): void
     {
+        $this->customerNameModalAfterDeliveryPhoneFlow = false;
         $this->orderTypeDeliveryStep = 'idle';
         $this->orderTypeDeliveryPendingTypeId = null;
         $this->orderTypeDeliveryPhone = '';
         $this->orderTypeDeliveryOtp = '';
+    }
+
+    protected function openDeliveryMapWithCustomerProfileModal(Customer $customer): void
+    {
+        session(['customer' => $customer]);
+        $this->customer = $customer;
+        $this->suppressSetCustomerAutoPlaceOrder = true;
+        $this->dispatch('setCustomer', customer: ['id' => $customer->id]);
+
+        $name = $customer->name ?? '';
+        $this->customerName = ($name === 'Guest' || $name === '') ? '' : (string) $name;
+        $this->customerPhone = $this->orderTypeDeliveryPhone;
+        $this->customerPhoneCode = $this->orderTypeDeliveryPhoneCode;
+        $this->customerAddress = (string) ($customer->delivery_address ?? '');
+
+        $this->customerNameModalAfterDeliveryPhoneFlow = true;
+        $this->orderTypeDeliveryStep = 'map';
+        $this->dispatch('init-order-type-delivery-map');
+        $this->showCustomerNameModal = true;
     }
 
     protected function deliveryFlowSmsOtpEnabled(): bool
@@ -1197,6 +1266,29 @@ class Cart extends Component
         $this->calculateTotal();
     }
 
+    public function removeItem($id)
+    {
+        $menuID = str_replace('"', '', explode('_', $id)[0]);
+
+        unset($this->orderItemList[$id]);
+        unset($this->orderItemVariation[$id]);
+        unset($this->orderItemAmount[$id]);
+        unset($this->orderItemQty[$id]);
+        unset($this->itemModifiersSelected[$id]);
+        unset($this->itemModifierOptionQtys[$id]);
+        unset($this->orderItemModifiersPrice[$id]);
+        unset($this->itemNotes[$id]);
+
+        if (isset($this->cartItemQty[$menuID])) {
+            $this->cartItemQty[$menuID] = max(0, ($this->cartItemQty[$menuID] - 1));
+            if ($this->cartItemQty[$menuID] === 0) {
+                unset($this->cartItemQty[$menuID]);
+            }
+        }
+
+        $this->calculateTotal();
+    }
+
     public function calculateTotal()
     {
         $this->cartQty = 0;
@@ -1338,22 +1430,103 @@ class Cart extends Component
     #[On('setCustomer')]
     public function setCustomer($customer)
     {
-        $customer = Customer::find($customer['id']);
-        $this->customer = $customer;
+        $id = null;
+        if (is_array($customer)) {
+            $id = $customer['id'] ?? null;
+        } elseif (is_object($customer) && isset($customer->id)) {
+            $id = $customer->id;
+        }
+        if (! $id) {
+            return;
+        }
+
+        $this->customer = Customer::find($id);
+
+        $this->guestCheckoutPhase = 'idle';
+
+        $skipAutoPlace = $this->suppressSetCustomerAutoPlaceOrder
+            || $this->customerNameModalAfterDeliveryPhoneFlow;
+
+        $this->suppressSetCustomerAutoPlaceOrder = false;
+
+        if (
+            $this->pendingPlaceOrderAfterAuth
+            && $this->customer
+            && ! $skipAutoPlace
+        ) {
+            $this->pendingPlaceOrderAfterAuth = false;
+            $this->showOrderTypeModal = false;
+            $this->placeOrder($this->payNow);
+        }
     }
 
     #[On('open-order-type-modal')]
     public function openOrderTypeModal()
     {
         $this->showOrderTypeModal = true;
-        $first = OrderType::where('branch_id', $this->shopBranch->id)
-            ->where('is_active', true)
-            ->where('enable_from_customer_site', true)
-            ->orderBy('id')
-            ->first();
+        // Must match customer UI order (getOrderTypesProperty: delivery first, etc.) — not orderBy('id'),
+        // or Alpine activeTab and Livewire delivery/phone state get out of sync.
+        $first = $this->orderTypes->first();
         if ($first) {
             $this->onOrderTypeModalTabChanged($first->id);
         }
+    }
+
+    /**
+     * Guest must open order-type modal before checkout (unless already past it and only login is missing).
+     */
+    public function guestNeedsOrderTypeModalBeforeCheckout(): bool
+    {
+        if ($this->cameFromQR) {
+            return false;
+        }
+
+        return ! $this->customer && $this->guestCheckoutPhase !== 'awaiting_identity';
+    }
+
+    /**
+     * Same intent as desktop cart sidebar: pay-now when any shop payment method is enabled.
+     */
+    protected function checkoutOffersPayNowIntent(): bool
+    {
+        $gw = $this->paymentGateway;
+
+        if (! $gw) {
+            return false;
+        }
+
+        return (bool) (
+            $gw->is_qr_payment_enabled
+            || $gw->stripe_status
+            || $gw->razorpay_status
+            || $gw->flutterwave_status
+            || $gw->paypal_status
+            || $gw->payfast_status
+            || $gw->xendit_status
+            || ($gw->epay_status ?? false)
+            || $gw->is_offline_payment_enabled
+        );
+    }
+
+    /**
+     * Mobile menu bottom bar: label says "place order" — guests who need identity must hit checkout modal,
+     * not only open the cart sheet (order summary).
+     */
+    public function checkoutFromMobileMenuStrip(): void
+    {
+        if (! $this->customer && $this->guestCheckoutPhase === 'awaiting_identity') {
+            $this->dispatch('showSignup');
+
+            return;
+        }
+
+        if ($this->guestNeedsOrderTypeModalBeforeCheckout()) {
+            $this->placeOrder($this->checkoutOffersPayNowIntent());
+
+            return;
+        }
+
+        $this->showCartItems();
     }
 
     #[On('showCartItems')]
@@ -1393,8 +1566,17 @@ class Cart extends Component
         $this->updatedPhoneCodeSearch();
     }
 
+    public function updatedShowCustomerNameModal($value): void
+    {
+        if (! $value && $this->customerNameModalAfterDeliveryPhoneFlow) {
+            $this->customerNameModalAfterDeliveryPhoneFlow = false;
+        }
+    }
+
     public function submitCustomerName()
     {
+        $fromOrderTypeDeliveryPhone = $this->customerNameModalAfterDeliveryPhoneFlow;
+
         $rules = [
             'customerName' => 'required',
             'customerPhoneCode' => 'required',
@@ -1404,9 +1586,11 @@ class Cart extends Component
             ],
         ];
 
-        // Require address when order type is delivery
-        if ($this->orderType === 'delivery' || $this->orderTypeSlug === 'delivery') {
-            $rules['customerAddress'] = 'required';
+        // Address is collected on the map step during order-type delivery flow
+        if (! $fromOrderTypeDeliveryPhone) {
+            if ($this->orderType === 'delivery' || $this->orderTypeSlug === 'delivery') {
+                $rules['customerAddress'] = 'required';
+            }
         }
 
         $this->validate($rules);
@@ -1422,6 +1606,10 @@ class Cart extends Component
         $this->dispatch('setCustomer', customer: $this->customer);
 
         $this->showCustomerNameModal = false;
+
+        if ($fromOrderTypeDeliveryPhone) {
+            return;
+        }
 
         $this->placeOrder($this->payNow);
     }
@@ -1559,8 +1747,24 @@ class Cart extends Component
             Order::where('id', $this->order->id)->update([
                 'status' => 'pending_verification',
             ]);
-            $this->printKot($this->order);
-            $this->sendNotifications($this->order);
+
+            $updateOrderId = $this->order->id;
+            Bus::dispatchAfterResponse(function () use ($updateOrderId) {
+                $orderModel = Order::find($updateOrderId);
+                if (! $orderModel) {
+                    return;
+                }
+                try {
+                    (new static)->printKot($orderModel, null);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop KOT print (update order): '.$e->getMessage());
+                }
+                try {
+                    static::dispatchOrderPlacedNotifications($orderModel);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop order notifications (update order): '.$e->getMessage());
+                }
+            });
 
             $this->alert('success', __('messages.orderSaved'), [
                 'toast' => false,
@@ -1569,9 +1773,30 @@ class Cart extends Component
                 'cancelButtonText' => __('app.close')
             ]);
 
-            $this->redirect(route('order_success', [$this->order->uuid]));
+            // Relative URL keeps the same host as the customer (avoids landing redirect when APP_URL ≠ browser URL).
+            $this->redirect(route('order_success', [$this->order->uuid], absolute: false));
             return;
         }
+
+        // Guest: never create an anonymous order — order-type modal first, then signup/login (delivery may create customer inside modal).
+        // QR/table flow keeps legacy anonymous checkout without this gate.
+        if (! $this->customer && ! $this->cameFromQR) {
+            if ($this->guestCheckoutPhase === 'awaiting_identity') {
+                $this->dispatch('showSignup');
+
+                return;
+            }
+
+            $this->guestCheckoutPhase = 'awaiting_order_type';
+            $this->payNow = $pay;
+            $this->pendingPlaceOrderAfterAuth = true;
+            $this->openOrderTypeModal();
+
+            return;
+        }
+
+        // Logged-in checkout: clear any stale “resume after auth” flag
+        $this->pendingPlaceOrderAfterAuth = false;
 
         if ($this->orderType == 'delivery') {
             $deliverySetting = $this->shopBranch->deliverySetting ?? null;
@@ -1639,7 +1864,7 @@ class Cart extends Component
                 'branch_id' => $this->shopBranch->id,
                 'table_id' => $table->id ?? null,
                 'date_time' => now(),
-                'customer_id' => $this->customer->id ?? null,
+                'customer_id' => $this->customer?->id,
                 'sub_total' => $this->subTotal,
                 'total' => $this->total,
                 'order_type' => $this->orderTypeSlug ?? $this->orderType,
@@ -1778,7 +2003,8 @@ class Cart extends Component
             'tax_mode' => $this->taxMode,
         ]);
 
-        if ($order->status != 'draft') {
+        // Pay now: keep KOT print in-request so flow matches existing payment modal behaviour.
+        if ($pay && $order->status != 'draft') {
             $this->printKot($order, $kot);
         }
 
@@ -1797,7 +2023,27 @@ class Cart extends Component
                 'status' => 'kot'
             ]);
 
-            $this->sendNotifications($order);
+            $orderId = $order->id;
+            $kotId = $kot->id;
+            Bus::dispatchAfterResponse(function () use ($orderId, $kotId) {
+                $orderModel = Order::find($orderId);
+                $kotModel = Kot::find($kotId);
+                if (! $orderModel || ! $kotModel) {
+                    return;
+                }
+                if ($orderModel->status !== 'draft') {
+                    try {
+                        (new static)->printKot($orderModel, $kotModel);
+                    } catch (\Throwable $e) {
+                        Log::error('Deferred shop KOT print: '.$e->getMessage());
+                    }
+                }
+                try {
+                    static::dispatchOrderPlacedNotifications($orderModel);
+                } catch (\Throwable $e) {
+                    Log::error('Deferred shop order notifications: '.$e->getMessage());
+                }
+            });
 
             $this->alert('success', __('messages.orderSaved'), [
                 'toast' => false,
@@ -1807,7 +2053,7 @@ class Cart extends Component
             ]);
 
             cache()->forget('branch_' . $this->shopBranch->id . '_order_stats');
-            $this->redirect(route('order_success', [$order->uuid]));
+            $this->redirect(route('order_success', [$order->uuid], absolute: false));
         }
     }
 
@@ -1882,7 +2128,7 @@ class Cart extends Component
                 'cancelButtonText' => __('app.close')
             ]);
 
-            $this->redirect(route('order_success', $payment->order->uuid));
+            $this->redirect(route('order_success', $payment->order->uuid, absolute: false));
         }
     }
 
@@ -2315,7 +2561,10 @@ class Cart extends Component
         $this->paymentOrder = null;
     }
 
-    public function sendNotifications($order)
+    /**
+     * Runs broadcast + admin notifications + customer bill email. Safe to call from jobs / afterResponse.
+     */
+    public static function dispatchOrderPlacedNotifications(Order $order): void
     {
         NewOrderCreated::dispatch($order);
 
@@ -2324,9 +2573,14 @@ class Cart extends Component
             try {
                 $order->customer->notify(new SendOrderBill($order));
             } catch (\Exception $e) {
-                Log::error('Error sending order bill email: ' . $e->getMessage());
+                Log::error('Error sending order bill email: '.$e->getMessage());
             }
         }
+    }
+
+    public function sendNotifications($order)
+    {
+        self::dispatchOrderPlacedNotifications($order);
     }
 
     public function toggleQrCode()
@@ -2354,6 +2608,7 @@ class Cart extends Component
     private function loadModifiersForItem($menuItemId, $variationId = null): void
     {
         $this->selectedModifiers = [];
+        $this->optionQuantities = [];
         $this->modifierQuantity = 1;
         $this->cartSelectedModifierModel = MenuItem::with(['branch.restaurant'])->find($menuItemId);
         $this->selectedVariationName = $variationId ? (MenuItemVariation::find($variationId)?->variation ?? null) : null;
@@ -2371,6 +2626,7 @@ class Cart extends Component
                 }
             }
         }
+        $this->modifierTotalDisplay = (float) ($this->cartSelectedModifierModel?->price ?? 0) * $this->modifierQuantity;
     }
 
     public function toggleSelection($groupId, $optionId): void
@@ -2396,8 +2652,94 @@ class Cart extends Component
         }
     }
 
-    public function incrementQuantity(): void { $this->modifierQuantity++; }
-    public function decrementQuantity(): void { if ($this->modifierQuantity > 1) $this->modifierQuantity--; }
+    /**
+     * Shop cart embeds item-modifiers as a partial; wire:model binds here. Keep optionQuantities in sync when checkboxes change.
+     */
+    public function updated($propertyName): void
+    {
+        if (! is_string($propertyName)) {
+            return;
+        }
+        if ($propertyName !== 'selectedModifiers' && ! str_starts_with($propertyName, 'selectedModifiers.')) {
+            return;
+        }
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
+    public function updatedSelectedModifiers(): void
+    {
+        $this->syncOptionQuantitiesFromSelectedModifiers();
+        $this->recalculateModifierTotal();
+    }
+
+    private function syncOptionQuantitiesFromSelectedModifiers(): void
+    {
+        foreach ($this->cartModifiers as $group) {
+            foreach ($group->options as $option) {
+                if (! $option->is_available) {
+                    continue;
+                }
+                $id = $option->id;
+                $raw = $this->selectedModifiers[$id] ?? false;
+                if ($this->isModifierOptionSelected($raw)) {
+                    if (($this->optionQuantities[$id] ?? 0) < 1) {
+                        $this->optionQuantities[$id] = 1;
+                    }
+                } else {
+                    unset($this->optionQuantities[$id]);
+                }
+            }
+        }
+    }
+
+    private function isModifierOptionSelected(mixed $raw): bool
+    {
+        if ($raw === false || $raw === null || $raw === '' || $raw === 0 || $raw === '0') {
+            return false;
+        }
+        if (is_string($raw) && strtolower($raw) === 'false') {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function incrementOptionQty(int $optionId): void
+    {
+        $this->optionQuantities[$optionId] = ($this->optionQuantities[$optionId] ?? 0) + 1;
+        $this->selectedModifiers[$optionId] = $optionId;
+        $this->recalculateModifierTotal();
+    }
+
+    public function decrementOptionQty(int $optionId): void
+    {
+        $qty = ($this->optionQuantities[$optionId] ?? 1) - 1;
+        if ($qty <= 0) {
+            unset($this->optionQuantities[$optionId]);
+            $this->selectedModifiers[$optionId] = false;
+        } else {
+            $this->optionQuantities[$optionId] = $qty;
+        }
+        $this->recalculateModifierTotal();
+    }
+
+    public function recalculateModifierTotal(): void
+    {
+        $base = (float) ($this->cartSelectedModifierModel?->price ?? 0);
+        $addons = 0;
+        $selectedIds = array_filter(array_map('intval', array_keys(array_filter($this->optionQuantities))));
+        if (!empty($selectedIds)) {
+            $prices = ModifierOption::whereIn('id', $selectedIds)->pluck('price', 'id');
+            foreach ($selectedIds as $id) {
+                $addons += (float) ($prices[$id] ?? 0) * ($this->optionQuantities[$id] ?? 1);
+            }
+        }
+        $this->modifierTotalDisplay = ($base + $addons) * $this->modifierQuantity;
+    }
+
+    public function incrementQuantity(): void { $this->modifierQuantity++; $this->recalculateModifierTotal(); }
+    public function decrementQuantity(): void { if ($this->modifierQuantity > 1) { $this->modifierQuantity--; $this->recalculateModifierTotal(); } }
 
     public function saveModifiers(): void
     {
@@ -2422,11 +2764,11 @@ class Cart extends Component
         }
 
         $finalModifiers = [$this->selectedModifierItem => array_keys(array_filter($this->selectedModifiers))];
-        $this->setPosModifier($finalModifiers, $this->modifierQuantity);
+        $this->setPosModifier($finalModifiers, $this->modifierQuantity, $this->optionQuantities);
     }
 
     #[On('setPosModifier')]
-    public function setPosModifier(array $modifierIds, int $quantity = 1)
+    public function setPosModifier(array $modifierIds, int $quantity = 1, array $optionQuantities = [])
     {
         // Check radius restriction before adding items with modifiers
         if (!$this->checkRadiusRestriction()) {
@@ -2470,6 +2812,7 @@ class Cart extends Component
         $this->cartItemQty[$keyId] = ($this->cartItemQty[$keyId] ?? 0) + $quantity;
         $this->orderItemQty[$keyId] = $quantity;
         $this->itemModifiersSelected[$keyId] = Arr::flatten($modifierIds);
+        $this->itemModifierOptionQtys[$keyId] = $optionQuantities;
 
         // Set price context on modifiers before calculating total
         $modifierTotal = 0;
@@ -2479,7 +2822,7 @@ class Cart extends Component
                 if ($this->orderTypeId) {
                     $modifier->setPriceContext($this->orderTypeId, null);
                 }
-                $modifierTotal += $modifier->price;
+                $modifierTotal += $modifier->price * ($optionQuantities[$modifierId] ?? 1);
             }
         }
 
@@ -2780,7 +3123,9 @@ class Cart extends Component
         return OrderType::where('branch_id', $this->shopBranch->id)
             ->where('is_active', true)
             ->where('enable_from_customer_site', true)
-            ->get();
+            ->get()
+            ->sortByDesc(fn($ot) => strtolower((string) ($ot->slug ?? '')) === 'delivery' || strtolower((string) ($ot->type ?? '')) === 'delivery')
+            ->values();
     }
 
     /**

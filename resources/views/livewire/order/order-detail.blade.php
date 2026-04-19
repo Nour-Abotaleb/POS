@@ -656,9 +656,9 @@
                         </div>
 
                         <!-- Secondary Actions - Utility buttons in a grid -->
-                        <div class="grid grid-cols-4 gap-2">
+                        <div class="grid grid-cols-2 gap-2">
                             <x-secondary-link wire:click="printOrder({{ $order->id }})" target="_blank"
-                                class="min-h-[50px] cursor-pointer rounded-xl bg-white hover:bg-gray-50 text-gray-700 border p-3 inline-flex flex-col items-center justify-center gap-1 transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                                class="flex items-center gap-3 min-h-[50px] cursor-pointer rounded-xl bg-white hover:bg-gray-50 text-gray-700 border p-3 justify-center transition-colors dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor"
                                     viewBox="0 0 16 16">
                                     <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
@@ -668,7 +668,8 @@
                                     <span class="text-sm font-medium">@lang('app.print')</span>
                                     </x-secondary-link>
 
-                            @if (in_array($order->status, ['billed', 'payment_due', 'paid']) && user_can('Delete Order'))
+                           
+                            {{-- @if (in_array($order->status, ['billed', 'payment_due', 'paid']) && user_can('Delete Order'))
                                 <button
                                     class="min-h-[50px] rounded-xl bg-red-600 hover:bg-red-700 text-white p-3 inline-flex flex-col items-center justify-center gap-1 transition-colors"
                                     wire:click="$toggle('cancelOrderModal')">
@@ -679,9 +680,11 @@
                                     </svg>
                                     <span class="text-sm font-medium">@lang('app.cancel')</span>
                                 </button>
-                            @endif
+                            @endif  --}}
+                        
 
-                            @if (!in_array($order->status, ['paid', 'payment_due', 'canceled']))
+                            
+                            {{-- @if (!in_array($order->status, ['paid', 'payment_due', 'canceled']))
                                 @if (user_can('Delete Order'))
                                 <button
                                 class="min-h-[50px] rounded-xl bg-red-500 hover:bg-red-600 text-white p-3 inline-flex flex-col items-center justify-center gap-1 transition-colors"
@@ -690,10 +693,11 @@
                                     <span class="text-sm font-medium">@lang('app.delete')</span>
                                 </button>
                                 @endif
-                            @endif
+                            @endif  --}}
+                            
 
                             <button
-                                class="min-h-[50px] rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 inline-flex flex-col items-center justify-center gap-1 transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                                class="flex items-center gap-3 min-h-[50px] rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 justify-center transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                                 wire:click="$toggle('showOrderDetail')" wire:loading.attr="disabled">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">

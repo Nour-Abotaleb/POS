@@ -1,4 +1,4 @@
-<div class="w-full min-w-0 px-4">
+<div class="w-full min-w-0">
     <!-- Order Type Selection Modal -->
     @php
         $firstOrderTypeId = ($orderTypes ?? collect())->first()?->id ?? null;
@@ -6,14 +6,34 @@
         $orderTypeBranchLat = $shopBranch->lat ?? 24.7136;
         $orderTypeBranchLng = $shopBranch->lng ?? 46.6753;
     @endphp
-    <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl">
+    <x-dialog-modal wire:model.live="showOrderTypeModal" maxWidth="4xl" noPadding>
         <x-slot name="title"></x-slot>
 
         <x-slot name="content">
-            <div x-data="{ activeTab: {{ $firstOrderTypeId ?? 'null' }} }">
+            <div x-data="{
+                activeTab: {{ $firstOrderTypeId ?? 'null' }},
+                hoursModalOpen: false,
+                hoursBranchName: '',
+                hoursDays: [],
+                hoursSelected: 0,
+                openBranchHours(payload) {
+                    this.hoursBranchName = payload.branchName;
+                    this.hoursDays = payload.days;
+                    this.hoursSelected = typeof payload.todayIndex === 'number' ? payload.todayIndex : 0;
+                    this.hoursModalOpen = true;
+                },
+                closeHours() { this.hoursModalOpen = false; },
+                activeDay() { return this.hoursDays[this.hoursSelected] || { closed: true, from: null, to: null, label: '' }; }
+            }"
+                x-init="$watch(() => $wire.showOrderTypeModal, (open) => {
+                    if (open) {
+                        activeTab = {{ $firstOrderTypeId !== null ? (int) $firstOrderTypeId : 'null' }};
+                    }
+                })"
+                @keydown.escape.window="closeHours()">
 
                 {{-- Order Type Tabs --}}
-                <div class="flex gap-1 mb-5">
+                <div class="flex gap-1 mb-5 px-6 pt-4">
                     @foreach($orderTypes ?? [] as $orderType)
                         <button
                             type="button"
@@ -29,16 +49,16 @@
                     @endforeach
                 </div>
 
-                {{-- Delivery: map + phone + OTP; other types: branch cards --}}
+                {{-- Delivery: map + phone (+ OTP UI commented out — Cart::orderTypeDeliverySendOtp skips OTP for now); other types: branch cards --}}
                 @foreach($orderTypes ?? [] as $orderType)
                     @php
                         $isDeliveryOrderType = strtolower((string) ($orderType->slug ?? '')) === 'delivery'
                             || strtolower((string) ($orderType->type ?? '')) === 'delivery';
                     @endphp
-                    <div x-show="activeTab === {{ $orderType->id }}" x-cloak class="space-y-4 mb-5">
+                    <div x-show="activeTab === {{ $orderType->id }}" x-cloak class="space-y-4">
                         @if($isDeliveryOrderType)
                             <div wire:key="order-type-delivery-panel-{{ $orderType->id }}"
-                                class="relative rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden min-h-[420px] bg-gray-100 dark:bg-gray-900">
+                                class="relative overflow-hidden min-h-[420px] bg-gray-100 dark:bg-gray-900">
                                 <div id="order-type-delivery-map" class="absolute inset-0 min-h-[420px] z-0" wire:ignore></div>
 
                                 @if($orderTypeDeliveryStep === 'map' && $orderTypeDeliveryPendingTypeId === $orderType->id)
@@ -65,136 +85,245 @@
 
                                 @if($orderTypeDeliveryStep === 'phone' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
-                                        <div class="bg-white dark:bg-gray-800 rounded-md shadow-2xl max-w-md w-full p-6 space-y-4 text-start">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-start">@lang('modules.customer.phoneVerificationHeading')</h3>
-                                                <button type="button" id="orderTypeDeliveryCloseFlowBtn" wire:click="orderTypeDeliveryCloseFlow" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md" aria-label="@lang('app.close')">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-5">
+                                            {{-- Header: title (RTL right) + circle close button (RTL left) --}}
+                                            <div class="flex items-center justify-between gap-3">
+                                                <h3 class="py-2 text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                                                    @lang('modules.customer.phoneVerificationHeading')
+                                                </h3>
+                                                <button type="button" wire:click="orderTypeDeliveryCloseFlow"
+                                                    class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full bg-white shadow-md dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300"
+                                                    aria-label="@lang('app.close')">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
                                                 </button>
                                             </div>
-                                            {{-- <p class="text-sm text-gray-600 dark:text-gray-400 text-end">@lang('modules.customer.enterPhoneToContinue')</p> --}}
-                                            <div class="flex gap-2">
-                                                <x-input
-                                                    id="orderTypeDeliveryPhoneCodeInput"
-                                                    type="text"
-                                                    class="w-28 shrink-0"
+
+                                            {{-- Combined phone input --}}
+                                            <div class="my-4 flex rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 dark:focus-within:ring-gray-500 bg-white dark:bg-gray-900">
+                                                <input type="tel"
+                                                class="flex-1 min-w-0 border-0 bg-transparent px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0"
+                                                wire:model="orderTypeDeliveryPhone"
+                                                placeholder="55XXXXXXX" />
+                                                <input type="text"
+                                                    class="w-16 shrink-0 border-0 bg-gray-50 px-3 py-3 text-sm text-center font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-0 border-e border-gray-200 dark:border-gray-600"
                                                     wire:model="orderTypeDeliveryPhoneCode"
-                                                    placeholder="+966"
-                                                />
-                                                <x-input
-                                                    id="orderTypeDeliveryPhoneInput"
-                                                    type="tel"
-                                                    class="flex-1"
-                                                    wire:model="orderTypeDeliveryPhone"
-                                                    placeholder="55XXXXXXX"
-                                                />
+                                                    placeholder="+966" />
                                             </div>
+
                                             <x-input-error for="orderTypeDeliveryPhoneCode" />
                                             <x-input-error for="orderTypeDeliveryPhone" />
-                                            <div id="orderTypeDeliveryFirebaseError" class="text-sm text-red-600 text-center" style="display: none;"></div>
-                                            <div id="orderTypeDeliveryRecaptchaContainer" style="display: none;"></div>
-                                            <button type="button" id="orderTypeDeliverySendOtpBtn"
-                                                class="w-full py-3 rounded-md text-white text-sm font-bold"
-                                                style="background-color: #011646;">
-                                                @lang('app.next')
+
+                                            <button type="button" wire:click="orderTypeDeliverySendOtp" wire:loading.attr="disabled"
+                                                class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90 mt-4"
+                                                style="background-color: var(--brand-primary);">
+                                                <span wire:loading.remove wire:target="orderTypeDeliverySendOtp">@lang('app.next')</span>
+                                                <span wire:loading wire:target="orderTypeDeliverySendOtp" class="inline-flex items-center justify-center">
+                                                    <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                                    </svg>
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
                                 @endif
 
+                                {{-- OTP modal (disabled — use Cart::orderTypeDeliverySendOtp without OTP; restore when SMS/email OTP is required)
                                 @if($orderTypeDeliveryStep === 'otp' && $orderTypeDeliveryPendingTypeId === $orderType->id)
                                     <div class="absolute inset-0 z-20 bg-black/45 flex items-center justify-center p-4">
-                                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 text-center">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <button type="button" id="orderTypeDeliveryBackToPhoneBtn" wire:click="orderTypeDeliveryBackToPhone" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="@lang('app.back')">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-5">
+                                            <div class="flex items-center justify-between gap-3">
+                                                <h3 class="text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                                                    @lang('app.verification')
+                                                </h3>
+                                                <button type="button" wire:click="orderTypeDeliveryBackToPhone"
+                                                    class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300"
+                                                    aria-label="@lang('app.back')">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
                                                 </button>
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-end">@lang('app.verification')</h3>
                                             </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">@lang('messages.verificationCodeSent')</p>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">+{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}</p>
-                                            <x-input
-                                                id="orderTypeDeliveryOtpInput"
-                                                type="text"
-                                                inputmode="numeric"
-                                                maxlength="6"
-                                                class="block w-full text-center text-xl tracking-widest"
+                                            <p class="text-sm text-black dark:text-gray-400 text-center">@lang('messages.verificationCodeSent')</p>
+                                            <p class="mt-2 mb-3 text-base font-semibold text-gray-900 dark:text-white text-center" dir="ltr">
+                                                +{{ $orderTypeDeliveryPhoneCode }} {{ $orderTypeDeliveryPhone }}
+                                            </p>
+                                            <input type="text" inputmode="numeric" maxlength="6"
+                                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-center text-xl leading-none font-semibold tracking-[0.5em] py-2 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent"
                                                 wire:model="orderTypeDeliveryOtp"
-                                                placeholder="----"
-                                                autocomplete="one-time-code"
-                                            />
+                                                placeholder="_ _ _ _"
+                                                autocomplete="one-time-code" />
                                             <x-input-error for="orderTypeDeliveryOtp" />
-                                            <div id="orderTypeDeliveryFirebaseOtpError" class="text-sm text-red-600 text-center" style="display: none;"></div>
-                                            <button type="button" id="orderTypeDeliveryVerifyOtpBtn"
-                                                class="w-full py-3 rounded-xl text-white text-sm font-bold"
-                                                style="background-color: #011646;">
-                                                @lang('app.verify')
+                                            <button type="button" wire:click="orderTypeDeliveryVerifyAndComplete" wire:loading.attr="disabled"
+                                                class="mt-4 w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
+                                                style="background-color: var(--brand-primary);">
+                                                <span wire:loading.remove wire:target="orderTypeDeliveryVerifyAndComplete">@lang('app.verify')</span>
+                                                <span wire:loading wire:target="orderTypeDeliveryVerifyAndComplete" class="inline-flex items-center justify-center">
+                                                    <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                                    </svg>
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
                                 @endif
+                                --}}
                             </div>
                         @else
-                            @foreach(($modalBranchesByOrderTypeId[$orderType->id] ?? collect()) as $branch)
-                                <div wire:key="modal-branch-{{ $orderType->id }}-{{ $branch->id }}"
-                                    class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                                    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 gap-2">
-                                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $branch->name }}</span>
-                                        <div class="flex items-center gap-2 flex-shrink-0">
-                                            @if($branch->id !== $shopBranch->id)
-                                                <a href="{{ route('shop_restaurant', [$restaurant->hash]) }}?branch={{ $branch->unique_hash }}"
-                                                    wire:navigate
-                                                    class="text-xs font-medium px-2 py-1 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                    @lang('messages.shopAtThisBranch')
-                                                </a>
-                                            @endif
-                                            <span @class([
-                                                'text-xs font-medium px-2.5 py-0.5 rounded-full',
-                                                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' => $branch->is_active,
-                                                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' => !$branch->is_active,
-                                            ])>
-                                                {{ $branch->is_active ? __('app.open') : __('app.closed') }}
-                                            </span>
+                            @php
+                                $daysOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+                                $hoursLocale = session('customer_locale', app()->getLocale());
+                                $todayName = now()->format('l');
+                                $todayIndexDefault = array_search($todayName, $daysOrder, true) ?: 0;
+                            @endphp
+                            <div class="px-6 pb-6 grid grid-cols-1 gap-4">
+                                @foreach(($modalBranchesByOrderTypeId[$orderType->id] ?? collect()) as $branch)
+                                    @php
+                                        $branchIsOpen = $branch->is_active !== false;
+                                        $mapHref = null;
+                                        if ($branch->lat && $branch->lng) {
+                                            $mapHref = 'https://www.google.com/maps/search/?api=1&query=' . $branch->lat . ',' . $branch->lng;
+                                        } elseif ($branch->address) {
+                                            $mapHref = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($branch->address);
+                                        }
+                                        $hoursDaysModal = [];
+                                        foreach ($daysOrder as $day) {
+                                            $dayKey = strtolower($day);
+                                            $rows = $branch->reservationSettings
+                                                ->where('day_of_week', $day)
+                                                ->filter(fn($r) => (bool) $r->available);
+                                            if ($rows->isEmpty()) {
+                                                $hoursDaysModal[] = ['label' => __('menu.day_'.$dayKey), 'closed' => true, 'from' => null, 'to' => null];
+                                                continue;
+                                            }
+                                            $minStart = $rows->min('time_slot_start');
+                                            $maxEnd   = $rows->max('time_slot_end');
+                                            $openT    = \Carbon\Carbon::parse($minStart);
+                                            $closeT   = \Carbon\Carbon::parse($maxEnd);
+                                            $hoursDaysModal[] = [
+                                                'label'  => __('menu.day_'.$dayKey),
+                                                'closed' => false,
+                                                'from'   => $openT->copy()->locale($hoursLocale)->translatedFormat('g:i a'),
+                                                'to'     => $closeT->copy()->locale($hoursLocale)->translatedFormat('g:i a'),
+                                            ];
+                                        }
+                                        $hoursPayload = ['branchName' => $branch->name, 'days' => $hoursDaysModal, 'todayIndex' => $todayIndexDefault];
+                                    @endphp
+                                    <article wire:key="modal-branch-{{ $orderType->id }}-{{ $branch->id }}"
+                                        class="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
+                                        <div class="flex items-center justify-between gap-3 p-4">
+                                            <div class="min-w-0 flex-1 text-start">
+                                                <h2 class="font-bold text-gray-900 dark:text-white leading-snug">{{ $branch->name }}</h2>
+                                                @if($branch->address)
+                                                    <p class="mt-1.5 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ $branch->address }}</p>
+                                                @endif
+                                                <div class="mt-3 flex flex-wrap items-center gap-2">
+                                                    @if($branchIsOpen)
+                                                        <span class="inline-block rounded-md px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
+                                                            @lang('menu.branch_open')
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-block rounded-md px-2.5 py-1 text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200">
+                                                            @lang('menu.branch_closed')
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="flex gap-2 shrink-0">
+                                                @if($branch->phone)
+                                                    <a href="tel:{{ preg_replace('/\s+/', '', $branch->phone) }}"
+                                                        class="p-1 text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                                @if($mapHref)
+                                                    <a href="{{ $mapHref }}" target="_blank" rel="noopener noreferrer"
+                                                        class="p-1 rounded-md text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                                <button type="button"
+                                                    class="p-1 rounded-md text-gray-600 hover:text-[var(--brand-primary)] dark:hover:bg-gray-700 transition dark:text-gray-400"
+                                                    @click.prevent.stop="openBranchHours(@js($hoursPayload))">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
-                                        @if($branch->phone)
-                                            <div class="flex items-center gap-3 px-4 py-3">
-                                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                                    </svg>
-                                                </div>
-                                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $branch->phone }}</span>
-                                            </div>
-                                        @endif
-                                        @if($branch->address)
-                                            <div class="flex items-start gap-3 px-4 py-3">
-                                                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                    </svg>
-                                                </div>
-                                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ $branch->address }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
+                                    </article>
+                                @endforeach
+
+                                {{-- Confirm order type (pickup / dine-in / etc.): required so guests can finish modal and reach login --}}
+                                <div class="px-6 pb-6">
+                                    <button type="button"
+                                        wire:click="selectOrderTypeFromModal({{ $orderType->id }})"
+                                        class="w-full py-3 rounded-xl text-white text-sm font-bold shadow-lg"
+                                        style="background-color: #011646;">
+                                        @lang('app.next')
+                                    </button>
                                 </div>
-                            @endforeach
+                            </div>
                         @endif
                     </div>
                 @endforeach
 
-                {{-- Confirm Button --}}
-                <!-- <button
-                    type="button"
-                    @click="$wire.call('selectOrderTypeFromModal', activeTab)"
-                    class="w-full py-3 px-4 rounded-xl text-white text-sm font-semibold transition hover:opacity-90"
-                    style="background-color: #011646;"
-                >
-                    @lang('app.confirm')
-                </button> -->
+                {{-- Branch hours overlay --}}
+                <div x-show="hoursModalOpen" x-cloak x-transition
+                    class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px]"
+                    role="dialog" aria-modal="true"
+                    @click.self="closeHours()">
+                    <div @click.stop x-transition
+                        class="relative w-full max-w-lg rounded-lg bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 max-h-[90vh] flex flex-col">
+                        <div class="flex items-center justify-between gap-3 px-5 pt-5 pb-3 shrink-0">
+                            <h2 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-start">
+                                @lang('menu.branch_hours_title')
+                            </h2>
+                            <button type="button"
+                                class="shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-gray-200 text-gray-600 shadow-md"
+                                @click="closeHours()">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="px-5 py-4 overflow-y-auto min-h-0 flex-1">
+                            <div class="flex gap-2 justify-center mb-5" dir="{{ session('customer_is_rtl') ? 'rtl' : 'ltr' }}">
+                                <template x-for="(d, i) in hoursDays" :key="i">
+                                    <button type="button" @click="hoursSelected = i"
+                                        class="rounded-lg px-2 py-2 text-sm font-light transition w-[80px] text-center"
+                                        :class="hoursSelected === i ? 'text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200'"
+                                        :style="hoursSelected === i ? 'background-color: var(--brand-primary);' : ''"
+                                        x-text="d.label"></button>
+                                </template>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto pb-4" dir="{{ session('customer_is_rtl') ? 'rtl' : 'ltr' }}">
+                                <div class="text-center space-y-2">
+                                    <div class="text-sm font-bold text-gray-900 dark:text-white">@lang('menu.branch_hours_from')</div>
+                                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[2.5rem] flex items-center justify-center">
+                                        <span x-show="activeDay().closed" x-cloak class="text-gray-500 dark:text-gray-400">@lang('menu.branch_hours_closed_day')</span>
+                                        <span x-show="!activeDay().closed" x-text="activeDay().from || '—'"></span>
+                                    </div>
+                                </div>
+                                <div class="text-center space-y-2">
+                                    <div class="text-sm font-bold text-gray-900 dark:text-white">@lang('menu.branch_hours_to')</div>
+                                    <div class="rounded-md bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-100 min-h-[2.5rem] flex items-center justify-center">
+                                        <span x-show="activeDay().closed" x-cloak class="text-gray-500 dark:text-gray-400">@lang('menu.branch_hours_closed_day')</span>
+                                        <span x-show="!activeDay().closed" x-text="activeDay().to || '—'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </x-slot>
@@ -475,6 +604,7 @@
 
 
 
+    @if(!$modalOnly)
     {{-- Admin: Settings → Customer site (text header or image carousel) --}}
     <x-shop-banner :restaurant="$restaurant" />
 
@@ -558,7 +688,10 @@
                                 <svg class="w-3 h-3 flex-shrink-0 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
-                                <span class="truncate">{{ $catName }}</span>
+                                <span class="min-w-0 truncate">{{ $catName }}</span>
+                                <span class="shrink-0 text-[11px] font-medium text-gray-500 dark:text-gray-300">
+                                    ({{ (int) ($cat->items_count ?? 0) }})
+                                </span>
                             </button>
                         @endforeach
 
@@ -617,7 +750,10 @@
                                         ? 'bg-[#011646] text-white'
                                         : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-200'"
                                 >
-                                    {{ $catName }}
+                                    <span class="inline-flex items-center gap-2">
+                                        <span>{{ $catName }}</span>
+                                        <span class="text-[11px] opacity-90">({{ (int) ($cat->items_count ?? 0) }})</span>
+                                    </span>
                                 </button>
                             @endforeach
                         </div>
@@ -696,7 +832,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="w-28 h-28 rounded-md overflow-hidden flex-shrink-0"
+                                        class="w-24 h-24 md:w-28 md:h-28 rounded-md overflow-hidden flex-shrink-0"
                                     >
                                         <img
                                             class="w-full h-full object-cover cart-item-photo-invert"
@@ -728,7 +864,7 @@
                 </style>
 
                 <!-- Load More Indicator -->
-                <div class="flex items-center justify-center py-6 px-4">
+                <div class="flex items-center justify-center py-6 px-2">
                     @if(!$this->allItemsLoaded)
                         <div wire:loading wire:target="loadMoreMenuItems" class="flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400">
                             <svg class="inline animate-spin h-6 w-6" style="color: var(--brand-primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -797,11 +933,11 @@
                                         {!! currency_format($orderItemAmount[$key], $restaurant->currency_id) !!}
                                     </span>
                                 </div>
-                                @if ($item->calories)
+                             {{--@if ($item->calories)
                                     <div class="text-xs text-gray-500 dark:text-gray-400 text-end mt-0.5">
                                         {{ $item->calories }}
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 <!-- Addons toggle -->
                                 @if (!empty($itemModifiersSelected[$key]))
@@ -814,7 +950,7 @@
                                         </svg>
                                         @lang('app.show')
                                     </button>
-                                    <div x-show="open" x-collapse class="mt-1 space-y-0.5 text-end">
+                                    <div x-show="open" x-collapse class="mt-1 space-y-0.5 text-start">
                                         @php
                                             $groupedModifiers = [];
                                             $allModOpts = \App\Models\ModifierOption::with('modifierGroup')
@@ -824,15 +960,19 @@
                                                 $opt = $allModOpts[$modOptId] ?? null;
                                                 if ($opt) {
                                                     $groupName = $opt->modifierGroup->name ?? '';
-                                                    $groupedModifiers[$groupName][] = $opt->name;
+                                                    $groupedModifiers[$groupName][] = [
+                                                        'id'   => $modOptId,
+                                                        'name' => $opt->name,
+                                                    ];
                                                 }
                                             }
                                         @endphp
-                                        @foreach ($groupedModifiers as $groupName => $optionNames)
+                                        @foreach ($groupedModifiers as $groupName => $options)
                                         <div>
-                                            <div class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
-                                            @foreach ($optionNames as $optName)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{ $optName }} ({{ $orderItemQty[$key] ?? 1 }})</div>
+                                            <div class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $groupName }}.. :</div>
+                                            @foreach ($options as $opt)
+                                            @php $optQty = $itemModifierOptionQtys[$key][$opt['id']] ?? 1; @endphp
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $opt['name'] }} ({{ $optQty }})</div>
                                             @endforeach
                                         </div>
                                         @endforeach
@@ -875,10 +1015,42 @@
 
                         <!-- Summary + Place Order -->
                         <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                            @if(!($restaurant->tax_inclusive ?? false))
                             <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <span>@lang('modules.order.subTotal')</span>
                                 <span>{!! currency_format($subTotal, $restaurant->currency_id) !!}</span>
                             </div>
+                            @endif
+                            @if(!($restaurant->tax_inclusive ?? false))
+                                @if ($taxMode == 'order')
+                                    @foreach ($taxes ?? [] as $taxItem)
+                                        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                            <span>{{ $taxItem->tax_name }} ({{ $taxItem->tax_percent }}%)</span>
+                                            <span>{!! currency_format(($taxItem->tax_percent / 100) * $subTotal, $restaurant->currency_id) !!}</span>
+                                        </div>
+                                    @endforeach
+                                @elseif (!empty($orderItemTaxDetails))
+                                    @php
+                                        $sidebarTaxTotals = [];
+                                        foreach ($orderItemTaxDetails as $taxDetailItem) {
+                                            $qty = $taxDetailItem['qty'] ?? 1;
+                                            foreach (($taxDetailItem['tax_breakup'] ?? []) as $taxName => $taxInfo) {
+                                                if (!isset($sidebarTaxTotals[$taxName])) {
+                                                    $sidebarTaxTotals[$taxName] = ['percent' => $taxInfo['percent'], 'amount' => $taxInfo['amount'] * $qty];
+                                                } else {
+                                                    $sidebarTaxTotals[$taxName]['amount'] += $taxInfo['amount'] * $qty;
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    @foreach ($sidebarTaxTotals as $taxName => $taxInfo)
+                                        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                            <span>{{ $taxName }} ({{ $taxInfo['percent'] }}%)</span>
+                                            <span>{!! currency_format($taxInfo['amount'], $restaurant->currency_id) !!}</span>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            @endif
                             <div class="flex items-center justify-between text-sm font-bold text-gray-900 dark:text-white">
                                 <span>@lang('modules.order.total')</span>
                                 <span>{!! currency_format($total, $restaurant->currency_id) !!}</span>
@@ -936,219 +1108,165 @@
 
         </div>
 
+        {{-- Fixed waiter + login strip (lg:hidden = mobile/tablet only) — commented out per request
+        @if ($this->shouldShowWaiterButtonMobile || (is_null(customer()) && $restaurant->customer_login_required))
         <div class="fixed flex justify-center w-full max-w-lg gap-6 px-4 bottom-24 lg:hidden">
             @if ($this->shouldShowWaiterButtonMobile)
                 @livewire('forms.callWaiterButton', ['tableNumber' => $table->id ?? null, 'shopBranch' => $shopBranch])
             @endif
             @if (is_null(customer()) && $restaurant->customer_login_required)
-                <x-button type="button" wire:click="$dispatch('showSignup')">@lang('app.login')</x-button>
+                <button type="button" wire:click="$dispatch('showSignup')">
+                    @lang('app.login')
+                </button>
             @endif
         </div>
+        @endif
+        --}}
 
-        {{-- @if ($cartQty > 0)
-            <div class="fixed z-10 flex items-center justify-between w-full max-w-lg p-4 mx-auto antialiased font-bold text-white rounded-md lg:max-w-screen-xl dark:bg-gray-800 bottom-1 left-1/2 -translate-x-1/2"
-                style="background-color: var(--brand-primary);">
-                <div>@lang('modules.order.totalItem'): {{ $cartQty }} &nbsp;|&nbsp;
-                    {!! currency_format($subTotal, $restaurant->currency_id) !!} + @lang('modules.order.taxes')</div>
-                <x-secondary-button wire:click="showCartItems">@lang('modules.order.viewCart')</x-secondary-button>
+        @if ($cartQty > 0)
+        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 mx-2 mb-6 rounded-md text-white shadow-xl lg:hidden"
+            style="background-color: var(--brand-primary);">
+            {{-- Cart icon with badge --}}
+            <button type="button" wire:click="showCartItems" class="relative flex-shrink-0">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
+            </button>
+            <div class="flex flex-1 items-center justify-center min-w-0 px-2">
+                <button type="button" wire:click="checkoutFromMobileMenuStrip"
+                    class="flex items-center gap-2 font-bold text-base text-white">
+                    <span>@lang('modules.order.placeOrder')</span>
+                </button>
             </div>
-        @endif --}}
+            <div class="text-base font-bold flex-shrink-0">
+                {!! currency_format($total, $restaurant->currency_id) !!}
+            </div>
+        </div>
+        @endif
     @endif
 
     @if ($showCart)
 
-        {{-- Order type selection removed - users select at the beginning via modal --}}
+        {{-- Mobile cart: items list + fixed bottom bar --}}
+        <div class="pb-28">
 
-        <div class="px-4 mt-4 space-y-4">
+            {{-- Items --}}
             @foreach ($orderItemList as $key => $item)
-                <div class="flex items-center justify-between gap-6 transition bg-white border rounded-lg shadow-sm hover:shadow-md dark:border-gray-600 dark:lg:bg-gray-900 dark:shadow-sm"
-                    wire:key='menu-item-{{ $item->id . microtime() }}'>
-                    <div class="flex w-full p-4 space-x-4 dark:bg-gray-800 dark:text-gray-200">
-                        <!-- Item Image -->
-                        @if ($restaurant && !$restaurant->hide_menu_item_image_on_customer_site)
+            @php
+                $displayPrice = $this->getItemDisplayPrice($key);
+                $totalAmount  = $orderItemAmount[$key];
+            @endphp
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800"
+                wire:key='cart-item-{{ $item->id . microtime() }}'>
 
-                            <img class="object-cover w-10 h-10 rounded-lg cursor-pointer lg:w-16 lg:h-16"
-                                wire:click="showItemDetail({{ $item->id }})" src="{{ $item->item_photo_url }}"
-                                alt="{{ $item->item_name }}">
-                        @endif
+                {{-- Image --}}
+                @if ($restaurant && !$restaurant->hide_menu_item_image_on_customer_site)
+                    <img class="w-20 h-20 rounded-xl object-cover flex-shrink-0 cursor-pointer"
+                        wire:click="showItemDetail({{ $item->id }})"
+                        src="{{ $item->item_photo_url }}" alt="{{ $item->item_name }}">
+                @endif
 
-                        <!-- Item Details -->
-                        <div class="flex-1 min-w-0">
-                            <div
-                                class="flex flex-col items-start justify-between w-full gap-2 sm:flex-row sm:items-baseline">
-                                <!-- Item Name and Details -->
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <div
-                                        class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        <img src="{{ asset('img/' . $item->type . '.svg') }}" class="h-4 me-2"
-                                            title="@lang('modules.menu.' . $item->type)" alt="" />
-                                        {{ $item->item_name }}
-                                    </div>
-                                    @if ($item->calories)
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">
-                                            {{ $item->calories }}
-                                        </span>
-                                    @endif
+                {{-- Details --}}
+                <div class="flex-1 min-w-0 text-end">
+                    <div class="font-bold text-gray-900 dark:text-white text-sm">{{ $item->item_name }}</div>
 
-                                    @if (isset($orderItemVariation[$key]))
-                                        <span
-                                            class="px-2.5 py-0.5 bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-sm text-xs font-sm">
-                                            {{ $orderItemVariation[$key]->variation }}
-                                        </span>
-                                    @endif
+                    @if ($item->description)
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 line-clamp-2">{{ $item->description }}</div>
+                    @endif
 
-                                    {{-- @if ($item->preparation_time)
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">
-                                            @lang('modules.menu.preparationTime'): {{ $item->preparation_time }} @lang('modules.menu.minutes')
-                                        </span>
-                                    @endif --}}
-                                </div>
+                    @if ($item->calories)
+                        <div class="text-xs text-gray-400 mt-0.5">{{ $item->calories }} @lang('modules.menu.calories')</div>
+                    @endif
 
-                                <!-- Quantity Controls and Price -->
-                                <div class="flex flex-wrap items-center justify-between gap-3 sm:w-auto md:w-1/3">
-                                    <!-- Quantity Controls -->
-                                    <div class="flex items-center">
-                                        <button type="button" wire:click="subQty('{{ $key }}')"
-                                            class="h-8 p-2 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-s-md">
-                                            <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true"
-                                                viewBox="0 0 18 2">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                    @if (isset($orderItemVariation[$key]))
+                        <span class="inline-block mt-1 px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs">
+                            {{ $orderItemVariation[$key]->variation }}
+                        </span>
+                    @endif
+
+                    {{-- Modifiers --}}
+                    @if (!empty($itemModifiersSelected[$key]))
+                        <div class="flex flex-wrap justify-end gap-1 mt-1">
+                            @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--brand-primary)]/10" style="color: var(--brand-primary);">
+                                    {{ $this->modifierOptions[$modifierOptionId]->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    {{-- Item note --}}
+                    @if (isset($this->itemNotes[$key]) && !empty($this->itemNotes[$key]))
+                        <span class="inline-flex items-center gap-1 mt-1 px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                            {{ $this->itemNotes[$key] }}
+                            <button wire:click="$set('itemNotes.{{ $key }}', '')" class="text-gray-400 hover:text-red-500">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </span>
+                    @else
+                        <div x-data="{ showNoteInput: false, noteText: '' }" class="mt-1 flex justify-end">
+                            <button x-show="!showNoteInput"
+                                @click="showNoteInput = true; $nextTick(() => $refs.noteInput.focus())"
+                                class="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-[var(--brand-primary)] transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-3 h-3" xml:space="preserve">
+                                    <path d="M11.3 26.5 4 28l1.5-7.3L21.6 4.5c.8-.8 2.1-.8 2.9 0l2.9 2.9c.8.8.8 2.1 0 2.9zm7.4-19 5.8 5.8m-5.8 0-8.8 8.8"
+                                        style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
+                                </svg>
+                                @lang('modules.order.addNote')
+                            </button>
+                            <div x-show="showNoteInput" x-cloak @click.away="showNoteInput = false" class="flex w-full mt-1">
+                                <div class="relative flex-1">
+                                    <x-input x-ref="noteInput" x-model="noteText" type="text"
+                                        class="w-full pr-16 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        :placeholder="__('placeholders.addItemNotesPlaceholder')"
+                                        @keydown.enter="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false" />
+                                    <div class="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+                                        <button @click="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false"
+                                            class="p-1 text-white rounded hover:opacity-90" style="background-color: var(--brand-primary);">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 13 4 4L19 7"/>
                                             </svg>
                                         </button>
-
-                                        <input type="text" wire:model='orderItemQty.{{ $key }}'
-                                            class="w-12 h-8 text-sm text-center text-gray-900 bg-white border-gray-300 border-x-0 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                            readonly />
-
-                                        <button type="button" wire:click="addQty('{{ $key }}')"
-                                            class="h-8 p-2 border border-gray-300 bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 rounded-e-md">
-                                            <svg class="w-2 h-2 text-gray-900 dark:text-white" aria-hidden="true"
-                                                viewBox="0 0 18 18">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                        <button @click="showNoteInput = false" class="p-1 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                             </svg>
                                         </button>
                                     </div>
-
-                                    <!-- Price and Amount -->
-                                    @php
-                                        // Use display price (base price without tax for inclusive items)
-                                        $displayPrice = $this->getItemDisplayPrice($key);
-                                        // Total amount per line (what customer pays)
-                                        $totalAmount = $orderItemAmount[$key];
-                                    @endphp
-                                    <div class="flex flex-col items-end gap-1">
-                                        @if ($taxMode === 'item' && $restaurant?->tax_inclusive)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                {!! currency_format($displayPrice, $restaurant->currency_id) !!} ×
-                                                {{ $orderItemQty[$key] }}
-                                            </div>
-                                        @endif
-                                        <span
-                                            class="text-base font-semibold text-gray-900 dark:text-white whitespace-nowrap">
-                                            {!! currency_format($totalAmount, $restaurant->currency_id) !!}
-                                        </span>
-                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- Modifiers (Shown below if present) -->
-                            @if (!empty($itemModifiersSelected[$key]))
-                                <div class="flex flex-wrap gap-2 mt-2">
-                                    @foreach ($itemModifiersSelected[$key] as $modifierOptionId)
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--brand-primary)]/10" style="color: var(--brand-primary);">
-                                            {{ $this->modifierOptions[$modifierOptionId]->name }}
-                                            <span class="ml-1" style="color: var(--brand-primary);">
-                                                {!! currency_format($this->modifierOptions[$modifierOptionId]->price, $this->modifierOptions[$modifierOptionId]->modifierGroup->branch->restaurant->currency_id) !!}
-                                            </span>
-                                        </span>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            <!-- Item Notes Section -->
-                            <div class="mt-2">
-                                @if (isset($this->itemNotes[$key]) && !empty($this->itemNotes[$key]))
-                                    <div class="flex items-center mt-2">
-                                        <span
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                            <svg class="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" stroke="currentColor"
-                                                fill="none">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 8h10M7 12h4m1 8-4-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3z" />
-                                            </svg>
-                                            <span class="mr-1.5">{{ $this->itemNotes[$key] }}</span>
-                                            <button wire:click="$set('itemNotes.{{ $key }}', '')"
-                                                class="text-gray-400 transition-colors duration-200 hover:text-red-500">
-                                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </div>
-                                @else
-                                    <div x-data="{ showNoteInput: false, noteText: '' }" class="mt-2">
-                                        <button x-show="!showNoteInput"
-                                            @click="showNoteInput = true; $nextTick(() => $refs.noteInput.focus())"
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-full text-gray-700 hover:bg-[var(--brand-primary)]/10 hover:text-[var(--brand-primary)] dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-600 transition-all duration-200 group">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
-                                                class="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-200"
-                                                xml:space="preserve">
-                                                <path
-                                                    d="M11.3 26.5 4 28l1.5-7.3L21.6 4.5c.8-.8 2.1-.8 2.9 0l2.9 2.9c.8.8.8 2.1 0 2.9zm7.4-19 5.8 5.8m-5.8 0-8.8 8.8"
-                                                    style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" />
-                                            </svg>
-                                            <span class="whitespace-nowrap">@lang('modules.order.addNote')</span>
-                                        </button>
-                                        <div x-show="showNoteInput" x-cloak @click.away="showNoteInput = false"
-                                            x-transition:enter="transition ease-out duration-200"
-                                            x-transition:enter-start="opacity-0 transform scale-95"
-                                            x-transition:enter-end="opacity-100 transform scale-100"
-                                            class="flex items-center mt-2">
-
-                                            <div class="flex w-full">
-                                                <div class="relative flex-1">
-                                                    <x-input x-ref="noteInput" x-model="noteText" type="text"
-                                                        class="w-full pr-20 text-sm border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-[var(--brand-primary)] focus:border-[var(--brand-primary)]"
-                                                        :placeholder="__('placeholders.addItemNotesPlaceholder')"
-                                                        @keydown.enter="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false" />
-                                                    <div
-                                                        class="absolute inset-y-0 right-0 flex items-center gap-1 pr-2">
-                                                        <button
-                                                            @click="$wire.set('itemNotes.{{ $key }}', noteText); showNoteInput = false"
-                                                            class="p-1.5 text-white rounded-md hover:opacity-90 transition-colors duration-200" style="background-color: var(--brand-primary);"
-                                                            title="@lang('app.save')">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-3.5 h-3.5" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="m5 13 4 4L19 7" />
-                                                            </svg>
-                                                        </button>
-                                                        <button @click="showNoteInput = false"
-                                                            class="p-1.5 text-gray-500 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                                                            title="@lang('app.cancel')">
-                                                            <svg class="w-3.5 h-3.5"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="M6 18 18 6M6 6l12 12" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         </div>
+                    @endif
+
+                    {{-- Price + qty controls --}}
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="flex items-center gap-1">
+                            <button type="button" wire:click="addQty('{{ $key }}')"
+                                class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                style="background-color: var(--brand-primary);">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                            <span class="w-7 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $orderItemQty[$key] ?? 1 }}</span>
+                            <button type="button" wire:click="subQty('{{ $key }}')"
+                                class="w-7 h-7 flex items-center justify-center rounded-md text-white flex-shrink-0"
+                                style="background-color: var(--brand-primary);">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                            {!! currency_format($totalAmount, $restaurant->currency_id) !!}
+                        </span>
                     </div>
                 </div>
+            </div>
             @endforeach
 
             @if ($cartQty > 0)
@@ -1243,6 +1361,7 @@
                             </div>
                         </div>
 
+                        @if(!($restaurant->tax_inclusive ?? false))
                         <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
                             <div>
                                 @lang('modules.order.subTotal')
@@ -1251,6 +1370,7 @@
                                 {!! currency_format($subTotal, $restaurant->currency_id) !!}
                             </div>
                         </div>
+                        @endif
 
                         @if (count($orderItemList) > 0 && $extraCharges && count($extraCharges) > 0)
                             @foreach ($extraCharges as $charge)
@@ -1268,6 +1388,7 @@
                             @endforeach
                         @endif
 
+                        @if(!($restaurant->tax_inclusive ?? false))
                         @if ($taxMode == 'order')
                             @foreach ($taxes ?? [] as $item)
                                 <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400" wire:key="order-tax-{{ $item->id }}">
@@ -1312,10 +1433,6 @@
                                 <div class="flex justify-between mt-2 text-sm text-gray-500 dark:text-neutral-400">
                                     <div>
                                         @lang('modules.order.totalTax')
-                                        <span
-                                            class="ml-2 px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300">
-                                            @lang($restaurant?->tax_inclusive ? 'modules.settings.taxInclusive' : 'modules.settings.taxExclusive')
-                                        </span>
                                     </div>
                                     <div>
                                         {!! currency_format($totalTax, $restaurant->currency_id) !!}
@@ -1323,6 +1440,7 @@
                                 </div>
                             @endif
                         @endif
+                        @endif {{-- !tax_inclusive --}}
 
                         @if ($orderType === 'delivery' && !is_null($deliveryFee))
                             <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
@@ -1383,99 +1501,6 @@
                         </div>
                     @endif
 
-                    <div class="w-full h-auto pt-3 pb-4 text-center select-none"
-                        wire:key='order-{{ microtime() }}'>
-                        <div class="flex gap-2">
-
-                            @if (is_null($customer) && ($restaurant->customer_login_required || $orderTypeSlug == 'delivery'))
-                                <x-button class="justify-center w-full" wire:click="$dispatch('showSignup')">
-                                    @lang('app.next')
-                                </x-button>
-                            @elseif ($orderTypeSlug == 'pickup')
-                                <x-button class="justify-center w-full" wire:click="showPickupDateTime">
-                                    @lang('app.next')
-                                </x-button>
-                            @else
-                                <div class="grid w-full grid-cols-2 gap-2">
-                                    @php
-                                        $isPaymentEnabled =
-                                            in_array($orderTypeSlug, ['dine_in', 'delivery', 'pickup']) &&
-                                            (($orderTypeSlug == 'dine_in' && $paymentGateway->is_dine_in_payment_enabled) ||
-                                                ($orderTypeSlug == 'delivery' &&
-                                                    $paymentGateway->is_delivery_payment_enabled) ||
-                                                ($orderTypeSlug == 'pickup' && $paymentGateway->is_pickup_payment_enabled));
-
-                                        $showPayNow =
-                                            $paymentGateway->is_qr_payment_enabled ||
-                                            $paymentGateway->stripe_status ||
-                                            $paymentGateway->razorpay_status ||
-                                            $paymentGateway->flutterwave_status ||
-                                            $paymentGateway->paypal_status ||
-                                            $paymentGateway->payfast_status ||
-                                            $paymentGateway->xendit_status ||
-                                            $paymentGateway->epay_status ||
-                                            $paymentGateway->is_offline_payment_enabled;
-
-                                        $loadingSpinner = '
-                                            <div role="status" class="flex items-center">
-                                                <svg aria-hidden="true" class="w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-gray-700"
-                                                    viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                                </svg>
-                                            </div>';
-                                    @endphp
-
-                                    @if (!$order)
-                                        @if ($showPayNow)
-                                            <x-button class="flex items-center justify-center w-full gap-2"
-                                                wire:click="placeOrder(true)" wire:loading.delay.attr="disabled">
-                                                <span wire:loading.delay
-                                                    wire:target="placeOrder(true)">{!! $loadingSpinner !!}</span>
-                                                @lang('modules.order.payNow')
-                                            </x-button>
-
-                                            @if (!$isPaymentEnabled)
-                                                <x-secondary-button
-                                                    class="flex items-center justify-center w-full gap-2"
-                                                    wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                                    <span wire:loading.delay
-                                                        wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                                    @lang('modules.order.payLater')
-                                                </x-secondary-button>
-                                            @endif
-                                        @else
-                                            <x-button class="flex items-center justify-center w-full gap-2"
-                                                wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                                <span wire:loading.delay
-                                                    wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                                @lang('modules.order.placeOrder')
-                                            </x-button>
-                                        @endif
-                                    @else
-                                        <x-button class="flex items-center justify-center w-full gap-2"
-                                            wire:click="placeOrder" wire:loading.delay.attr="disabled">
-                                            <span wire:loading.delay
-                                                wire:target="placeOrder">{!! $loadingSpinner !!}</span>
-                                            @lang('modules.order.placeOrder')
-                                        </x-button>
-                                    @endif
-
-                                </div>
-
-                            @endif
-                        </div>
-
-                        <div class="flex mt-4">
-                            <a href="javascript:;" wire:click="showMenuItems"
-                                class="relative text-gray-500 transition-colors duration-300 group hover:text-[var(--brand-primary)]">
-                                <span class="inline-block">@lang('app.back')</span>
-                                <span
-                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--brand-primary)] group-hover:w-full transition-all duration-300 ease-in-out"></span>
-                            </a>
-                        </div>
-                    </div>
-
                 </div>
             @else
                 <div class="p-4 text-center md:py-7 md:px-5">
@@ -1484,7 +1509,7 @@
                     </h3>
 
                     <a class="inline-flex items-center justify-center px-3 py-2 mt-3 text-sm font-medium text-white border border-transparent rounded-lg gap-x-2 hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
- style="background-color: var(--brand-primary);"
+                        style="background-color: var(--brand-primary);"
                         href="{{ module_enabled('Subdomain') ? url('/') : route('shop_restaurant', [$restaurant->hash]) }}"
                         wire:navigate>
                         @lang('modules.order.placeOrder')
@@ -1492,87 +1517,198 @@
                 </div>
             @endif
         </div>
+
+        {{-- Fixed bottom bar --}}
+        @if ($cartQty > 0)
+        @php
+            $isPaymentEnabled =
+                in_array($orderTypeSlug, ['dine_in', 'delivery', 'pickup']) &&
+                (($orderTypeSlug == 'dine_in' && $paymentGateway->is_dine_in_payment_enabled) ||
+                    ($orderTypeSlug == 'delivery' && $paymentGateway->is_delivery_payment_enabled) ||
+                    ($orderTypeSlug == 'pickup' && $paymentGateway->is_pickup_payment_enabled));
+
+            $showPayNow =
+                $paymentGateway->is_qr_payment_enabled ||
+                $paymentGateway->stripe_status ||
+                $paymentGateway->razorpay_status ||
+                $paymentGateway->flutterwave_status ||
+                $paymentGateway->paypal_status ||
+                $paymentGateway->payfast_status ||
+                $paymentGateway->xendit_status ||
+                $paymentGateway->epay_status ||
+                $paymentGateway->is_offline_payment_enabled;
+        @endphp
+        {{-- Same mobile bar layout as shop home: cart + badge | action label | total --}}
+        <div class="fixed bottom-0 inset-x-0 z-30 flex items-center justify-between px-5 py-4 mx-2 mb-6 rounded-md text-white shadow-xl lg:hidden"
+            style="background-color: var(--brand-primary);">
+
+            <button type="button" wire:click="showMenuItems" class="relative flex-shrink-0" aria-label="@lang('menu.back')">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-white text-[#011646] text-xs font-bold">{{ $cartQty }}</span>
+            </button>
+
+            <div class="flex flex-1 items-center justify-center gap-2 min-w-0 px-2">
+                @if (is_null($customer))
+                    {{-- Guests always go through Cart::placeOrder → order-type modal then login; no anonymous checkout --}}
+                    @if (!$order && $showPayNow)
+                        <button type="button" wire:click="placeOrder(true)" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder(true)">...</span>
+                            <span wire:loading.remove wire:target="placeOrder(true)">@lang('modules.order.payNow')</span>
+                        </button>
+                        @if (!$isPaymentEnabled)
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.payLater')</span>
+                        </button>
+                        @endif
+                    @else
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.placeOrder')</span>
+                        </button>
+                    @endif
+                @elseif ($orderTypeSlug == 'pickup')
+                    <button type="button" wire:click="showPickupDateTime"
+                        class="flex items-center gap-2 font-bold text-base text-white">
+                        <span>@lang('app.next')</span>
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                @else
+                    @if (!$order && $showPayNow)
+                        <button type="button" wire:click="placeOrder(true)" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder(true)">...</span>
+                            <span wire:loading.remove wire:target="placeOrder(true)">@lang('modules.order.payNow')</span>
+                        </button>
+                        @if (!$isPaymentEnabled)
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.payLater')</span>
+                        </button>
+                        @endif
+                    @else
+                        <button type="button" wire:click="placeOrder" wire:loading.attr="disabled"
+                            class="flex items-center gap-2 font-bold text-base text-white">
+                            <span wire:loading wire:target="placeOrder">...</span>
+                            <span wire:loading.remove wire:target="placeOrder">@lang('modules.order.placeOrder')</span>
+                        </button>
+                    @endif
+                @endif
+            </div>
+
+            <div class="text-base font-bold flex-shrink-0">
+                {!! currency_format($total, $restaurant->currency_id) !!}
+            </div>
+        </div>
+        @endif
     @endif
 
-    <x-dialog-modal wire:model.live="showCustomerNameModal" maxWidth="sm">
-        <x-slot name="title">
-
-        </x-slot>
+    <x-dialog-modal wire:model.live="showCustomerNameModal" maxWidth="sm" noPadding>
+        <x-slot name="title"></x-slot>
 
         <x-slot name="content">
             @if (!is_null($customer))
-                <form wire:submit="submitCustomerName">
+                <form wire:submit="submitCustomerName" class="p-6 space-y-5">
                     @csrf
-                    <div class="space-y-4">
-                        <div>
-                            <x-label for="customerName" value="{{ __('modules.customer.enterName') }}" />
-                            <x-input id="customerName" class="block w-full mt-1" type="text"
-                                wire:model='customerName' />
-                            <x-input-error for="customerName" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-label for="customerPhone" value="{{ __('modules.customer.phone') }}" />
-                            <div class="flex gap-2 mt-1">
-                                <!-- Phone Code Dropdown -->
-                                <div x-data="{ isOpen: @entangle('phoneCodeIsOpen').live }" @click.away="isOpen = false" class="relative w-28">
-                                    <div @click="isOpen = !isOpen"
-                                        class="p-2 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm">
-                                                @if($customerPhoneCode)
-                                                    +{{ $customerPhoneCode }}
-                                                @else
-                                                    {{ __('modules.settings.select') }}
-                                                @endif
-                                            </span>
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
 
-                                    <ul x-show="isOpen" x-transition class="absolute z-50 w-full mt-1 overflow-auto bg-white rounded-lg shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-                                        <li class="sticky top-0 px-2 py-2 bg-white dark:bg-gray-700 z-10">
-                                            <input wire:model.live.debounce.300ms="phoneCodeSearch" class="block w-full px-2 py-1 text-sm border border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white" type="text" placeholder="{{ __('placeholders.search') }}" />
+                    {{-- Header: title + close button --}}
+                    <div class="flex items-center justify-between gap-3">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white flex-1 text-start">
+                            @lang('messages.completeYourInfo')
+                        </h3>
+                        <button type="button" wire:click="$toggle('showCustomerNameModal')"
+                            class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Name --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            {{ __('modules.customer.enterName') }}
+                        </label>
+                        <input id="customerName" type="text" wire:model="customerName"
+                            class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent" />
+                        <x-input-error for="customerName" class="mt-1.5" />
+                    </div>
+
+                    {{-- Phone --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            {{ __('modules.customer.phone') }}
+                        </label>
+                        <div class="flex rounded-lg border border-gray-200 dark:border-gray-600 overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 dark:focus-within:ring-gray-500 bg-white dark:bg-gray-900">
+                            <div x-data="{ isOpen: @entangle('phoneCodeIsOpen').live }" @click.away="isOpen = false" class="relative shrink-0">
+                                <button type="button" @click="isOpen = !isOpen"
+                                    class="flex items-center gap-1 px-3 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 border-e border-gray-200 dark:border-gray-600 bg-transparent h-full">
+                                    <span>{{ $customerPhoneCode ? '+' . $customerPhoneCode : __('modules.settings.select') }}</span>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <ul x-show="isOpen" x-transition @click.stop
+                                    class="absolute z-50 start-0 top-full mt-1 w-36 overflow-auto bg-white dark:bg-gray-700 rounded-lg shadow-lg max-h-52 ring-1 ring-black/10">
+                                    <li class="sticky top-0 px-2 py-2 bg-white dark:bg-gray-700 z-10">
+                                        <input wire:model.live.debounce.300ms="phoneCodeSearch"
+                                            class="block w-full px-2 py-1 text-sm border border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                                            type="text" placeholder="{{ __('placeholders.search') }}" />
+                                    </li>
+                                    @forelse ($phonecodes as $phonecode)
+                                        <li @click="$wire.selectPhoneCode('{{ $phonecode }}')"
+                                            wire:key="info-phone-code-{{ $phonecode }}"
+                                            class="py-2 px-3 text-sm text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                                            :class="{ 'bg-gray-100 dark:bg-gray-600': '{{ $phonecode }}' === '{{ $customerPhoneCode }}' }">
+                                            +{{ $phonecode }}
                                         </li>
-                                        @forelse ($phonecodes as $phonecode)
-                                            <li @click="$wire.selectPhoneCode('{{ $phonecode }}')"
-                                                wire:key="cart-phone-code-{{ $phonecode }}"
-                                                class="relative py-2 pl-3 text-gray-900 cursor-pointer select-none pr-9 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-300"
-                                                :class="{ 'bg-gray-100 dark:bg-gray-600': '{{ $phonecode }}' === '{{ $customerPhoneCode }}' }">
-                                                <span class="block text-sm">+{{ $phonecode }}</span>
-                                            </li>
-                                        @empty
-                                            <li class="py-2 pl-3 text-gray-500 dark:text-gray-400">
-                                                {{ __('modules.settings.noPhoneCodesFound') }}
-                                            </li>
-                                        @endforelse
-                                    </ul>
-                                </div>
-
-                                <!-- Phone Number Input -->
-                                <x-input id="customerPhone" class="block w-full" type="tel"
-                                    wire:model='customerPhone' placeholder="1234567890" />
+                                    @empty
+                                        <li class="py-2 px-3 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ __('modules.settings.noPhoneCodesFound') }}
+                                        </li>
+                                    @endforelse
+                                </ul>
                             </div>
-                            <x-input-error for="customerPhoneCode" class="mt-2" />
-                            <x-input-error for="customerPhone" class="mt-2" />
+                            <input id="customerPhone" type="tel" wire:model="customerPhone" placeholder="1234567890"
+                                class="flex-1 min-w-0 border-0 bg-transparent px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none" />
                         </div>
-
-                        @if ($orderType === 'delivery' || $orderTypeSlug === 'delivery')
-                            <div>
-                                <x-label for="customerAddress" value="{{ __('modules.customer.address') }}" />
-                                <x-textarea id="customerAddress" class="block w-full mt-1"
-                                    wire:model='customerAddress' rows="4" />
-                                <x-input-error for="customerAddress" class="mt-2" />
-                            </div>
-                        @endif
+                        <x-input-error for="customerPhoneCode" class="mt-1.5" />
+                        <x-input-error for="customerPhone" class="mt-1.5" />
                     </div>
 
-                    <div class="flex justify-between w-full pb-4 mt-6 space-x-4">
-                        <x-button>@lang('app.continue')</x-button>
-                        <x-button-cancel wire:click="$toggle('showCustomerNameModal')"
-                            wire:loading.attr="disabled">@lang('app.cancel')</x-button-cancel>
-                    </div>
+                    @if ($orderType === 'delivery' || $orderTypeSlug === 'delivery')
+                        {{-- Address --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                {{ __('modules.customer.address') }}
+                            </label>
+                            <textarea id="customerAddress" wire:model="customerAddress" rows="3"
+                                class="block w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:border-transparent resize-none"></textarea>
+                            <x-input-error for="customerAddress" class="mt-1.5" />
+                        </div>
+                    @endif
+
+                    {{-- Submit --}}
+                    <button type="submit" wire:loading.attr="disabled"
+                        class="w-full py-3 rounded-lg text-white text-base font-bold transition hover:opacity-90"
+                        style="background-color: var(--brand-primary);">
+                        <span wire:loading.remove wire:target="submitCustomerName">@lang('app.continue')</span>
+                        <span wire:loading wire:target="submitCustomerName" class="inline-flex items-center justify-center">
+                            <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                            </svg>
+                        </span>
+                    </button>
                 </form>
             @endif
         </x-slot>
@@ -2059,7 +2195,7 @@
         </x-dialog-modal>
     @endif
 
-    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="lg" :noPadding="true">
+    <x-dialog-modal wire:model.live="showModifiersModal" maxWidth="md" :noPadding="true">
         <x-slot name="content">
             @if ($cartSelectedModifierModel)
                 @include('livewire.pos.item-modifiers', [
@@ -2390,5 +2526,6 @@
             });
         </script>
     @endscript
+    @endif {{-- !$modalOnly --}}
 
 </div>

@@ -13,6 +13,10 @@
     [dir="rtl"] .pos-slider-next-arrow {
         transform: rotate(180deg);
     }
+    /* Invert food-type icon in dark mode */
+    .dark .pos-menu-item-type-icon {
+        filter: invert(1) brightness(10) !important;
+    }
     /* Desktop: products panel always in normal layout (as before), never fixed overlay; keep flex layout so content and category filter show correctly */
     @media (min-width: 1024px) {
         .pos-menu-panel {
@@ -74,7 +78,7 @@
                 </button>
             </div>
             {{-- Search + Filters (header) --}}
-            <div class="flex-shrink-0 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-gray-100 dark:border-gray-700 pt-3 px-3 shadow-sm space-y-4 mt-2">
+            <div class="flex-shrink-0 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-gray-100 dark:border-gray-700 pt-1 px-3 shadow-sm space-y-4 mt-2">
                 <div class="grid grid-cols-1 gap-1">
                         <div class="relative space-y-2">
                             <div class="flex-1 min-w-0">
@@ -128,14 +132,14 @@
                                         el.scrollBy({ left: (rtl ? -dir : dir) * 220, behavior: 'smooth' });
                                     }
                                 }">
-                                    <div x-ref="menuSlider" class="pos-slider-scroll-hide flex-1 min-w-0 overflow-x-auto overflow-y-hidden pb-2 scroll-smooth">
+                                    <div x-ref="menuSlider" class="pos-slider-scroll-hide flex-1 min-w-0 overflow-x-auto overflow-y-hidden pb-1 scroll-smooth">
                                         <div class="flex flex-nowrap items-center gap-2 min-w-0">
                                             <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #A3A3A399;">@lang('app.posCategory'):</span>
                                             <button type="button"
                                                 wire:click="$set('menuId', null)"
                                                 style="{{ $menuId === null ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                 @class([
-                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'px-3 py-2 text-xs rounded-lg border transition text-left shrink-0',
                                                     'text-white shadow-sm' => $menuId === null,
                                                     'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $menuId !== null,
                                                 ])>
@@ -151,7 +155,7 @@
                                                     wire:click="$set('menuId', {{ $menu->id }})"
                                                     style="{{ $isActiveMenu ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                     @class([
-                                                        'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                        'px-3 py-2 text-xs rounded-lg border transition text-left shrink-0',
                                                         'text-white shadow-sm' => $isActiveMenu,
                                                         'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveMenu,
                                                     ])>
@@ -232,14 +236,14 @@
                                         el.scrollBy({ left: (rtl ? -dir : dir) * 220, behavior: 'smooth' });
                                     }
                                 }">
-                                    <div x-ref="productsSlider" class="pos-slider-scroll-hide flex-1 min-w-0 overflow-x-auto overflow-y-hidden pb-2 scroll-smooth">
+                                    <div x-ref="productsSlider" class="pos-slider-scroll-hide flex-1 min-w-0 overflow-x-auto overflow-y-hidden pb-1 scroll-smooth">
                                         <div class="flex flex-nowrap items-center gap-2 min-w-0">
                                             <span class="text-sm font-light ms-2 dark:text-gray-300 whitespace-nowrap shrink-0" style="color: #A3A3A399;">@lang('app.posProducts'):</span>
                                             <button type="button"
                                                 wire:click="$set('filterCategories', null)"
                                                 style="{{ $filterCategories === null ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                 @class([
-                                                    'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                    'px-3 py-2 text-xs rounded-lg border transition text-left shrink-0',
                                                     'text-white shadow-sm' => $filterCategories === null,
                                                     'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => $filterCategories !== null,
                                                 ])>
@@ -255,7 +259,7 @@
                                                     wire:click="$set('filterCategories', {{ $category->id }})"
                                                     style="{{ $isActiveCategory ? 'background-color: var(--brand-primary); border-color: var(--brand-primary); color: white;' : '' }}"
                                                     @class([
-                                                        'px-3 py-3 text-xs rounded-lg border transition text-left shrink-0',
+                                                        'px-3 py-2 text-xs rounded-lg border transition text-left shrink-0',
                                                         'text-white shadow-sm' => $isActiveCategory,
                                                         'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200' => ! $isActiveCategory,
                                                     ])>
@@ -314,7 +318,7 @@
                     }
                 }"
                 >
-                <ul class="pos-menu-items-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 pb-8
+                <ul class="pos-menu-items-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 lg:gap-2 pb-24 lg:pb-8
                     [&::-webkit-scrollbar]:w-2
                     [&::-webkit-scrollbar-track]:rounded
                     [&::-webkit-scrollbar-track]:bg-gray-200
@@ -356,7 +360,7 @@
                                     {{-- Image Section --}}
                                     @if (!$restaurant->hide_menu_item_image_on_pos)
                                     <div class="relative aspect-square hidden md:block">
-                                        <img class="w-full lg:w-32 lg:h-32 object-cover rounded-t-lg"
+                                        <img class="w-full lg:w-32 lg:h-32 object-cover rounded-t-lg pos-menu-item-type-icon"
                                             src="{{ $item->item_photo_url }}"
                                             alt="{{ $item->item_name }}"
                                             loading="lazy"
@@ -375,11 +379,11 @@
                                         <h5 class="text-xs font-medium text-gray-900 dark:text-white min-h-[1.5rem]">
                                             {{ $item->item_name }}
                                         </h5>
-                                        @if ($item->calories)
+                                        {{-- @if ($item->calories)
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                                 {{ $item->calories }}
                                             </div>
-                                        @endif
+                                        @endif --}}
                                         @if ($orderLimitReached)
                                             <div class="text-red-500 text-xs">@lang('messages.orderLimitReached')</div>
                                         @elseif (!$item->in_stock)

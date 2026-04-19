@@ -392,7 +392,7 @@ return [
         'paymentDetails' => 'Payment Details',
         'paystack' => 'Paystack',
         'cancelKot' => 'Cancel KOT',
-        'kotBillAndPayment' => 'KOT, Bill & Payment',
+        'kotBillAndPayment' => 'KOT & Payment',
         'cancelled' => 'Cancelled',
         'prefixSettings' => 'Prefix Settings',
         'orderSettingsHelp' => 'Configure order settings to manage how orders are processed.',

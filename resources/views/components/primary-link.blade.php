@@ -1,4 +1,13 @@
-<a {{ $attributes->merge(['class' => 'text-white justify-center sm:w-auto font-semibold rounded-lg text-sm px-5 py-2.5 text-center', 'style' => 'background-color: var(--brand-primary); border-color: var(--brand-primary);']) }}
+@php
+    $attrClass = (string) $attributes->get('class', '');
+    $hasCustomPadding = str_contains($attrClass, 'px-') || str_contains($attrClass, 'py-') || str_contains($attrClass, 'p-');
+    $baseClass = 'text-white justify-center sm:w-auto font-semibold rounded-lg text-sm text-center';
+    if (! $hasCustomPadding) {
+        $baseClass .= ' px-5 py-2.5';
+    }
+@endphp
+
+<a {{ $attributes->merge(['class' => $baseClass, 'style' => 'background-color: var(--brand-primary); border-color: var(--brand-primary);']) }}
     wire:loading.attr="disabled" wire:target="{{ $target ?? 'submitForm' }}">
 
     <svg aria-hidden="true" wire:target="{{ $target ?? 'submitForm' }}" wire:loading.class.remove="hidden"

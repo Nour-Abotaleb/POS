@@ -1,11 +1,29 @@
+<div class="text-base text-gray-900 dark:text-gray-100 flex flex-col" style="max-height: 85vh; max-height: 85svh;">
 <style>
-    .btn-add-item img { filter: invert(1) brightness(10) !important; }
+    /* Dark mode: Riyal/currency is often a black img or SVG — invert so it matches light text */
+    .dark .item-modifiers-currency img,
+    .dark .item-modifiers-currency svg {
+        filter: invert(1) !important;
+    }
+    /* Dark blue add button: bright glyph on #011646 (spinner SVG is outside .btn-add-item-currency) */
+    .btn-add-item .btn-add-item-currency img,
+    .btn-add-item .btn-add-item-currency svg {
+        filter: invert(1) brightness(10) !important;
+    }
+    /* Checkbox: brand primary background + border when checked */
+    .item-modifier-cb:checked {
+        background-color: var(--brand-primary) !important;
+        border-color: var(--brand-primary) !important;
+        accent-color: var(--brand-primary);
+    }
 </style>
-<div class="text-base text-gray-900 dark:text-gray-100">
     @php $currencyId = $selectedModifierItem->branch->restaurant->currency_id; @endphp
 
     <!-- Hero Image -->
-    <div class="relative overflow-hidden rounded-t-lg" style="height: 300px;">
+    <div
+        class="relative overflow-hidden rounded-t-lg flex-shrink-0"
+        style="height: clamp(240px, 30vh, 300px);"
+    >
         <!-- Close button -->
         <button type="button"
             wire:click="$dispatch('closeModifiersModal')"
@@ -26,8 +44,8 @@
         @endif
     </div>
 
-    <!-- Content -->
-    <div class="px-6 pb-6">
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pb-2">
     <!-- Item Info -->
     <div class="pt-4 flex items-center justify-between gap-2">
         <span class="text-xl font-bold text-gray-900 dark:text-white text-end">
@@ -37,7 +55,7 @@
             @endif
         </span>
         @if ($selectedModifierItem->price)
-        <span class="text-base font-bold text-gray-900 dark:text-white whitespace-nowrap flex items-center gap-1">
+        <span class="item-modifiers-currency text-base font-bold text-gray-900 dark:text-white whitespace-nowrap inline-flex items-center gap-1">
             {!! currency_format($selectedModifierItem->price, $currencyId) !!}
         </span>
         @endif
@@ -85,23 +103,40 @@
 
         <!-- Options -->
         @foreach ($modifier->options as $option)
-        <div class="flex w-full items-center justify-between gap-3 py-3">
-            <div class="flex min-w-0 flex-1 items-center gap-3 text-start">
-                @if ($option->is_available)
-                    <x-checkbox
-                        class="shrink-0"
-                        wire:model="selectedModifiers.{{ $option->id }}"
-                        wire:click="toggleSelection({{ $modifier->id }}, {{ $option->id }})"
-                        value="{{ $option->id }}" />
-                @else
-                    <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                        @lang('modules.menu.notAvailable')
-                    </span>
+        @php $optQty = $optionQuantities[$option->id] ?? 0; @endphp
+        <div class="flex w-full items-center justify-between gap-3 py-2">
+            <div class="flex min-w-0 flex-1 flex-col gap-1.5 text-start">
+                <div class="flex items-center gap-3">
+                    @if ($option->is_available)
+                        <x-checkbox
+                            class="shrink-0 item-modifier-cb"
+                            wire:model.live="selectedModifiers.{{ $option->id }}"
+                            value="{{ $option->id }}" />
+                    @else
+                        <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                            @lang('modules.menu.notAvailable')
+                        </span>
+                    @endif
+                    <div class="min-w-0 text-gray-900 dark:text-white font-medium">{{ $option->name }}</div>
+                </div>
+                @if ($optQty > 0)
+                    <div class="flex items-center gap-2 ms-7">
+                        <button type="button" wire:click="incrementOptionQty({{ $option->id }})"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
+                            style="background-color: var(--brand-primary);">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 1v16M1 9h16"/></svg>
+                        </button>
+                        <span class="w-5 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ $optQty }}</span>
+                           <button type="button" wire:click="decrementOptionQty({{ $option->id }})"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-white"
+                            style="background-color: var(--brand-primary);">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 18 2"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h16"/></svg>
+                        </button>
+                    </div>
                 @endif
-                <div class="min-w-0 text-gray-900 dark:text-white font-medium">{{ $option->name }}</div>
             </div>
-            @if ($option->is_available && $option->price)
-                <span class="shrink-0 text-sm font-medium text-gray-900 dark:text-gray-300 whitespace-nowrap flex items-center gap-1">{!! currency_format($option->price, $currencyId) !!}</span>
+            @if ($option->is_available)
+                <span class="item-modifiers-currency shrink-0 text-sm font-medium text-gray-900 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1">{!! currency_format($option->price ?? 0, $currencyId) !!}</span>
             @endif
         </div>
         @endforeach
@@ -109,22 +144,22 @@
         <x-input-error for="requiredModifiers.{{ $modifier->id }}" class="mt-2" />
     </div>
     @endforeach
+    </div><!-- end scrollable -->
 
-    <!-- Bottom: Add button + quantity counter -->
-    <div class="flex items-center gap-3 mt-6">
-        
-        <div class="flex items-center justify-between bg-[#F8F8F8] rounded-md overflow-hidden min-w-[180px] flex-shrink-0 py-2.5 px-2" style="background-color: #F8F8F8">
+    <!-- Fixed Bottom: Add button + quantity counter -->
+    <div class="flex-shrink-0 flex items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700">
+        <div class="flex items-center justify-between bg-[#F8F8F8] rounded-md overflow-hidden md:min-w-[180px] flex-shrink-0 py-2.5 px-2" style="background-color: #F8F8F8">
             <button type="button"
             wire:click="incrementQuantity"
-            class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 dark:text-white py-2">
+            class="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 py-2">
             <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
             </svg>
             </button>
-            <span class="px-3 text-gray-900 dark:text-white font-medium text-xl sm:text-2xl tabular-nums select-none">{{ $quantity }}</span>
+            <span class="px-3 text-gray-900 font-medium text-xl sm:text-2xl tabular-nums select-none">{{ $quantity }}</span>
             <button type="button"
                 wire:click="decrementQuantity"
-                class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 dark:text-white py-2">
+                class="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center hover:bg-gray-50 border border-gray-400 rounded-md dark:hover:bg-gray-700 text-gray-400 py-2">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                 </svg>
@@ -136,11 +171,15 @@
             wire:loading.attr="disabled"
             class="btn-add-item flex-1 py-3.5 rounded-md text-white font-bold text-base transition"
             style="background-color: #011646;">
-            <span wire:loading.remove wire:target="saveModifiers" class="inline-flex items-center justify-center gap-1">
-                @lang('app.add') ({!! currency_format($selectedModifierItem->price * $quantity, $currencyId) !!})
+            <span wire:loading.remove wire:target="saveModifiers" class="text-xs md:text-sm lg:text-base inline-flex items-center justify-center gap-1">
+                @lang('app.add') (<span class="btn-add-item-currency item-modifiers-currency inline-flex items-center gap-0">{!! currency_format(isset($modifierTotalDisplay) && $modifierTotalDisplay > 0 ? $modifierTotalDisplay : $selectedModifierItem->price * $quantity, $currencyId) !!}</span>)
             </span>
-            <span wire:loading wire:target="saveModifiers">...</span>
+            <span wire:loading wire:target="saveModifiers" class="inline-flex items-center justify-center">
+                <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+            </span>
         </button>
     </div>
-    </div><!-- end .px-6 -->
 </div>

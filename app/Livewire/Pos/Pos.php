@@ -154,6 +154,18 @@ class Pos extends Component
         $this->customer = Customer::find($customerId);
     }
 
+    public function hydrate()
+    {
+        // Re-load taxes on every Livewire request to ensure they survive re-hydration
+        // (Eloquent Collections stored as public properties can lose data between requests)
+        if (empty($this->taxes) || (is_countable($this->taxes) && count($this->taxes) === 0)) {
+            $restaurantId = $this->restaurant->id ?? restaurant()->id;
+            $this->taxes = cache()->remember('taxes_' . $restaurantId, 60 * 60 * 24, function () use ($restaurantId) {
+                return Tax::where('restaurant_id', $restaurantId)->get();
+            });
+        }
+    }
+
     public function mount()
     {
         $this->restaurant = restaurant()->load(['paymentGateways', 'package']);
@@ -2976,9 +2988,11 @@ class Pos extends Component
     }
 
     #[On('setPosModifier')]
-    public function setPosModifier($modifierIds)
+    public function setPosModifier($modifierIds, $quantity = 1, $optionQuantities = [])
     {
         $this->showModifiersModal = false;
+
+        $qty = max(1, (int) $quantity);
 
         $sortNumber = Str::of(implode('', Arr::flatten($modifierIds)))
             ->split(1)->sort()->implode('');
@@ -2999,21 +3013,37 @@ class Pos extends Component
             if ($this->orderTypeId && isset($this->orderItemList[$keyId])) {
                 $this->orderItemList[$keyId]->setPriceContext($this->orderTypeId, $this->normalizeDeliveryAppId());
             }
-
-            $this->orderItemAmount[$keyId] = 1 * ($this->orderItemVariation[$keyId]->price ?? $this->orderItemList[$keyId]->price);
         }
 
         $this->itemModifiersSelected[$keyId] = Arr::flatten($modifierIds);
-        $this->orderItemQty[$this->selectedModifierItem] = isset($this->orderItemQty[$this->selectedModifierItem]) ? ($this->orderItemQty[$this->selectedModifierItem] + 1) : 1;
 
         // Get modifier options with price context set
         $modifierOptions = $this->getModifierOptionsProperty();
         $modifierTotal = collect($this->itemModifiersSelected[$keyId])
-            ->sum(fn($modifierId) => isset($modifierOptions[$modifierId]) ? $modifierOptions[$modifierId]->price : 0);
+            ->sum(fn($modifierId) => isset($modifierOptions[$modifierId])
+                ? $modifierOptions[$modifierId]->price * ($optionQuantities[$modifierId] ?? 1)
+                : 0);
 
-        $this->orderItemModifiersPrice[$keyId] = (1 * (isset($this->itemModifiersSelected[$keyId]) ? $modifierTotal : 0));
+        $this->orderItemModifiersPrice[$keyId] = (isset($this->itemModifiersSelected[$keyId]) ? $modifierTotal : 0);
 
-        $this->syncCart($keyId);
+        // Quantity and line total must use $keyId (same as cart row), not the bare menu item id.
+        if (isset($this->orderItemList[$keyId])) {
+            $this->orderItemQty[$keyId] = ($this->orderItemQty[$keyId] ?? 0) + $qty;
+            if ($this->orderTypeId) {
+                if (isset($this->orderItemVariation[$keyId])) {
+                    $this->orderItemVariation[$keyId]->setPriceContext($this->orderTypeId, $this->normalizeDeliveryAppId());
+                }
+                if (isset($this->orderItemList[$keyId])) {
+                    $this->orderItemList[$keyId]->setPriceContext($this->orderTypeId, $this->normalizeDeliveryAppId());
+                }
+            }
+            $basePrice = $this->orderItemVariation[$keyId]->price ?? $this->orderItemList[$keyId]->price;
+            $this->orderItemAmount[$keyId] = $this->orderItemQty[$keyId] * ($basePrice + ($this->orderItemModifiersPrice[$keyId] ?? 0));
+            $this->calculateTotal();
+        } else {
+            $this->orderItemQty[$keyId] = $qty;
+            $this->syncCart($keyId);
+        }
     }
 
     #[Computed]
