@@ -334,6 +334,167 @@
 
     @script
     <script>
+        (function () {
+        // Delivery checkout: Firebase Phone Auth (OTP) for phone verification modal (ES5 compatible)
+        var firebaseConfig = {!! json_encode(config('firebase.web')) !!};
+        console.log('Firebase config used on page:', firebaseConfig);
+        var orderTypeDeliveryConfirmationResult = null;
+
+        function setFirebaseError(elId, message) {
+            var el = document.getElementById(elId);
+            if (!el) return;
+            if (!message) {
+                el.textContent = '';
+                el.style.display = 'none';
+                return;
+            }
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+
+        function loadFirebaseSdk() {
+            if (window.firebase && window.firebase.auth && window.firebase.auth.RecaptchaVerifier) return Promise.resolve();
+            if (window.__orderTypeDeliveryFirebaseSdkLoading) return window.__orderTypeDeliveryFirebaseSdkLoading;
+
+            window.__orderTypeDeliveryFirebaseSdkLoading = (function () {
+                function loadScript(src) {
+                    return new Promise(function (resolve, reject) {
+                        var s = document.createElement('script');
+                        s.src = src;
+                        s.async = true;
+                        s.onload = resolve;
+                        s.onerror = function () { reject(new Error('Failed to load: ' + src)); };
+                        document.head.appendChild(s);
+                    });
+                }
+
+                // Compat builds let us call RecaptchaVerifier + signInWithPhoneNumber easily
+                return loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js')
+                    .then(function () { return loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js'); });
+            })();
+
+            return window.__orderTypeDeliveryFirebaseSdkLoading;
+        }
+
+        function getE164Phone(phoneCode, phone) {
+            var cc = String(phoneCode || '').replace(/[^\d]/g, '');
+            var p = String(phone || '').replace(/[^\d]/g, '');
+            if (!cc || !p) return null;
+            return '+' + cc + p;
+        }
+
+        function ensureFirebaseApp() {
+            var required = ['apiKey', 'authDomain', 'projectId', 'appId'];
+            var missing = [];
+            for (var i = 0; i < required.length; i++) {
+                var k = required[i];
+                if (!firebaseConfig || !firebaseConfig[k]) missing.push(k);
+            }
+            if (missing.length) {
+                throw new Error('Firebase config missing in .env: ' + missing.join(', '));
+            }
+
+            if (window.firebase && window.firebase.apps && window.firebase.apps.length) return window.firebase.apps[0];
+            return window.firebase.initializeApp(firebaseConfig);
+        }
+
+        function orderTypeDeliveryFirebaseSendOtp() {
+            var sendBtn = document.getElementById('orderTypeDeliverySendOtpBtn');
+            if (sendBtn) sendBtn.disabled = true;
+
+            orderTypeDeliveryConfirmationResult = null;
+            setFirebaseError('orderTypeDeliveryFirebaseError', '');
+
+            return loadFirebaseSdk()
+                .then(function () {
+                    ensureFirebaseApp();
+                    var auth = window.firebase.auth();
+
+                    var phoneCodeEl = document.getElementById('orderTypeDeliveryPhoneCodeInput');
+                    var phoneEl = document.getElementById('orderTypeDeliveryPhoneInput');
+                    var phoneCode = phoneCodeEl ? phoneCodeEl.value : '';
+                    var phone = phoneEl ? phoneEl.value : '';
+                    var e164 = getE164Phone(phoneCode, phone);
+                    if (!e164) throw new Error('Enter a valid phone number.');
+
+                    var appVerifier = new window.firebase.auth.RecaptchaVerifier(
+                        'orderTypeDeliveryRecaptchaContainer',
+                        { size: 'invisible' },
+                        auth
+                    );
+
+                    return auth.signInWithPhoneNumber(e164, appVerifier).then(function (result) {
+                        orderTypeDeliveryConfirmationResult = result;
+                        return $wire.call('orderTypeDeliveryFirebaseOtpSent', phoneCode, phone);
+                    });
+                })
+                .catch(function (err) {
+                    var msg = (err && err.message) ? err.message : String(err);
+                    setFirebaseError('orderTypeDeliveryFirebaseError', msg);
+                })
+                .finally(function () {
+                    if (sendBtn) sendBtn.disabled = false;
+                });
+        }
+
+        function orderTypeDeliveryFirebaseConfirmOtp() {
+            var verifyBtn = document.getElementById('orderTypeDeliveryVerifyOtpBtn');
+            if (verifyBtn) verifyBtn.disabled = true;
+
+            setFirebaseError('orderTypeDeliveryFirebaseOtpError', '');
+
+            return loadFirebaseSdk()
+                .then(function () {
+                    var otpEl = document.getElementById('orderTypeDeliveryOtpInput');
+                    var otp = otpEl ? otpEl.value : '';
+
+                    if (!orderTypeDeliveryConfirmationResult) throw new Error('OTP session not ready. Please resend code.');
+                    if (String(otp).trim().length < 4) throw new Error('Enter the OTP code.');
+
+                    return orderTypeDeliveryConfirmationResult.confirm(String(otp).trim()).then(function () {
+                        return $wire.call('orderTypeDeliveryFirebaseVerifyAndComplete');
+                    });
+                })
+                .catch(function (err) {
+                    var msg = (err && err.message) ? err.message : String(err);
+                    setFirebaseError('orderTypeDeliveryFirebaseOtpError', msg);
+                })
+                .finally(function () {
+                    if (verifyBtn) verifyBtn.disabled = false;
+                });
+        }
+
+        // Event delegation (modal steps are conditionally rendered by Livewire)
+        document.addEventListener('click', function (e) {
+            function closest(el, selector) {
+                while (el && el.nodeType === 1) {
+                    if (el.matches && el.matches(selector)) return el;
+                    el = el.parentElement;
+                }
+                return null;
+            }
+
+            var backToPhone = closest(e.target, '#orderTypeDeliveryBackToPhoneBtn');
+            var closeFlow = closest(e.target, '#orderTypeDeliveryCloseFlowBtn');
+            if (backToPhone || closeFlow) {
+                orderTypeDeliveryConfirmationResult = null;
+                setFirebaseError('orderTypeDeliveryFirebaseError', '');
+                setFirebaseError('orderTypeDeliveryFirebaseOtpError', '');
+                return;
+            }
+
+            var send = closest(e.target, '#orderTypeDeliverySendOtpBtn');
+            if (send) {
+                orderTypeDeliveryFirebaseSendOtp();
+                return;
+            }
+
+            var verify = closest(e.target, '#orderTypeDeliveryVerifyOtpBtn');
+            if (verify) {
+                orderTypeDeliveryFirebaseConfirmOtp();
+            }
+        });
+
         $wire.on('init-order-type-delivery-map', () => {
             const MAP_KEY = @js($orderTypeMapApiKey ?? '');
             const BR_LAT = {{ (float) $orderTypeBranchLat }};
@@ -396,6 +557,7 @@
             script.async = true;
             document.head.appendChild(script);
         });
+        })();
     </script>
     @endscript
 

@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Helper\Files;
-use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
@@ -16,45 +16,50 @@ trait GeneratesQrCode
 {
     public function createQrCode(string $qrUrl, ?string $label = null)
     {
-        $fileName = $this->getQrCodeFileName();
-        $filePath = public_path(Files::UPLOAD_FOLDER . '/qrcodes/' . $fileName);
+        try {
+            $fileName = $this->getQrCodeFileName();
+            $filePath = public_path(Files::UPLOAD_FOLDER . '/qrcodes/' . $fileName);
 
-        $builder = Builder::create()
-            ->writer(new PngWriter())
-            ->writerOptions([])
-            ->data($qrUrl)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
-            ->size(300)
-            ->margin(10)
-            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->validateResult(false);
+            // Use only the working approach - no Builder pattern
+            $writer = new PngWriter();
+            
+            // Create a simple QR code without complex configuration
+            $qrCode = new QrCode($qrUrl);
+            $result = $writer->write($qrCode);
 
-        if ($label) {
-            $builder->labelText($label)
-                ->labelFont(new \Endroid\QrCode\Label\Font\NotoSans(20))
-                ->labelAlignment(\Endroid\QrCode\Label\LabelAlignment::Center);
-        }
+            Files::createDirectoryIfNotExist('qrcodes');
+            $result->saveToFile($filePath);
 
-        $result = $builder->build();
+            Files::fileStore(
+                new File($filePath),
+                'qrcodes',
+                $fileName,
+                uploaded: false,
+                restaurantId: $this->getRestaurantId()
+            );
 
-        Files::createDirectoryIfNotExist('qrcodes');
-        $result->saveToFile($filePath);
+            // Move file to cloud storage
+            if (config('filesystems.default') !== 'local') {
+                $contents = FileFacade::get($filePath);
+                Storage::disk(config('filesystems.default'))->put('qrcodes/' . $fileName, $contents);
+                // Delete local file
+                unlink($filePath);
+            }
+            
+            \Log::info('QR Code generated successfully', [
+                'url' => $qrUrl,
+                'file' => $fileName,
+                'restaurant_id' => $this->getRestaurantId()
+            ]);
 
-        Files::fileStore(
-            new File($filePath),
-            'qrcodes',
-            $fileName,
-            uploaded: false,
-            restaurantId: $this->getRestaurantId()
-        );
-
-        // Move file to cloud storage
-        if (config('filesystems.default') !== 'local') {
-            $contents = FileFacade::get($filePath);
-            Storage::disk(config('filesystems.default'))->put('qrcodes/' . $fileName, $contents);
-            // Delete local file
-            unlink($filePath);
+        } catch (\Exception $e) {
+            // Log but never throw - this prevents transaction rollback
+            \Log::error('QR Code generation failed: ' . $e->getMessage(), [
+                'url' => $qrUrl,
+                'label' => $label,
+                'restaurant_id' => $this->getRestaurantId(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 
