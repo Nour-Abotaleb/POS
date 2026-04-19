@@ -63,12 +63,23 @@ class Branch extends BaseModel
 
     public function generateQrCode()
     {
-        // Generate a new unique_hash to invalidate old QR code links
-        $this->generateUniqueHash();
-        $this->save();
-        
-        // $this->createQrCode(route('table_order', [$this->getRestaurantId()]) . '?branch=' . $this->id);
-        $this->createQrCode(route('table_order', [$this->restaurant_id]) . '?branch=' . $this->unique_hash . '&hash=' . $this->restaurant->hash . '&from_qr=1');
+        try {
+            // Generate a new unique_hash to invalidate old QR code links
+            $this->generateUniqueHash();
+            $this->save();
+            
+            // $this->createQrCode(route('table_order', [$this->getRestaurantId()]) . '?branch=' . $this->id);
+            $this->createQrCode(route('table_order', [$this->restaurant_id]) . '?branch=' . $this->unique_hash . '&hash=' . $this->restaurant->hash . '&from_qr=1');
+        } catch (\Exception $e) {
+            // Log the error but don't fail the branch creation
+            \Log::error('Branch QR Code generation failed: ' . $e->getMessage(), [
+                'branch_id' => $this->id,
+                'restaurant_id' => $this->restaurant_id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Don't re-throw the exception
+        }
     }
 
     public function deliverySetting()
