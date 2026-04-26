@@ -55,10 +55,8 @@ class Pos extends Component
     public $kotNumber;
     public $tableNo;
     public $tableId;
-    public $users;
     public $noOfPax = 1;
     public $selectWaiter;
-    public $taxes;
     public $orderNote;
     public $tableOrder;
     public $tableOrderID;
@@ -89,7 +87,6 @@ class Pos extends Component
     public $orderItemVariation = [];
     public $orderItemQty = [];
     public $orderItemAmount = [];
-    public $deliveryExecutives;
     public $selectDeliveryExecutive;
     public $orderID;
     public $discountType;
@@ -109,7 +106,6 @@ class Pos extends Component
     public $deliveryFee = 0;
     public $itemNotes = [];
     public $orderPlaces;
-    public $cancelReasons;
     public $confirmDeleteModal = false;
     public $deleteOrderModal = false;
     public $cancelReason;
@@ -130,7 +126,6 @@ class Pos extends Component
     public $formattedOrderNumber;
     public $customerId;
     public $customer;
-    public $menuList;
     public $menuId;
     public $menuItemsPerPage = 40;
     /** @var int Start at 0 so initial HTML is small; first batch loads via wire:init after hydration. */
@@ -156,14 +151,8 @@ class Pos extends Component
 
     public function hydrate()
     {
-        // Re-load taxes on every Livewire request to ensure they survive re-hydration
-        // (Eloquent Collections stored as public properties can lose data between requests)
-        if (empty($this->taxes) || (is_countable($this->taxes) && count($this->taxes) === 0)) {
-            $restaurantId = $this->restaurant->id ?? restaurant()->id;
-            $this->taxes = cache()->remember('taxes_' . $restaurantId, 60 * 60 * 24, function () use ($restaurantId) {
-                return Tax::where('restaurant_id', $restaurantId)->get();
-            });
-        }
+        // Removed manual tax re-hydration: taxes are now a #[Computed] property
+        // which automatically handles per-request loading efficiently.
     }
 
     public function mount()
@@ -179,28 +168,9 @@ class Pos extends Component
         $this->maxDate = now()->addDays($this->pickupRange - 1)->endOfDay()->format('Y-m-d\TH:i');
         $this->defaultDate = old('deliveryDateTime', $this->deliveryDateTime ?? $this->minDate);
 
-        $this->users = cache()->remember('waiters_' . $this->restaurant->id, 60 * 60 * 24, function () {
-            return User::withoutGlobalScope(BranchScope::class)
-                ->where(function ($q) {
-                    return $q->where('branch_id', branch()->id)
-                        ->orWhereNull('branch_id');
-                })
-                ->role('waiter_' . $this->restaurant->id)
-                ->where('restaurant_id', $this->restaurant->id)
-                ->get();
-        });
-
         $this->taxMode = $this->restaurant->tax_mode;
 
-        $this->taxes = cache()->remember('taxes_' . $this->restaurant->id, 60 * 60 * 24, function () {
-            return Tax::all();
-        });
-
         $this->selectWaiter = user()->id;
-
-        $this->deliveryExecutives = cache()->remember('delivery_executives_' . restaurant()->id, 60 * 60 * 24, function () {
-            return DeliveryExecutive::where('status', 'available')->get();
-        });
 
         if ($this->tableOrderID) {
             $this->tableId = $this->tableOrderID;
@@ -299,22 +269,6 @@ class Pos extends Component
             $this->extraCharges = ($order->status === 'kot' && !$this->orderDetail) ? [] : $order->extraCharges;
         }
 
-
-        $this->cancelReasons = Cache::remember(
-            'cancel_reasons_' . branch()->id,
-            now()->addHours(2),
-            function () {
-                return KotCancelReason::where('cancel_order', true)->get();
-            }
-        );
-
-        // Eager load menu with categories (cached 5 min to speed up POS)
-        $this->menuList = Cache::remember('pos_menulist_' . branch()->id, 3600, function () {
-            return Menu::withoutGlobalScopes()
-                ->where('branch_id', branch()->id)
-                ->orderBy('sort_order')
-                ->get();
-        });
 
         // Set order number once when starting fresh (no order, or table with no active order)
         $needsOrderNumber = !$this->orderNumber && (
@@ -3267,6 +3221,58 @@ class Pos extends Component
     }
 
     #[Computed]
+    public function users()
+    {
+        $restaurantId = $this->restaurant->id ?? restaurant()->id;
+        return cache()->remember('waiters_' . $restaurantId, 3600, function () use ($restaurantId) {
+            return User::withoutGlobalScope(BranchScope::class)
+                ->where(function ($q) {
+                    return $q->where('branch_id', branch()->id)
+                        ->orWhereNull('branch_id');
+                })
+                ->role('waiter_' . $restaurantId)
+                ->where('restaurant_id', $restaurantId)
+                ->get();
+        });
+    }
+
+    #[Computed]
+    public function taxes()
+    {
+        $restaurantId = $this->restaurant->id ?? restaurant()->id;
+        return cache()->remember('taxes_' . $restaurantId, 3600, function () {
+            return Tax::all();
+        });
+    }
+
+    #[Computed]
+    public function menuList()
+    {
+        return Cache::remember('pos_menulist_' . branch()->id, 3600, function () {
+            return Menu::withoutGlobalScopes()
+                ->where('branch_id', branch()->id)
+                ->orderBy('sort_order')
+                ->get();
+        });
+    }
+
+    #[Computed]
+    public function deliveryExecutives()
+    {
+        return cache()->remember('delivery_executives_' . restaurant()->id, 3600, function () {
+            return DeliveryExecutive::where('status', 'available')->get();
+        });
+    }
+
+    #[Computed]
+    public function cancelReasons()
+    {
+        return Cache::remember('cancel_reasons_' . branch()->id, 3600, function () {
+            return KotCancelReason::where('cancel_order', true)->get();
+        });
+    }
+
+    #[Computed]
     public function orderTypes()
     {
         $branchId = branch()->id;
@@ -3375,7 +3381,15 @@ class Pos extends Component
             $this->shouldBlockPos = !$this->hasPosMachine || $this->machineStatus === 'pending' || $this->machineStatus === 'declined';
         }
 
-        return view('livewire.pos.pos');
+        return view('livewire.pos.pos', [
+            'users' => $this->users,
+            'taxes' => $this->taxes,
+            'menuList' => $this->menuList,
+            'deliveryExecutives' => $this->deliveryExecutives,
+            'cancelReasons' => $this->cancelReasons,
+            'orderTypes' => $this->orderTypes,
+            'categoryList' => $this->categoryList,
+        ]);
     }
 
     // Update item notes and save to database if applicable

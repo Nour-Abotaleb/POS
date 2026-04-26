@@ -668,6 +668,19 @@
                                     <span class="text-sm font-medium">@lang('app.print')</span>
                                     </x-secondary-link>
 
+                            @if (in_array($order->status, ['paid', 'billed']) && $order->invoice_type != '381' && $order->invoice_type != '383')
+                                <button
+                                    class="flex items-center gap-3 min-h-[50px] rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-700 p-3 justify-center transition-colors dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-900/50"
+                                    wire:click="$toggle('returnInvoiceModal')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                    </svg>
+                                    <span class="text-sm font-medium">@lang('modules.order.returnInvoice') / استرجاع</span>
+                                </button>
+                            @endif
+
                            
                             {{-- @if (in_array($order->status, ['billed', 'payment_due', 'paid']) && user_can('Delete Order'))
                                 <button
@@ -990,6 +1003,53 @@
 
         <x-danger-button class="ml-3" wire:click="cancelOrderStatus({{ $order->id }})" wire:loading.attr="disabled">
             @lang('modules.order.cancelOrder')
+        </x-danger-button>
+    </x-slot>
+</x-confirmation-modal>
+
+<!-- Return Invoice Modal -->
+<x-confirmation-modal wire:model="returnInvoiceModal">
+    <x-slot name="title">
+        <div class="flex items-center gap-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">استرجاع الفاتورة (Credit Note)</h3>
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">سيتم إنشاء إشعار دائن للفاتورة وإرساله لهيئة الزكاة</p>
+            </div>
+        </div>
+    </x-slot>
+
+    <x-slot name="content">
+        <div class="flex flex-col w-full space-y-6">
+            <div class="p-4 border bg-orange-50 rounded-xl border-orange-200 dark:bg-orange-900/20 dark:border-orange-800">
+                <div class="flex items-start gap-3">
+                    <svg class="flex-shrink-0 mt-0.5 w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-orange-800 dark:text-orange-200">سبب الاسترجاع مطلوب (ZATCA Requirement)</p>
+                        <p class="mt-1 text-sm text-orange-700 dark:text-orange-300">يجب إدخال سبب الاسترجاع لاعتماده كإشعار دائن.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Reason Textarea -->
+            <textarea
+                wire:model.defer="returnReason"
+                id="returnReason"
+                rows="4"
+                class="block w-full px-4 py-3 transition-all duration-200 border-2 border-gray-300 shadow-sm resize-none rounded-xl dark:border-gray-600 focus:ring-2 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="أدخل سبب الاسترجاع (مثال: العميل أعاد الطلب، خطأ في الفاتورة...)"
+            ></textarea>
+        </div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <x-secondary-button wire:click="$set('returnInvoiceModal', false)" wire:loading.attr="disabled">
+            {{ __('app.cancel') }}
+        </x-secondary-button>
+
+        <x-danger-button class="ml-3" wire:click="returnInvoice" wire:loading.attr="disabled">
+            تأكيد الاسترجاع
         </x-danger-button>
     </x-slot>
 </x-confirmation-modal>

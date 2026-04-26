@@ -390,48 +390,112 @@ class SalesReport extends Component
         ->keyBy('date');
 
 
-        // Process taxes and charges dynamically using actual tax breakdown data
-        $groupedData = $query->map(function ($item) use ($charges, $taxes, $taxMode, $orderData, $outstandingData, $dateTimeData) {
+        // -----------------------------------------------------------------------
+        // PRE-FETCH all charge and tax data for the ENTIRE range in 3 queries.
+        // Previously, each date row ran N*charges + 2 tax queries inside map(),
+        // causing 100+ DB calls per render. Now we fetch once and distribute in memory.
+        // -----------------------------------------------------------------------
+
+        // 1. All charge amounts grouped by date
+        $chargeDataByDate = DB::table('order_charges')
+            ->join('orders', 'order_charges.order_id', '=', 'orders.id')
+            ->join('restaurant_charges', 'order_charges.charge_id', '=', 'restaurant_charges.id')
+            ->whereIn('orders.status', ['paid', 'payment_due'])
+            ->whereBetween('orders.date_time', [$dateTimeData['startDateTime'], $dateTimeData['endDateTime']])
+            ->where(function ($q) use ($dateTimeData) {
+                if ($dateTimeData['startTime'] < $dateTimeData['endTime']) {
+                    $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$dateTimeData['startTime'], $dateTimeData['endTime']]);
+                } else {
+                    $q->where(function ($sub) use ($dateTimeData) {
+                        $sub->whereRaw('TIME(orders.date_time) >= ?', [$dateTimeData['startTime']])
+                            ->orWhereRaw('TIME(orders.date_time) <= ?', [$dateTimeData['endTime']]);
+                    });
+                }
+            })
+            ->where('orders.branch_id', branch()->id)
+            ->when($this->filterByWaiter, fn($q) => $q->where('orders.waiter_id', $this->filterByWaiter))
+            ->select(
+                DB::raw('DATE(CONVERT_TZ(orders.date_time, "+00:00", "' . $dateTimeData['offset'] . '")) as date'),
+                'order_charges.charge_id',
+                'restaurant_charges.charge_name',
+                'restaurant_charges.charge_type',
+                'restaurant_charges.charge_value',
+                DB::raw('SUM(CASE WHEN restaurant_charges.charge_type = "percent"
+                    THEN (restaurant_charges.charge_value / 100) * orders.sub_total
+                    ELSE restaurant_charges.charge_value END) as charge_total')
+            )
+            ->groupBy('date', 'order_charges.charge_id', 'restaurant_charges.charge_name', 'restaurant_charges.charge_type', 'restaurant_charges.charge_value')
+            ->get()
+            ->groupBy('date');
+
+        // 2. All item-level tax data grouped by date
+        $itemTaxDataByDate = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('menu_items', 'order_items.menu_item_id', '=', 'menu_items.id')
+            ->join('menu_item_tax', 'menu_items.id', '=', 'menu_item_tax.menu_item_id')
+            ->join('taxes', 'menu_item_tax.tax_id', '=', 'taxes.id')
+            ->where('orders.status', 'paid')
+            ->where('orders.branch_id', branch()->id)
+            ->whereBetween('orders.date_time', [$dateTimeData['startDateTime'], $dateTimeData['endDateTime']])
+            ->where(function ($q) use ($dateTimeData) {
+                if ($dateTimeData['startTime'] < $dateTimeData['endTime']) {
+                    $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$dateTimeData['startTime'], $dateTimeData['endTime']]);
+                } else {
+                    $q->where(function ($sub) use ($dateTimeData) {
+                        $sub->whereRaw('TIME(orders.date_time) >= ?', [$dateTimeData['startTime']])
+                            ->orWhereRaw('TIME(orders.date_time) <= ?', [$dateTimeData['endTime']]);
+                    });
+                }
+            })
+            ->when($this->filterByWaiter, fn($q) => $q->where('orders.waiter_id', $this->filterByWaiter))
+            ->select(
+                DB::raw('DATE(CONVERT_TZ(orders.date_time, "+00:00", "' . $dateTimeData['offset'] . '")) as date'),
+                'taxes.tax_name', 'taxes.tax_percent',
+                'order_items.tax_amount', 'order_items.quantity',
+                'order_items.order_id', 'menu_items.id as menu_item_id'
+            )
+            ->get()
+            ->groupBy('date');
+
+        // 3. All order-level tax data grouped by date
+        $orderTaxDataByDate = DB::table('order_taxes')
+            ->join('orders', 'order_taxes.order_id', '=', 'orders.id')
+            ->join('taxes', 'order_taxes.tax_id', '=', 'taxes.id')
+            ->where('orders.status', 'paid')
+            ->where('orders.branch_id', branch()->id)
+            ->whereBetween('orders.date_time', [$dateTimeData['startDateTime'], $dateTimeData['endDateTime']])
+            ->where(function ($q) use ($dateTimeData) {
+                if ($dateTimeData['startTime'] < $dateTimeData['endTime']) {
+                    $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$dateTimeData['startTime'], $dateTimeData['endTime']]);
+                } else {
+                    $q->where(function ($sub) use ($dateTimeData) {
+                        $sub->whereRaw('TIME(orders.date_time) >= ?', [$dateTimeData['startTime']])
+                            ->orWhereRaw('TIME(orders.date_time) <= ?', [$dateTimeData['endTime']]);
+                    });
+                }
+            })
+            ->when($this->filterByWaiter, fn($q) => $q->where('orders.waiter_id', $this->filterByWaiter))
+            ->select(
+                DB::raw('DATE(CONVERT_TZ(orders.date_time, "+00:00", "' . $dateTimeData['offset'] . '")) as date'),
+                'taxes.tax_name', 'taxes.tax_percent',
+                'orders.sub_total', 'orders.discount_amount', 'orders.id as order_id'
+            )
+            ->get()
+            ->groupBy('date');
+
+        // Process taxes and charges using pre-fetched data (NO DB queries inside this loop)
+        $groupedData = $query->map(function ($item) use ($charges, $taxes, $taxMode, $orderData, $outstandingData, $dateTimeData, $chargeDataByDate, $itemTaxDataByDate, $orderTaxDataByDate) {
             // Get order-level data for this date
             $orderInfo = $orderData->get($item->date);
             $outstandingInfo = $outstandingData->get($item->date);
 
-            // Build per-day window matching loadDateItems (date + time range, TZ aware)
-            $dateCarbon = Carbon::createFromFormat('Y-m-d', $item->date, $dateTimeData['timezone']);
-            $startDateTime = $dateCarbon->copy()->setTimeFromTimeString($this->startTime)->setTimezone('UTC')->toDateTimeString();
-            $endBase = $dateCarbon->copy();
-            if ($this->startTime > $this->endTime) {
-                $endBase->addDay();
-            }
-            $endDateTime = $endBase->setTimeFromTimeString($this->endTime)->setTimezone('UTC')->toDateTimeString();
-            $startTime = Carbon::parse($this->startTime, $dateTimeData['timezone'])->setTimezone('UTC')->format('H:i');
-            $endTime = Carbon::parse($this->endTime, $dateTimeData['timezone'])->setTimezone('UTC')->format('H:i');
-
+            // Build charge amounts from pre-fetched collection (in memory — no DB query)
             $chargeAmounts = [];
+            $dayCharges = $chargeDataByDate->get($item->date, collect());
             foreach ($charges as $charge) {
-                $chargeAmounts[$charge->charge_name] = DB::table('order_charges')
-                    ->join('orders', 'order_charges.order_id', '=', 'orders.id')
-                    ->join('restaurant_charges', 'order_charges.charge_id', '=', 'restaurant_charges.id')
-                    ->where('order_charges.charge_id', $charge->id)
-                    ->whereIn('orders.status', ['paid', 'payment_due'])
-                    ->whereBetween('orders.date_time', [$startDateTime, $endDateTime])
-                    ->where(function ($q) use ($startTime, $endTime) {
-                        if ($startTime < $endTime) {
-                            $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$startTime, $endTime]);
-                        } else {
-                            $q->where(function ($sub) use ($startTime, $endTime) {
-                                $sub->whereRaw('TIME(orders.date_time) >= ?', [$startTime])
-                                    ->orWhereRaw('TIME(orders.date_time) <= ?', [$endTime]);
-                            });
-                        }
-                    })
-                    ->where('orders.branch_id', branch()->id)
-                    ->when($this->filterByWaiter, function ($q) {
-                        $q->where('orders.waiter_id', $this->filterByWaiter);
-                    })
-                    ->sum(DB::raw('CASE WHEN restaurant_charges.charge_type = "percent"
-                THEN (restaurant_charges.charge_value / 100) * orders.sub_total
-                ELSE restaurant_charges.charge_value END')) ?? 0;
+                $chargeAmounts[$charge->charge_name] = $dayCharges
+                    ->where('charge_id', $charge->id)
+                    ->sum('charge_total') ?? 0;
             }
 
             // Get tax breakdown from both item and order level taxes - flexible approach
@@ -450,37 +514,8 @@ class SalesReport extends Component
                 ];
             }
 
-            // First, try to get item-level tax data (regardless of current tax mode)
-            $itemTaxData = DB::table('order_items')
-                ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->join('menu_items', 'order_items.menu_item_id', '=', 'menu_items.id')
-                ->join('menu_item_tax', 'menu_items.id', '=', 'menu_item_tax.menu_item_id')
-                ->join('taxes', 'menu_item_tax.tax_id', '=', 'taxes.id')
-                ->where('orders.status', 'paid')
-                ->where('orders.branch_id', branch()->id)
-                ->whereBetween('orders.date_time', [$startDateTime, $endDateTime])
-                ->where(function ($q) use ($startTime, $endTime) {
-                    if ($startTime < $endTime) {
-                        $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$startTime, $endTime]);
-                    } else {
-                        $q->where(function ($sub) use ($startTime, $endTime) {
-                            $sub->whereRaw('TIME(orders.date_time) >= ?', [$startTime])
-                                ->orWhereRaw('TIME(orders.date_time) <= ?', [$endTime]);
-                        });
-                    }
-                })
-                ->when($this->filterByWaiter, function ($q) {
-                    $q->where('orders.waiter_id', $this->filterByWaiter);
-                })
-                ->select(
-                    'taxes.tax_name',
-                    'taxes.tax_percent',
-                    'order_items.tax_amount',
-                    'order_items.quantity',
-                    'order_items.order_id',
-                    'menu_items.id as menu_item_id'
-                )
-                ->get();
+            // First, try to get item-level tax data from pre-fetched collection
+            $itemTaxData = $itemTaxDataByDate->get($item->date, collect());
 
             // Process item-level taxes if found
             if ($itemTaxData->isNotEmpty()) {
@@ -508,34 +543,8 @@ class SalesReport extends Component
                 }
             }
 
-            // Second, try to get order-level tax data (regardless of current tax mode)
-            $orderTaxData = DB::table('order_taxes')
-                ->join('orders', 'order_taxes.order_id', '=', 'orders.id')
-                ->join('taxes', 'order_taxes.tax_id', '=', 'taxes.id')
-                ->where('orders.status', 'paid')
-                ->where('orders.branch_id', branch()->id)
-                ->whereBetween('orders.date_time', [$startDateTime, $endDateTime])
-                ->where(function ($q) use ($startTime, $endTime) {
-                    if ($startTime < $endTime) {
-                        $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$startTime, $endTime]);
-                    } else {
-                        $q->where(function ($sub) use ($startTime, $endTime) {
-                            $sub->whereRaw('TIME(orders.date_time) >= ?', [$startTime])
-                                ->orWhereRaw('TIME(orders.date_time) <= ?', [$endTime]);
-                        });
-                    }
-                })
-                ->when($this->filterByWaiter, function ($q) {
-                    $q->where('orders.waiter_id', $this->filterByWaiter);
-                })
-                ->select(
-                    'taxes.tax_name',
-                    'taxes.tax_percent',
-                    'orders.sub_total',
-                    'orders.discount_amount',
-                    'orders.id as order_id'
-                )
-                ->get();
+            // Second, try to get order-level tax data from pre-fetched collection
+            $orderTaxData = $orderTaxDataByDate->get($item->date, collect());
 
             // Process order-level taxes if found
             if ($orderTaxData->isNotEmpty()) {
@@ -546,48 +555,6 @@ class SalesReport extends Component
                     $taxAmounts[$taxName] += $taxAmount;
                     $taxDetails[$taxName]['total_amount'] += $taxAmount;
                     $taxDetails[$taxName]['items_count'] += 1; // Count as one order
-                }
-            }
-
-            // If neither item nor order taxes found, try fallback calculation
-            if (empty($itemTaxData) && empty($orderTaxData)) {
-                foreach ($taxes as $tax) {
-                    // Try item-level calculation using direct tax amount from order_items
-                    $itemTaxAmount = DB::table('order_items')
-                        ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                        ->join('menu_item_tax', 'order_items.menu_item_id', '=', 'menu_item_tax.menu_item_id')
-                        ->join('taxes', 'menu_item_tax.tax_id', '=', 'taxes.id')
-                        ->where('taxes.id', $tax->id)
-                        ->where('orders.status', 'paid')
-                        ->where('orders.branch_id', branch()->id)
-                        ->whereBetween('orders.date_time', [$startDateTime, $endDateTime])
-                        ->where(function ($q) use ($startTime, $endTime) {
-                            if ($startTime < $endTime) {
-                                $q->whereRaw('TIME(orders.date_time) BETWEEN ? AND ?', [$startTime, $endTime]);
-                            } else {
-                                $q->where(function ($sub) use ($startTime, $endTime) {
-                                    $sub->whereRaw('TIME(orders.date_time) >= ?', [$startTime])
-                                        ->orWhereRaw('TIME(orders.date_time) <= ?', [$endTime]);
-                                });
-                            }
-                        })
-                        ->when($this->filterByWaiter, function ($q) {
-                            $q->where('orders.waiter_id', $this->filterByWaiter);
-                        })
-                        ->sum(DB::raw('
-                            CASE
-                                WHEN (SELECT COUNT(*) FROM menu_item_tax WHERE menu_item_id = order_items.menu_item_id) > 1
-                                THEN (order_items.tax_amount * (taxes.tax_percent /
-                                    (SELECT SUM(t.tax_percent) FROM menu_item_tax mit
-                                    JOIN taxes t ON mit.tax_id = t.id
-                                    WHERE mit.menu_item_id = order_items.menu_item_id)
-                                ))
-                                ELSE COALESCE(order_items.tax_amount, 0)
-                            END
-                        ')) ?? 0;
-
-                    $taxAmounts[$tax->tax_name] += $itemTaxAmount;
-                    $taxDetails[$tax->tax_name]['total_amount'] += $itemTaxAmount;
                 }
             }
 
@@ -617,6 +584,9 @@ class SalesReport extends Component
                 'total_tax_amount' => $totalTaxAmount,
             ];
         });
+
+
+
 
         // Aggregate all taxes across all dates
         $allTaxes = [];

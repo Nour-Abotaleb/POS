@@ -35,7 +35,7 @@ class AssignReservationTable extends Command
         $this->info('----------------------------------------');
         $this->info('Starting table reservation status update...');
 
-        DB::enableQueryLog();
+        $queryCount = 0;
 
         try {
             // Get restaurant timezone and calculate time range
@@ -62,6 +62,7 @@ class AssignReservationTable extends Command
                     ->update(['available_status' => 'reserved']);
 
                 $processedTables += $updated;
+                $queryCount++;
 
                 $this->info("Processed {$updated} tables in current chunk");
             }
@@ -74,7 +75,6 @@ class AssignReservationTable extends Command
 
         $executionTime = round(microtime(true) - $startTime, 2);
         $memoryUsed = round((memory_get_usage() - $startMemory) / 1024 / 1024, 2);
-        $queryCount = count(DB::getQueryLog());
 
         $this->line("<fg=green>✓</> <fg=blue>Completed in</> <fg=yellow>{$executionTime}s</> <fg=white>|</> <fg=yellow>{$memoryUsed}MB</> <fg=white>|</> <fg=yellow>{$queryCount}</> <fg=blue>queries</>");
 

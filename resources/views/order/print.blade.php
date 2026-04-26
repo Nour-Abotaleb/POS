@@ -189,8 +189,16 @@
             <!-- ZATCA Compliant Invoice Title -->
             <div style="text-align: center; margin-bottom: 3mm; direction: rtl;">
                 <h2 style="font-size: 12pt; font-weight: bold; margin: 0;">
-                    فاتورة ضريبية مبسطة<br>
-                    <span style="font-size: 10pt; direction: ltr;">Simplified Tax Invoice</span>
+                    @if ($order->invoice_type == '381')
+                        إشعار دائن<br>
+                        <span style="font-size: 10pt; direction: ltr;">Credit Note</span>
+                    @elseif ($order->invoice_type == '383')
+                        إشعار مدين<br>
+                        <span style="font-size: 10pt; direction: ltr;">Debit Note</span>
+                    @else
+                        فاتورة ضريبية مبسطة<br>
+                        <span style="font-size: 10pt; direction: ltr;">Simplified Tax Invoice</span>
+                    @endif
                 </h2>
             </div>
             
@@ -258,6 +266,14 @@
                             </td>
                             <td class="space_left">{{ $order->date_time->timezone(timezone())->translatedFormat('d M Y h:i A') }}</td>
                         </tr>
+                        @if ($order->parentOrder)
+                            <tr>
+                                <td colspan="2" style="font-size: 8pt; color: #555; padding-top: 2mm;">
+                                    المرجع: {{ $order->parentOrder->show_formatted_order_number }}<br>
+                                    Reference: {{ $order->parentOrder->show_formatted_order_number }}
+                                </td>
+                            </tr>
+                        @endif
                     </table>
                 </div>
                 @php
