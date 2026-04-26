@@ -31,11 +31,14 @@ class OrderObserver
             cache()->forget('branch_' . $order->branch->id . '_order_stats');
         }
 
-        $todayKotCount = Kot::join('orders', 'kots.order_id', '=', 'orders.id')
-            ->whereDate('kots.created_at', '>=', now()->startOfDay()->toDateTimeString())
-            ->whereDate('kots.created_at', '<=', now()->endOfDay()->toDateTimeString())
-            ->whereNotIn('orders.status', ['canceled', 'draft'])
-            ->count();
+        // Cache the heavy JOIN query for 10s — safe since it's only used for broadcasting
+        $todayKotCount = cache()->remember('today_kot_count_branch_' . ($order->branch_id ?? 0), 10, function () {
+            return Kot::join('orders', 'kots.order_id', '=', 'orders.id')
+                ->whereDate('kots.created_at', '>=', now()->startOfDay()->toDateTimeString())
+                ->whereDate('kots.created_at', '<=', now()->endOfDay()->toDateTimeString())
+                ->whereNotIn('orders.status', ['canceled', 'draft'])
+                ->count();
+        });
 
         event(new OrderUpdated($order, 'created'));
         event(new TodayOrdersUpdated($todayKotCount));
@@ -58,12 +61,14 @@ class OrderObserver
             $this->cascadeOrderStatusToKots($order);
         }
 
-        // Count today's KOTs (optimized query)
-        $todayKotCount = Kot::join('orders', 'kots.order_id', '=', 'orders.id')
-            ->whereDate('kots.created_at', '>=', now()->startOfDay()->toDateTimeString())
-            ->whereDate('kots.created_at', '<=', now()->endOfDay()->toDateTimeString())
-            ->whereNotIn('orders.status', ['canceled', 'draft'])
-            ->count();
+        // Cache the heavy JOIN query for 10s — safe since it's only used for broadcasting
+        $todayKotCount = cache()->remember('today_kot_count_branch_' . ($order->branch_id ?? 0), 10, function () {
+            return Kot::join('orders', 'kots.order_id', '=', 'orders.id')
+                ->whereDate('kots.created_at', '>=', now()->startOfDay()->toDateTimeString())
+                ->whereDate('kots.created_at', '<=', now()->endOfDay()->toDateTimeString())
+                ->whereNotIn('orders.status', ['canceled', 'draft'])
+                ->count();
+        });
 
         // Broadcast events
         event(new OrderUpdated($order, 'updated'));

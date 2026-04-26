@@ -17,4 +17,4 @@ Schedule::command('inventory:check-batch-expiry')->daily();
 Schedule::command('queue:flush')->weekly();
 
 // Schedule the queue:work command to run without overlapping and with 3 tries
-Schedule::command('queue:work database --tries=3 --stop-when-empty')->withoutOverlapping();
+Schedule::command('queue:work database --tries=3 --stop-when-empty --memory=256 --max-time=3600')->withoutOverlapping();

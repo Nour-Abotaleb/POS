@@ -36,6 +36,12 @@ class Order extends BaseModel
             $model->uuid ??= (string) \Illuminate\Support\Str::uuid();
         });
 
+        static::created(function ($model) {
+            if (in_array($model->status, ['paid', 'billed'])) {
+                \App\Jobs\ReportZatcaInvoiceJob::dispatch($model->id)->delay(now()->addSeconds(30));
+            }
+        });
+
         static::updated(function ($model) {
             if ($model->isDirty('status') && in_array($model->status, ['paid', 'billed'])) {
                 // Dispatch ZATCA Job for Phase 2 processing
@@ -144,6 +150,16 @@ class Order extends BaseModel
     public function deliveryPlatform(): BelongsTo
     {
         return $this->deliveryApp();
+    }
+
+    public function parentOrder(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'parent_order_id');
+    }
+
+    public function childOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'parent_order_id');
     }
 
     public static function generateOrderNumber($branch)

@@ -56,6 +56,8 @@ class OrderDetail extends Component
     public $selectWaiter;
     public $confirmDeleteItemModal = false;
     public $itemToDelete;
+    public $returnInvoiceModal = false;
+    public $returnReason = '';
 
     public function mount()
     {
@@ -879,6 +881,83 @@ class OrderDetail extends Component
         }
 
         return 0;
+    }
+
+    public function returnInvoice()
+    {
+        if (empty($this->returnReason)) {
+            $this->alert('error', __('modules.settings.enterCancelReason'), [
+                'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
+            ]);
+            return;
+        }
+
+        if ($this->order) {
+            $existingReturn = Order::where('parent_order_id', $this->order->id)
+                ->whereIn('invoice_type', ['381', '383'])
+                ->exists();
+                
+            if ($existingReturn) {
+                $this->alert('error', 'Invoice already returned / الإيصال تم استرجاعه مسبقاً', [
+                    'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
+                ]);
+                return;
+            }
+
+            // Create Return Order (Credit Note)
+            $returnOrder = $this->order->replicate();
+            $returnOrder->uuid = \Illuminate\Support\Str::uuid();
+            $returnOrder->parent_order_id = $this->order->id;
+            $returnOrder->invoice_type = '381'; // Credit Note
+            $returnOrder->return_reason = $this->returnReason;
+            
+            $orderNumberSetting = \App\Models\Order::generateOrderNumber(branch());
+            $returnOrder->order_number = $orderNumberSetting['order_number'];
+            $returnOrder->formatted_order_number = $orderNumberSetting['formatted_order_number'];
+            $returnOrder->zatca_uuid = null;
+            $returnOrder->zatca_hash = null;
+            $returnOrder->zatca_xml = null;
+            $returnOrder->zatca_qr_code = null;
+            $returnOrder->zatca_status = 'pending';
+            $returnOrder->zatca_errors = null;
+            $returnOrder->zatca_reported_at = null;
+            $returnOrder->zatca_invoice_counter = null;
+            $returnOrder->status = 'paid';
+            $returnOrder->order_status = 'delivered'; 
+            $returnOrder->save();
+
+            // Replicate Items
+            foreach ($this->order->items as $item) {
+                $newItem = $item->replicate();
+                $newItem->order_id = $returnOrder->id;
+                $newItem->save();
+            }
+
+            // Replicate Payments
+            foreach ($this->order->payments as $payment) {
+                $newPayment = $payment->replicate();
+                $newPayment->order_id = $returnOrder->id;
+                $newPayment->save();
+            }
+
+            // Replicate Taxes
+            foreach ($this->order->taxes as $tax) {
+                $newTax = $tax->replicate();
+                $newTax->order_id = $returnOrder->id;
+                $newTax->save();
+            }
+
+            $this->order->update(['status' => 'canceled', 'order_status' => 'cancelled']);
+
+            $this->returnInvoiceModal = false;
+            $this->showOrderDetail = false;
+            
+            $this->alert('success', 'Invoice returned successfully / تم استرجاع الفاتورة وإنشاء إشعار دائن', [
+                'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
+            ]);
+            $this->dispatch('refreshOrders');
+            $this->dispatch('refreshPos');
+        }
     }
 
     public function render()
