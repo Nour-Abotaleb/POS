@@ -679,6 +679,17 @@
                                     </svg>
                                     <span class="text-sm font-medium">@lang('modules.order.returnInvoice') / استرجاع</span>
                                 </button>
+
+                                <button
+                                    class="flex items-center gap-3 min-h-[50px] rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 p-3 justify-center transition-colors dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                                    wire:click="$toggle('debitInvoiceModal')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-sm font-medium">Debit Note / إشعار مدين</span>
+                                </button>
                             @endif
 
                            
@@ -1051,6 +1062,53 @@
         <x-danger-button class="ml-3" wire:click="returnInvoice" wire:loading.attr="disabled">
             تأكيد الاسترجاع
         </x-danger-button>
+    </x-slot>
+</x-confirmation-modal>
+
+<!-- Debit Invoice Modal -->
+<x-confirmation-modal wire:model="debitInvoiceModal">
+    <x-slot name="title">
+        <div class="flex items-center gap-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">إشعار مدين (Debit Note)</h3>
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">سيتم إنشاء إشعار مدين للفاتورة وإرساله لهيئة الزكاة</p>
+            </div>
+        </div>
+    </x-slot>
+
+    <x-slot name="content">
+        <div class="flex flex-col w-full space-y-6">
+            <div class="p-4 border bg-blue-50 rounded-xl border-blue-200 dark:bg-blue-900/20 dark:border-blue-800">
+                <div class="flex items-start gap-3">
+                    <svg class="flex-shrink-0 mt-0.5 w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800 dark:text-blue-200">سبب التعديل مطلوب (ZATCA Requirement)</p>
+                        <p class="mt-1 text-sm text-blue-700 dark:text-blue-300">يجب إدخال سبب الإشعار المدين (مثال: زيادة في السعر، خدمات إضافية...)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Reason Textarea -->
+            <textarea
+                wire:model.defer="debitReason"
+                id="debitReason"
+                rows="4"
+                class="block w-full px-4 py-3 transition-all duration-200 border-2 border-gray-300 shadow-sm resize-none rounded-xl dark:border-gray-600 focus:ring-2 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="أدخل سبب الإشعار المدين..."
+            ></textarea>
+        </div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <x-secondary-button wire:click="$set('debitInvoiceModal', false)" wire:loading.attr="disabled">
+            {{ __('app.cancel') }}
+        </x-secondary-button>
+
+        <x-button class="ml-3" wire:click="debitInvoice" wire:loading.attr="disabled">
+            تأكيد الإشعار المدين
+        </x-button>
     </x-slot>
 </x-confirmation-modal>
 

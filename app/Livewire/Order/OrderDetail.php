@@ -58,6 +58,8 @@ class OrderDetail extends Component
     public $itemToDelete;
     public $returnInvoiceModal = false;
     public $returnReason = '';
+    public $debitInvoiceModal = false;
+    public $debitReason = '';
 
     public function mount()
     {
@@ -953,6 +955,70 @@ class OrderDetail extends Component
             $this->showOrderDetail = false;
             
             $this->alert('success', 'Invoice returned successfully / تم استرجاع الفاتورة وإنشاء إشعار دائن', [
+                'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
+            ]);
+            $this->dispatch('refreshOrders');
+            $this->dispatch('refreshPos');
+        }
+    }
+
+    public function debitInvoice()
+    {
+        if (empty($this->debitReason)) {
+            $this->alert('error', __('modules.settings.enterCancelReason'), [
+                'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
+            ]);
+            return;
+        }
+
+        if ($this->order) {
+            // Create Debit Order (Debit Note)
+            $debitOrder = $this->order->replicate();
+            $debitOrder->uuid = \Illuminate\Support\Str::uuid();
+            $debitOrder->parent_order_id = $this->order->id;
+            $debitOrder->invoice_type = '383'; // Debit Note
+            $debitOrder->return_reason = $this->debitReason; // Re-use return_reason field for simplicity as it stores InstructionNote
+            
+            $orderNumberSetting = \App\Models\Order::generateOrderNumber(branch());
+            $debitOrder->order_number = $orderNumberSetting['order_number'];
+            $debitOrder->formatted_order_number = $orderNumberSetting['formatted_order_number'];
+            $debitOrder->zatca_uuid = null;
+            $debitOrder->zatca_hash = null;
+            $debitOrder->zatca_xml = null;
+            $debitOrder->zatca_qr_code = null;
+            $debitOrder->zatca_status = 'pending';
+            $debitOrder->zatca_errors = null;
+            $debitOrder->zatca_reported_at = null;
+            $debitOrder->zatca_invoice_counter = null;
+            $debitOrder->status = 'paid';
+            $debitOrder->order_status = 'delivered'; 
+            $debitOrder->save();
+
+            // Replicate Items
+            foreach ($this->order->items as $item) {
+                $newItem = $item->replicate();
+                $newItem->order_id = $debitOrder->id;
+                $newItem->save();
+            }
+
+            // Replicate Payments
+            foreach ($this->order->payments as $payment) {
+                $newPayment = $payment->replicate();
+                $newPayment->order_id = $debitOrder->id;
+                $newPayment->save();
+            }
+
+            // Replicate Taxes
+            foreach ($this->order->taxes as $tax) {
+                $newTax = $tax->replicate();
+                $newTax->order_id = $debitOrder->id;
+                $newTax->save();
+            }
+
+            $this->debitInvoiceModal = false;
+            $this->showOrderDetail = false;
+            
+            $this->alert('success', 'Debit Note created successfully / تم إنشاء إشعار مدين بنجاح', [
                 'toast' => true, 'position' => 'top-end', 'showCancelButton' => false, 'cancelButtonText' => __('app.close')
             ]);
             $this->dispatch('refreshOrders');
