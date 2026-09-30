@@ -1,0 +1,89 @@
+name: Deploy to Demo (demo.adallah.com)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+env:
+  APP_DIR: /home/adallah-demo/htdocs/demo.adallah.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, xml, ctype, iconv, intl, mysql, gd, zip, bcmath, curl, fileinfo
+        coverage: none
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Composer dependencies
+      run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+    - name: Install NPM dependencies and build assets
+      run: |
+        npm ci
+        npm run build
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEMO_SSH_KEY }}" > ~/.ssh/id_deploy
+        chmod 600 ~/.ssh/id_deploy
+        ssh-keyscan -H "${{ secrets.DEMO_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+    - name: Upload files
+      run: |
+        # Runtime state (.env, storage, uploads, generated css/lang) is excluded so it survives deploys.
+        rsync -az --delete \
+          -e "ssh -i ~/.ssh/id_deploy" \
+          --exclude='.git' \
+          --exclude='.github' \
+          --exclude='node_modules' \
+          --exclude='tests' \
+          --exclude='.env' \
+          --exclude='/storage/' \
+          --exclude='/bootstrap/cache/' \
+          --exclude='/public/storage' \
+          --exclude='/public/user-uploads/' \
+          --exclude='/public/qrcodes/' \
+          --exclude='/public/css/app-custom.css' \
+          --exclude='/public/css/theme-custom.css' \
+          --exclude='/lang/' \
+          --exclude='/.well-known/' \
+          ./ "${{ secrets.DEMO_SSH_USER }}@${{ secrets.DEMO_SSH_HOST }}:${APP_DIR}/"
+        # lang/eng is versioned; sync it without deleting languages added at runtime.
+        rsync -az -e "ssh -i ~/.ssh/id_deploy" ./lang/ "${{ secrets.DEMO_SSH_USER }}@${{ secrets.DEMO_SSH_HOST }}:${APP_DIR}/lang/"
+
+    - name: Run post-deploy tasks
+      run: |
+        ssh -i ~/.ssh/id_deploy "${{ secrets.DEMO_SSH_USER }}@${{ secrets.DEMO_SSH_HOST }}" "APP_DIR=${APP_DIR} bash -s" <<'EOF'
+        set -e
+        cd "$APP_DIR"
+        mkdir -p storage/app/public storage/framework/{cache/data,sessions,views} storage/logs bootstrap/cache public/user-uploads
+        chmod -R ug+rwX storage bootstrap/cache public/user-uploads
+        php artisan package:discover --ansi
+        php artisan migrate --force
+        [ -L public/storage ] || php artisan storage:link
+        php artisan optimize:clear
+        php artisan config:cache
+        php artisan view:cache
+        php artisan queue:restart || true
+        echo "Deployed ${GITHUB_SHA:-} at $(date)"
+        EOF
