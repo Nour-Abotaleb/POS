@@ -77,11 +77,14 @@ jobs:
         set -e
         cd "$APP_DIR"
         mkdir -p storage/app/public storage/framework/{cache/data,sessions,views} storage/logs bootstrap/cache public/user-uploads
-        chmod -R ug+rwX storage bootstrap/cache public/user-uploads
+        # Files created by PHP-FPM (site user) can't be chmod'ed/removed by the SSH user; ignore those.
+        chmod -R ug+rwX storage bootstrap/cache public/user-uploads 2>/dev/null || true
         php artisan package:discover --ansi
         php artisan migrate --force
         [ -L public/storage ] || php artisan storage:link
-        php artisan optimize:clear
+        php artisan config:clear
+        php artisan route:clear
+        php artisan view:clear
         php artisan config:cache
         php artisan view:cache
         php artisan queue:restart || true
