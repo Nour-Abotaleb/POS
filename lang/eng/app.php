@@ -281,4 +281,5 @@ return array(
     'name' => 'Name',
     'customer' => 'Customer',
     'show' => 'Show',
+    'verifyEnvato' => 'Verify Purchase Code',
 );
